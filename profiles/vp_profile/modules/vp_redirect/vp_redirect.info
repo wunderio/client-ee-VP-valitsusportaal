@@ -1,0 +1,4 @@
+name = VP Redirect
+core = 7.x
+package = VP
+version = 7.x-1.0

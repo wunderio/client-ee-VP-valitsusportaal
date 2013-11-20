@@ -1,0 +1,38 @@
+<?php
+
+/**
+ * @file
+ * Code for the VP Gallery feature.
+ */
+
+include_once 'vp_gallery.features.inc';
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function vp_gallery_views_pre_view(&$view, &$display_id, &$args) {
+  if ($view->name == 'vp_galleries') {
+    if (isset($_GET['keyword'])) {
+      $_GET['body'] = $_GET['keyword'];
+    }
+  }
+}
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function vp_gallery_views_query_alter(&$view, &$query) {
+  if ($view->name == 'vp_galleries' && isset($_GET['body']) && !empty($_GET['body'])) {
+    $query->where[2]['conditions'][1]['value'] = '%' . $_GET['body'] . '%';
+  }
+}
+
+
+/**
+ * Implements hook_node_view().
+ */
+function vp_gallery_node_view($node, $view_mode, $langcode) {
+  if ($node->type === 'gallery') {
+    drupal_add_js(drupal_get_path('module', 'vp_gallery') .'/js/retina.js', array('scope' => 'footer'));
+  }
+}

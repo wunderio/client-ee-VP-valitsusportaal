@@ -1,0 +1,44 @@
+// Isikuandmete töötlemine
+
+@if $layout == editor or
+    $layout == global {
+  .static-module-3-2.layout-8 {
+	 background-image: none;
+	 font-size: 12px;
+
+	.col-1-container {
+		width: 280px;
+		float: left;
+		margin-right: 20px;
+	}
+	.col-2-container {
+		width: 67.7%; min-width: 280px; float: left;
+	}
+
+	.col-1-container div,
+	.col-2-container div {
+		background-color: #f8f8f8;
+		border-radius: 3px;
+		margin-bottom: 20px;
+		padding-bottom: 5px;
+		padding-left: 20px;
+        padding-right: 20px;
+		padding-top: 30px;
+		width:auto;
+		margin-right: 0px;
+	}
+
+	.col:before {
+		background-color: transparent;
+	}
+
+	.custom-bullet-list {
+		padding-top: 0px;
+		padding-left: 10px;
+		line-height: 15px;
+   }
+   .bold-black {
+		font-weight: 600;
+   }
+ }
+}

@@ -1,0 +1,6 @@
+core = "7.x"
+description = "Provides Estonian ID-card authentication"
+name = "Estonian ID-card Authentication"
+package = "DigiDoc"
+version = "7.x-1.0"
+dependencies[] = digidoc

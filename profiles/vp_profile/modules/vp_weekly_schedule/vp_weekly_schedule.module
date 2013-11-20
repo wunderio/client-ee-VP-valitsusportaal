@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Weekly Schedule feature.
+ */
+
+include_once 'vp_weekly_schedule.features.inc';

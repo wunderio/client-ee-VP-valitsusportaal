@@ -1,0 +1,64 @@
+<?php
+/**
+ * @file
+ * Code for the Weekly Schedule feature.
+ */
+
+include_once 'vp_menu.features.inc';
+
+/**
+ * Implements hook_block_info().
+ */
+function vp_menu_block_info() {
+  $blocks = array();
+
+  $blocks['second_level_menu_content'] = array(
+    'info' => t('Second level menu content'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_init().
+ */
+function vp_menu_init() {
+  drupal_add_js(drupal_get_path('module', 'vp_menu') .'/imagesloaded.js', array('scope' => 'footer'));
+  drupal_add_library('flexslider', 'flexslider');
+  drupal_add_js(drupal_get_path('module', 'vp_menu') .'/vp_menu.js', array('scope' => 'footer'));
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function vp_menu_block_view($delta = '') {
+  $block = array();
+
+  switch ($delta) {
+    case 'second_level_menu_content':
+      $block['subject'] = t('Second level menu content');
+
+      $block['content'] = '<div id="block-vp-menu-second-level-menu-content-content">';
+      $menu_tree = menu_tree_all_data('main-menu', NULL, 1);
+      foreach ($menu_tree as $menu_link) {
+        if ($menu_link['link']['hidden'] == 1) continue;
+
+        $node = node_load(substr($menu_link['link']['link_path'], 5));
+        $block['content'] .=
+          '<div id="menu-l2-popup-menu-mlid-'.$menu_link['link']['mlid'].'" class="menu-l2-popup menu-mlid menu-mlid-'.$menu_link['link']['mlid'].'">'.
+            '<div class="arrow"></div>'.
+            (isset($node->body[LANGUAGE_NONE][0]['value']) ? $node->body[LANGUAGE_NONE][0]['value'] : '').
+          '</div>';
+      }
+      $block['content'] .= '</div>';
+
+      drupal_add_js(array('vp_menu' => $block['content']), 'setting');
+
+      $block['content'] = '<script type="text/javascript">document.write(Drupal.settings.vp_menu)</script>';
+
+    break;
+  }
+
+  return $block;
+}

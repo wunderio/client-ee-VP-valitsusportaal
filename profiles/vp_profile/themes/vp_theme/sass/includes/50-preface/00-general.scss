@@ -1,0 +1,71 @@
+
+
+
+@if $layout == global {
+  .zone-preface-wrapper {
+    display: none;
+  }
+}
+
+
+
+@if $layout == default {
+  .zone-preface-wrapper {
+    display: block;
+    margin-top: -20px;
+    overflow: hidden;
+    padding: 36px 0;
+    position: relative;
+    z-index: 1;
+
+    .zone-preface {
+      background: url(../img/20-default/zone-preface-separator.png) repeat-y 711px 0;
+
+      .region-preface-first {
+        width: 680px;
+        margin-right: 0;
+        padding-left: 20px;
+      }
+
+      .region-preface-second {
+        display: block;
+        float: none;
+        margin-left: 0;
+        overflow: hidden;
+        padding-left: 20px;
+        padding-right: 20px;
+        width: auto;
+
+        .region-inner {
+          padding: 4px 12px;
+        }
+      }
+    }
+  }
+}
+
+
+
+@if $layout == tablet {
+  .zone-preface-wrapper {
+    background: url(../img/30-tablet/zone-preface-wrapper.png) 50% 0 repeat-y;
+
+    .zone-preface {
+      background-position: 50% 0;
+
+      .region-preface-first {
+        margin-right: 0;
+        padding-left: 23px;
+        width: 312px;
+      }
+    }
+  }
+}
+
+
+
+@if $layout == desktop {
+  .zone-preface-wrapper {
+    background: url(../img/40-desktop/zone-preface-wrapper.png) 50% 0 repeat-y;
+  }
+}

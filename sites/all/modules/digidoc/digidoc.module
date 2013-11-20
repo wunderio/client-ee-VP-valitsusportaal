@@ -1,0 +1,215 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ *
+ * @return array
+ */
+function digidoc_menu() {
+  $items = array();
+
+  $items['admin/config/services/digidoc'] = array(
+    'title' => 'DigiDoc',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('digidoc_admin_form'),
+    'description' => 'Configure settings for DigiDoc service authentication and signing',
+    'access arguments' => array('administer digidoc'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'digidoc.admin.inc',
+    'file path' => drupal_get_path('module', 'digidoc'),
+  );
+  $items['ddoc_download'] = array(
+    'title' => 'DigiDoc download',
+    'page callback' => 'digidoc_ddoc_download',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ *
+ * @return array
+ */
+function digidoc_permission() {
+  return array(
+    'administer digidoc' => array(
+      'title' => t('Administer authentication and sign modules'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_user_categories().
+ */
+function digidoc_user_categories() {
+  return array(array(
+    'name' => 'digidoc',
+    'title' => t('ID-Card'),
+    'weight' => 9,
+  ));
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function digidoc_form_user_profile_form_alter(&$form, &$form_state) {
+  if ($form['#user_category'] == 'digidoc') {
+    module_load_include('inc', 'digidoc', 'digidoc.admin');
+    digidoc_user_form($form, $form_state, $form_state['user']);
+  }
+}
+
+/**
+ * Page callback for obfusicated DigiDoc container download.
+ *
+ * @return void
+ */
+function digidoc_ddoc_download() {
+  $path = variable_get('digidoc_ddoc_file_location', 'public://ddoc');
+  $realpath = drupal_realpath(rtrim($path, '/'));
+
+  // Get filename.
+  $filename = isset($_GET['ddocfile']) ? trim($_GET['ddocfile']) . '.ddoc' : '';
+
+  // Check for file existance.
+  $file = $realpath . '/' . $filename;
+  if (empty($filename) or !file_exists($file)) {
+    drupal_not_found();
+    return;
+  }
+
+  // Get proper filename.
+  $proper_filename = '';
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'file')
+    ->propertyCondition('uri', $path . '/' . $filename);
+  $fid = $query->execute();
+  $fid = isset($fid['file']) ? array_keys($fid['file']) : array();
+  $fid = array_shift($fid);
+  if (!empty($fid)) {
+    $proper_file = file_load($fid);
+    $proper_filename = $proper_file->filename;
+  }
+
+  // Set headers and output file contents to browser.
+  drupal_add_http_header('Content-Type', 'plain/text; utf-8');
+  drupal_add_http_header('Content-Disposition', 'attachment; filename="' . $proper_filename . '"');
+  drupal_add_http_header('cache-control', 'nocache');
+  readfile($file);
+}
+
+/**
+ * Helper function to build DataFile XML from given list of files.
+ *
+ * @param array $files
+ * @return array
+ */
+function digidoc_datafiles($files) {
+  if (empty($files)) {
+    return array();
+  }
+
+  $fileXMLTemplate = '<DataFile xmlns="http://www.sk.ee/DigiDoc/v1.3.0#" ContentType="EMBEDDED_BASE64" Filename="%s" Id="%s" MimeType="%s" Size="%s">%s</DataFile>';
+  $file_id = 0;
+  $datafiles = array();
+  foreach ($files as $filename => $fileinfo) {
+    $filename = trim($filename);
+
+    // Skip in case of empty file names or improper types.
+    if (!strlen($filename) || !in_array($fileinfo['type'], array('text', 'file'))) {
+      continue;
+    }
+
+    // Set file info based on data type - file or text.
+    switch ($fileinfo['type']) {
+      case 'text':
+        $file = array(
+          'name' => $filename,
+          'MIME' => $fileinfo['MIME'],
+          'content' => $fileinfo['content'],
+        );
+        break;
+      case 'file':
+        $basename = drupal_basename($fileinfo['content']);
+        if (!file_exists($basename) or !is_readable($basename)) {
+          continue;
+        }
+
+        // Get file contents and add to file info.
+        $content = file_get_contents($basename);
+        $file = array(
+          'name' => $filename,
+          'MIME' => $fileinfo['mime'],
+          'content' => $content,
+        );
+
+        // Keep it clean, remove loaded content.
+        unset($content);
+        break;
+    }
+
+    // Build DataFile XML from template using current FileID (DigiDoc container
+    // internal file index).
+    $id = 'D' . $file_id;
+    $xml = sprintf($fileXMLTemplate, $file['name'], $id, $file['MIME'], mb_strlen($file['content']), chunk_split(base64_encode($file['content']), 64, "\n") );
+
+    // See on DigestValue allkirjastama saatmiseks
+    // (digidocservice_spec_est.pdf, lk. 40, "datafiles")
+    $hash = base64_encode(pack("H*", sha1(str_replace("\r\n","\n",$xml))));
+
+    // Add DataFile to dataset.
+    $file_info = array(
+      'Id' => $id,
+      'Filename' => $file['name'],
+      'ContentType' => 'HASHCODE',
+      'MimeType' => $file['MIME'],
+      'Size' => mb_strlen($file['content']),
+      'DigestType' => 'sha1',
+      'DigestValue' => $hash,
+      'xml' => $xml,
+      'content' => $file['content'],
+    );
+    $datafiles[] = $file_info;
+
+    // Increase file ID.
+    $file_id++;
+  }
+
+  return $datafiles;
+}
+
+/**
+ * Helper function to return the human-readable error
+ * corresponding to given error code.
+ *
+ * @param int $code
+ * @return string
+ */
+function _mobiil_id_get_error_message($code) {
+  $errors = array(
+    100 => t('Error in Mobiil-ID service. Please contact the site administrator for further details.'),
+    101 => t('One of the required input parameters is faulty. Please contact the site administrator for further details.'),
+    102 => t('One of the required input parameters is missing. Please contact the site administrator for further details.'),
+    103 => t('This site has no access to Mobiil-ID service. Please contact the site administrator for further details.'),
+    200 => t('Error in Mobiil-ID service. Please try again.'),
+    201 => t('Your certificate was not found.'),
+    202 => t('Unable to verify the validity of your certificate.'),
+    300 => t('Phone related error. Please try again or contact your service provider for further details.'),
+    301 => t('The inserted phone number doesn\'t have a valid Mobiil-ID contract.'),
+    302 => t('Your certificate is not valid.'),
+    303 => t('Mobiil-ID service has not been activate for your phone number. To activate the service visit !link.', array('!link' => l('http://mobiil.id.ee', 'http://mobiil.id.ee'))),
+    'USER_CANCEL' => t('Authentication cancelled!'),
+    'NOT_VALID' => t('Signature is not valid!'),
+    'EXPIRED_TRANSACTION' => t('Authentication has expired!'),
+    'MID_NOT_READY' => t('Mobiil-ID service is unavailable at the moment!'),
+    'PHONE_ABSENT' => t('Phone is not reachable!'),
+    'SENDING_ERROR' => t('Could not send the authentication message to the phone!'),
+    'SIM_ERROR' =>  t('SIM card error!'),
+    'INTERNAL_ERROR' => t('Technical error of Mobiil-ID service!'),
+  );
+
+  return isset($errors[$code]) ? $errors[$code] : '';
+}

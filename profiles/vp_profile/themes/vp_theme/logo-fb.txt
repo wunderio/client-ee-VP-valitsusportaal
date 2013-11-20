@@ -1,0 +1,1 @@
+Facebook logo should be atleast 200x200 but in the sharing popup it shows only 100x100. So I'm using the correct version according to the 100px measurement from "riigivapp – digimeedias kasutamine final.pdf"

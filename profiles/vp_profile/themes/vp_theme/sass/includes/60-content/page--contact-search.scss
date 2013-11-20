@@ -1,0 +1,215 @@
+@if $layout == global {
+  // Sidebar.
+  .block--exp-contact-search-page {
+    @extend %extendable-search-form;
+
+    .form-item-name {
+      margin-bottom: 10px;
+    }
+  }
+
+  .view-contact-search {
+    @extend %extendable-contact;
+
+    img {
+      margin: 0 0 20px 0;
+    }
+
+    .views-row {
+      background: url(../img/20-default/news-page-separator.png) repeat-x 0 100%;
+      margin-bottom: 18px;
+      padding-bottom: 20px;
+    }
+
+    // No bottom border for last row.
+    .views-row-last {
+      background: none;
+    }
+
+    h3 {
+      color: $color-text-main-blue;
+      font-family: $font_museo500;
+      font-size: 16px;
+      text-shadow: none;
+    }
+
+    .field-name-field-profile-photo {
+      float: left;
+      padding-left: 0;
+    }
+
+    .field-group-format {
+      margin-left: 120px;
+    }
+
+    @media all and (max-width: 360px) {
+      .field-name-field-profile-photo {
+        float: none;
+        padding-bottom: 15px;
+      }
+
+      .field-group-format {
+        margin-left: 0;
+      }
+    }
+
+    // Last item gets 0 bottom margin.
+    .group_contact {
+      margin-bottom: 0;
+    }
+
+    .field-group-format {
+      margin-bottom: 10px;
+
+      &.group-contact {
+        margin-top: 0;
+      }
+    }
+  }
+
+  // Tabs
+  .block-vp-search-tabs {
+    .content {
+      background-image: url(../img/10-global/block-vp-search-tabs-shadow.png);
+      background-position: 0 50%;
+      background-repeat: no-repeat;
+      background-size: auto 150%;
+      font-family: $font_museo300;
+      font-size: 22px;
+      line-height: 22px;
+      margin: 10px 0 0 0;
+      overflow: hidden;
+      padding-top: 3px;
+      text-shadow: 0 0 4px rgba(0, 0, 0, 0.18);
+    }
+
+    .item {
+      padding: 4px 0 4px 18px;
+
+      &.active {
+        background: url(../img/10-global/block-vp-search-tabs-arrow.png) no-repeat 0 50%;
+
+        a {
+          color: $color-text-main-blue;
+        }
+      }
+    }
+
+    a {
+      color: #888;
+
+      &:hover,
+      &:focus {
+        color: $color-text-main-blue;
+      }
+    }
+
+    .spacer {
+      display: none;
+    }
+  }
+}
+
+
+
+@if $layout == default {
+  // Tabs
+  .block-vp-search-tabs {
+    margin: 0 -15px;
+
+    .content {
+      background-image: url(../img/30-tablet/block-vp-search-tabs-shadow.png);
+      background-position: 50% 100%;
+      background-size: auto;
+      font-size: 30px;
+      line-height: 30px;
+      margin: 0;
+      padding-top: 0;
+      text-shadow: 0 0 4px rgba(0, 0, 0, 0.18);
+    }
+
+    li {
+      float: left;
+    }
+
+    .item {
+      padding: 25px 32px 20px 32px;
+
+      &.first {
+        padding-left: 14px;
+      }
+
+      &.last {
+        border: 0;
+      }
+
+      &.active {
+        background: url(../img/20-default/block-vp-search-tabs-arrow.png) no-repeat 50% 100%;
+
+        a {
+          color: $color-text-main-blue;
+        }
+      }
+    }
+
+    &.active {
+      background: url(../img/20-default/block-vp-search-tabs-arrow.png) no-repeat 50% 100%;
+
+      a {
+        color: $color-text-main-blue;
+      }
+    }
+
+    .spacer {
+      border-right: 1px solid #CCC;
+      direction: ltr;
+      height: 30px;
+      overflow: hidden;
+      text-indent: -10000px;
+      margin-top: 25px;
+      display: block;
+    }
+  }
+
+  .view-contact-search {
+    .node {
+      font-size: 12px;
+    }
+
+    .field-name-field-profile-photo {
+      padding-left: 20px;
+    }
+
+    .field-group-format {
+      margin-left: 150px;
+    }
+
+    img {
+      margin: 0;
+    }
+
+    h3 {
+      padding-top: 3px;
+    }
+  }
+}
+
+
+
+@if $layout == tablet {
+  // Sidebar.
+  .block--exp-contact-search-page {
+    @extend %extendable-search-form-tablet;
+  }
+}
+
+
+
+@if $layout == desktop {
+  // Tabs
+  .block-vp-search-tabs {
+    .content {
+      background-image: url(../img/40-desktop/block-vp-search-tabs-shadow.png);
+    }
+  }
+}

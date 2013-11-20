@@ -1,0 +1,109 @@
+@import '../../../bourbon/bourbon';
+@import '../../../variables.scss';  // Get column count from here
+
+%grid-base {
+  display: inline;
+  float: left;
+  position: relative;
+  margin-left: $gw-gutter-tablet/2;
+  margin-right: $gw-gutter-tablet/2;
+}
+
+@mixin grid($columns) {
+  @extend %grid-base;
+  width: $columns * $gw-column-tablet + $columns * $gw-gutter-tablet - $gw-gutter-tablet;
+}
+
+@mixin prefix($columns) {
+  padding-left: $columns * $gw-column-tablet + $columns * $gw-gutter-tablet;
+}
+
+@mixin suffix($columns) {
+  padding-right: $columns * $gw-column-tablet + $columns * $gw-gutter-tablet;
+}
+
+@mixin pull($columns) {
+  margin-left: $columns * $gw-column-tablet + $columns * $gw-gutter-tablet * -1;
+}
+
+@mixin push($columns) {
+  margin-left: $columns * $gw-column-tablet + $columns * $gw-gutter-tablet;;
+}
+
+body {
+  min-width: $gw-count * $gw-column-tablet + $gw-count * $gw-gutter-tablet;
+}
+
+.container-#{$gw-count} {
+  margin-left: auto;
+  margin-right: auto;
+  width: $gw-count * $gw-column-tablet + $gw-count * $gw-gutter-tablet;
+  $i: 1;
+  @while $i < $gw-count + 1 {
+    .grid-#{$i} {
+      @include grid($i);
+    }
+    .prefix-#{$i} {
+      @include prefix($i);
+    }
+    .suffix-#{$i} {
+      @include suffix($i);
+    }
+    .pull-#{$i} {
+      @include pull($i);
+    }
+    .push-#{$i} {
+      @include push($i);
+    }
+    $i: $i + 1;
+  }
+}
+
+.container-12 {
+  @include clearfix;
+}
+
+/* Hacks */
+body {
+  min-width: $gw-count * $gw-column-tablet + $gw-count * $gw-gutter-tablet - $gw-gutter-tablet;
+}
+
+.container-12 {
+  width: $gw-count * $gw-column-tablet + $gw-count * $gw-gutter-tablet - $gw-gutter-tablet;
+
+  .grid-1:first-child,
+  .grid-2:first-child,
+  .grid-3:first-child,
+  .grid-4:first-child,
+  .grid-5:first-child,
+  .grid-6:first-child,
+  .grid-7:first-child,
+  .grid-8:first-child,
+  .grid-9:first-child,
+  .grid-10:first-child,
+  .grid-11:first-child,
+  .grid-12:first-child {
+    margin-left: 0;
+  }
+
+  .grid-1:last-child,
+  .grid-2:last-child,
+  .grid-3:last-child,
+  .grid-4:last-child,
+  .grid-5:last-child,
+  .grid-6:last-child,
+  .grid-7:last-child,
+  .grid-8:last-child,
+  .grid-9:last-child,
+  .grid-10:last-child,
+  .grid-11:last-child,
+  .grid-12:last-child {
+    margin-right: 0;
+  }
+
+  .grid-12 {
+    margin-left: $gw-gutter-tablet/2;
+    margin-right: $gw-gutter-tablet/2;
+    width: $gw-count * $gw-column-tablet + $gw-count * $gw-gutter-tablet - $gw-gutter-tablet;
+  }
+}

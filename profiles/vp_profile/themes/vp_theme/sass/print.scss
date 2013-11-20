@@ -1,0 +1,92 @@
+@import 'functions.scss';
+$layout: print;
+@import 'extendables.scss';
+@import 'includes/**/*';
+
+// Hide most of the stuff.
+.front,
+#admin-menu,
+#zone-portal-navigation-wrapper,
+#block-vp-menu-second-level-menu-content,
+.block-main-menu,
+#zone-top-wrapper,
+#region-sidebar-first,
+#region-sidebar-second,
+#section-footer,
+.menu-l2-popup,
+.block-delta-blocks-breadcrumb,
+.block-addthis-custom,
+.block-delta-blocks-tabs,
+.all-news,
+.static-join-in,
+.field-name-field-gallery,
+.block-views-28b60dac48d416a8e6750a35cdd59247, // Related news.
+.view-display-id-important_topics_slideshow_block {
+  display: none !important;
+}
+
+// General reset for all tags.
+* {
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #000 !important;
+  //font-size: 10.5pt !important;
+  //line-height: 1.3 !important;
+  text-shadow: none !important;
+}
+// Need to override some styles inside the html.
+body .page .section-header,
+body .page .section-content {
+  background: transparent !important;
+}
+
+body {
+  margin: 0 2em 1em 1em;
+}
+
+.section-header {
+  min-height: 0;
+}
+
+.zone-wrapper,
+.zone {
+  //border: 1px solid black;
+}
+
+.section,
+.zone-wrapper,
+.zone,
+.region,
+.region-inner {
+  margin: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  position: static !important;
+  width: auto !important;
+}
+
+.block-delta-blocks-logo {
+  padding-left: 0;
+}
+
+h1 {
+  //font-size: 15pt !important;
+}
+
+.node {
+  h2 {
+    //font-size: 13pt !important;
+    //margin-top: 25px !important;
+  }
+
+  p a:after {
+    content: " (" attr(href) ")";
+    font-size: 80%;
+  }
+}
+
+img,
+.views-row {
+  page-break-inside: avoid;
+}
+

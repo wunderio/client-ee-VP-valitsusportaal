@@ -1,0 +1,111 @@
+
+
+
+@if $layout == global {
+  // Sidebar.
+  .block--exp-contact-contact-page {
+    @extend %extendable-taxonomy-filter;
+  }
+
+  .view-display-id-contact_page {
+    table {
+      @extend %table-reset;
+      @extend %extendable-table;
+
+      margin-bottom: 72px;
+    }
+
+    td.views-field-title {
+      cursor: pointer;
+      font-weight: bold;
+
+      &:hover {
+        color: $color-text-main-blue;
+      }
+    }
+
+    .modal-tr {
+      display: none;
+    }
+
+    // Table title and description.
+    & {
+      caption {
+        text-align:  left;
+      }
+
+      h2 {
+        color: $color-text-main-blue;
+        margin-bottom: 10px;
+        text-shadow: none;
+      }
+
+      p {
+        font-size: 14px;
+        line-height: 18px;
+        padding-bottom: 44px;
+      }
+    }
+
+    // Widths so multiple tables on same page align nicely.
+    & {
+      .views-field-title {
+        width: 130px;
+      }
+
+      .views-field-field-contact-phone-nr {
+        width: 90px;
+      }
+
+      .views-field-field-contact-e-mail {
+        width: 200px;
+      }
+    }
+  }
+
+
+
+  //=== DIALOG ===//
+
+  .ui-dialog-content-contact {
+    @extend %extendable-contact;
+
+    .field-name-field-profile-photo {
+      margin-bottom: 30px;
+    }
+
+    .title {
+      padding-top: 6px;
+    }
+  }
+}
+
+
+
+@if $layout == default {
+  .page-contact-search .region-sidebar-first .block {
+    padding: 15px 20px 16px 20px;
+  }
+
+  .ui-dialog-content-contact {
+    .field-group-format {
+      margin-left: 180px;
+    }
+
+    .field-name-field-profile-photo {
+      float: left;
+      margin-left: 0;
+      margin-bottom: 0;
+    }
+
+    a {
+      color: $color-link;
+      text-decoration: underline;
+
+      &:hover,
+      &:focus {
+        color: $color-link-hover;
+      }
+    }
+  }
+}

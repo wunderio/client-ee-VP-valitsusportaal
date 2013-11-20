@@ -1,0 +1,133 @@
+
+
+
+@if $layout == default {
+  .view-display-id-important_topics_slideshow_block {
+    $column_space: 15px;
+
+    color: $color-text;
+    font-size: 14px;
+    line-height: 16px;
+    margin-left: -3px;
+    margin-right: 3px;
+
+    .flexslider-important-topics-slideshow {
+      padding-bottom: 10px;
+      display: none;
+
+      .slides {
+        //margin-left: -5px; // Make shadow visible from edges.
+        @extend %clearfix;
+      }
+
+      .row {
+        display: none; -webkit-backface-visibility: hidden; // Hide the slides before the JS is loaded. Avoids image jumping
+
+        &:first-child {
+          display: block;
+        }
+      }
+
+      .col {
+        padding-top: 5px
+      }
+
+      .col-inner {
+        background-color: #fff;
+        background-position: 100% 0;
+        background-repeat: no-repeat;
+        min-height: 154px;
+        padding: 23px 25px;
+      }
+
+      .views-field-title {
+        font-family: $font_museo300;
+        font-size: 22px;
+        line-height: 22px;
+        padding-bottom: 12px;
+
+        &,
+        a {
+          color: #006699
+        }
+      }
+    }
+
+    .flex-control-nav {
+      bottom: -6px;
+      left: 7px;
+      padding-right: $column_space + 1;
+      position: absolute;
+      right: 0;
+      text-align: center;
+
+      li {
+        display: inline-block;
+        margin: 0;
+
+        a {
+          @include size(13);
+          background: url(../img/10-global/cycle-important-topics-slideshow-nav.png);
+          cursor: pointer;
+          direction: ltr;
+          display: block;
+          margin: 0 4px;
+          overflow: hidden;
+          text-indent: -10000px;
+
+          &.flex-active {
+            background-position: 100% 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+@if $layout == tablet {
+  .view-display-id-important_topics_slideshow_block {
+    #flexslider-important-topics-slideshow-tablet {
+      display: block;
+
+      .row {
+        width: 312px; // Stop some flicker because on script loading rows get very large with for a short period.
+      }
+
+      .col {
+        padding-bottom: 8px;
+      }
+    }
+  }
+}
+
+
+
+@if $layout == desktop {
+  .view-display-id-important_topics_slideshow_block {
+    $column_space: 15px;
+
+    #flexslider-important-topics-slideshow-desktop {
+      display: block;
+
+      .row {
+        width: 680px; // Stop some flicker because on script loading rows get very large with for a short period.
+
+        &.flex-active-slide .col-inner {
+          box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.65);
+        }
+      }
+
+      .col {
+        float: left;
+        padding-bottom: 14px;
+        width: 50%;
+      }
+
+      .col-inner {
+        margin: 0 ceil($column_space/2);
+      }
+    }
+  }
+}

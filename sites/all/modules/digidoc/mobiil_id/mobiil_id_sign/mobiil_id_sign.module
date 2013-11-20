@@ -1,0 +1,420 @@
+<?php
+
+/**
+ * Implements hook_init().
+ *
+ * @return void
+ */
+function mobiil_id_sign_init() {
+  $path = drupal_get_path('module', 'digidoc');
+  drupal_add_css($path . '/mobiil_id/mobiil_id.css');
+}
+
+/**
+ * Implements hook_theme().
+ *
+ * @return array
+ */
+function mobiil_id_sign_theme() {
+  $path = drupal_get_path('module', 'digidoc');
+  return array(
+    'mobiil_id_status' => array(
+      'template' => 'status',
+      'path' => $path . '/mobiil_id/templates',
+      'variables' => array(
+        'verification_code' => '',
+      ),
+    ),
+  );
+}
+
+/**
+ * Mobiil-ID sign form.
+ *
+ * @param array $form
+ * @param array $form_state
+ * @return void
+ */
+function mobiil_id_sign_form($form, &$form_state) {
+  $form = array();
+
+  // Response status wrapper.
+  $form['status'] = array(
+    '#markup' => '<div id="digidoc-sign-status"></div>',
+  );
+
+  // Add sign link.
+  $form['mobiil_id_sign'] = array(
+    '#type' => 'button',
+    '#value' => t('Sign with Mobiil-ID'),
+    '#prefix' => '<div id="mobiil-id-sign-wrapper">',
+    '#suffix' => '</div>',
+    '#ajax' => array(
+      'callback' => '_mobiil_id_sign_handle_request',
+      'wrapper' => 'digidoc-sign-status',
+      'event' => 'mobiil_id_sign_start',
+    ),
+    '#attached' => array(
+      'js' => array(array(
+        'data' => drupal_get_path('module', 'digidoc') . '/mobiil_id/mobiil_id.js',
+        'type' => 'file',
+      )),
+    ),
+  );
+
+  return $form;
+}
+
+/**
+ * Handler for sign initialize and finalize requests.
+ *
+ * @param array $form
+ * @param array $form_state
+ * @return array
+ */
+function _mobiil_id_sign_handle_request($form, &$form_state) {
+  global $language;
+
+  $state = isset($_POST['state']) ? filter_xss(trim($_POST['state'])) : 'initialize';
+  $commands = $status_result = array();
+
+  if ($state == 'initialize') {
+    $phone_num = isset($_SESSION['__erjk_phone_number']) ? trim($_SESSION['__erjk_phone_number']) : '';
+    if (empty($phone_num)) {
+      form_error($form['status'], _mobiil_id_get_error_message(102));
+      return $form['status'];
+    }
+
+    // Make the SOAP request to start sign process.
+    $status_result = _mobiil_id_sign_initialize($phone_num);
+    if ($status_result['status'] == 'OK') {
+      $mobiil_id = &$_SESSION['mobiil_id_sign'];
+
+      // Hide "Sign" button.
+      $commands[] = ajax_command_invoke('#mobiil-id-sign-wrapper', 'addClass', array('element-hidden'));
+
+      // Trigger status check.
+      $commands[] = ajax_command_invoke('#digidoc-sign-status', 'trigger', array(
+        'mobiil_id_sign_finalize'
+      ));
+
+      // Show user status page with challenge ID.
+      $content = theme('mobiil_id_status', array(
+        'verification_code' => $mobiil_id['challengeid'],
+      ));
+      $commands[] = ajax_command_html('#digidoc-sign-status', $content);
+      return array('#type' => 'ajax', '#commands' => $commands);
+    }
+    else {
+      form_error($form['status'], $status_result['status_msg']);
+      return $form['status'];
+    }
+  }
+  elseif ($state == 'finalize') {
+    $status_result = _mobiil_id_sign_finalize();
+    if ($status_result['status'] == 'OK') {
+      // Implement "hook_digidoc_id_card_sign_success".
+      $hooks = module_implements('digidoc_mobiil_id_sign_success');
+      foreach($hooks as $module) {
+        $function = $module . '_digidoc_mobiil_id_sign_success';
+        $function($form_state, $status_result, $commands);
+      }
+    }
+  }
+
+  $commands[] = ajax_command_html('#digidoc-sign-status', t($status_result['status_msg']));
+  return array('#type' => 'ajax', '#commands' => $commands);
+}
+
+/**
+ * Outputs the page with instuctions and challenge id or error in case Mobiil-ID service failed
+ * (ie. wrong or non-registered Mobiil-ID phone number)
+ *
+ * @return string description
+ */
+function _mobiil_id_sign_initialize($phone_num) {
+  $status = 'error';
+  $status_msg = 'Unidentified error in signing implementation';
+
+  // Get phone number and add Estonian country code to it.
+  if (!preg_match('/^\+?372/', $phone_num)) {
+    $phone_num = '+372' . $phone_num;
+  }
+
+  try {
+    list($_language, $_message) = _mobiil_id_get_response_message();
+
+    // Some of these are NOT used by ID card signing, but are instead
+    // used by signing with Mobiil-ID.
+    // Since we want to have a somewhat uniform way to do these things
+    // and not overcomplicate the use of this module then the same alter
+    // hook is used by both signing modules.
+    //
+    // So, the info actually used by ID card signing is as follows: Role,
+    // City, StateOrProvince, PostalCode, CountryName; and none of those
+    // fields are required, so it's actually not needed to have the alter
+    // hook for id card signing.
+    $signer = array(
+      'Sesscode' => 0,
+      'SignerIDCode' => '',
+      'SignersCountry' => 'EE', // country that assigned the IDCode. ISO 3166 2-letter uppercase format
+      'SignerPhoneNo' => $phone_num, // in format +xxxxxxxxx starting with country code
+      'ServiceName' => variable_get('digidoc_service_name', 'Testimine'), // up to 20 symbols
+      'AdditionalDataToBeDisplayed' => $_message, // up to 50 symbols, shown on phone
+      'Language' => $_language, // ISO 639: 3-letter uppercase format
+      'Role' => variable_get('digidoc_signer_role',''),
+      'City' => variable_get('digidoc_signer_city',''),
+      'StateOrProvince' => variable_get('digidoc_signer_state',''),
+      'PostalCode' => variable_get('digidoc_signer_postalcode',''),
+      'CountryName' => variable_get('digidoc_signer_country','Eesti'),
+      'SigningProfile' => '', // it's ignored in current version of the client
+      'MessagingMode' => 'asynchClientServer',
+      'AsyncConfiguration' => NULL, // only applicable for asynchServerServer and we don't use that
+      'ReturnDocInfo' => true, // returns DigiDoc file info
+      'ReturnDocData' => true, // returns DigiDoc document in HTMLescaped format
+    );
+    foreach (module_implements('digidoc_signer_alter') as $module) {
+      $function = $module . '_digidoc_signer_alter';
+      $function($signer);
+    }
+
+    // Create dummy file. Let the "hook_digidoc_files_alter" change
+    // the file to be signed.
+    $t1 = 'This is a test file. You should implement "_digidoc_files_alter" hook and overwrite $files parameter.';
+    $files = array(
+      'test.txt' => array('type' => 'text', 'MIME' => 'text/plain', 'content' => $t1),
+    );
+
+    // Invoke hook to alter files that are about to be signed.
+    foreach (module_implements('digidoc_files_alter') as $module) {
+      $function = $module . '_digidoc_files_alter';
+      $function($files);
+    }
+
+    // Initialize SOAP connection to OpenXAdES server.
+    $client = new SoapClient(
+      variable_get('digidoc_server_url', 'https://www.openxades.org:8443/?wsdl'),
+      array(
+        'trace' => true,
+        'exceptions' => true,
+        'login' => variable_get('digidoc_server_username', null),
+        'password' => variable_get('digidoc_server_password', null)
+      )
+    );
+
+    // Get datafiles to be signed. Store them to session.
+    // @todo: kui on taidetud, ytle pahasti ja tee tyhjaks
+    $dataFiles = digidoc_datafiles($files);
+    $_SESSION['mobiil_id_sign']['datafiles'] = $dataFiles;
+
+    // Build the necessary digidoc file.
+    $ddocFile = '<?xml version="1.0" encoding="UTF-8"?><SignedDoc format="DIGIDOC-XML" version="1.3" xmlns="http://www.sk.ee/DigiDoc/v1.3.0#">';
+    foreach ($dataFiles as $m => $v) {
+      $dataFileXMLTemplate = '<DataFile xmlns="http://www.sk.ee/DigiDoc/v1.3.0#" ContentType="HASHCODE" Filename="%s" Id="%s" MimeType="%s" Size="%s" DigestType="%s" DigestValue="%s">';
+      $ddocFile .= sprintf($dataFileXMLTemplate, $v['Filename'], $v['Id'], $v['MimeType'], $v['Size'], $v['DigestType'], $v['DigestValue']);
+      $ddocFile .= "\n</DataFile>";
+    }
+    $ddocFile .= '</SignedDoc>';
+
+    // Start the session. Store returned session ID to local session.
+    //
+    // Assembling necessary parameters based on
+    // http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl
+    //
+    // The function is called this way instead of $client->StartSession()
+    // because by using __soapCall() I can pre-form the parameter array
+    // it doesn't matter much here, but the next function call has many
+    // parameters and it's clearer to do it this way.
+    $startSession_param = array(
+      'SigningProfile' => null,
+      'SigDocXML' => $ddocFile,
+      'bHoldSession' => true,
+      'datafile' => null,
+    );
+    $startSession_result = $client->__soapCall('StartSession', $startSession_param);
+    $_SESSION['mobiil_id_sign']['sesscode'] = $startSession_result['Sesscode'];
+
+    // Starting actual signing.
+    // Parameter array based on
+    // http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl
+    $mobileSign_param = $signer;
+    $mobileSign_param['Sesscode'] = $_SESSION['mobiil_id_sign']['sesscode'];
+    $mobileSign_result = $client->__soapCall('MobileSign', $mobileSign_param);
+    if ($mobileSign_result['Status'] == 'OK') {
+      $status = 'OK';
+
+      // Store returned challenge ID in session.
+      $_SESSION['mobiil_id_sign']['challengeid'] = $mobileSign_result['ChallengeID'];
+    }
+    else {
+      $status = $mobileSign_result['Status'];
+      $status_msg = _mobiil_id_sign_get_error_message($mobileSign_result['Status']);
+    }
+  }
+  catch(Exception $e) {
+    unset($_SESSION['mobiil_id_sign']['challengeid']);
+
+    $status = 'soaperror';
+    $status_msg = _mobiil_id_get_error_message($e->getMessage());
+  }
+
+  return array('status' => $status, 'status_msg' => $status_msg);
+}
+
+/**
+ * Goes through the final steps to sign a document digitally with Mobiil-ID.
+ */
+function _mobiil_id_sign_finalize() {
+  $mobiil_id = &$_SESSION['mobiil_id_sign'];
+  $status = 'error';
+  $status_msg = 'Unidentified error in signing implementation';
+
+  // Unset challenge ID from session, we do not need it anymore.
+  unset($mobiil_id['challengeid']);
+
+  try {
+    $client = new SoapClient(
+      variable_get('digidoc_server_url', 'https://www.openxades.org:8443/?wsdl'),
+      array(
+        'trace' => true,
+        'exceptions' => true,
+        'login' => variable_get('digidoc_server_username', null),
+        'password' => variable_get('digidoc_server_password', null)
+      )
+    );
+
+    $getStatusInfo_param = array(
+      'Sesscode' => $mobiil_id['sesscode'],
+      'ReturnDocInfo' => false,
+      'WaitSignature' => false,
+    );
+
+    $counter = 0;
+    while ($getStatusInfo_result = $client->__soapCall('GetStatusInfo', $getStatusInfo_param)) {
+      $status_code = $getStatusInfo_result['StatusCode'];
+      if (in_array($status_code, array('OUTSTANDING_TRANSACTION', 'REQUEST_OK'))) {
+        $counter++;
+
+        // Cancel further processing, if checking has taken
+        // more than 30 seconds.
+        if ($counter * 5 > 30) {
+          break;
+        }
+
+        // Sleep for 5 seconds and then retry the SOAP call.
+        sleep(5);
+        continue;
+      }
+      elseif ($getStatusInfo_result['StatusCode'] == 'SIGNATURE') {
+        // Get signed document.
+        $getSignedDoc_param = array('Sesscode' => $mobiil_id['sesscode']);
+        $getSignedDoc_result = $client->__soapCall('GetSignedDoc', $getSignedDoc_param);
+        $signedDocData = html_entity_decode($getSignedDoc_result['SignedDocData']);
+
+        // Close session.
+        $closeSession_param = array('Sesscode' => $mobiil_id['sesscode']);
+        $closeSession_result = $client->__soapCall('CloseSession', $closeSession_param);
+        unset($mobiil_id['sesscode']);
+
+        // Load datafiles stored in session.
+        $datafiles = '';
+        foreach ($mobiil_id['datafiles'] as $m => $v) {
+          $datafiles .= "\n".$v['xml'];
+        }
+        unset($mobiil_id['datafiles']);
+
+        // Removing the datafiles that are currently in the text because the
+        // final DigiDoc file must have encoded files instead of hashes of
+        // those files. Documentation bottom of pg. 26
+        // and inserting the EMBEDDED_BASE64 versions of datafiles.
+        $signedDocData = preg_replace('/<DataFile\sContentType[^>]+><\/DataFile>/', '', $signedDocData);
+        $signedDocData = str_replace(
+          '<SignedDoc format="DIGIDOC-XML" version="1.3" xmlns="http://www.sk.ee/DigiDoc/v1.3.0#">',
+          '<SignedDoc format="DIGIDOC-XML" version="1.3" xmlns="http://www.sk.ee/DigiDoc/v1.3.0#">' . $datafiles,
+          $signedDocData
+        );
+
+        // If user developer has implemented a custom save functionality,
+        // run it, istead of the default one, where .ddoc files with
+        // random names are saved to DDOC file location defined in
+        // DigiDoc configuration.
+        $ddocFileName = '';
+        $ddoc_save_hooks = module_implements('digidoc_ddoc_save');
+        if (count($ddoc_save_hooks)) {
+          foreach ($ddoc_save_hooks as $module) {
+            $function = $module . '_digidoc_ddoc_save';
+            $function($signedDocData, $ddocFileName);
+          }
+        }
+        else {
+          // Creating random file name as default behaviour.
+          $ddocFileName = md5(time() . rand()) . '.ddoc';
+          $path = variable_get('digidoc_ddoc_file_location', 'public://ddoc');
+          file_prepare_directory($path, FILE_CREATE_DIRECTORY);
+          file_save_data($signedDocData, $path . '/' . $ddocFileName, FILE_EXISTS_REPLACE);
+        }
+
+        // Invoke digidoc finalize hook.
+        // Used to execute additional code on successful Mobiil-ID sign.
+        $finalize_hooks = module_implements('digidoc_sign_finalize');
+        foreach ($finalize_hooks as $module) {
+          $function = $module . '_digidoc_sign_finalize';
+          $function($ddocFileName);
+        }
+
+        // Remove "mobiil_id_sign" from session.
+        unset($_SESSION['mobiil_id_sign']);
+
+        $status = 'OK';
+        $status_msg = t('Report signed.');
+        return array(
+          'status' => $status,
+          'status_msg' => $status_msg,
+          'filename' => $ddocFileName,
+        );
+      }
+      else {
+        $status = 'error';
+        $status_msg = _mobiil_id_get_error_message($getStatusInfo_result['StatusCode']);
+        break;
+      }
+    }
+  }
+  catch(Exception $e) {
+    $status = 'soaperror';
+    $status_msg = _mobiil_id_get_error_message($e->getMessage());
+  }
+
+  return array('status' => $status, 'status_msg' => $status_msg);
+}
+
+function _mobiil_id_get_response_message() {
+  global $language;
+
+  // If the locale module is enabled, set the message language
+  // based on what language user is in.
+  // NOTE! The Mobiil-ID service language codes are different from Drupal's.
+  $lang = $message = '';
+  if (module_exists('locale')) {
+    switch ($language->language) {
+      case 'et':
+        $lang = 'EST';
+        $message = variable_get('mobiil_id_sign_message_et', '');
+        break;
+      case 'ru':
+        $lang = 'RUS';
+        $message = variable_get('mobiil_id_sign_message_ru', '');
+        break;
+      default:
+        $lang = 'ENG';
+        $message = variable_get('mobiil_id_sign_message_en', '');
+        break;
+    }
+  }
+  else {
+    $lang = variable_get('mobiil_id_language', 'EST');
+    $message = variable_get('mobiil_id_sign_message', '');
+  }
+
+  return array($lang, $message);
+}

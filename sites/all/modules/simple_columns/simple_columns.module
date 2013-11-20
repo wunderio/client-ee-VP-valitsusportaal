@@ -1,0 +1,237 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ */
+function simple_columns_menu() {
+  $items['admin/structure/simple-columns'] = array(
+    'title' => 'Simple columns',
+    'description' => 'Build Simple columns block.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('simple_columns_admin_form'),
+    'access arguments' => array('administer nodes'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
+/**
+ * @todo Links adding with AJAX.
+ */
+function simple_columns_admin_form($form, &$form_state) {
+  global $user;
+  // Count
+  $form['simple_columns_count'] = array(
+    '#type' => 'select',
+    '#options' => array_combine(range(1, 10), range(1, 10)),
+    '#title' => t('Number of columns:'),
+    '#default_value' => variable_get('simple_columns_count', 4),
+    '#required' => TRUE,
+  );
+  if (module_exists('number')) {
+    $form['simple_columns_count']['#number_type'] = 'integer';
+    $form['simple_columns_count']['#element_validate'] = array('number_field_widget_validate');
+  }
+  // Generate simple columns block.
+  for ($i = 1; $i <= variable_get('simple_columns_count', 4); ++$i) {
+    $form['simple_columns_block_'.$i] = array(
+    '#type' => 'fieldset',
+      '#title' => t('Column !nr', array('!nr' => $i)),
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+    );
+    if(isset($form_state['opened']) && $form_state['opened'] == 'simple_columns_'.$i.'_links')
+      $form['simple_columns_block_'.$i]['#collapsed'] = FALSE;
+    $form['simple_columns_block_'.$i]['simple_columns_'.$i.'_title'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Title'),
+      '#default_value' => variable_get('simple_columns_'.$i.'_title'),
+    );
+    $body = variable_get('simple_columns_'.$i.'_body', array('value' => '', 'format' => (filter_formats($user))));
+    $form['simple_columns_block_'.$i]['simple_columns_'.$i.'_body'] = array(
+      '#type' => 'text_format',
+      '#title' => t('Body'),
+      '#default_value' => $body['value'],
+      '#format' => $body['format'],
+    );
+    $form['simple_columns_block_'.$i]['simple_columns_'.$i.'_links'] = array(
+      '#type' => 'container',
+      '#tree' => TRUE,
+      '#language' => LANGUAGE_NONE,
+    );
+    $form['simple_columns_block_'.$i]['simple_columns_'.$i.'_links'][LANGUAGE_NONE] = array(
+      '#theme' => 'field_multiple_value_form',
+      '#title' => t('Links'),
+      '#cardinality' => FIELD_CARDINALITY_UNLIMITED,
+      '#description' => '',
+      '#language' => LANGUAGE_NONE,
+      '#field_name' => 'simple_columns_'.$i.'_links_widget',
+    );
+    $links_values = variable_get('simple_columns_'.$i.'_links');
+    if (!isset($form_state['num_names']['simple_columns_'.$i.'_links']) || $form_state['num_names']['simple_columns_'.$i.'_links'] < count($links_values[LANGUAGE_NONE])) {
+      $form_state['num_names']['simple_columns_'.$i.'_links'] = count($links_values[LANGUAGE_NONE]);
+    }
+    for ($l = 0; $l < $form_state['num_names']['simple_columns_'.$i.'_links']; ++$l) {
+      $form['simple_columns_block_'.$i]['simple_columns_'.$i.'_links'][LANGUAGE_NONE][$l] = array(
+        '#type' => 'link_field',
+        '#weight' => 0-$l,
+        '#field_name' => 'simple_columns_'.$i.'_links',
+        '#delta' => 0-$l,
+        '#language' => LANGUAGE_NONE,
+        '#field_parents' => NULL,
+      );
+      if (isset($links_values[LANGUAGE_NONE][$l]))
+        $form['simple_columns_block_'.$i]['simple_columns_'.$i.'_links'][LANGUAGE_NONE][$l]['#default_value'] = $links_values[LANGUAGE_NONE][$l];
+    }
+    $form['simple_columns_block_'.$i]['simple_columns_'.$i.'_links'][LANGUAGE_NONE]['add_more'] = array(
+      '#type' => 'submit',
+      '#name' => "add_another_$i-links",
+      '#value' => 'Add another item',
+      '#attributes' => array('class' => array("$i-links")),
+      '#submit' => array('simple_columns_add_more_add_one'),
+    );
+  }
+
+  $form = system_settings_form($form);
+  // Clear cache so simple_columns_variable_type_info() gets reloaded for options update.
+  $form['#submit'][] = 'variable_cache_clear';
+
+  return $form;
+}
+
+function simple_columns_add_more_add_one($form, &$form_state) {
+  $form_state['opened'] = $form_state['triggering_element']['#parents'][0];
+  $form_state['num_names'][$form_state['triggering_element']['#parents'][0]]++;
+  $form_state['rebuild'] = TRUE;
+}
+
+/**
+ * Implements hook_variable_type_info().
+ */
+function simple_columns_variable_type_info() {
+  $type['simple_columns'] = array(
+    'title' => t('Simple columns'),
+    'type' => 'select',
+    'options' => array_combine(range(1, 10), range(1, 10)),
+  );
+
+  return $type;
+}
+
+/**
+ * Implements hook_variable_group_info().
+ */
+function simple_columns_variable_group_info() {
+  $groups['simple_columns'] = array(
+    'title' => t('Simple columns'),
+  );
+  return $groups;
+}
+
+/**
+ * Implements hook_variable_info().
+ */
+function simple_columns_variable_info($options) {
+  $variable['simple_columns_count'] = array(
+    'title' => t('Simple columns', array(), $options),
+    'type' => 'number',
+    'default' => 4,
+    'element' => array(
+      '#type' => 'select',
+      '#options' => array_combine(range(1, 10), range(1, 10)),
+      '#required' => TRUE,
+      '#size' => 1,
+    ),
+    'group' => 'simple_columns',
+    'localize' => TRUE,
+  );
+  $variable['simple_columns_[simple_columns]_title'] = array(
+    'title' => t('Column title', array(), $options),
+    'type' => 'multiple',
+    'multiple' => 'simple_columns',
+    'repeat' => array('type' => 'string'),
+    'group' => 'simple_columns',
+    'localize' => TRUE,
+  );
+  $variable['simple_columns_[simple_columns]_body'] = array(
+    'title' => t('Column body text', array(), $options),
+    'type' => 'multiple',
+    'multiple' => 'simple_columns',
+    'repeat' => array(
+      'type' => 'array',
+      'element' => array(
+        '#type' => 'text_format',
+      ),
+      'default' => array('value' => '', 'format' => 'full_html'),
+    ),
+    'group' => 'simple_columns',
+    'localize' => TRUE,
+  );
+  $variable['simple_columns_[simple_columns]_links'] = array(
+    'title' => t('Column links', array(), $options),
+    'type' => 'multiple',
+    'multiple' => 'simple_columns',
+    'repeat' => array(
+      'type' => 'array',
+      'default' => array(),
+    ),
+    'group' => 'simple_columns',
+    'localize' => TRUE,
+  );
+  
+  return $variable;
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function simple_columns_block_info() {
+  $blocks = array();
+
+  $blocks['simple_columns'] = array(
+    'info' => t('Simple columns'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function simple_columns_block_view($delta = '') {
+  $block = array();
+
+  switch ($delta) {
+    case 'simple_columns':
+      $block['subject'] = t('Simple columns');
+
+      for ($i = 1; $i <= variable_get('simple_columns_count', 4); ++$i) {
+        $block_items[$i]['title'] = variable_get('simple_columns_'.$i.'_title', '');
+        $block_items[$i]['body'] = variable_get('simple_columns_'.$i.'_body', array('value' => '', 'format' => NULL));
+        $block_items[$i]['links'] = variable_get('simple_columns_'.$i.'_links', array());
+      }
+      
+      $block['content'] = theme('simple_columns_block', array('block_items' => $block_items));
+    break;
+  }
+
+  return $block;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function simple_columns_theme() {
+  $theme = array(
+    'simple_columns_block' => array(
+      'variables' => array(
+        'block_items' => NULL,
+      ),
+      'template'  => 'simple_columns_block',
+    ),
+  );
+
+  return $theme;
+}

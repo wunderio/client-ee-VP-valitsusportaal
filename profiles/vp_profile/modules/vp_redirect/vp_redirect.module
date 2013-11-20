@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * Implements hook_init().
+ */
+function vp_redirect_init() {
+  $args = arg();
+  if ($args[0] === 'node') return;
+  unset($args[0]);
+  foreach ($args as $arg) {
+    if (is_numeric($arg) && db_table_exists('migrate_map_newsnode')) {
+      $nid = db_select('migrate_map_newsnode', 'n')
+        ->condition('n.sourceid1', (int) $arg)
+        ->fields('n', array('destid1'))
+        ->range(0, 1)
+        ->execute()
+        ->fetchCol();
+      if (!empty($nid)) {
+        drupal_goto('node/'.$nid[0], array(), 301);
+      }
+    }
+  }
+}

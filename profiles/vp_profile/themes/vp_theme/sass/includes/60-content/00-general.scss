@@ -1,0 +1,81 @@
+
+
+
+@if $layout == global {
+  .front .zone-content {
+    // Show only the first block in content-zone on frontpage.
+    & {
+      .block {
+        display: none;
+
+        &.first-content-block-in-region {
+          display: block;
+          // @todo. Hard code max-width here. Not the best solution.
+          @media all and (max-width: 719px) {
+            height: auto !important;
+          }
+        }
+      }
+    }
+
+    .block {
+      background-color: #F6F4EF;
+      position: relative;
+
+      .block-inner {
+        padding: 20px;
+      }
+
+      .block-title {
+        background: url(../img/10-global/front-content-block-title.png) no-repeat 50% 100%;
+        color: #006699;
+        font-family: $font_museo700;
+        font-size: 12px;
+        margin: -20px -20px 12px;
+        padding: 10px 20px 6px 20px;
+        text-shadow: none;
+      }
+
+      .tabs {
+        @extend %frontpage-content-block-tabs;
+      }
+    }
+
+    // Reset for messages.
+    .block-delta-blocks-messages {
+      background: transparent !important;
+      clear: both;
+      float: none !important;
+      margin-bottom: 20px;
+      width: auto !important;
+
+      .block-inner {
+        padding: 0 !important;
+      }
+    }
+  }
+}
+
+
+
+@if $layout == default {
+  .front .zone-content .block {
+    display: block;
+  }
+}
+
+
+
+@if $layout == desktop {
+  .front {
+    .region-content {
+      .block {
+        background-color: #F6F4EF;
+
+        .block-inner {
+          padding: 20px;
+        }
+      }
+    }
+  }
+}

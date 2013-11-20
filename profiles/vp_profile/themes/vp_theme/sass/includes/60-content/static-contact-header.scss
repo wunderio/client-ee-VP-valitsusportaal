@@ -1,0 +1,297 @@
+
+
+
+@if $layout == global or
+    $layout == editor {
+  .static-contact-header {
+    padding: 28px 0 23px;
+
+    h2 {
+      @include fontSize(30px);
+      line-height: 30px;
+    }
+
+    a {
+      text-decoration: underline;
+    }
+
+    .location-wrap {
+      @extend %clearfix;
+      padding-bottom: 28px;
+    }
+
+    .contacts-wrap {
+      @extend %horizontal-ruler-global;
+      padding-bottom: 50px;
+      padding-top: 40px;
+
+      &:after {
+        background-image: url(../img/40-desktop/block-separator.png);
+        background-position: 50% 0;
+        bottom: 0;
+        content: "";
+        height: 23px;
+        left: 0;
+        margin-left: -20px;
+        margin-right: -20px;
+        position: absolute;
+        right: 0;
+        z-index: 2;
+      }
+    }
+
+    .textbox {
+      line-height: 18px;
+      padding: 20px 45px 20px 0;
+
+      p {
+        font-size: 14px;
+      }
+
+      ul {
+        margin-top: 18px;
+      }
+
+      .label {
+        display: inline-block;
+        min-width: 61px;
+        padding-right: 5px;
+      }
+    }
+
+    .mapbox,
+    .imagebox {
+      clear: left;
+      float: left;
+      margin-bottom: 0;
+      margin-top: 15px;
+
+      img {
+        border: 5px solid #fff;
+        box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.6);
+      }
+
+      .hint {
+        color: #006699;
+        text-align: center;
+        padding-top: 8px;
+      }
+    }
+
+    .mapbox {
+      margin-right: 24px;
+    }
+
+    .imagebox {
+    }
+
+    .styled-textbox {
+      border: 1px dashed #BD4932;
+      color: #525252;
+      line-height: 22px;
+      margin: 0 auto;
+      margin: 6px 6px 35px 6px;
+      padding: 30px 10px;
+      position: relative;
+      text-align: center;
+      width: 216px;
+
+      em {
+        @include fontSize(17px);
+        color: #00688C; // Allthough we could use $color-link-hover, I think style should be static (not changeable through variable).
+        font-family: $font_museo500;
+        font-style: normal;
+      }
+
+      &:before {
+        background-image: url(../img/10-global/static-contact-header-styled-textbox.png);
+        bottom: -6px;
+        content: "";
+        left: -6px;
+        position: absolute;
+        right: -6px;
+        top: -6px;
+        z-index: -1;
+      }
+    }
+
+    .contacts {
+      overflow: hidden;
+    }
+
+    .contact {
+      @extend %clearfix;
+      background: url(../img/20-default/news-page-separator.png) repeat-x 0 0;
+      line-height: 18px;
+      margin-top: 20px;
+      padding: 21px 0 0 0;
+
+      img {
+        float: left;
+      }
+
+      h3,
+      p,
+      ul {
+        margin-left: 119px;
+      }
+
+      @media all and (max-width: 430px) {
+        img {
+          float: none;
+          margin-bottom: 15px;
+        }
+
+        h3,
+        p,
+        ul {
+          margin-left: 0;
+        }
+      }
+
+      h3 {
+        color: $color-text-main-blue;
+        text-shadow: none;
+        margin-bottom: 2px;
+      }
+
+      p,
+      ul {
+        margin-bottom: 11px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+
+      .label {
+        display: inline-block;
+        min-width: 44px;
+        padding-right: 5px;
+      }
+
+      &:first-child {
+        background: none;
+        margin-top: 0;
+        padding-top: 0;
+      }
+    }
+  }
+}
+
+
+
+@if $layout == default or
+    $layout == editor {
+  .static-contact-header {
+    .textbox {
+      padding: 20px 45px 20px 20px;
+    }
+
+    .mapbox,
+    .imagebox {
+      clear: none;
+      margin: 0 24px 0 0;
+      width: 260px;
+
+      img {
+        margin: 0 auto;
+      }
+    }
+
+    .styled-textbox {
+      float: left;
+      margin-bottom: 6px;
+      margin-left: -8px;
+    }
+
+    .contacts {
+      padding-left: 29px;
+    }
+
+    .contact {
+      h3,
+      p,
+      ul {
+        margin-left: 129px;
+      }
+    }
+  }
+}
+
+
+
+@if $layout == tablet {
+  .static-contact-header {
+    .location-wrap {
+      padding-bottom: 35px;
+    }
+
+    .contacts-wrap {
+      padding-bottom: 55px;
+      padding-top: 50px;
+    }
+
+    .textbox {
+      padding-bottom: 30px;
+    }
+
+    .mapbox,
+    .imagebox {
+      margin: 0 20px;
+    }
+
+    .mapbox {
+      margin-left: 35px;
+    }
+
+    .imagebox {
+      margin-right: 35px;
+    }
+
+    .styled-textbox {
+      width: 170px;
+    }
+  }
+}
+
+
+
+@if $layout == desktop or
+    $layout == editor {
+  .static-contact-header {
+    h2 {
+      padding: 0 0 38px 0;
+    }
+
+    .location-wrap {
+      padding-bottom: 55px;
+    }
+
+    .contacts-wrap {
+      padding-bottom: 63px;
+      padding-top: 67px;
+    }
+
+    .textbox {
+      float: left;
+      width: 260px;
+    }
+
+    .contact {
+      padding-left: 20px;
+    }
+  }
+}
+
+
+@if $layout == editor {
+  .static-contact-header {
+    font-size: 12px;
+    width: 1000px;
+
+    .styled-textbox {
+      margin-left: 6px;
+    }
+  }
+}

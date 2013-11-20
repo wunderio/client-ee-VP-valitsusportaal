@@ -1,0 +1,113 @@
+
+
+
+@if $layout == global {
+  #user-pass,
+  #user-login {
+    padding-bottom: 50px;
+
+    label,
+    .description {
+      display: none;
+    }
+
+    .form-text {
+      width: 100%;
+    }
+
+    #mobiil-id-auth-wrapper,
+    .form-item,
+    .form-actions {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+
+    #mobiil-id-auth-wrapper,
+    .form-actions {
+      text-align: right;
+    }
+
+    .form-submit {
+      margin-left: 10px;
+      margin-right: 0;
+    }
+  }
+
+  #user-login {
+    .ajax-progress {
+      margin: 5px 0;
+    }
+  }
+
+  #digidoc-auth-service-wrapper {
+    @extend %list-reset;
+    @extend %clearfix;
+    float: right;
+    padding-bottom: 10px;
+
+    li {
+      float: left;
+      margin: 0 0 8px 10px;
+    }
+  }
+
+  #mobiil-id-link,
+  #id-card-login-link {
+    a {
+      background-repeat: no-repeat;
+      border-radius: 5px;
+      color: $color-text;
+      direction: ltr;
+      display: block;
+      font-weight: bold;
+      height: 31px;
+      overflow: hidden;
+      text-indent: -10000px;
+      width: 88px;
+
+      &:focus,
+      &:hover {
+        box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.22);
+      }
+    }
+  }
+
+  #mobiil-id-link a {
+    background-image: url(../img/10-global/mid-logo-uus.png);
+  }
+
+  #id-card-login-link a {
+    background-image: url(../img/10-global/id-kaart-logo-uus.png);
+  }
+
+  #mobiil-id-auth-wrapper {
+    @extend %clearfix;
+
+
+    #edit-mobiil-id-auth {
+      float: right;
+      margin-right: 0;
+      margin-left: 10px;
+    }
+
+    #mobiil-id-cancel {
+      display: inline-block;
+      margin-top: 7px;
+    }
+  }
+
+  // Mobiil-id message after submit.
+  #digidoc-auth-service-mobiil_id {
+    font-weight: bold;
+  }
+}
+
+
+
+@if $layout == default {
+  #user-pass,
+  #user-login {
+    width: 300px;
+    margin: 0 auto;
+  }
+}

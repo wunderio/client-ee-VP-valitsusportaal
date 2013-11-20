@@ -1,0 +1,25 @@
+
+
+
+@if $layout == global {
+  .all-news {
+    @extend %clearfix;
+    background-color: #F9F9F9;
+    clear: both;
+    margin: 20px 0 60px;
+    padding: 0 6px;
+
+    a {
+      color: #696969 !important;
+      float: left;
+      font-family: $font_museo700;
+      font-size: 10px;
+      padding: 6px 10px 4px 10px;
+      text-transform: uppercase;
+
+      &:hover {
+        color: $color-text-main-blue !important;
+      }
+    }
+  }
+}

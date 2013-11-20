@@ -1,0 +1,59 @@
+
+
+
+@if $layout == global {
+  .ui-widget-overlay {
+    background: url(../img/10-global/ui-widget-overlay.png);
+    cursor: pointer;
+    filter: none !important;
+    opacity: 1 !important;
+  }
+
+  .ui-dialog {
+    background: url(../img/10-global/ui-dialog-bg.png);
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+    border: 0;
+    overflow: visible;
+    padding: 10px;
+
+    // Titlebar.
+    & {
+      .ui-dialog-titlebar {
+        border: 0;
+        left: 0;
+        padding: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 1;
+      }
+
+      .ui-dialog-title {
+        display: none;
+      }
+
+      .ui-dialog-titlebar-close {
+        background: url(../img/10-global/ui-dialog-titlebar-close.png) !important;
+        border: 0;
+        height: 30px;
+        margin: 0;
+        padding: 0;
+        right: -8px;
+        top: -8px;
+        width: 30px;
+
+        span {
+          display: none;
+        }
+      }
+    }
+
+    .ui-dialog-content {
+      background: #fff;
+      border-radius: 2px;
+      padding: 30px;
+    }
+  }
+}

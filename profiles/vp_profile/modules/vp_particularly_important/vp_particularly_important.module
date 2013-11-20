@@ -1,0 +1,123 @@
+<?php
+/**
+ * @file
+ * Code for the VP Particularly Important feature.
+ */
+
+include_once 'vp_particularly_important.features.inc';
+
+/**
+ * Implements hook_block_info().
+ */
+function vp_particularly_important_block_info() {
+  $blocks = array();
+
+  $blocks['particularly_important'] = array(
+    'info' => t('Particularly Important'),
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function vp_particularly_important_block_view($delta = '') {
+  $block = array();
+
+  switch ($delta) {
+    case 'particularly_important':
+
+      if (variable_get('vp_particularly_important_enabled', 0) == 0) {
+        return $block;
+      }
+
+      $block['subject'] = t('Particularly Important');
+
+      $block['content'] =
+        '<div class="title">'.check_markup(variable_get('vp_particularly_important_title', ''), 'plain_text').'</div>'.
+        '<div class="body">'.check_markup(variable_get('vp_particularly_important_text', ''), 'plain_text').'</div>';
+
+    break;
+  }
+
+  return $block;
+}
+
+/**
+ * Implements hook_menu().
+ */
+function vp_particularly_important_menu() {
+  $items = array();
+
+  $items['admin/structure/particularly-important'] = array(
+    'title' => 'Particularly Important',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('vp_particularly_important_page', NULL),
+    'access callback' => TRUE,
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
+/**
+ * Particularly important administration form.
+ */
+function vp_particularly_important_page() {
+  $form = array();
+
+  $form['vp_particularly_important_enabled'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enabled'),
+    '#default_value' => variable_get('vp_particularly_important_enabled', 0),
+  );
+
+  $form['vp_particularly_important_title'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Title'),
+    '#rows' => 2,
+    '#default_value' => variable_get('vp_particularly_important_title', ''),
+  );
+
+  $form['vp_particularly_important_text'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Text'),
+    '#rows' => 4,
+    '#default_value' => variable_get('vp_particularly_important_text', ''),
+  );
+
+  return system_settings_form($form);
+}
+
+/**
+ * Implements hook_variable_info().
+ */
+function vp_particularly_important_variable_info($options) {
+  $variables = array();
+
+  $variables['vp_particularly_important_title'] = array(
+    'type' => 'string',
+    'title' => t('Particularly Important Title'),
+    'default' => '',
+    'localize' => TRUE,
+  );
+
+  $variables['vp_particularly_important_text'] = array(
+    'type' => 'string',
+    'title' => t('Particularly Important Text'),
+    'default' => '',
+    'localize' => TRUE,
+  );
+
+  return $variables;
+}
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function vp_particularly_important_preprocess_html(&$vars) {
+  if (variable_get('vp_particularly_important_enabled', 0) == 1) {
+    $vars['classes_array'][] = 'vp-particularly-important';
+  }
+}

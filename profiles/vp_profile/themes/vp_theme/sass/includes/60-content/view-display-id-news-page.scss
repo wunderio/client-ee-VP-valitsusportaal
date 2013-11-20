@@ -1,0 +1,8 @@
+
+
+
+@if $layout == global {
+  .view-display-id-news-page {
+    @extend %news-list;
+  }
+}

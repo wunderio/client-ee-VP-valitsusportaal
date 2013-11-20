@@ -1,0 +1,108 @@
+<?php
+/**
+ * @file
+ * Code for the VP Video Gallery feature.
+ */
+
+include_once 'vp_video_gallery.features.inc';
+
+/**
+ * Implements hook_form_alter().
+ */
+function vp_video_gallery_form_alter(&$form, &$form_state, $form_id) {
+  global $language;
+  $form_once = &drupal_static(__FUNCTION__);
+
+  if ($form['#id'] == 'views-exposed-form-youtube-videos-page' && !isset($form_once)) {
+
+    if ($language->language != 'et') {
+      $form = array();
+      return;
+    }
+
+    drupal_add_library('system','ui.datepicker');
+    drupal_add_js('(function($){$().ready(function(){
+
+      $("#edit-date-custom-min").datepicker({
+        dateFormat: "dd.mm.yy",
+        autoSize: true,
+        onClose: function(selectedDate) {
+          $("#edit-date-custom-max").datepicker("option", "minDate", selectedDate);
+        }
+      });
+      $("#edit-date-custom-max").datepicker({
+        dateFormat: "dd.mm.yy",
+        autoSize: true,
+        onClose: function(selectedDate) {
+          $("#edit-date-custom-min").datepicker("option", "maxDate", selectedDate);
+        }
+      });
+
+    });})(jQuery);', 'inline');
+  }
+}
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function vp_video_gallery_views_query_alter(&$view, &$query) {
+  global $language;
+
+  // Show videos page only in estonian.
+  if ($view->name == 'youtube_videos' && $language->language != 'et' && !isset($view->live_preview)) {
+    //drupal_not_found();
+    drupal_goto('<front>');
+    drupal_exit();
+  }
+
+  // Modal window for views.
+  if ($view->name == 'youtube_videos') {
+    drupal_add_library('system', 'ui.dialog');
+    drupal_add_js('(function($){$().ready(function(){
+      $("div.view-id-youtube_videos div.views-row a").click(function(e){
+        e.preventDefault();
+        $views_row = $(this).parent().parent();
+        $.colorbox({html:\'<iframe width="850" height="470" src="\'+$(this).attr("href")+\'" frameborder="0" allowfullscreen></iframe><div class="date">\'+$views_row.find("div.views-field-created").text()+\'</div><div class="title">\'+$views_row.find("h2").text()+\'</div><div class="description">\'+$views_row.find("div.views-field-body").text()+\'</div>\'});
+      });
+    });})(jQuery);', 'inline');
+  }
+
+  if ($view->name == 'youtube_videos' && isset($_GET['search']) && !empty($_GET['search'])) {
+
+    if (is_object($query->where[1]['conditions'][0]['field'])) {
+
+      $title_conditions = $query->where[1]['conditions'][0]['field']->conditions();
+
+      $where = $title_conditions['#conjunction'] == 'OR' ? db_or() : db_and();
+      unset($title_conditions['#conjunction']);
+
+      foreach ($title_conditions as $conditions) {
+        $where->condition($query->where[1]['conditions'][1]['field'], $conditions['value'], $conditions['operator']);
+      }
+
+      unset($query->where[1]['conditions'][1]);
+      $query->add_where(1, $where);
+    }
+    else {
+      $query->where[1]['conditions'][1]['value'] = '%'.$_GET['search'].'%';
+    }
+
+  }
+
+  if ($view->name == 'youtube_videos') {
+    if (empty($view->exposed_input['date']) || $view->exposed_input['date'] === 'All') {
+      unset($query->where[2]);
+    }
+    elseif ($view->exposed_input['date'] == 4) {
+      unset($query->where[2]['conditions'][0]);
+    }
+    else {
+      //unset($query->where[4]['conditions'][1]);
+
+      if ($view->exposed_input['date'] == 1) $min_date = '-7 days';
+      if ($view->exposed_input['date'] == 2) $min_date = '-30 days';
+      if ($view->exposed_input['date'] == 3) $min_date = '-12 months';
+      $query->where[2]['conditions'][0]['field'] = 'node.created BETWEEN '.strtotime($min_date).' AND '.REQUEST_TIME;
+    }
+  }
+}

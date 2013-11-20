@@ -1,0 +1,61 @@
+
+
+
+@if $layout == global {
+  .view-youtube-videos {
+    @extend %news-list;
+  }
+
+  // BEGIN: SIDEBAR
+  .region-sidebar-first {
+    display: none;
+  }
+  // END: SIDEBAR
+
+  #cboxLoadedContent {
+    line-height: 20px;
+
+    .page-videos & {
+      padding-bottom: 17px;
+    }
+
+    .date {
+      @extend %news-date;
+      padding-bottom: 3px;
+      padding-top: 9px;
+    }
+
+    .title {
+      font-family: $font_museo500;
+      font-size: 15px;
+      margin-bottom: -1px;
+    }
+  }
+}
+
+
+
+@if $layout == default {
+  // BEGIN: SIDEBAR
+  .block-views-exp-youtube-videos-page {
+    @extend %extendable-search-form;
+
+    .region-sidebar-first & {
+      padding-bottom: 14px;
+    }
+
+    .views-widget-filter-title .views-widget {
+      margin: 9px 0;
+    }
+  }
+  // END: SIDEBAR
+}
+
+
+@if $layout == tablet {
+  // BEGIN: SIDEBAR
+  .block-views-exp-youtube-videos-page {
+    @extend %extendable-search-form-tablet;
+  }
+  // END: SIDEBAR
+}

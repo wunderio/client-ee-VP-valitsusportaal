@@ -1,0 +1,231 @@
+
+
+
+@if $layout == global {
+  .block-search-form {
+    margin-right: 22px;
+    position: static !important;
+
+    .block-title {
+      background: url(../img/10-global/mobile-search-icon.png);
+      cursor: pointer;
+      direction: ltr;
+      height: 35px;
+      overflow: hidden;
+      text-indent: -10000px;
+      width: 35px;
+
+      &.active {
+        background-position: 0 100%;
+      }
+    }
+
+    .content {
+      background: #f2f0e9;
+      display: none;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 35px;
+      z-index: 1;
+    }
+
+    .gss {
+      display: block;
+      padding: 20px;
+    }
+
+    .container-inline {
+      background: #a4a39e;
+      border-radius: 5px;
+      overflow: hidden;
+      padding: 3px;
+      position: relative;
+    }
+
+    .form-text {
+      background: #fff;
+      border-radius: 1px;
+      border: 0;
+      box-shadow: none;
+      color: #666;
+      display: block;
+      font-family: $font_default;
+      font-size: 1.5em;
+      height: 2em;  // 33px
+      padding: 0 10px;
+      width: 100%;
+    }
+
+    .form-submit {
+      @include linear-gradient(to left, #0085B2, #00468C);
+      -moz-background-clip: border;
+      -webkit-background-clip: border;
+      background-clip: border-box;
+      -moz-border-radius: 1px;
+      -webkit-border-radius: 1px;
+      border-radius: 1px;
+      border: 0;
+      bottom: 3px;
+      box-shadow: inset 0 0 1px 0 rgba(0, 0, 0, 0.6);
+      color: #fff;
+      cursor: pointer;
+      font-family: $font_museo700;
+      font-size: 1.5em;
+      font-weight: normal;
+      height: auto;
+      margin: 0;
+      padding: 0 12px;
+      position: absolute;
+      right: 3px;
+      text-shadow: 0 0 1px rgba(0, 0, 0, .65);
+      text-transform: uppercase;
+      top: 3px;
+    }
+  }
+
+  // Autocomplete.
+
+  #vp-autocomplete {
+    display: none;
+
+    .responsive-layout-mobile & {
+      display: none !important;
+    }
+  }
+}
+
+
+
+@if $layout == default {
+  .block-search-form {
+    position: relative !important;
+    margin-right: 0;
+
+    .block-title {
+      display: none;
+    }
+
+    .content {
+      background: transparent;
+      display: block !important;
+      position: static;
+    }
+
+    .gss {
+      padding: 0;
+    }
+
+    .container-inline {
+      background: url(../img/10-global/block-search-form-bg.png);
+      border-radius: 3px;
+      box-shadow: inset 0 0 7px 0 rgba(0, 0, 0, 0.3);
+      height: 21px;
+      margin-left: 12px;
+      margin-top: 4px;
+      padding: 3px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .form-text,
+    .form-submit,
+    .form-item {
+      float: left;
+    }
+
+    .form-item {
+      margin: 0 2px 0 0;
+    }
+
+    .form-text {
+      -webkit-box-sizing: content-box;
+      -moz-box-sizing: content-box;
+      box-sizing: content-box;
+      box-shadow: inset 0 0 1px 0 rgba(0, 0, 0, 0.6);
+      font-size: 11px;
+      height: 16px;
+      line-height: 16px;
+      padding: 3px 6px 2px 6px;
+      width: 160px;
+    }
+
+    .form-submit {
+      -webkit-box-sizing: content-box;
+      -moz-box-sizing: content-box;
+      box-sizing: content-box;
+      font-size: 10px;
+      height: 16px;
+      line-height: 16px;
+      padding: 3px 6px 2px 6px;
+      position: static;
+    }
+
+  }
+
+  // Autocomplete.
+
+  // Make autocomplete popup hover over content.
+  .zone-portal-navigation-wrapper {
+    position: relative;
+    z-index: 3;
+  }
+
+  #vp-autocomplete {
+    background: #52524f url(../img/20-default/search-popup.png);
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.7);
+    color: #fff;
+    display: block;
+    left: 7px;
+    padding: 27px 13px 16px 13px;
+    position: absolute;
+    right: -5px;
+    text-align: left;
+    top: 0;
+    z-index: 1;
+
+    h2 {
+      color: $color-text-extra-golden;
+      font-family: $font_museo700;
+      font-size: 13px;
+      margin-top: 14px;
+      text-shadow: none;
+    }
+
+    li {
+      background: url(../img/10-global/hr2-on-dark-bg.png) repeat-x;
+      padding: 6px 0;
+
+      &.first {
+        background: none;
+      }
+    }
+
+    a {
+      background: url(../img/10-global/link-arrow-on-dark-bg.png) no-repeat 0 50%;
+      display: block;
+      line-height: 12px;
+      padding-left: 13px;
+    }
+  }
+}
+
+
+
+@if $layout == tablet {
+  .block-search-form {
+    .form-text {
+      width: 105px;
+    }
+
+    .container-inline {
+      margin-left: 10px;
+    }
+  }
+}
+
+
+
+@if $layout == desktop {
+
+}

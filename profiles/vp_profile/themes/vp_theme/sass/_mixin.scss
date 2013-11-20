@@ -1,0 +1,15 @@
+// _mixin.scss
+
+// Chrome, Safari4+ with color fallback.
+@mixin lineartextgradient($color1, $color2, $startPoint:left top, $endPoint:left bottom) {
+  color: $color1;
+  background: -webkit-gradient(linear, $startPoint, $endPoint, color-stop(0%,$color1), color-stop(100%,$color2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+// REM font-size.
+@mixin fontSize($size) {
+  font-size: $size; // Fallback in px.
+  font-size: ($size / 16px) * 1rem;
+}

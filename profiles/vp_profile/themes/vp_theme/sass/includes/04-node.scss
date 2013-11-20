@@ -1,0 +1,251 @@
+//
+// @file
+// Node styles.
+//
+// Path: sass\includes\04-node.scss
+// Because node can be used in views and thus can appear in any region, this
+// file is in the includes root folder.
+//
+
+@if $layout == editor or
+    $layout == global {
+  .node {
+    font-size: 14px;
+
+    p,
+    dl,
+    ul,
+    ol {
+      margin: 0 0 18px;
+    }
+
+    ul,
+    ol {
+      list-style-position: outside;
+      padding-left: 30px;
+    }
+
+    ol {
+      list-style-type: decimal;
+    }
+
+    .field-name-body {
+      ul {
+        padding: 0;
+
+        li {
+          background: url(../img/10-global/custom-bullet-romb.png) no-repeat 10px 3px;
+          padding: 0 0 0 30px;
+          margin: 14px 0;
+        }
+
+        ul,
+        ol {
+          padding-bottom: 0;
+          margin-bottom: 0;
+        }
+
+        ul {
+          padding-left: 7px;
+
+          li {
+            background-image: url(../img/10-global/kollane-bullet-small.png);
+            background-position: 10px 4px;
+          }
+
+          // Third level (ul and ol).
+          & {
+            ul,
+            ol {
+              padding-left: 30px;
+
+              li {
+                background: none;
+                padding-left: 0;
+              }
+            }
+
+            ul {
+              list-style-type: circle;
+            }
+          }
+        }
+      }
+    }
+
+    // BEGIN: A little fix for page /rss-feeds.
+    #rsseses {
+      margin-top: 10px;
+    }
+
+    input[name=rsseses] {
+      height: 2.3em;
+    }
+    // END: A little fix for page /rss-feeds.
+
+    dl dt,
+    dl dt {
+      font-weight: bold;
+    }
+
+    dl dd,
+    dl dd {
+      padding-left: 25px;
+    }
+
+    dd.content,
+    dd.content {
+      margin-left: 20px;
+    }
+
+    img,
+    .image {
+      margin: 18px auto;
+      max-width: 100%;
+
+      .responsive-layout-mobile & {
+        float: none !important;
+        width: 100% !important;
+      }
+    }
+
+    img {
+      height: auto !important; // Shouldn this be global?
+    }
+
+    .image {
+      @extend %image-caption;
+    }
+
+    table {
+      @extend %table-reset;
+
+      &#extended-file-field-table-field-files {
+        tbody td:first-child {
+          font-weight: bold;
+        }
+      }
+
+      color: #000000;
+      font-size: 12px;
+      line-height: 15px;
+
+      tr {
+        border-bottom: 1px solid #BBB;
+      }
+
+      thead {
+        tr {
+          border-width: 2px;
+        }
+      }
+
+      th {
+        color: #00668C;
+        font-size: 11px;
+      }
+
+      th,
+      td {
+        background: url(../img/10-global/table-vertical-border.png) repeat-y 100% 0;
+        padding: 8px 14px 5px 14px;
+
+        &:last-child {
+          background: none;
+        }
+        // IE8 support.
+        &.last-child {
+          background: none;
+        }
+      }
+
+      .responsive-layout-mobile & {
+        img {
+          width: auto !important;
+        }
+      }
+    }
+  }
+
+  //=== STATIC SHARED STYLES ===//
+  .static {
+    img {
+      display: block;
+      margin: 0;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding-left: 0;
+
+      li {
+        margin-left: 0;
+        padding-left: 0;
+      }
+    }
+  }
+
+  // BEGIN: STYLES IN THE EDITOR BUTTONS
+  .node-text-small {
+    font-size: 85.714%;
+  }
+
+  .node-lead-default {
+    font-family: $font_museo500;
+    font-size: 18px;
+    line-height: 1.22222222;
+  }
+
+  .node-lead-emphasized {
+    color: $color-text-main-blue;
+    font-family: $font_museo500;
+    font-size: 18px;
+    line-height: 1.22222222;
+  }
+
+  .node-text-color-red {
+    color: $color-text-extra-red;
+  }
+
+  .node-text-color-blue {
+    color: $color-text-main-blue;
+  }
+
+  // END: STYLES IN THE EDITOR BUTTONS
+}
+
+
+
+@if $layout == editor {
+  .editor {
+    margin: 15px;
+    max-width: 960px;
+
+    .wysiwyg-break {
+      height: 12px !important;
+      margin: 18px 0;
+    }
+  }
+}
+
+
+
+@if $layout == default {
+  .node {
+    img,
+    .image {
+      margin-left: 18px;
+      margin-right: 18px;
+
+      &[style*="float:left"] {
+        margin-left: 0;
+      }
+
+      &[style*="float: right;"],
+      .float-right {
+        margin-right: 0;
+      }
+    }
+  }
+}

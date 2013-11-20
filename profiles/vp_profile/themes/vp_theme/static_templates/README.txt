@@ -1,0 +1,1 @@
+These are backups of original static templates used in ckeditor for Valitsuportaal.

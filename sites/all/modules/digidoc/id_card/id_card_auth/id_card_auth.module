@@ -1,0 +1,205 @@
+<?php
+
+/**
+ * Implements hook_init().
+ *
+ * @return void
+ */
+function id_card_auth_init() {
+  $path = drupal_get_path('module', 'digidoc');
+  drupal_add_css($path . '/id_card/id_card.css');
+}
+
+/**
+ * Implements hook_enable().
+ *
+ * @return void
+ */
+function id_card_auth_enable() {
+  db_update('system')
+    ->fields(array('weight' => 1))
+    ->condition('type', 'module')
+    ->condition('name', 'id_card_auth')
+    ->execute();
+}
+
+/**
+ * Implements hook_menu().
+ *
+ * @return array menu items
+ */
+function id_card_auth_menu() {
+  $items = array();
+
+  $items['admin/config/services/digidoc/id_card'] = array(
+    'title' => 'ID-Card',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('id_card_auth_admin_form'),
+    'description' => 'Configure ID-Card settings',
+    'access arguments' => array('administer id card'),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'id_card_auth.admin.inc',
+    'file path' => drupal_get_path('module', 'id_card_auth'),
+  );
+
+  $items['id_card_login'] = array(
+    'title' => 'ID-Card login',
+    'page callback' => 'id_card_login',
+    'description' => 'ID-Card login page',
+    'access callback' => 'user_is_anonymous',
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ *
+ * @return array
+ */
+function id_card_auth_permission() {
+  return array(
+    'administer id card' => array(
+      'title' => t('Administer ID-card authentication and sign modules'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * @param array $form
+ * @param array $form_state
+ * @return void
+ */
+function id_card_auth_form_user_login_block_alter(&$form, &$form_state) {
+  _id_card_user_login_form_alter($form, $form_state);
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * @param array $form
+ * @param array $form_state
+ * @return void
+ */
+function id_card_auth_form_user_login_alter(&$form, &$form_state) {
+  _id_card_user_login_form_alter($form, $form_state);
+}
+
+/**
+ * Alters the use form to add ID-Card login support
+ *
+ * @param array $form
+ * @param array $form_state
+ * @return void
+ */
+function _id_card_user_login_form_alter(&$form, &$form_state) {
+  // Check, if admin has configured to allowed login form alter.
+  $can_alter_form = (bool)variable_get('id_card_alter_user_login_form', 0);
+  if (!$can_alter_form) {
+    return;
+  }
+
+  // Force HTTPS.
+  variable_set('https', true);
+
+  // Create DigiDoc authentication wrapper.
+  // Also used by Mobiil-ID Authenticate module.
+  if (!isset($form['digidoc_auth_service'])) {
+    $form['digidoc_auth_service'] = array(
+      'links' => array(
+        '#theme' => 'item_list',
+        '#items' => array(),
+        '#attributes' => array('id' => 'digidoc-auth-service-wrapper'),
+        '#weight' => 1,
+      ),
+    );
+  }
+  $wrapper = &$form['digidoc_auth_service'];
+
+  // Add ID card service to item list.
+  $wrapper['links']['#items'][] = array(
+    'data' => l(
+      t('Log in with ID-Card'),
+      'id_card_login',
+      array('absolute' => true, 'https' => true)
+    ),
+    'id' => array('id-card-login-link'),
+  );
+}
+
+/**
+ * Outputs the login page with instuctions or error in case ID-Card service failed
+ * (ie. wrong or non-registered ID-Card phone number)
+ *
+ * @return string description
+ */
+function id_card_login() {
+  // @TODO: Testing this I found that the value was in
+  // REDIRECT_SSL_CLIENT_VERIFY instead of SSL_CLIENT_VERIFY,
+  // maybe should check both?
+  if (@$_SERVER['REDIRECT_SSL_CLIENT_VERIFY'] == 'SUCCESS') {
+    if ($_SERVER['REDIRECT_SSL_CLIENT_S_DN_CN']) {
+      // Extract the ID Code from SSL_CLIENT_S_DN_CN
+      list($lastname, $firstname, $id_code) = explode(',', $_SERVER['REDIRECT_SSL_CLIENT_S_DN_CN']);
+
+      if (variable_get('id_card_create_new_user', '1')) {
+        user_external_login_register($id_code, 'id_card');
+        // @TODO: Redirect to front page instead.
+        return '<div class="id-card-login-successful">' . t('Logged in with @id_code.', array('@id_code' => $id_code)) . '</div>';
+      } else {
+        $user_info = user_external_load($id_code);
+
+        // Creation of new users is disabled, so check if it exists.
+        if ($user_info and $user_info->status == 1) {
+          global $user;
+          $user = $user_info;
+          user_login_finalize();
+        } else {
+          drupal_set_message(t('Cannot login. User account not active.'), 'error', FALSE);
+          drupal_goto('');
+          return FALSE;
+        }
+      }
+
+      // Invoke "hook_id_card_auth_after_success".
+      $hooks = module_implements('digidoc_id_card_auth_success');
+      if (!empty($hooks)) {
+        foreach ($hooks as $module) {
+          $data = array(
+            'firstname' => $firstname,
+            'lastname' => $lastname,
+            'id_code' => $id_code,
+          );
+          $function = $module . '_digidoc_id_card_auth_success';
+          $function($data);
+        }
+      }
+      else {
+        drupal_goto('');
+      }
+    } else {
+      // @TODO: ID code could also be extracted from another $_SERVER value
+      // @TODO: Explain the error a bit better
+      return '<div class="id-card-login-error">' . t('Authentication failed!') . '</div>';
+    }
+  } else {
+      return '<div class="id-card-login-error">' . t('Authentication failed!') . '</div>';
+  }
+}
+
+// @TODO: This seems like a hack, maybe there's a better way to hide the block on certain pages
+/*function id_card_auth_block_view_alter(&$data, $block) {
+    // Hide the default user login block on id_card_login page
+    if ($block->module == 'user' && $block->delta == 'login' && $_GET['q'] == 'id_card_login') {
+        $data = array();
+    }
+
+    global $user;
+
+    if (($block->module == 'id_card_authenticate' && $block->delta == 'id_card_authenticate') && ($_GET['q'] == 'id_card_login' || $_GET['q'] == 'mobiil_id_login' || $user->uid)) {
+        $data = array();
+    }
+}*/

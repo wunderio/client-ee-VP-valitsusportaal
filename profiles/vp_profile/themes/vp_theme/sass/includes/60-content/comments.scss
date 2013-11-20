@@ -1,0 +1,266 @@
+
+
+@if $layout == global {
+  .page-comment-reply .block-system-main,
+  .page-comment-edit .block-system-main {
+    padding-top: 23px !important;
+  }
+
+  // Dublicate some styles on delete page for less css.
+  .page-comment-delete  .block-system-main {
+    background: #f8f8f8;
+    font-size: 18px;
+    line-height: 15px;
+    padding: 35px 20px 23px 20px;
+
+    .form-submit {
+      border-radius: 5px;
+      font-family: Tahoma, Verdana, Segoe, sans-serif;
+      font-size: 12px;
+      font-weight: normal;
+      padding: 5px 13px 8px 13px;
+    }
+
+    .form-actions {
+      font-size: 12px;
+    }
+  }
+
+  .page-comment-reply .block-system-main,
+  .page-comment-edit .block-system-main,
+  .comment-wrapper {
+    background: #f8f8f8;
+    font-size: 12px;
+    line-height: 15px;
+    margin-top: 0 !important;
+    padding: 3px 0 23px 20px;
+
+    .logged-in & {
+      padding-top: 3px;
+      margin-top: 25px !important;
+    }
+
+    .comment {
+      background: url(http://vp-ra.devel.mekaia.com/profiles/vp_profile/themes/vp_theme/img/10-global/comment-spacer.png) repeat-x 0 100%;
+      margin-bottom: 15px;
+      padding-bottom: 18px;
+    }
+
+    h2,
+    h3 {
+      text-shadow: none;
+    }
+
+    h2 {
+      font-family: Museo500;
+      font-size: 18px;
+      margin-bottom: 10px;
+      padding-top: 20px;
+
+      &.title {
+        .not-logged-in & {
+          padding-top: 0;
+        }
+      }
+    }
+
+    h3 {
+      font-family: Tahoma, Verdana, Segoe, sans-serif;
+      font-size: 14px;
+      font-weight: bold;
+
+      a:focus,
+      a:hover {
+        color: $color-link-hover;
+      }
+    }
+
+    .comment-submitted  {
+      font-weight: bold;
+    }
+
+    .form-text,
+    .form-textarea {
+      padding: 10px;
+    }
+
+    .form-text {
+      height: 2.2em;
+      background-position: 99% 0.55em;
+
+      &.throbbing {
+        background-position: 99% -1em;
+      }
+    }
+
+    .form-text,
+    .form-textarea-wrapper {
+      width: 100%;
+    }
+
+    .form-submit {
+      border-radius: 5px;
+      font-family: Tahoma, Verdana, Segoe, sans-serif;
+      font-size: 12px;
+      font-weight: normal;
+      padding: 5px 13px 8px 13px;
+    }
+
+    .form-item,
+    .form-actions {
+      margin-bottom: 0;
+      margin-top: 0;
+      padding: 8px 0;
+    }
+
+    .form-item {
+      // radio, checkbox etc.
+      .form-item {
+        padding: 2px 0;
+
+        label {
+          padding: 0;
+        }
+      }
+
+      .description {
+        padding-top: 0.4em;
+      }
+
+      &#edit-author--2 {
+        margin-bottom: -5px;
+      }
+    }
+
+    .form-actions {
+      padding-top: 13px;
+    }
+
+    label {
+      padding-bottom: 3px;
+    }
+
+    #edit-author--2 label {
+      display: inline-block;
+    }
+
+    #edit-preview {
+      display: none;
+    }
+
+    .comment-links {
+      overflow: hidden;
+      padding: 5px 0;
+
+      &,
+      a {
+        color: gray;
+      }
+
+      a {
+        text-decoration: underline;
+
+        &:hover {
+          text-decoration: none;
+        }
+      }
+
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      li {
+        float: left;
+        margin-left: 0;
+        padding-left: 0;
+        padding-right: 5px;
+      }
+    }
+
+    .grippie {
+      display: none;
+    }
+  }
+
+  .logged-in.page-comment-reply .block-system-main,
+  .logged-in .comment-wrapper {
+    .comment-links {
+      color: $color-text;
+
+      a {
+        background: shade(#eee, 3%);
+        border-radius: 3px;
+        color: #00698c;
+        display: block;
+        text-decoration: none;
+        font-size: 11px;
+        padding: 3px 7px;
+
+        &.active,
+        &:hover {
+          background: shade(#f6f6f6, 3%);
+        }
+      }
+    }
+  }
+
+  // Hide "Lisa kommentaar" link between node content and comments when logged in.
+  .logged-in .node > .clearfix > .node-links {
+    display: none;
+  }
+
+  // Show "Lisa kommentaar" link between node content and comments when logged out.
+  .not-logged-in .node > .clearfix > .node-links {
+    @include fontSize(13px);
+    margin-top: 25px;
+    background: #f8f8f8;
+    padding: 20px;
+    font-weight: bold;
+
+    &,
+    a {
+      color: $color-text;
+    }
+
+    a {
+      text-decoration: underline;
+
+      &:focus,
+      &:hover {
+        text-decoration: none;
+      }
+    }
+
+    > ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+
+      li {
+        margin: 0;
+        padding: 0;
+      }
+    }
+  }
+}
+
+
+
+
+
+@if $layout == desktop {
+  .page-comment-reply .block-system-main,
+  .page-comment-edit .block-system-main,
+  .comment-wrapper {
+    .form-text,
+    .form-textarea-wrapper {
+      width: 589px;
+    }
+
+    .grippie {
+      display: block;
+    }
+  }
+}

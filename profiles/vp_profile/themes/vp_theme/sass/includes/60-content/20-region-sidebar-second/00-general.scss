@@ -1,0 +1,8 @@
+
+
+
+@if $layout == global {
+  .region-sidebar-second {
+    @extend %extendable-region-sidebar-first;
+  }
+}

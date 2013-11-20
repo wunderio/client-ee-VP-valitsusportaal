@@ -1,0 +1,21 @@
+
+
+
+@if $layout == global {
+  .block-views-28b60dac48d416a8e6750a35cdd59247 {
+    margin: 30px 0;
+
+    .block-title {
+      @extend %news-block-title;
+    }
+
+    // Remove horizontal separator from last news.
+    .views-row:last-child {
+      background-image: none;
+    }
+    // IE8 support.
+    .views-row.last-child {
+      background-image: none;
+    }
+  }
+}

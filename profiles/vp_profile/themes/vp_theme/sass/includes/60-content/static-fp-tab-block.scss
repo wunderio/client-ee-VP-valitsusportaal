@@ -1,0 +1,87 @@
+
+
+
+@if $layout == editor or
+    $layout == global {
+  .static-fp-tab-block {
+      .static-fp-tabs {
+        background: url(../img/10-global/front-content-block-title.png) no-repeat 50% 100%;
+        color: #006699;
+        font-family: $font_museo700;
+        font-size: 12px;
+        margin: -20px -20px 20px;
+        overflow: hidden;
+        padding: 13px 20px 7px 20px;
+        text-shadow: none;
+
+        a {
+          color: #666;
+          display: block;
+          font-size: 10px;
+          font-weight: bold;
+          text-transform: uppercase;
+        }
+
+        li {
+          float: left;
+          padding-right: 10px;
+
+          a:hover,
+          &.active a {
+            color: $color-text-main-blue;
+          }
+        }
+      }
+
+    .tab-content {
+      font-size: 13px;
+      line-height: 16px;
+      display: none;
+
+      .editor & {
+        background: #f6f4ef;
+        display: block;
+        margin-bottom: 10px;
+        padding: 18px;
+        position: relative;
+        width: 240px;
+
+        h2 {
+          display: block;
+        }
+      }
+
+      &:first-child {
+        display: block;
+      }
+
+      h2 {
+        display: none;
+      }
+
+      p,
+      ul {
+        margin-bottom: 15px;
+      }
+
+      ul {
+        @extend %list-reset;
+        font-size: 12px;
+
+        li {
+          background: url(../img/10-global/link-arrow-on-light-bg.png) no-repeat 0 6px;
+          padding: 2px 0 2px 17px;
+        }
+
+        a {
+          color: $color-text-main-blue;
+
+          &:focus,
+          &:hover {
+            color: $color-text-extra-red;
+          }
+        }
+      }
+    }
+  }
+}

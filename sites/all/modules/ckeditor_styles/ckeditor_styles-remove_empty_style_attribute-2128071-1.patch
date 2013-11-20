@@ -1,0 +1,21 @@
+diff --git a/ckeditor_styles.module b/ckeditor_styles.module
+index 55acfd8..46da167 100644
+--- a/ckeditor_styles.module
++++ b/ckeditor_styles.module
+@@ -75,6 +75,16 @@ function ckeditor_styles_wysiwyg_editor_settings_alter(&$settings, $context) {
+ function ckeditor_styles_rules_load_all() {
+   ctools_include('export');
+   $result = ctools_export_crud_load_all('ckeditor_style_rules');
++  // Remove the empty style tag from html.
++  foreach ($result as $key => $var) {
++    if (array_key_exists('attributes', $var)) {
++      foreach ($var->attributes as $attr_name => $attr_value) {
++        if ($attr_name === 'style' && empty($attr_value)) {
++          unset($result[$key]->attributes['style']);
++        }
++      }
++    }
++  }
+   return $result;
+ }
+ 

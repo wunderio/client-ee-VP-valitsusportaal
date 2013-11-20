@@ -1,0 +1,9 @@
+name = Feeds SOAP Fetcher
+description = SOAP fetcher for Feeds
+package = Feeds
+core = 7.x
+version = 7.x-dev
+
+dependencies[] = ctools
+dependencies[] = feeds
+dependencies[] = feeds_jsonpath_parser

@@ -1,0 +1,8 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function vp_live_press_briefings_install() {
+
+}

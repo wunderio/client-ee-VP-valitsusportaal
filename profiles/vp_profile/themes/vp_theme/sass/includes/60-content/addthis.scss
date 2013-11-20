@@ -1,0 +1,85 @@
+
+
+
+@if $layout == global {
+  .block-addthis-custom {
+    padding-bottom: 15px;
+
+    .responsive-layout-mobile & {
+      a {
+        margin: 0;
+        padding: 0;
+      }
+
+      .at16nc {
+        height: 24px;
+        line-height: 24px !important;
+        margin: 0 5px 0 0;
+        padding: 0;
+        width: 24px;
+
+        &.at16t_facebook {
+          background-image: url(../img/10-global/addthis-facebook.png);
+          background-position: 0 0;
+        }
+
+        &.at16t_twitter {
+          background-image: url(../img/10-global/addthis-twitter.png);
+          background-position: 0 0;
+        }
+
+        &.at16t_google_plusone_share {
+          background-image: url(../img/10-global/addthis-google.png);
+          background-position: 0 0;
+        }
+
+        &.at16t_linkedin {
+          background-image: url(../img/10-global/addthis-linkedin.png);
+          background-position: 0 0;
+        }
+
+        @media
+        only screen and (-webkit-min-device-pixel-ratio: 2),
+        only screen and ( min--moz-device-pixel-ratio: 2),
+        only screen and (-o-min-device-pixel-ratio: 2/1),
+        only screen and (min-device-pixel-ratio: 2),
+        only screen and (min-resolution: 192dpi),
+        only screen and (min-resolution: 2dppx) {
+          &.at16t_facebook {
+            background-image: url(../img/10-global/addthis-facebook@2x.png);
+            background-size : 100% 100%;
+          }
+
+          &.at16t_twitter {
+            background-image: url(../img/10-global/addthis-twitter@2x.png);
+            background-size : 100% 100%;
+          }
+
+          &.at16t_google_plusone_share {
+            background-image: url(../img/10-global/addthis-google@2x.png);
+            background-size : 100% 100%;
+          }
+
+          &.at16t_linkedin {
+            background-image: url(../img/10-global/addthis-linkedin@2x.png);
+            background-size : 100% 100%;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+@if $layout == default {
+  // Arrange social icons next to content title.
+  .block-delta-blocks-page-title {
+    overflow: hidden;
+  }
+
+  .block-addthis-custom {
+    float: right;
+    padding: 9px 0 0 15px;
+  }
+}

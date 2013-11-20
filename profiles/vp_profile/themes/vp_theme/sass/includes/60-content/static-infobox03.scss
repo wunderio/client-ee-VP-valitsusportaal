@@ -1,0 +1,85 @@
+
+
+
+@if $layout == editor or
+    $layout == global {
+  .node .static-infobox03 {
+    background-color: #faf9f5;
+    font-size: 12px;
+    line-height: 16px;
+    margin: 0 0 18px 0;
+    padding: 9px 20px;
+
+    a {
+      color: #444;
+      display: block;
+
+      &:focus,
+      &:hover {
+        color: $color-text-extra-red;
+      }
+    }
+
+    ul {
+      li {
+        background-image: none;
+        border-top: 1px dashed #cdcbcb;
+        line-height: 16px;
+        margin: 0 0 10px 0;
+        padding: 16px 0 8px 54px;
+        position: relative;
+
+        &:first-child {
+          border-top: 0;
+        }
+
+        &:before {
+          content: "";
+          height: 40px;
+          left: 0;
+          margin-top: -20px;
+          position: absolute;
+          top: 50%;
+          width: 40px;
+          z-index: 1;
+        }
+      }
+    }
+
+    .world:before {
+      // todo
+    }
+
+    .telephone:before {
+      // todo
+    }
+
+    .shadow:before {
+      // todo
+    }
+
+    .person:before {
+      background-image: url(../img/10-global/static-read-more-icon-person-white.png)
+    }
+
+    .list:before {
+      // todo
+    }
+
+    .external {
+      // todo
+    }
+
+    .graph:before {
+      // todo
+    }
+
+    .download:before {
+      background-image: url(../img/10-global/static-read-more-icon-download-white.png)
+    }
+
+    .case:before {
+      // todo
+    }
+  }
+}

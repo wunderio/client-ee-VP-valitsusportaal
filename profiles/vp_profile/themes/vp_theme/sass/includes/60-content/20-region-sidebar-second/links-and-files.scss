@@ -1,0 +1,41 @@
+
+
+
+@if $layout == global {
+  .block-views-f09b2921de187cba152bbeb961c4a0e1 {
+    .content {
+      font-size: 12px;
+      margin-top: -4px;
+    }
+
+    ul {
+      margin: 0;
+      padding: 0;
+
+      li {
+        background: url(../img/10-global/link-arrow-on-light-bg2.png) no-repeat 3px 65%;
+        margin: 0;
+        padding: 2px 0 2px 16px;
+      }
+
+      a,
+      img,
+      span {
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+      .file {
+        display: block;
+      }
+
+      a {
+        color: $color-text;
+
+        &:hover {
+          color: $color-text-main-blue;
+        }
+      }
+    }
+  }
+}

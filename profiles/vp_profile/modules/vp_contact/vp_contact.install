@@ -1,0 +1,8 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function vp_contact_install() {
+  drupal_mkdir('public://contacts/files', NULL, TRUE);
+}

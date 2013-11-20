@@ -1,0 +1,125 @@
+
+
+$static_module_3_2_desktop_col_width: 297px;
+$static_module_3_2_col_padding_left: 30px;
+$static_module_3_2_col_padding_right: 30px;
+
+
+
+@if $layout == editor or
+    $layout == global {
+  .static-module-3-2 {
+    @extend %clearfix;
+    @extend %horizontal-ruler-global;
+    padding-bottom: 30px;
+    padding-top: 50px;
+
+    // Titles.
+    & {
+      h2 {
+        font-size: 30px;
+        line-height: 40px;
+      }
+
+      h3 {
+        font-family: $font_museo700;
+        font-size: 17px;
+        line-height: 20px;
+        text-shadow: none;
+        margin-bottom: 16px;
+      }
+    }
+
+    // Text
+    p {
+      font-size: 13px;
+      line-height: 18px;
+      margin-bottom: 18px;
+    }
+
+    // Real columns
+    .col {
+      background-color: #f8f8f8;
+      border-radius: 3px;
+      margin-bottom: 20px;
+      padding-bottom: 5px;
+      padding-left: $static_module_3_2_col_padding_left;
+      padding-right: $static_module_3_2_col_padding_right;
+      padding-top: 30px;
+
+      &.col-1 {
+        margin-top: 20px;
+      }
+    }
+  }
+}
+
+
+
+@if $layout == editor {
+  .static-module-3-2 {
+    @extend %horizontal-ruler-default;
+
+    .editor & {
+      width: 930px;
+    }
+  }
+}
+
+
+
+@if $layout == editor or
+    $layout == desktop {
+  .static-module-3-2 {
+    // BEGIN: Make columns look equal height.
+      padding-bottom: 142px;
+      padding-top: 68px;
+
+      .col:before {
+        background-color: #f8f8f8;
+        border-radius: 3px;
+        bottom: 135px;
+        content: "";
+        position: absolute;
+        top: 135px;
+        width: $static_module_3_2_desktop_col_width;
+        z-index: -1;
+      }
+
+      .col-1:before {
+        left: 0;
+      }
+
+      .col-2:before {
+        left: $static_module_3_2_desktop_col_width + 20;
+        width: $static_module_3_2_desktop_col_width - 1; // For equal 20px solumn spacing.
+      }
+
+      .col-3:before {
+        right: 0;
+      }
+    // END: Make columns look equal height.
+
+    // Real columns
+    .col {
+      background-color: transparent;
+      float: left;
+      margin-bottom: 0;
+      margin-right: 18px;
+      padding-top: 58px;
+      width: $static_module_3_2_desktop_col_width - $static_module_3_2_col_padding_left - $static_module_3_2_col_padding_right;
+
+      &.col-1 {
+        margin-top: 0;
+      }
+
+      &.col-2 {
+        width: $static_module_3_2_desktop_col_width - $static_module_3_2_col_padding_left - $static_module_3_2_col_padding_right - 1; // For equal 20px solumn spacing.
+      }
+
+      &.last {
+        margin-right: 0;
+      }
+    }
+  }
+}

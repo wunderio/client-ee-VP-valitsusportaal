@@ -1,0 +1,265 @@
+
+
+
+%no-word-break {
+     -ms-word-break: normal;
+       word-break: normal;
+
+  -webkit-hyphens: manual;
+     -moz-hyphens: manual;
+          hyphens: manual;
+}
+
+
+
+@if $layout == editor or
+    $layout == global {
+  @import url('fonts/fonts.css');
+  //=== HEADINGS (based on stylebook, @todo: what to set for globally and what to .node? ) ===//
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-weight: normal;
+    text-shadow: 0 0 4px rgba(0, 0, 0, 0.18);
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: $font_museo300;
+  }
+
+  h4 {
+    font-family: $font_museo500;
+  }
+
+  h5 {
+    font-family: $font_museo700;
+  }
+
+  h1 {
+    color: #00668C;
+    font-size: 30px;
+    line-height: 36px;
+    margin-bottom: 20px;
+  }
+
+  h2 {
+    color: #00668C;
+    font-size: 20px;
+    line-height: 24px;
+  }
+
+  h3 {
+    color: #BD4732;
+    font-size: 18px;
+    line-height: 22px;
+  }
+
+  h4 {
+    color: #00678C;
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  h5 {
+    color: #111;
+    font-size: 14px;
+    line-height: 17px;
+  }
+
+
+
+  //=== GLOBAL FONT SETTINGS ===//
+
+  body,
+  input,
+  textarea,
+  select,
+  button {
+    font-family: $font_default;
+  }
+
+  body,
+  input,
+  textarea,
+  select {
+    color: $color-text;
+    font-size: $text-size-default;
+    line-height: $line-height-default;
+  }
+
+
+
+  //=== LINKS ===//
+
+  a {
+    color: $color-link;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+      color: $color-link-hover;
+    }
+
+    .node & {
+      &:visited {
+        color: $color-link-visited;
+      }
+    }
+
+    h1 &,
+    h2 &,
+    h3 &,
+    h4 &,
+    h5 & {
+      color: inherit;
+      text-shadow: none;
+
+      &:hover,
+      &:focus {
+        color: $color-link;
+      }
+    }
+  }
+
+
+
+  //=== OTHER (@todo: need better categories here) ===//
+
+  sup {
+    vertical-align: super;
+  }
+
+  sub {
+    vertical-align: sub;
+  }
+}
+
+
+
+@if $layout == global {
+  body {
+    background-color: #efede3;
+
+    // Remove custom image from mobile.
+    &.responsive-layout-mobile .page .section-header,
+    &.responsive-layout-mobile .page .section-content {
+      background-color: transparent !important;
+      background-image: none !important;
+    }
+  }
+
+  .view-header,
+  .view-content,
+  .views-row,
+  .view-footer {
+    @extend %clearfix;
+  }
+
+  img {
+    display: block;
+    height: auto;
+    max-width: 100%;
+    width: auto; // IE8 fix.
+
+    #cboxLoadedContent & {
+      display: block;
+      float: none;
+      height: auto !important;
+      width: 100% !important;
+    }
+  }
+
+  iframe {
+    display: block;
+    width: 100%;
+
+    // Iframes have height attr set and it's too big for mobile.
+    // If we don't set height 100% here the dialog will be very hight at load
+    // and resize to normal size. It's not a nice flicker at all.
+    .ui-dialog &,
+    #cboxLoadedContent & {
+      height: 100%;
+    }
+  }
+
+  embed {
+    display: block;
+    max-width: 100%;
+  }
+
+  .grid-1, .grid-2, .grid-3, .grid-4, .grid-5, .grid-6, .grid-7, .grid-8, .grid-9, .grid-10, .grid-11, .grid-12 {
+    position: relative;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .field-collection-container {
+    border-bottom: 0;
+    margin-bottom: 0;
+  }
+
+  .clear {
+    clear: both;
+    display: block;
+    overflow: hidden;
+    visibility: hidden;
+    width: 0;
+    height: 0;
+  }
+
+
+  // Break text inside tables. Note that th tag should not be included here
+  // as it will allow words break to one character per line.
+  td {
+     -ms-word-break: break-all;
+         word-break: break-all;
+
+    -webkit-hyphens: auto;
+       -moz-hyphens: auto;
+            hyphens: auto;
+
+    &.no-word-break {
+      @extend %no-word-break;
+    }
+  }
+
+  .messages {
+    border-radius: 3px;
+
+    &.error {
+      border-color: tint(#ED541D, 40%);
+    }
+  }
+}
+
+
+
+@if $layout == default {
+  body {
+    background-image: url(../img/40-desktop/body.png);
+
+    // Align the custom background image correctly.
+    .page .section-content {
+      background-position: 50% -160px !important;
+    }
+  }
+
+  #skip-link {
+    a {
+      color: $color-text-extra-golden;
+    }
+  }
+}
+
+
+
+@if $layout == desktop {
+  td {
+    @extend %no-word-break;
+  }
+}

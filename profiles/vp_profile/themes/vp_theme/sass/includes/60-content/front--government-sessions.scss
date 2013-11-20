@@ -1,0 +1,197 @@
+
+
+
+@if $layout == global {
+  .block-live-press-briefings {
+    .block-inner {
+      padding-bottom: 0 !important; // To make the bottom tabs act like it's in the flow.
+    }
+
+    .import-video-stream-video-wrap {
+      border-bottom: 1px solid #464646;
+      padding-bottom: 23px;
+      padding-top: 10px;
+
+      &.starting {
+        padding-top: 6px;
+
+        .text {
+          padding-top: 10px;
+        }
+      }
+    }
+
+    .aside {
+      @extend %clearfix;
+      float: right;
+
+      @media all and (max-width: 360px) {
+        float: none;
+        width: 100%;
+      }
+    }
+
+    .text {
+      @include fontSize(14px);
+      color: $color-text-extra-red;
+      font-family: $font_museo700;
+      line-height: 17px;
+      overflow: hidden;
+      padding-right: 15px;
+      padding-top: 10px;
+      text-transform: uppercase;
+    }
+
+    a.import-video-stream-live,
+    a.import-video-youtube-live {
+      box-shadow: -2px 2px 5px 0 rgba(0, 0, 0, 0.6);
+      width: 130px;
+      display: block;
+
+      @media all and (max-width: 360px) {
+        width: auto;
+      }
+    }
+
+    table {
+      @extend %table-reset;
+    }
+
+    .time-wrap {
+      float: left;
+      text-align: center;
+
+      .title {
+        @include fontSize(10px);
+        color: #666;
+        display: block;
+        font-family: $font_museo700;
+      }
+
+      .time {
+        padding-top: 3px;
+
+        &,
+        span {
+          display: inline-block;
+        }
+
+        .spacer {
+          display: none;
+        }
+
+        span {
+          @include fontSize(40px);
+          background-image: url(../img/10-global/time.png);
+          border-radius: 5px;
+          color: #fff;
+          font-family: $font_museo500;
+          line-height: 44px;
+          margin: 0 2px;
+          min-width: 48px;
+          padding: 1px 4px;
+          position: relative;
+          z-index: 1;
+          box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.6);
+
+          &:before {
+            border-top: 1px solid #222;
+            content: "";
+            left: 3px;
+            margin-top: -1px;
+            position: absolute;
+            right: 3px;
+            top: 50%;
+            z-index: 2;
+          }
+        }
+      }
+    }
+
+    // List of events.
+    .goverment-session-list {
+      overflow: hidden;
+      padding: 6px 0 20px 0;
+
+      h3 {
+        @include fontSize(14px);
+        color: $color-text-main-blue;
+        margin-top: 10px;
+        text-shadow: none;
+      }
+
+      a {
+        color: $color-text;
+        text-decoration: none !important;
+
+        &:focus,
+        &:hover {
+          color: $color-text-main-blue;
+        }
+      }
+
+      table {
+        margin: 0;
+      }
+
+      .views-field-created,
+      .views-field-title {
+        line-height: 16px;
+        padding-bottom: 7px;
+        padding-top: 7px;
+      }
+
+      .views-field-created {
+        @include fontSize(11px);
+        color: #666;
+        padding-left: 0;
+        padding-right: 0;
+        width: 30px;
+      }
+
+      .views-field-title {
+        padding-right: 0;
+      }
+
+      .view-import-video-stream-from-session .views-field-title {
+        padding-left: 40px;
+        padding-right: 10px;
+      }
+    }
+  }
+}
+
+
+
+@if $layout == default {
+  .block-live-press-briefings {
+    .text {
+      padding-top: 2px;
+    }
+  }
+}
+
+
+
+@if $layout == tablet {
+  .block-live-press-briefings {
+    .import-video-stream-video-wrap {
+      border: 0;
+      float: left;
+      padding: 10px 60px 0 0;
+      width: 280px;
+    }
+
+    .aside {
+      /*float: none;
+      padding-bottom: 30px;
+      padding-top: 5px;*/
+    }
+
+    a.import-video-stream-live,
+    a.import-video-youtube-live {
+      //box-shadow: none;
+      //width: auto;
+    }
+  }
+}

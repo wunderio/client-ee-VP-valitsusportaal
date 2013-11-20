@@ -1,0 +1,17 @@
+
+
+
+@if $layout == default {
+  .region-sidebar-first {
+    @extend %extendable-region-sidebar-first;
+
+    .block {
+      background-color: #f5f4ef;
+    }
+
+    .views-exposed-widget > label {
+      @extend %sidebar-block-title;
+      margin-bottom: 4px;
+    }
+  }
+}

@@ -1,0 +1,8 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function vp_weekly_schedule_install() {
+ 
+}

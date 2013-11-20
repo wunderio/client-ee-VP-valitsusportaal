@@ -1,0 +1,571 @@
+
+
+
+@if $layout == default or
+    $layout == editor {
+  .static-mainmenu-popup {
+    // Full desktop width + 20px.
+    $width: $gw-column-desktop * $gw-count + $gw-gutter-desktop * $gw-count - $gw-gutter-desktop + 20;
+
+    background-image: url(../img/10-global/mainmenu-popup.png);
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.6);
+    //font-family: $font_trebuchetms;
+    font-size: $text-size-default;
+    line-height: 16px;
+    padding: 20px 10px 20px 10px;
+    color: #fff;
+
+    a {
+      color: #ffda2d;
+
+      &:focus,
+      &:hover {
+        color: #ffda2d;
+        text-decoration: underline;
+      }
+    }
+
+    .active & {
+      box-shadow: none;
+    }
+
+    .menu-l2-popup.active & {
+      padding-bottom: 40px;
+    }
+
+    .editor & {
+      width: $width;
+
+      ul {
+        list-style-type: none;
+      }
+
+      div {
+        outline: rgba(255, 255, 255, 0.5) dotted 1px;
+      }
+    }
+
+    /* Hacking grid because of design (6). */
+    .container-12 {
+      padding: 0 10px;
+      width: auto;
+
+      .editor & {
+        @include clearfix;
+        overflow: hidden;
+      }
+
+      // Had to create extra block for having a bit more spacing than grids default gutter (20px).
+      .grid-inner {
+        padding: 0 25px;
+      }
+
+      .column {
+        float: left;
+        margin: 0;
+        min-height: 190px;
+        padding: 10px 0 20px 0;
+
+        // If there is no title in the colum, add more top padding.
+        &.column-has-no-title {
+          padding-top: 55px;
+          min-height: 165px;
+        }
+      }
+
+      .column-footer {
+        background-position: 50% 0;
+        background-repeat: no-repeat;
+        margin-top: -15px;
+        padding-bottom: 30px;
+        padding-top: 20px;
+        text-align: right;
+
+        p {
+          padding: 0 15px;
+        }
+      }
+
+      .grid-12 {
+        width: 100%;
+      }
+    }
+
+    // Column separators.
+    & {
+      .has-big-column-separators .column {
+        background-image: url(../img/10-global/mainmenu-popup-column-separator-big.png);
+        min-height: 260px;
+      }
+
+      .column {
+        background: url(../img/10-global/mainmenu-popup-column-separator.png) no-repeat 100% 50%;
+
+        &:last-child {
+          background-image: none;
+        }
+        // IE8 support.
+        &.last-child {
+          background-image: none;
+        }
+      }
+    }
+
+    .widget-menu {
+      overflow: hidden;
+
+      li {
+        background: url(../img/10-global/mainmenu-popup-item-border.png) repeat-x 100% 100%;
+        float: none;
+        padding: 6px 0;
+
+        &:last-child {
+          background: none;
+        }
+        // IE8 support.
+        &.last-child {
+          background: none;
+        }
+
+        em {
+          font-style: normal;
+          color: $color-text-extra-golden;
+        }
+
+        a {
+          background: url(../img/10-global/mainmenu-popup-item-arrow.png) no-repeat 3px 3px;
+          color: #fff;
+          display: block; // Better line-height and padding support.
+          line-height: 12px;
+          padding-left: 14px; // @todo: add this to li so text would align correctly?
+
+          &:focus,
+          &:hover {
+            &,
+            em {
+              color: #00CCFF;
+              text-decoration: none;
+            }
+          }
+        }
+      }
+
+      // Use these 2 classes to put widget-menu side by side.
+      // Use the .widget-menu-first on the first ul and .widget-menu-last on the second ul.
+      & {
+        &.widget-menu-first,
+        &.widget-menu-last {
+          float: left;
+          width: 48%;
+        }
+
+        &.widget-menu-first {
+          margin-left: 0;
+          margin-right: 0;
+        }
+
+        &.widget-menu-last {
+          margin-left: (20/525) * 100%; // ~20px inside grid-7.
+          margin-right: 0;
+        }
+      }
+
+      // Bold yellow links without white lines.
+      &.widget-menu-variant2 {
+        li {
+          background: transparent;
+
+          a {
+            color: $color-text-extra-golden;
+            font-weight: bold;
+
+            &:focus,
+            &:hover {
+              color: #00CCFF;
+              text-decoration: none;
+            }
+          }
+        }
+      }
+
+      // Blue bullets
+      &.widget-menu-variant3 {
+        li {
+          background: transparent;
+          padding: 3px 0;
+
+          a {
+            background: url(../img/20-default/widget-menu-variant3-bullet.png) no-repeat 0 50%;
+            color: $color-text-extra-golden;
+            padding-left: 25px;
+
+            &:focus,
+            &:hover {
+              color: #00CCFF;
+              text-decoration: none;
+            }
+          }
+        }
+      }
+    }
+
+    .widget-bigmenu {
+      overflow: hidden;
+
+      li {
+        background-repeat: no-repeat;
+        float: left;
+        line-height: 15px;
+        margin-bottom: 25px;
+        margin-left: 20px;
+        padding-left: 45px;
+        width: 229px;
+
+        &.odd {
+          clear: left;
+          margin-left: 0;
+        }
+
+        &.case {
+          background-image: url(../img/20-default/mainmenu-popup-case-beige.png);
+        }
+      }
+
+      h3 {
+        color: #ffda2d;
+        font-family: $font_museo500;
+        font-size: 14px;
+        line-height: 15px;
+      }
+    }
+
+    .widget-icon-menu {
+      li {
+        background-repeat: no-repeat;
+        margin: 5px 0;
+        position: relative;
+        white-space: nowrap;
+      }
+
+      img,
+      a {
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+      a {
+        color: #ffd300;
+        font-family: $font_museo500;
+        font-size: 13px;
+        line-height: 14px;
+        padding-left: 8px;
+        white-space: normal;
+      }
+    }
+
+    // Image aside the widget-menu (positioned right). Image has to come first in the dom.
+    .widget-menu-image {
+      float: right;
+      margin-left: 50px;
+
+      .responsive-layout-tablet & {
+        display: none;
+      }
+    }
+
+    .widget-text {
+      &.gray {
+        color: #e1dfd6;
+      }
+
+      h3 {
+        color: #fcfcfa;
+        font-size: 15px;
+        margin-bottom: -4px;
+        text-shadow: none;
+      }
+
+      img {
+        margin: 0;
+      }
+
+      p {
+        margin-bottom: 12px;
+      }
+
+      a {
+        color: $color-text-extra-golden;
+
+        &:focus,
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    h2 {
+      color: #ffcc00;
+      font-family: $font_museo700;
+      font-size: 14px;
+      line-height: 16px;
+      margin-bottom: 13px;
+
+      &.bigger {
+        font-family: $font_museo500;
+        font-size: 18px;
+        line-height: 18px;
+        margin-top: -2px;
+      }
+    }
+
+    .image-white-border {
+      border-radius: 3px;
+      border: 3px solid #fff;
+      margin-left: -3px !important;
+      margin-right: -3px !important;
+    }
+
+    // Class for push items away vertically.
+    .vertical-push-small,
+    .widget-menu-small .vertical-push-small {
+      padding-top: 20px;
+    }
+
+    .vertical-push,
+    .widget-menu .vertical-push {
+      padding-top: 30px;
+    }
+
+    .vertical-push-2x,
+    .widget-menu .vertical-push-2x {
+      padding-top: 60px;
+    }
+  }
+
+  .widget-slider {
+    background-image: url(../img/20-default/widget-slider-bg.png);
+    color: #e1dfd6;
+    margin-top: 3px;
+    padding: 20px 27px 30px 27px;
+    position: relative;
+
+    h3 {
+      color: #fff;
+      font-family: $font_museo300;
+      font-size: 15px;
+      text-shadow: none;
+    }
+
+    .slides > li {
+      display: none;
+
+      &:first-child {
+        display: block;
+      }
+    }
+
+    p {
+      margin-bottom: 20px;
+    }
+
+    .flex-control-nav {
+      bottom: -29px;
+      left: 0;
+      position: absolute;
+      right: 0;
+      text-align: center;
+
+      li {
+        margin: 0;
+      }
+
+      a {
+        background: url(../img/20-default/widget-slideshow-nav.png) !important;
+        width: 12px;
+        height: 12px;
+        cursor: pointer;
+        direction: ltr;
+        display: block;
+        margin: 0 5px;
+        overflow: hidden;
+        text-indent: -10000px;
+
+        &.flex-active {
+          background-position: 100% 0 !important;
+        }
+      }
+
+    }
+  }
+}
+
+
+
+@if $layout == editor {
+  .widget-slider {
+    background: transparent;
+    padding: 0;
+
+    .slides > li {
+      background-image: url(../img/20-default/widget-slider-bg.png);
+      display: block;
+      margin-bottom: 10px;
+      margin-top: 10px;
+      padding: 20px 27px 30px 27px;
+    }
+  }
+}
+
+
+
+@if $layout == tablet {
+  .static-mainmenu-popup {
+    /* Hacking grid because of design (6). */
+    .container-12 {
+      .grid-3 {
+        width: 160px;
+      }
+
+      .grid-4 {
+        width: 220px;
+      }
+
+      .grid-5 {
+        width: 280px;
+      }
+
+      .grid-6 {
+        width: 340px;
+      }
+
+      .grid-7 {
+        width: 400px;
+      }
+
+      .grid-8 {
+        width: 460px;
+      }
+
+      .grid-9 {
+        width: 520px;
+      }
+
+      .grid-10 {
+        width: 580px;
+      }
+
+      .grid-11 {
+        width: 640px;
+      }
+
+      // Need to change grid for tablet. Use tablet- prefix grid.
+      .responsive-layout-tablet & {
+        .tablet-grid-3 {
+          width: 25%;
+        }
+
+        .tablet-grid-6 {
+          width: 50%;
+        }
+
+        .tablet-grid-9 {
+          width: 75%;
+        }
+
+        .tablet-grid-12 {
+          background: transparent !important;
+          min-height: 0 !important;
+          width: 100%;
+        }
+      }
+
+      .column-footer {
+        background-image: url(../img/30-tablet/mainmenu-popup-footer-shadow.png);
+      }
+    }
+
+    .widget-icon-menu {
+      a {
+        width: 135px;
+      }
+    }
+
+    .widget-bigmenu {
+      li {
+        float: none;
+        margin-left: 0;
+        width: auto;
+      }
+    }
+  }
+}
+
+
+
+@if $layout == desktop or
+    $layout == editor {
+  .static-mainmenu-popup {
+    /* Hacking grid because of design (6). */
+    .container-12 {
+      .grid-3 {
+        width: 235px;
+      }
+
+      .grid-3_5 {
+        width: 287px;
+      }
+
+      .grid-4 {
+        width: 320px;
+      }
+
+      // Size betwee grid-4 and grid-5.
+      .grid-4_5 {
+        width: 362px;
+      }
+
+      .grid-5 {
+        width: 405px;
+      }
+
+      .grid-6 {
+        width: 490px;
+      }
+
+      .grid-7 {
+        width: 575px;
+      }
+
+      // Size betwee grid-7 and grid-8.
+      .grid-7_5 {
+        width: 618px;
+      }
+
+      .grid-8 {
+        width: 660px;
+      }
+
+      .grid-9 {
+        width: 745px;
+      }
+
+      .grid-10 {
+        width: 830px;
+      }
+
+      .grid-11 {
+        width: 915px;
+      }
+
+      .column-footer {
+        background-image: url(../img/40-desktop/mainmenu-popup-footer-shadow.png);
+      }
+    }
+
+    .widget-icon-menu {
+      a {
+        width: 235px;
+      }
+    }
+  }
+}

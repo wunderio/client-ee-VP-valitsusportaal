@@ -1,0 +1,347 @@
+
+@if $layout == global {
+  .page {
+    .region-top,
+    .region-content,
+    .region-sidebar-first,
+    .region-sidebar-second {
+      background: white;
+      padding: 20px;
+    }
+
+    // Smaller space between breadcrumbs and content title.
+    .region-top {
+      padding-bottom: 1px;
+    }
+  }
+}
+
+@if $layout == default {
+  .page {
+    $header_height: 160px;
+    $content_vertical_offset: -15px;
+    $content_shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+    $content_padding_front: 20px;
+    $content_padding_subpage: 35px;
+
+    // Mobile reset
+    .region-top,
+    .region-content,
+    .region-sidebar-first,
+    .region-sidebar-second {
+      background: transparent;
+      padding: 0;
+    }
+
+    // Default content paddings.
+    & {
+      .zone-top,
+      .zone-content,
+      .zone-footer {
+        padding: $content_padding_subpage 0;
+
+        .region:first-child .region-inner {
+          padding-left: $content_padding_subpage;
+        }
+
+        .region:last-child .region-inner {
+          padding-right: $content_padding_subpage;
+        }
+        // IE8 support.
+        .region.last-child .region-inner {
+          padding-right: $content_padding_subpage;
+        }
+
+        .front & {
+          padding: $content_padding_front 0;
+
+          .region:first-child .region-inner {
+            padding-left: $content_padding_front;
+          }
+
+          .region:last-child .region-inner {
+            padding-right: $content_padding_front;
+          }
+          // IE8 support.
+          .region.last-child .region-inner {
+            padding-right: $content_padding_front;
+          }
+        }
+      }
+
+      .zone-postscript {
+        padding: $content_padding_front 0;
+
+        .region:first-child .region-inner {
+          padding-left: $content_padding_front;
+        }
+
+        .region:last-child .region-inner {
+          padding-right: $content_padding_front;
+        }
+        // IE8 support.
+        .region.last-child .region-inner {
+          padding-right: $content_padding_front;
+        }
+      }
+    }
+
+
+    // Horizontal paddings between content and sidebar on subpage.
+    // Padding differ for between the sidebars (according to content news and news list design).
+    // @todo: equalize paddings if there's no good reason for current settings.
+    & {
+      // If sidebar-first exists.
+      .not-front.has-sidebar-first & {
+        .region-content {
+          .region-inner {
+            margin-left: -40px;
+          }
+        }
+
+        .region-sidebar-first {
+          .region-inner {
+            margin-left: -15px;
+            padding-right: 50px;
+          }
+        }
+      }
+
+      // If sidebar-second exists.
+      .not-front.has-sidebar-second & {
+        .region-content {
+          .region-inner {
+            margin-right: -30px;
+          }
+        }
+
+        .region-sidebar-second {
+          .region-inner {
+            margin-right: -15px;
+            padding-left: 60px;
+          }
+        }
+      }
+    }
+
+    .header-content-wrapper {
+      background: #efede3 url(../img/10-global/section-content.png) repeat-x;
+    }
+
+    .zone-top {
+      background: #fff;
+      box-shadow: $content_shadow;
+      overflow: hidden;
+      position: relative;
+      z-index: 2;
+    }
+
+    .section-content {
+      margin-top: -1px; // Disable margin junctions - needed for active menu animation.
+      padding-top: 1px; // Disable margin junctions - needed for active menu animation.
+      position: relative; // For megamenu positioning.
+    }
+
+    .zone-content-wrapper {
+      $padding_top_subpage: 10px;
+      $padding_top_front: 30px;
+
+      bottom: $content_vertical_offset;
+      margin-top: $content_vertical_offset - $padding_top_subpage;
+      overflow: hidden;
+      padding-top: $padding_top_subpage;
+      position: relative;
+      z-index: 2;
+
+      .front & {
+        margin-top: $content_vertical_offset - $padding_top_front;
+
+        .region-inner {
+          @extend %clearfix;
+          margin-left: 0;
+          margin-right: 0;
+
+          .block {
+            float: left;
+            margin-left: 10px;
+            margin-right: 10px;
+          }
+        }
+
+        .region:first-child .region-inner {
+          padding-left: 10px;
+        }
+
+        .region:last-child .region-inner {
+          padding-right: 10px;
+        }
+        // IE8 support.
+        .region.last-child .region-inner {
+          padding-right: 10px;
+        }
+      }
+
+      .zone-content {
+        background-color: #fff;
+        border-bottom: 10px solid transparent; // Merge shadow with .zone-postscript
+        box-shadow: $content_shadow;
+        margin-bottom: -10px; // Merge shadow with .zone-postscript
+      }
+    }
+
+    // Merge .zone-top and .zone-content on subpages.
+    & {
+      .not-front & {
+        .zone-top-wrapper {
+          margin-top: -10px;
+          overflow: hidden;
+          padding-top: 10px;
+
+          .zone-top {
+            margin-bottom: -10px;
+            padding-bottom: 10px;
+            padding-top: 25px;
+          }
+        }
+
+        .zone-content-wrapper {
+          margin-top: -15px;
+          padding-top: 0;
+
+          .zone-content {
+            margin-top: -10px;
+            min-height: 180px;
+          }
+        }
+      }
+    }
+
+    //
+    // Make postscript visually merged with zone-content. Also need to add
+    // border-bottom: 10px solid transparent and margin-bottom: -10px to
+    // .zone-content
+    //
+    .zone-postscript-wrapper {
+      bottom: $content_vertical_offset;
+      overflow: hidden;
+      position: relative;
+      z-index: 2;
+
+      .zone-postscript {
+        background: #F8F9FA url(../img/40-desktop/zone-postscript.png) no-repeat;
+        border-top: 10px solid transparent; // Merge shadow with .zone-content
+        box-shadow: $content_shadow;
+        margin-top: -10px; // Merge shadow with .zone-content
+      }
+    }
+
+    .zone-footer-wrapper {
+      box-shadow: inset 0px 4px 10px -4px rgba(0, 0, 0, 0.5);
+      height: 10px;
+    }
+  }
+}
+
+
+
+@if $layout == tablet {
+  .page {
+    $content_padding: 20px;
+
+    .zone-content-wrapper {
+      .front & {
+        .region-inner {
+          .block {
+            width: 320px;
+
+            &.first-content-block-in-region {
+              height: auto !important;
+              margin-bottom: 20px;
+              width: 660px;
+            }
+          }
+        }
+      }
+    }
+
+    // Horizontal paddings between content and sidebar on subpage.
+    // Padding differ for between the sidebars (according to content news and news list design).
+    // @todo: equalize paddings if there's no good reason for current settings.
+    & {
+      // If sidebar-first exists.
+      .not-front.has-sidebar-first & {
+        .region-content {
+          .region-inner {
+            margin-left: 30px;
+          }
+        }
+
+        .region-sidebar-first {
+          .region-inner {
+            margin-right: -20px;
+            padding-right: 0;
+          }
+        }
+      }
+
+      // If sidebar-second exists.
+      .not-front.has-sidebar-second & {
+        .region-content {
+          .region-inner {
+            margin-right: 30px;
+          }
+        }
+
+        .region-sidebar-second {
+          .region-inner {
+            padding-left: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+@if $layout == desktop {
+  .page {
+    $content_shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+    $content_padding: 20px;
+
+    .zone-content-wrapper {
+      .front & {
+        .region-inner {
+          .block {
+            width: 306px
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+@if $layout == lte_ie8 {
+  .page {
+    .zone-top,
+    .zone-content,
+    .zone-postscript {
+      border: 1px solid #e3e2de;
+    }
+
+    .zone-top {
+      border-bottom: 0;
+    }
+
+    .zone-content {
+      border-bottom: 0;
+      border-top: 0;
+    }
+
+    .zone-postscript {
+      border-top: 0;
+    }
+  }
+}

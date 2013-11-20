@@ -1,0 +1,214 @@
+
+
+
+@if $layout == editor or
+    $layout == global {
+  .static-module-2 {
+    @extend %horizontal-ruler-default;
+    padding-bottom: 40px;
+    padding-top: 40px;
+    position: relative;
+    z-index: 1;
+
+    .editor & {
+      width: 930px;
+    }
+
+    .static-inner {
+      @extend %clearfix;
+    }
+
+    &:before {
+      margin-left: -20px;
+      margin-right: -20px;
+      top: -14px;
+    }
+
+    // BEGIN: Text styles.
+      h2,
+      p {
+        margin: 0 0 15px;
+      }
+
+      h2 {
+        color: $color-text-extra-red;
+        font-family: $font_museo500;
+        text-shadow: none;
+      }
+
+      p {
+        font-size: 13px;
+        line-height: 16px;
+      }
+
+      .lead {
+        line-height: 19px;
+        font-size: 14px;
+      }
+    // END: Text styles.
+
+    .left-col,
+    .right-col {
+      background-color: #F6F6F6;
+      border-radius: 5px;
+      border: 1px solid #EEE;
+      padding: 30px;
+    }
+
+    .left-col {
+      margin-bottom: 20px;
+    }
+
+    @if $layout == editor {
+      @extend %static-module-2-default;
+      @extend %static-module-2-desktop;
+    }
+  }
+}
+
+
+
+@if $layout == default {
+  .static-module-2 {
+    @extend %static-module-2-default;
+  }
+}
+
+
+
+@if $layout == tablet {
+  .static-module-2 {
+    // BEGIN: Make equal height boxes and the seal in the middle.
+      padding-bottom: 100px;
+      padding-top: 100px;
+
+      .left-col:before,
+      .right-col:before {
+        bottom: 62px;
+        top: 62px;
+        width: 296px;
+      }
+    // END: Make equal height boxes and the seal in the middle.
+
+    .left-col,
+    .right-col {
+      width: 218px;
+    }
+  }
+}
+
+
+
+@if $layout == desktop {
+  .static-module-2 {
+    @extend %static-module-2-desktop;
+  }
+}
+
+
+
+//
+// Placeholder selectors
+//
+// These need to be below the rest of the code as the real css will be replaced
+// there thus overwriting would not work.
+//
+
+
+
+%static-module-2-default {
+  padding-bottom: 30px;
+  padding-top: 68px;
+
+  // BEGIN: Make equal height boxes and the seal in the middle.
+    .left-col:before,
+    .right-col:before {
+      background-color: #F6F6F6;
+      border-radius: 5px;
+      border: 1px solid #EEE;
+      content: "";
+      margin: 0 0 18px 0;
+      position: absolute;
+      z-index: -1;
+    }
+
+    .left-col:before {
+      left: 5px;
+    }
+
+    .right-col:before {
+      right: 5px;
+    }
+
+    // The seal.
+    .static-inner {
+
+      &:before {
+        $height: 64px;
+        $width: 68px;
+
+        background: url(../img/40-desktop/static-module-2-seal.png);
+        content: "";
+        height: $height;
+        left: 50%;
+        margin-left: $width / (-2);
+        margin-top: $height / (-2);
+        position: absolute;
+        top: 47%;
+        width: $width;
+        z-index: 1;
+      }
+    }
+  // END: Make equal height boxes and the seal in the middle.
+
+  .left-col,
+  .right-col {
+    background: transparent;
+    border: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  .left-col {
+    float: left;
+    padding-left: 45px;
+    text-align: right;
+  }
+
+  .right-col {
+    float: right;
+    padding-right: 45px;
+  }
+}
+
+%static-module-2-desktop {
+  // BEGIN: Make equal height boxes and the seal in the middle.
+    padding-top: 142px;
+    padding-bottom: 142px;
+
+    .left-col:before,
+    .right-col:before {
+      bottom: 104px;
+      top: 104px;
+      width: 446px;
+    }
+  // END: Make equal height boxes and the seal in the middle.
+
+  .left-col,
+  .right-col {
+    width: 360px;
+  }
+}
+
+
+
+@if $layout == lte_ie8 {
+  .static-module-2 {
+    // The seal.
+    .static-inner {
+      &:before {
+        display: none;
+      }
+    }
+  }
+}

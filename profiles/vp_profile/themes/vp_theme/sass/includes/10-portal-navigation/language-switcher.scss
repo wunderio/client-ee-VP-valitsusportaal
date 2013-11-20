@@ -1,0 +1,185 @@
+
+
+
+@if $layout == global {
+  .zone-portal-navigation-wrapper {
+
+    .region-portal-navigation-second {
+      text-align: center;
+    }
+
+    .block-language-switcher-fallback {
+      margin-right: 5px;
+      position: static;
+
+      .block-title {
+        @include fontSize(14px);
+        background: #007c9e;
+        color: #fff;
+        cursor: pointer;
+        direction: ltr;
+        font-family: $font_museo500;
+        height: 31px;
+        line-height: 30px;
+        overflow: hidden;
+        padding: 4px 4px 0 4px;
+        text-align: center;
+        text-indent: -10000px;
+        text-shadow: none;
+        width: 35px;
+
+        &.active {
+          background: #f2f0e9;
+          color: #444;
+        }
+      }
+
+      .content {
+        background: #F2F0E9;
+        display: none;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 35px;
+      }
+
+      li {
+        border-bottom: 1px solid #ccc;
+        float: none;
+        padding: 0;
+        text-align: left;
+
+        &.active {
+          display: none;
+        }
+      }
+
+      .language-switcher-locale-url {
+        padding-top: 14px;
+      }
+
+      a {
+        @include fontSize(18px);
+        color: #3c3c3a;
+        display: block;
+        font-family: $font_museo500;
+        line-height: 20px;
+        padding: 9px 60px 6px 9.21659%;
+        text-decoration: none;
+
+        &:hover,
+        &:focus {
+          color: $color-link-hover;
+        }
+      }
+    }
+  }
+}
+
+
+
+@if $layout == default {
+  .zone-portal-navigation-wrapper {
+    .block-language-switcher-fallback {
+      display: block;
+      float: left;
+      margin-right: 0;
+
+      .block-title {
+        display: none;
+      }
+
+      .content {
+        display: block;
+        background: transparent;
+        position: static;
+      }
+
+      li {
+        border-bottom: 0;
+        float: left;
+        padding: 8px 9px 1px 9px;
+        text-align: left;
+
+        &.active {
+          display: block;
+        }
+      }
+
+      .language-switcher-locale-url {
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        padding-left: 6px;
+        padding-right: 4px;
+        padding-top: 0;
+
+        .locale-untranslated {
+          text-decoration: none;
+        }
+      }
+
+      a {
+        @include fontSize(11px);
+        color: #fff;
+        display: block;
+        font-family: $font_default;
+        padding: 0;
+
+        &:hover,
+        &:focus {
+          color: $color-text-extra-golden;
+        }
+
+        &.active {
+          color: #00CCFF;
+        }
+      }
+    }
+  }
+}
+
+
+
+@if $layout == tablet {
+  .zone-portal-navigation-wrapper {
+    .block-language-switcher-fallback {
+      li {
+        padding-left: 6px;
+        padding-right: 6px;
+
+        &.first {
+          padding-left: px
+        }
+      }
+
+      .language-switcher-locale-url {
+        padding-left: 0
+      }
+    }
+  }
+}
+
+
+
+@if $layout == desktop {
+  .zone-portal-navigation-wrapper {
+    .block-language-switcher-fallback {
+      .language-switcher-locale-url {
+        border-left: 1px solid rgba(255, 255, 255, 0.5);
+      }
+    }
+  }
+}
+
+
+
+
+@if $layout == lte_ie8 {
+  .zone-portal-navigation-wrapper {
+    .block-language-switcher-fallback {
+      .language-switcher-locale-url {
+        border-left: 1px solid #aeaead;
+        border-right: 1px solid #686865;;
+      }
+    }
+  }
+}

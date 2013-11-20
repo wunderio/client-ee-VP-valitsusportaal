@@ -1,0 +1,9 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function vp_search_install() {
+
+}
+

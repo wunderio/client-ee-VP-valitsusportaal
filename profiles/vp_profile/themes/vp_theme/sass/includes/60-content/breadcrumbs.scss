@@ -1,0 +1,49 @@
+
+
+
+@if $layout == global {
+  .block-delta-blocks-breadcrumb {
+    //margin-bottom: 20px;
+
+    .breadcrumb {
+      @include fontSize(16px);
+      font-family: $font_museo300;
+
+      span,
+      a {
+        display: inline-block;
+      }
+
+      span {
+        &.delimiter {
+          background: url(../img/10-global/breadcrumb-spacer.png) no-repeat 100% 30%;
+          direction: ltr;
+          margin-right: 5px;
+          min-height: 16px;
+          overflow: hidden;
+          padding: 0;
+          text-indent: -10000px;
+          vertical-align: middle;
+          width: 14px;
+        }
+
+        a {
+          color: #666;
+
+          &:focus,
+          &:hover {
+            color: $color-link;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+@if $layout == default {
+  .block-delta-blocks-breadcrumb {
+    margin-bottom: 0;
+  }
+}

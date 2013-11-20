@@ -1,0 +1,6 @@
+core = "7.x"
+description = "Provides Estonian ID-card digital document signing using DigiDoc service"
+name = "Estonian ID-card Sign"
+package = "DigiDoc"
+version = "7.x-1.0"
+dependencies[] = digidoc

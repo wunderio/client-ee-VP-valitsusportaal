@@ -1,0 +1,132 @@
+
+
+
+@if $layout == global {
+  .view-display-id-weekly_schedule_page {
+    $border: 1px solid shade(#F7F5F1, 4%);
+    padding-bottom: 30px;
+
+    // Pager.
+    .date-nav-wrapper {
+      $date-font-size: 11px;
+
+      border: $border;
+      margin-top: 0;
+      padding: 7px 10px;
+      width: auto;
+
+      .date-nav {
+        border: 0;
+        height: auto;
+        margin: 0;
+        min-height: 0;
+        padding: 0;
+      }
+
+      .date-heading {
+        padding: 0 70px;
+        width: auto;
+
+        h3 {
+          color: $color-text-main-blue;
+          font-family: $font_default;
+          font-size: $date-font-size;
+          line-height: 20px;
+          text-shadow: none;
+        }
+      }
+
+      .pager {
+        border-radius: 0;
+        border: 0;
+        box-shadow: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+          border: 0;
+          box-shadow: none;
+          display: block;
+          margin: 0;
+          padding: 0;
+
+          a {
+            font-size: $date-font-size;;
+            font-weight: normal;
+            margin-left: 0;
+            padding: 0;
+            position: absolute;
+            top: 0;
+            white-space: nowrap;
+
+            &:hover {
+              color: $color-text-extra-red;
+            }
+          }
+
+          &.date-prev a {
+            left: 0;
+          }
+
+          &.date-next a {
+            right: 0;
+          }
+        }
+      }
+    }
+
+    // Content.
+    & {
+      .views-table-wrapper {
+        border: $border;
+        margin-top: 11px;
+        padding: 32px 40px 18px 40px;
+
+
+        caption {
+          color: $color-text-main-blue;
+          font-family: $font_museo300;
+          font-size: 19px;
+          text-align: left;
+          padding-bottom: 20px;
+        }
+
+        table {
+          @extend %table-reset;
+          margin-bottom: 0;
+
+          tr {
+            border-bottom: 1px solid #BBB;
+
+            &:last-child {
+              border: 0;
+            }
+            // Last child.
+            &.last-child {
+              border: 0;
+            }
+          }
+
+          td {
+            padding-top: 10px;
+            padding-bottom: 25px;
+          }
+        }
+
+        .views-field-field-weekly-schedule-date {
+          color: #666;
+          font-size: 12px;
+          line-height: 14px;
+          padding-left: 0;
+          width: 135px;
+        }
+
+        .views-field-body {
+          font-size: 14px;
+          line-height: 18px;
+          padding-right: 0;
+        }
+      }
+    }
+  }
+}

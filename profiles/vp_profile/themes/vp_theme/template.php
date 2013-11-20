@@ -1,0 +1,431 @@
+<?php
+
+/**
+ * @file
+ * This file is empty by default because the base theme chain (Alpha & Omega) provides
+ * all the basic functionality. However, in case you wish to customize the output that Drupal
+ * generates through Alpha & Omega this file is a good place to do so.
+ *
+ * Alpha comes with a neat solution for keeping this file as clean as possible while the code
+ * for your subtheme grows. Please read the README.txt in the /preprocess and /process subfolders
+ * for more information on this topic.
+ */
+
+/**
+ * Implements theme_menu_link().
+ *
+ * Add id to for every menu item and copy a tag attributes to li tag.
+ */
+function vp_theme_menu_link($variables) {
+  // Add id for every menu item (faster and better hooking for megamenu access).
+  $li_tag_classes = (array) $variables['element']['#attributes']['class'];
+  $variables['element']['#attributes']['id'] = 'menu-mlid-' . $variables['element']['#original_link']['mlid'];
+
+  // Copy a tag attributes to li tag (need to have has-separator class on li tag in portal navigation zone).
+  $a_tag_classes = isset($variables['element']['#localized_options']['attributes']['class']) ? (array) $variables['element']['#localized_options']['attributes']['class'] : array();
+  $li_tag_classes = (array) $variables['element']['#attributes']['class'];
+  $joined_classes = array_merge($a_tag_classes, $li_tag_classes);
+  $variables['element']['#attributes']['class'] = $joined_classes;
+
+  return theme_menu_link($variables);
+}
+
+/**
+ * Add Open Graph meta tags for Facebook sharing.
+ */
+function add_facebook_meta_tags() {
+  global $base_url;
+
+  $site_name = variable_get('site_name');
+
+  // Add og:title meta tag.
+  $image_og_title = array(
+    '#tag' => 'meta',
+    '#attributes' => array(
+      'property' => 'og:title',
+      'content' => trim(drupal_get_title()) . (!empty($site_name) ? ' | ' . $site_name : ''),
+    ),
+  );
+
+  // Add og:image meta tag.
+  // Needs to be atleast 200x200.
+  $image_og_meta = array(
+    '#tag' => 'meta',
+    '#attributes' => array(
+      'property' => 'og:image',
+      'content' => $base_url . '/' . drupal_get_path('theme', 'vp_theme') . '/logo-fb.png',
+    ),
+  );
+
+  // Add og:description meta tag.
+  $description_og_meta = array(
+    '#tag' => 'meta',
+    '#attributes' => array(
+      'property' => 'og:description',
+      'content' => variable_get('site_slogan'),
+    ),
+  );
+
+  // Add og:url meta tag.
+  global $base_root;
+  $link = $base_root . request_uri();
+
+  $description_og_url = array(
+    '#tag' => 'meta',
+    '#attributes' => array(
+      'property' => 'og:url',
+      'content' => $link,
+    ),
+  );
+
+  if (arg(0) == 'node' && is_numeric(arg(1))) {
+    $node = node_load(arg(1));
+    $teaser_object = node_view($node, 'view_mode_facebook');
+    $teaser = '';
+    if (isset($teaser_object['body'][0]['#markup'])) {
+      $teaser = str_replace("\n", ' ', strip_tags($teaser_object['body'][0]['#markup']));
+    }
+    if ($node->type === 'news') {
+      if (!empty($node->field_cover_image)) {
+        $image_og_meta['#attributes']['content'] = image_style_url('large', $node->field_cover_image['und'][0]['uri']);
+      }
+    }
+
+    if (!empty($teaser)) {
+      $description_og_meta['#attributes']['content'] = $teaser;
+    }
+  }
+
+  drupal_add_html_head($image_og_title, 'image_og_title');
+  drupal_add_html_head($image_og_meta, 'image_og_meta');
+  drupal_add_html_head($description_og_meta, 'description_og_meta');
+  drupal_add_html_head($description_og_url, 'description_og_url');
+}
+
+/**
+ * Implements hook_preprocess_html().
+ *
+ * Add extra body classes.
+ */
+ function vp_theme_preprocess_html(&$vars) {
+  if (isset($vars['page']['content']['content']['sidebar_first'])) {
+    $vars['attributes_array']['class'][] = 'has-sidebar-first';
+  }
+
+  if (isset($vars['page']['content']['content']['sidebar_second'])) {
+    $vars['attributes_array']['class'][] = 'has-sidebar-second';
+  }
+
+  add_facebook_meta_tags();
+
+  // Add IE8 css.
+  drupal_add_css(drupal_get_path('theme', 'vp_theme') . '/css/lte-ie8.css', array(
+    'group' => 9999,
+    'weight' => 9999,
+    'browsers' => array(
+      'IE' => 'lte IE 8',
+      '!IE' => FALSE
+      ),
+    'preprocess' => FALSE,
+    'every_page' => TRUE,
+  ));
+
+  // Add print css.
+  drupal_add_css(drupal_get_path('theme', 'vp_theme') . '/css/print.css', array(
+    'group' => 9999+1,
+    'weight' => 9999+1,
+    'media' => 'print',
+    'preprocess' => FALSE,
+    'every_page' => TRUE,
+  ));
+}
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function vp_theme_preprocess_page(&$variables) {
+  if (drupal_is_front_page()) {
+    $variables['page']['content']['content']['#suffix'] = '
+    <script>
+      (function($) {
+        var equal_height_blocks_in_zone_content_wrap = function() {
+          var highest = 0;
+          var $blocks = $("#zone-content-wrapper .block");
+          $blocks.css("height", "auto");
+          $blocks.each(function(i) {
+            if (highest < $(this).height()) {
+              highest = $(this).height();
+            }
+          });
+          $blocks.css("height", highest);
+        }
+
+        equal_height_blocks_in_zone_content_wrap();
+
+        // Reload again in case there is image content.
+        $(window).load(function() {
+          equal_height_blocks_in_zone_content_wrap();
+        });
+      })(jQuery);
+    </script>';
+
+    foreach ($variables['page']['content']['content']['content'] as $key => &$var) {
+      if (isset($var['#block']) && $key !== 'delta_blocks_messages') {
+        $var['#block']->css_class = 'first-content-block-in-region';
+        break;
+      }
+    }
+  }
+}
+
+/**
+ * Returns HTML for a query pager.
+ *
+ * Modify the omega pager function to group first, previous and next, last links together.
+ *
+ * @param $vars
+ *   An associative array containing:
+ *   - tags: An array of labels for the controls in the pager.
+ *   - element: An optional integer to distinguish between multiple pagers on
+ *     one page.
+ *   - parameters: An associative array of query string parameters to append to
+ *     the pager links.
+ *   - quantity: The number of pages in the list.
+ *
+ * @ingroup themeable
+ */
+function vp_theme_pager($vars) {
+  global $pager_page_array, $pager_total;
+
+  $tags = $vars['tags'];
+  $element = $vars['element'];
+  $parameters = $vars['parameters'];
+  $quantity = $vars['quantity'];
+
+  // Calculate various markers within this pager piece:
+  // Middle is used to "center" pages around the current page.
+  $pager_middle = ceil($quantity / 2);
+  // current is the page we are currently paged to
+  $pager_current = $pager_page_array[$element] + 1;
+  // first is the first page listed by this pager piece (re quantity)
+  $pager_first = $pager_current - $pager_middle + 1;
+  // last is the last page listed by this pager piece (re quantity)
+  $pager_last = $pager_current + $quantity - $pager_middle;
+  // max is the maximum page number
+  $pager_max = $pager_total[$element];
+  // End of marker calculations.
+
+  // Prepare for generation loop.
+  $i = $pager_first;
+  if ($pager_last > $pager_max) {
+    // Adjust "center" if at end of query.
+    $i = $i + ($pager_max - $pager_last);
+    $pager_last = $pager_max;
+  }
+
+  if ($i <= 0) {
+    // Adjust "center" if at start of query.
+    $pager_last = $pager_last + (1 - $i);
+    $i = 1;
+  }
+  // End of generation loop preparation.
+
+  $li_first = theme('pager_first', array('text' => (isset($tags[0]) ? $tags[0] : t('« first')), 'element' => $element, 'parameters' => $parameters));
+  $li_previous = theme('pager_previous', array('text' => (isset($tags[1]) ? $tags[1] : t('‹ previous')), 'element' => $element, 'interval' => 1, 'parameters' => $parameters));
+  $li_next = theme('pager_next', array('text' => (isset($tags[3]) ? $tags[3] : t('next ›')), 'element' => $element, 'interval' => 1, 'parameters' => $parameters));
+  $li_last = theme('pager_last', array('text' => (isset($tags[4]) ? $tags[4] : t('last »')), 'element' => $element, 'parameters' => $parameters));
+
+  if ($pager_total[$element] > 1) {
+    if ($li_first || $li_previous) {
+      $items[] = array(
+        'class' => array('pager-group-first'),
+        'data' => '<ul>' . ($li_first ? '<li class="pager-item pager-first">' . $li_first . '</li>' : '') . ($li_previous ? '<li class="pager-item pager-previous">' . $li_previous . '</li>' : '') . '</ul>',
+      );
+    }
+
+    // When there is more than one page, create the pager list.
+    if ($i != $pager_max) {
+      if ($i > 1) {
+        $items[] = array(
+          'class' => array('pager-ellipsis'),
+          'data' => '…',
+        );
+      }
+
+      // Now generate the actual pager piece.
+      for (; $i <= $pager_last && $i <= $pager_max; $i++) {
+        if ($i < $pager_current) {
+          $items[] = array(
+            'class' => array('pager-item'),
+            'data' => theme('pager_previous', array('text' => $i, 'element' => $element, 'interval' => ($pager_current - $i), 'parameters' => $parameters)),
+          );
+        }
+
+        if ($i == $pager_current) {
+          $items[] = array(
+            'class' => array('pager-item', 'pager-current'),
+            'data' => '<span>' . $i . '</span>',
+          );
+        }
+
+        if ($i > $pager_current) {
+          $items[] = array(
+            'class' => array('pager-item'),
+            'data' => theme('pager_next', array('text' => $i, 'element' => $element, 'interval' => ($i - $pager_current), 'parameters' => $parameters)),
+          );
+        }
+      }
+
+      if ($i < $pager_max) {
+        $items[] = array(
+          'class' => array('pager-ellipsis'),
+          'data' => '…',
+        );
+      }
+    }
+
+    // End generation.
+    if ($li_next || $li_last) {
+      $items[] = array(
+        'class' => array('pager-group-last'),
+        'data' => '<ul>' . ($li_next ? '<li class="pager-item pager-next">' . $li_next . '</li>' : '') . ($li_last ? '<li class="pager-item pager-last">' . $li_last . '</li>' : '') . '</ul>',
+      );
+    }
+
+    return '<h2 class="element-invisible">' . t('Pages') . '</h2>' . theme('item_list', array(
+      'items' => $items,
+      'attributes' => array('class' => array('pager', 'clearfix')),
+    ));
+  }
+}
+
+/**
+* Implements hook_alpha_preprocess_block()
+*
+* There is an issue with using Path Breadcrumb module with Delta blocks.
+* See drupal.org/node/1777644 for description of issue and fix.
+*/
+function vp_theme_alpha_preprocess_block(&$vars) {
+  if ($vars['block']->module == 'delta_blocks' && $vars['block']->delta == 'breadcrumb') {
+    $data = array(
+      '#theme' => 'breadcrumb',
+      '#breadcrumb' => drupal_get_breadcrumb(),
+    );
+
+    $last = $data['#breadcrumb'][count($data['#breadcrumb'])-1];
+    if(!empty($last) && strpos($last, '<a') === FALSE && strlen($last) > 30) {
+      $data['#breadcrumb'][count($data['#breadcrumb'])-1] = substr($data['#breadcrumb'][count($data['#breadcrumb'])-1], 0, 30) . '...';
+    }
+
+    $active_trail = array();
+    $obj = menu_get_object('node');
+    if ($obj && $obj->type === 'article') {
+      $trail = menu_get_active_trail();
+      unset($trail[count($trail) - 1]);
+      foreach ($trail as $menu_item) {
+        $active_trail[] = l($menu_item['title'], $menu_item['href']);
+      }
+      $active_trail[] = $data['#breadcrumb'][count($data['#breadcrumb'])-1];
+      $data['#breadcrumb'] = $active_trail;
+    }
+
+    $breadcrumb = render($data);
+    $vars['content'] = $breadcrumb;
+  }
+}
+
+function vp_theme_preprocess_date_views_pager(&$vars) {
+  if ($vars['plugin']->view->name == 'weekly_schedule') {
+    $vars['nav_title'] = date('d.m.Y', strtotime('monday', strtotime($vars['plugin']->view->date_info->date_arg))).' - '.date('d.m.Y', strtotime('sunday', strtotime('sunday this week', strtotime($vars['plugin']->view->date_info->date_arg))));
+  }
+}
+
+/**
+ * Implements theme_menu_tree().
+ *
+ * Remove white-space from <li> tags in menus for more precise spacing when
+ * using display: inline-block.
+ */
+function vp_theme_menu_tree($variables) {
+  return '<ul class="menu">' . str_replace(array("\r", "\n"), '', $variables['tree']) . '</ul>';
+}
+
+/**
+ * Implements theme_preprocess_field().
+ */
+function vp_theme_preprocess_field(&$variables, $hook) {
+  global $language;
+
+  if ($variables['element']['#field_name'] == 'field_position' && $language->language !== 'et') {
+    $variables['items'][0]['#markup'] = '';
+  }
+  if ($variables['element']['#field_name'] == 'field_position_in_english' && $language->language !== 'en') {
+    $variables['items'][0]['#markup'] = '';
+  }
+  if ($variables['element']['#field_name'] == 'field_position_in_russian' && $language->language !== 'ru') {
+    $variables['items'][0]['#markup'] = '';
+  }
+}
+
+/**
+ * Implements theme_process_field().
+ */
+function vp_theme_process_field(&$variables, $hook) {
+  // Add tablet specific classes for gallery.
+  if ($variables['element']['#field_name'] == 'field_pictures' && $variables['element']['#field_type'] == 'field_collection') {
+    drupal_add_js(drupal_get_path('theme', 'vp_theme') .'/js/tablet_gallery.js', array('scope' => 'footer'));
+  }
+}
+
+/**
+ * Implements theme_form_alter().
+ *
+ * Better login screen.
+ */
+function vp_theme_form_alter( &$form, &$form_state, $form_id ) {
+  if (in_array($form_id, array('user_login', 'user_login_block', 'user_pass'))) {
+    // Move the digidoc and mobileid buttons to the bottom.
+    $form['actions']['#weight'] = 1;
+    $form['digidoc_auth_service']['#weight'] = -1;
+
+    // Placeholder.
+    if ($form_id === 'user_pass') {
+      $form['name']['#attributes']['placeholder'] = t('Username or e-mail address');
+    }
+    else {
+      $form['name']['#attributes']['placeholder'] = t('Username');
+    }
+    $form['pass']['#attributes']['placeholder'] = t('Password');
+
+    // Add "Request new password" link to submit button.
+    if ($form_id !== 'user_pass') {
+      $form['actions']['submit']['#prefix'] = l(t('Request new password'), 'user/password');
+    }
+
+    // Add placeholder support for older browsers.
+    drupal_add_js(drupal_get_path('theme', 'vp_theme') .'/js/jquery.placeholder.js', array('scope' => 'footer'));
+    drupal_add_js('jQuery(":input[placeholder]").placeholder();;', array('type' => 'inline', 'scope' => 'footer'));
+  }
+}
+
+/**
+ * Implements theme_preprocess_entity().
+ */
+function vp_theme_preprocess_entity(&$variables) {
+  // Remove image html if the image is not set.
+  if ($variables['elements']['#bundle'] == 'field_pictures') {
+    if (!isset($variables['field_picture'])) {
+      $variables = array();
+    }
+  }
+}
+
+/**
+ * Implements theme_preprocess_simplenews_block().
+ *
+ * Translate multi signup block body message / i18n
+ * https://drupal.org/node/1458538#comment-7389624
+ */
+function vp_theme_preprocess_simplenews_multi_block(&$vars) {
+  $vars['message'] = t($vars['message']);
+}

@@ -1,0 +1,253 @@
+
+
+
+$static-module-5-global-padding-bottom: 55px;
+$static-module-5-global-padding-top: 55px;
+
+
+
+@if $layout == editor or
+    $layout == global {
+  #static-module-5 {
+    @extend %horizontal-ruler-global;
+    padding-bottom: 30px;
+    padding-top: 68px;
+
+    h2,
+    h3 {
+      text-shadow: none;
+    }
+
+    h2 {
+      padding-top: 10px;
+      font-size: 25px;
+    }
+
+    h3 {
+      margin-top: 25px;
+    }
+
+    // BEGIN: Layout.
+      @extend %clearfix;
+      padding-top: $static-module-5-global-padding-top;
+      padding-bottom: $static-module-5-global-padding-bottom;
+      position: relative;
+      z-index: 1;
+
+      .aside {
+        float: left;
+        position: relative;
+        width: 286px;
+        z-index: 3;
+
+        ul {
+          margin: 0;
+
+          li {
+            background: none;
+            margin: 0;
+            padding: 0;
+          }
+        }
+      }
+
+      .main {
+        overflow: hidden;
+      }
+
+      .main-inner {
+        padding: 17px;
+      }
+    // END: Layout.
+
+    .aside {
+      display: none;
+    }
+
+    .main {
+      background: #F6F5E9 url(../img/10-global/static-module-5-main-bg.png);
+      border-radius: 3px;
+      padding: 8px;
+
+      .slide {
+        .responsive-layout-mobile & {
+          display: block !important;
+        }
+      }
+    }
+
+    .main-inner {
+      border-color: #BCBCB1;
+      border-radius: 3px;
+      border-style: dashed;
+      border-width: 1px;
+    }
+
+    .row {
+      background-color: #FFF;
+      border-radius: 3px;
+      margin: 11px 0;
+      padding: 18px;
+    }
+  }
+}
+
+
+
+@if $layout == editor {
+  #static-module-5 {
+    @extend %horizontal-ruler-default;
+    width: 930px;
+
+    h2,
+    h3 {
+      margin-top: 20px;
+      text-shadow: none;
+    }
+
+    h2 {
+      padding-left: 0;
+    }
+
+    // Horizontal line between aside and main.
+    .main:before {
+      display: none !important;
+    }
+
+    .main-inner {
+      padding-left: 17px;
+    }
+  }
+}
+
+
+
+@if $layout == default {
+  #static-module-5 {
+    h2 {
+      padding: 0px 0 23px 25px;
+      margin-top: 15px;
+    }
+
+    .main h2,
+    .main h3 {
+      display: none;
+    }
+
+    // BEGIN: Layout.
+      .main-inner {
+        padding-left: 43px;
+      }
+    // END: Layout.
+
+    .aside {
+      display: block;
+
+      ul {
+        @extend %list-reset;
+
+        // Tab
+        li {
+          $horizontal-padding: 4px;
+
+          cursor: pointer;
+          font-size: 15px;
+          line-height: 19px;
+          margin-bottom: 10px;
+          padding: 1px $horizontal-padding;
+          position: relative;
+          width: 301px - $horizontal-padding * 2;
+          z-index: 1;
+
+          div {
+            padding: 8px 50px 11px 22px;
+            position: relative;
+            border: 1px dashed transparent;
+
+            // Spacer for normal tabs.
+            &:after {
+              background: url(../img/10-global/static-module-5-tab-normal-border.png) 0 100% repeat-x;
+              bottom: -7px;
+              content: "";
+              height: 1px;
+              left: 22px;
+              position: absolute;
+              right: 37px;
+              z-index: 2;
+            }
+          }
+
+          // Remove the spacer from last tab.
+          &:last-child div:after {
+            display: none;
+          }
+
+          &.active {
+            background-color: #BB3F2B;
+            background-image: url(../img/40-desktop/static-module-5-tab-mid.png);
+            color: #fff;
+
+
+            div {
+              background: none;
+              border-radius: 3px;
+              border-color: #DDA297;
+
+              &:after {
+                // display: none; // Going to disable this. Seems more logical if the border is shown for active tab.
+              }
+            }
+
+            &:before,
+            &:after {
+              content: "";
+              left: 0;
+              position: absolute;
+              right: 0;
+              z-index: 2;
+            }
+
+            // Tab top part.
+            &:before {
+              background-image: url(../img/40-desktop/static-module-5-tab-top.png);
+              height: 13px;
+              top: -13px;
+            }
+
+            // Tab bottom part.
+            &:after {
+              background-image: url(../img/40-desktop/static-module-5-tab-bottom.png);
+              bottom: -12px;
+              height: 12px;
+            }
+          }
+        }
+      }
+    }
+
+    .main {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      padding-left: 0;
+
+      .slide {
+        display: none;
+      }
+
+      // Horizontal line between aside and main.
+      &:before {
+        background: url(../img/40-desktop/static-module-5-aside-main-spacer.png) 0 50%;
+        bottom: $static-module-5-global-padding-bottom;
+        content: "";
+        left: 284px;
+        position: absolute;
+        top: $static-module-5-global-padding-top;
+        width: 14px;
+      }
+    }
+
+     .main-inner {
+      border-left-width: 0;
+    }
+  }
+}

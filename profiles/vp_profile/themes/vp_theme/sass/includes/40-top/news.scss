@@ -1,0 +1,257 @@
+
+
+
+@if $layout == global {
+
+  .view-id-top_news_tabs {
+
+    .view-footer {
+      padding: 10px 0;
+      //background-color: shade(#F9F9F9, 3%);
+
+      h2 {
+        @include fontSize(14px);
+        font-family: $font_museo500;
+
+        text-transform: uppercase;
+
+        a {
+          background-color: tint($color-text-main-blue, 90%);
+          color: $color-text-main-blue;
+          display: block;
+          padding: 6px 10px 4px 10px;
+        }
+      }
+    }
+
+    .flexslider {
+      @extend %flexslider-reset;
+    }
+
+    .view-id-top_news_first {
+      .views-field-field-cover-image {
+        .field-content {
+          img {
+            width: 100%;
+          }
+        }
+      }
+
+      .aside {
+        padding-top: 20px;
+
+        .views-field-title {
+          color: #006699;
+          font-size: 22px;
+          line-height: 22px;
+          margin-bottom: 8px;
+        }
+      }
+    }
+
+    .view-id-news_tabs_right_side {
+      .views-row {
+        &.views-row-last h3 {
+        }
+
+        h3 {
+          background: url(../img/10-global/view-id-news_tabs_right_side--separator.png) repeat-x 0 100%;
+          color: #006699;
+          font-family: $font_default;
+          font-size: 12px;
+          line-height: 16px;
+          margin-bottom: 3px;
+          padding: 4px 0 12px 0;
+
+          a {
+            display: block;
+          }
+        }
+      }
+    }
+
+    // Tabs.
+    .views-slideshow-controls-bottom {
+      display: none;
+    }
+  }
+}
+
+
+
+@if $layout == default {
+  .view-id-top_news_tabs {
+
+    .view-footer {
+      display: none;
+    }
+
+    // Background separator
+    .flexslider_views_slideshow_slide {
+      float: left;
+    }
+
+    // Image and first news side by side.
+    .view-id-top_news_first {
+      .views-field-field-cover-image {
+        float: left;  // Float beside .aside
+      }
+      .aside {
+        overflow: hidden; // Float beside .views-field-field-cover-image
+      }
+    }
+
+    .view-id-top_news_first {
+      .views-field-field-cover-image {
+        padding-top: 7px;
+
+        .field-content {
+          border-radius: 3px;
+          overflow: hidden;
+        }
+      }
+
+      .aside {
+        padding-top: 15px;
+      }
+    }
+
+    // Tabs.
+    .views-slideshow-controls-bottom {
+      @extend %clearfix;
+      background-color: #fff;
+      display: block;
+      padding: 0 10px;
+      position: absolute;
+
+      .views-slideshow-pager-field-item {
+        float: left;
+        color: #717171;
+        cursor: pointer;
+        font-family: $font_museo700;
+        font-size: 10px;
+        font-weight: bold;
+        padding: 10px 12px;
+        text-transform: uppercase;
+
+        &:hover,
+        &.flex-active {
+          color: #006699;
+        }
+
+        &.flex-active {
+          background: url(../img/10-global/views-slideshow-controls-bottom-selected.png) no-repeat 50% 0;
+          color: #006699;
+        }
+      }
+    }
+  }
+}
+
+
+
+@if $layout == tablet {
+  .view-id-top_news_tabs {
+    .flexslider_views_slideshow_main {
+      padding-top: 30px;
+
+      .view-id-top_news_first {
+
+        .views-field-field-cover-image {
+          padding-right: 4%;
+          width: 48%;
+        }
+
+        .aside {
+        }
+      }
+
+      .view-id-news_tabs_right_side {
+        overflow: hidden;
+        padding-top: 20px;
+
+        .col {
+          float: left;
+          width: 48%;
+
+          &.col-1 {
+            padding-right: 2%;
+          }
+
+          &.col-2 {
+            padding-left: 2%;
+          }
+        }
+      }
+    }
+
+    // Tabs.
+    .views-slideshow-controls-bottom {
+      left: 0;
+      right: 0;
+      top: -20px;
+    }
+  }
+}
+
+
+
+@if $layout == desktop {
+  .view-id-top_news_tabs {
+    padding-bottom: 50px;
+
+    // Background separator
+    & {
+      margin: -20px 0;
+
+      .flexslider_views_slideshow_slide {
+        background: url(../img/10-global/view-id-top_news_tabs--separator.png) repeat-y 686px 0;
+        width: 960px;  // Stop some flicker because on script loading rows get very large with for a short period.
+
+        > .views-field {
+          @extend %clearfix;
+          background: url(../img/10-global/view-id-top_news_tabs--separator-overlay-bottom.png) no-repeat 686px 100%;
+          padding: 20px 0 40px 0;
+        }
+      }
+    }
+
+    .view-id-top_news_first {
+      float: left; // Float beside .view-id-news_tabs_right_side
+      width: 686px;
+
+      .views-field-field-cover-image {
+        padding-left: 10px;
+        padding-right: 22px;
+        width: 340px - 10 - 22;
+      }
+
+      .aside {
+        padding-right: 30px;
+      }
+    }
+
+    .view-id-news_tabs_right_side {
+      overflow: hidden; // Float beside .view-id-top_news_first
+      padding-left: 30px;
+      padding-right: 10px;
+      padding-top: 8px;
+
+      .views-row {
+        &.views-row-last h3 {
+          background-image: none;
+        }
+      }
+    }
+
+    // Tabs.
+    .views-slideshow-controls-bottom {
+      bottom: -20px; // $content_padding
+      box-shadow: 0 0 14px rgba(0, 0, 0, 0.15);
+      left: auto;
+      right: 20px; // $content_padding
+      top: auto;
+      width: 620px;
+    }
+  }
+}

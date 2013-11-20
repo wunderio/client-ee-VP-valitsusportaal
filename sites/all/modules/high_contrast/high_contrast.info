@@ -1,0 +1,3 @@
+name = High contrast
+description = "Allows users to switch to a high contrast version of the active theme"
+core = 7.x

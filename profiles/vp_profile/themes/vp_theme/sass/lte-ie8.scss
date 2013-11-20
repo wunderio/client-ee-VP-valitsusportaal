@@ -1,0 +1,45 @@
+$layout: lte_ie8;
+
+#cboxTitle {
+  background: url(../img/10-global/ie8-cbox-title.png);
+}
+
+
+// BEGIN: MAIN MENU POPUP ARROW FIX
+.static-mainmenu-popup {
+  .active & {
+    border: 0;
+  }
+}
+
+.menu-l2-popup {
+  border: 1px solid #454541;
+
+  .arrow {
+    top: -14px;
+
+    .active & {
+      top: 15px;
+    }
+  }
+}
+// END: MAIN MENU POPUP ARROW FIX
+
+.view-id-top_news_tabs {
+  .views-slideshow-controls-bottom {
+    border-top: 1px solid #eee; // Box shadow replacement.
+    border-right: 1px solid #eee; // Box shadow replacement.
+  }
+}
+.block-views-32b717fa40c1fc37f8cb2ace7b065d6b {
+  border-bottom: 0; // Box shadow replacement.
+  border: 1px solid #eee; // Box shadow replacement.
+
+  &:after {
+    border-top: 1px solid #eee; // Box shadow replacement.
+    height: 39px; // Box shadow replacement.
+  }
+}
+
+
+@import 'includes/**/*';

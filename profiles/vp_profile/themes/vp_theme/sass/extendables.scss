@@ -1,0 +1,675 @@
+@import 'bourbon/bourbon';
+@import 'variables.scss';
+@import '_mixin.scss';
+
+
+
+// Use placeholder clearfix instead because .clearfix class is included
+// from modules/system/system.base.css
+%clearfix {
+  @include clearfix;
+}
+
+
+
+%list-reset {
+  list-style-type: none;
+  padding-left: 0;
+
+  li {
+    margin-left: 0;
+    padding-left: 0;
+  }
+}
+
+
+
+%flexslider-reset {
+  margin: 0;
+  background: transparent;
+  border: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -o-border-radius: 0;
+  border-radius: 0;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  -o-box-shadow: none;
+
+  .slides {
+    img {
+      height: auto;
+    }
+
+    // Stop flickering on page load.
+    .flexslider_views_slideshow_slide.views-row-1 {
+      display: block;
+    }
+  }
+}
+
+
+
+// Aligns content side by side. The other element needs to have float set.
+%sidefloat {
+  display:table-cell;
+  vertical-align:top;
+  width:10000px;
+  //=display:block;  // IE7 and below
+  //=zoom:1;         // IE7 and below
+  //=width:auto;     // IE7 and below
+}
+
+
+
+%frontpage-content-block-tabs {
+  clear: both;
+  height: 45px; // Asume only .tabs are inside .view-footer in this block and add vertical spacing between content accordingly.
+
+  .tabs-inner {
+    @extend %clearfix;
+    background: url(../img/10-global/front-content-block-tabs.png) 50% 0 no-repeat;
+    bottom: 0;
+    left: 0;
+    padding: 11px 20px 13px 20px;
+    position: absolute;
+    right: 0;
+
+    li {
+      float: left;
+      padding-right: 17px;
+
+      a {
+        color: #666;
+        font-family: $font_museo700;
+        font-size: 10px;
+        font-weight: bold;
+        text-transform: uppercase;
+
+        &:hover {
+          color: $color-text-main-blue;
+        }
+      }
+    }
+  }
+}
+
+
+
+%news-date {
+  color: #686868;
+  font-size: 10px;
+  line-height: 14px;
+  padding-bottom: 6px;
+
+  .spacer {
+    padding: 0 6px;
+  }
+}
+
+
+
+%table-reset {
+  margin: 0 0 18px;
+  width: 100%;
+
+  tr {
+    background: transparent;
+    padding: 0;
+  }
+
+  tbody,
+  th,
+  tr {
+    border: 0;
+  }
+
+  th,
+  td {
+    padding: 5px 10px;
+    vertical-align: top;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+
+  img {
+    display: inline-block;
+    margin: 0;
+    vertical-align: middle;
+  }
+
+  // Should be relevant only in .node.
+  .node & {
+    &[border='0'],
+    &[border='0'] td,
+    &[border='0'] tbody {
+      border: 0 !important;
+    }
+  }
+}
+
+
+
+%news-list {
+  // Layout.
+  & {
+
+    // Make horizontal spacer wider than content.
+    & {
+      margin-left: -3px;
+      margin-right: -3px;
+
+      .views-row {
+        padding-left: 3px;
+        padding-right: 3px;
+      }
+    }
+
+    .views-row {
+      margin-bottom: 14px;
+      padding-bottom: 20px;
+    }
+
+    .col-left {
+      float: left;
+      padding-right: 17px;
+
+      a {
+        display: block;
+      }
+    }
+
+    .col-right {
+      @extend %sidefloat;
+      // Bottom part of char g was not showing in Chrome.
+      padding-bottom: 2px;
+    }
+  }
+
+  .views-row {
+    background: url(../img/20-default/news-page-separator.png) repeat-x 0 100%;
+  }
+
+  .views-field-created {
+    @extend %news-date;
+  }
+
+  .views-field-title {
+    font-size: 15px;
+    line-height: 16px;
+    padding-bottom: 7px;
+
+    a {
+      display: block;
+    }
+  }
+
+  .views-field-body {
+    font-size: 13px;
+    line-height: 15px;
+  }
+
+  @media all and (max-width: 500px) {
+    .col-left {
+      float: left;
+      padding-bottom: 10px;
+      padding-right: 0
+    }
+
+    .col-right {
+      clear: left;
+    }
+  }
+}
+
+
+
+// Sidebar block title.
+%sidebar-block-title {
+  color: $color-text-extra-red;
+  font-family: $font_museo500;
+  font-size: 17px;
+  font-weight: normal;
+  margin-bottom: 10px;
+  text-shadow: none;
+}
+
+
+
+// Red colored title for related galleries, related news on article content.
+%news-block-title {
+  font-family: $font_museo500;
+  font-size: 17px;
+  font-weight: normal;
+  line-height: 20px;
+  margin-bottom: 30px;
+  text-shadow: none;
+
+  &,
+  a {
+    color: $color-link;
+  }
+
+  a:hover {
+    color: $color-text-main-blue;
+  }
+}
+
+
+
+// Red colored title for related galleries, related news on article content.
+%article-block-title {
+  font-family: $font_museo300;
+  font-size: 25px;
+  font-weight: normal;
+  line-height: 24px;
+  margin-bottom: 30px;
+  text-shadow: none;
+
+  &,
+  a {
+
+    color: $color-text-main-blue;
+  }
+
+  a:hover {
+    color: $color-link;
+  }
+}
+
+%horizontal-ruler-global {
+  position: relative;
+  z-index: 1;
+
+  &:before {
+    background-image: url(../img/40-desktop/block-separator.png);
+    background-position: 50% 0;
+    content: "";
+    height: 23px;
+    left: 0;
+    margin-left: -20px;
+    margin-right: -20px;
+    position: absolute;
+    right: 0;
+    top: -9px;
+    z-index: 2;
+  }
+}
+
+
+%horizontal-ruler-default {
+  @extend %horizontal-ruler-global;
+
+  &:before {
+    margin-left: -35px;
+    margin-right: -35px;
+  }
+}
+
+
+
+
+%full-width-global {
+  margin-left: -20px;
+  margin-right: -20px;
+}
+
+
+%full-width-default {
+  margin-left: -35px;
+  margin-right: -35px;
+}
+
+
+
+%extendable-search-form {
+  .views-exposed-widget {
+    padding: .5em 1em 0 0;
+
+    & > label {
+      color: #bd4932;
+      font-family: $font_museo500;
+      font-size: 17px;
+      font-weight: normal;
+      margin-bottom: 4px;
+      text-shadow: none;
+    }
+  }
+
+  .form-item {
+    padding: 1px 0;
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  .form-text {
+    border-radius: 3px;
+    font-size: 12px;
+  }
+
+  .option {
+    color: $color-text;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 16px;
+    padding: 2px 0;
+    vertical-align: middle;
+    white-space: normal;
+
+    &#form-label-filter-in-radio-field {
+      display: inline-block;
+    }
+  }
+
+  // Textfield.
+  .form-type-textfield {
+    border-radius: 3px;
+    border: 1px solid #D6D4D0;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    display: block;
+    padding: 4px;
+
+    .form-text {
+      background: #fff;
+      border: 1px solid #D6D6D6;
+      box-shadow: none;
+      height: 25px;
+      padding: 0 5px;
+      width: 100%;
+    }
+  }
+
+  .views-exposed-widgets {
+    margin-bottom: 0;
+  }
+
+  .views-exposed-widget {
+    float: none;
+    margin-bottom: 30px;
+    padding-right: 0;
+
+    &.views-submit-button {
+      margin-bottom: 0;
+    }
+  }
+
+  // Datepicker.
+  #edit-date-wrapper {
+
+    .form-item-date-custom-min,
+    .form-item-date-custom-max {
+      border-radius: 0;
+      border: 0;
+      box-shadow: none;
+      float: left;
+      padding: 0;
+    }
+
+    .form-item-date-custom-max {
+      background: url(../img/10-global/datepicker-spacer.png) no-repeat 2px 50%;
+      padding-left: 8px;
+
+      label {
+        display: none;
+      }
+    }
+
+    .bef-datepicker {
+      $shadow-normal: inset 0 0 2px rgba(0, 0, 0, 0.2);
+
+      background-color: transparent;
+      border-radius: 3px;
+      border: 1px solid #C1BFBB;
+      box-shadow: $shadow-normal;
+      font-size: 11px;
+      height: 25px;
+      padding: 0 5px;
+      width: 82px !important;
+
+      &:focus {
+        box-shadow: #06f 0 0 7px, $shadow-normal;
+      }
+    }
+  }
+
+  .form-submit {
+    margin-top: -20px !important;
+    padding-bottom: 5px;
+    padding-top: 5px;
+  }
+
+  .views-reset-button {
+    display: none;
+  }
+}
+
+
+
+%extendable-search-form-tablet {
+  // Datepicker.
+  #edit-date-wrapper {
+    // Textfield.
+    .form-type-textfield {
+      float: none;
+
+      .form-text {
+        width: 85px;
+        display: block;
+      }
+    }
+
+    .form-item-date-custom-min {
+      background: url(../img/30-tablet/datepicker-spacer.png) no-repeat 50% 100%;
+      padding-bottom: 7px;
+    }
+
+    .form-item-date-custom-max {
+      background: none;
+      padding-left: 0;
+    }
+  }
+}
+
+
+
+%extendable-region-sidebar-first {
+  .block-title {
+    @extend %sidebar-block-title;
+  }
+
+  .block {
+    background-color: #f8f8f8;
+    font-size: 12px;
+    line-height: 18px;
+    margin-bottom: 18px;
+    padding: 15px 20px 30px 20px;
+  }
+}
+
+
+
+%extendable-table {
+  color: #000;
+  line-height: 15px;
+
+  th {
+    font-size: 11px;
+    color: #00678C;
+  }
+
+  th,
+  td {
+    border-bottom: 2px solid #BBB;
+    border-right: 1px solid #EAEAEA;
+
+    &.last {
+      border-right: 0;
+    }
+  }
+
+  td {
+    border-bottom-width: 1px;
+  }
+
+  td {
+    font-size: 12px;
+  }
+}
+
+
+
+%extendable-contact {
+  .node {
+    font-size: 11px;
+    line-height: 15px;
+  }
+
+  h3 {
+    color: $color-link-hover;
+    font-family: $font_museo500;
+    font-size: 16px;
+    text-shadow: none;
+  }
+
+  .field-name-field-profile-photo img {
+    margin: 0;
+  }
+
+  // Labels and content side by side.
+  & {
+    .field {
+      overflow: hidden;
+      padding: 2px 0 1px;
+    }
+
+    // Bugfix for hiding empty field position html.
+    & {
+      .field-name-field-position,
+      .field-name-field-position-in-english,
+      .field-name-field-position-in-russian {
+        display: none;
+      }
+
+      .i18n-et & {
+        .field-name-field-position {
+          display: block;
+        }
+      }
+
+      .i18n-en & {
+        .field-name-field-position-in-english {
+          display: block;
+        }
+      }
+
+      .i18n-ru & {
+        .field-name-field-position-in-russian {
+          display: block;
+        }
+      }
+    }
+
+    .field-label {
+      //color: #545454;
+      float: left;
+      font-weight: normal;
+      padding-right: 10px;
+      width: 70px;
+    }
+
+    .field-items {
+      //color: #111;
+      overflow: hidden;
+    }
+  }
+
+  .field-group-format {
+    margin-bottom: 30px;
+
+    &.group_main {
+      margin-bottom: 0;
+    }
+
+    &.group-contact {
+      margin-top: -6px;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+    // IE8 support.
+    &.last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+
+
+// Taxonomy filter
+%extendable-taxonomy-filter {
+  .form-item {
+    line-height: 16px;
+    padding: 2px 0;
+
+    a {
+      //background: url(../img/10-global/filter-bullet.png) no-repeat 0 2px;
+      color: $color-text;
+      display: inline-block;
+      padding-left: 22px;
+      padding-right: 7px;
+      position: relative;
+      white-space: normal;
+
+      &:focus,
+      &:hover {
+        color: $color-text-main-blue;
+      }
+
+      &:before {
+        background: url(../img/10-global/filter-bullet.png) no-repeat 0 0;
+        content: "";
+        display: block;
+        height: 14px;
+        left: 0;
+        position: absolute;
+        top: 1px;
+        width: 14px;
+      }
+    }
+
+    &.selected {
+      a {
+        color: $color-text-main-blue;
+
+        &:before {
+          background-position: 0 -46px;
+        }
+      }
+    }
+  }
+}
+
+
+
+%image-caption {
+  background-color: shade(#fbfbfb, 2.5%); // It's impossible to see the background color that is defined on the original design.
+  display: inline-block;
+
+  img {
+    margin: 0 !important;
+  }
+
+  .caption {
+    color: #8a8a8a;
+    display: inline-block;
+    font-size: 11px;
+    font-style: italic;
+    line-height: 14px;
+    padding: 10px 14px 12px 14px; // Bottom padding should be 16 but it looks weird when only 1 line text is in the caption.
+  }
+}

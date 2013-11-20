@@ -1,0 +1,17 @@
+name = Live press briefings
+description = Live press briefings block.
+core = 7.x
+package = Media
+version = 7.x-1.0
+project = vp_live_press_briefings
+dependencies[] = ctools
+dependencies[] = date
+dependencies[] = fe_block
+dependencies[] = views
+dependencies[] = vp_live_press_briefings
+configure = admin/config/media/live-press-briefings
+features[ctools][] = views:views_default:3.0
+features[fe_block_settings][] = vp_live_press_briefings-live_press_briefings
+features[features_api][] = api:2
+features[views_view][] = import_video_stream_from_session
+features[views_view][] = import_video_stream_press

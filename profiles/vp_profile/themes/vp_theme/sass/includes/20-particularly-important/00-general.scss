@@ -1,0 +1,42 @@
+
+@if $layout == global {
+  .zone-particularly-important-wrapper {
+    @include linear-gradient(#b80000, #d80100);
+    color: #fff;
+
+    .region-particularly-important {
+      padding: 40px 30px;
+    }
+
+    // Put the contents into table cell so width of title would be dynamic in case a single word is too long.
+    .block-inner {
+      display: table;
+
+      .content {
+        display: table-row;
+
+        .title,
+        .body {
+          display: table-cell;
+          vertical-align: top;
+        }
+      }
+    }
+
+    .title {
+      font-family: $font_museo500;
+      font-size: 15px;
+      line-height: 15px;
+      padding-right: 40px;
+      padding-top: 4px;
+      text-transform: uppercase;
+      width: 110px;
+    }
+
+    .body {
+      font-size: 22px;
+      line-height: 28px;
+      overflow: hidden;
+    }
+  }
+}

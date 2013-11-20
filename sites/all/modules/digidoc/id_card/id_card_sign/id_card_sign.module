@@ -1,0 +1,357 @@
+<?php
+
+/**
+ * Implementation of hook_menu().
+ *
+ * @return array menu items
+ */
+function id_card_sign_menu() {
+  $items = array();
+
+  /*$items['admin/config/services/id_card_sign_test'] = array(
+    'title' => 'ID card sign test',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('id_card_sign_test_admin_form'),
+    'description' => 'Test signing with ID card.',
+    'access arguments' => array('administer id card'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'id_card_sign.admin.inc',
+    'file path' => drupal_get_path('module', 'id_card_sign'),
+  );*/
+
+  return $items;
+}
+
+/**
+ * ID card sign form.
+ *
+ * @param array $form
+ * @param array $form_state
+ * @return void
+ */
+function id_card_sign_form($form, &$form_state) {
+  $form = array();
+
+  // Create ID card pluginLocation wrapper.
+  $form['plugin'] = array(
+    '#markup' => '<div id="pluginLocation"></div>',
+  );
+
+  // Response status wrapper.
+  $form['status'] = array(
+    '#markup' => '<div id="digidoc-sign-status"></div>',
+  );
+
+  // Add sign link.
+  $form['id_card_sign'] = array(
+    '#type' => 'button',
+    '#value' => t('Sign with ID card'),
+    '#ajax' => array(
+      'callback' => '_id_card_sign_handle_request',
+      'event' => 'id_card_sign_start',
+    ),
+    '#attached' => array(
+      'js' => array(array(
+        'data' => drupal_get_path('module', 'id_card_sign') . '/idCard.js',
+        'type' => 'file',
+      ), array(
+        'data' => drupal_get_path('module', 'digidoc') . '/id_card/id_card.js',
+        'type' => 'file',
+      )),
+    ),
+  );
+
+  return $form;
+}
+
+/**
+ * Handle AJAX form request.
+ *
+ * @param array $form
+ * @param array $form_state
+ * @return array
+ */
+function _id_card_sign_handle_request($form, &$form_state) {
+  $state = isset($_POST['state']) ? trim($_POST['state']) : 'initialize';
+  $commands = $status_result = array();
+
+  // Get certificate information.
+  if ($state == 'initialize') {
+    $cert = isset($_POST['cert']) ? filter_xss(trim($_POST['cert'])) : '';
+    $cert_id = isset($_POST['cert_id']) ? filter_xss(trim($_POST['cert_id'])) : '';
+    if (empty($cert) or empty($cert_id)) {
+      $commands[] = ajax_command_html('#digidoc-sign-status', t('Problem loading certificate information from ID-card.'));
+      return array('#type' => 'ajax', '#commands' => $commands);
+    }
+
+    // Make the SOAP request to start sign process.
+    $status_result = _id_card_sign_initialize($cert, $cert_id);
+    if ($status_result['status'] == 'OK') {
+      $commands[] = ajax_command_invoke('#digidoc-sign-status', 'trigger', array(
+        'id_card_sign_finalize',
+        array(
+          $status_result['hash'],
+          $status_result['signature_id'],
+        ),
+      ));
+      return array('#type' => 'ajax', '#commands' => $commands);
+    }
+    else {
+      form_error($form['status'], $status_result['status_msg']);
+      return $form['status'];
+    }
+  }
+  elseif ($state == 'finalize') {
+    $signature_id = isset($_POST['signature_id']) ? filter_xss(trim($_POST['signature_id'])) : '';
+    $signature_value = isset($_POST['signature']) ? filter_xss(trim($_POST['signature'])) : '';
+    $status_result = _id_card_sign_finalize($signature_id, $signature_value);
+    if ($status_result['status'] == 'OK') {
+      // Implement "hook_digidoc_id_card_sign_success".
+      $hooks = module_implements('digidoc_id_card_sign_success');
+      foreach($hooks as $module) {
+        $function = $module . '_digidoc_id_card_sign_success';
+        $function($form_state, $status_result, $commands);
+      }
+    }
+
+    $commands[] = ajax_command_invoke('#edit-id-card-sign', 'hide');
+  }
+
+  $commands[] = ajax_command_html('#digidoc-sign-status', t($status_result['status_msg']));
+  return array('#type' => 'ajax', '#commands' => $commands);
+}
+
+/**
+ * Goes through the initial steps to sign a document digitally with estonian ID card
+ */
+function _id_card_sign_initialize($cert, $cert_id) {
+  $status = 'error';
+  $status_msg = 'Unidentified error in signing implementation';
+
+  try {
+    // Start sign process.
+    $signer = array(
+      'SignerIDCode' => '',
+      'SignersCountry' => '',
+      'SignerPhoneNo' => '',
+      'ServiceName' => '',
+      'AdditionalDataToBeDisplayed' => '',
+      'Language' => 'EST', // ISO 639: 3-letter uppercase format
+      'Role' => variable_get('digidoc_signer_role',''),
+      'City' => variable_get('digidoc_signer_city',''),
+      'StateOrProvince' => variable_get('digidoc_signer_state',''),
+      'PostalCode' => variable_get('digidoc_signer_postalcode',''),
+      'CountryName' => variable_get('digidoc_signer_country','Eesti'),
+      'SigningProfile' => '', // it's ignored in current version of the client
+      'MessagingMode' => 'asynchClientServer',
+      'AsyncConfiguration' => NULL, // only applicable for asynchServerServer and we don't use that
+      'ReturnDocInfo' => true, // returns DigiDoc file info
+      'ReturnDocData' => true, // returns DigiDoc document in HTMLescaped format
+    );
+
+    // Invoke implementations of "hook_digidoc_signer_alter" hook.
+    foreach (module_implements('digidoc_signer_alter') as $module) {
+      $function = $module . '_digidoc_signer_alter';
+      $function($signer);
+    }
+
+    // Create dummy files for testing purpose. Developer should override these
+    // with real files using the "hook_digidoc_files_alter" hook.
+    $t1 = 'This is a test file. You should implement "_digidoc_files_alter" hook and overwrite $files parameter.';
+    $files = array(
+      'test.txt' => array('type' => 'text', 'MIME' => 'text/plain', 'content' => $t1),
+    );
+
+    // Invoke implementations of "hook_digidoc_files_alter" hook.
+    foreach (module_implements('digidoc_files_alter') as $module) {
+      $function = $module . '_digidoc_files_alter';
+      $function($files);
+    }
+
+    // Initialize SOAP connection to OpenXAdES server.
+    $client = new SoapClient(
+      variable_get('digidoc_server_url', 'https://www.openxades.org:8443/?wsdl'),
+      array(
+        'trace' => true,
+        'exceptions' => true,
+        'login' => variable_get('digidoc_server_username', ''),
+        'password' => variable_get('digidoc_server_password', '')
+      )
+    );
+
+    // Starting signing session by first building the necessary
+    // digidoc file, including data files.
+    $dataFiles = digidoc_datafiles($files);
+    // @todo: kui on taidetud, ytle pahasti ja tee tyhjaks
+    $_SESSION['id_card_sign']['datafiles'] = $dataFiles;
+
+    // Build DigiDoc container.
+    $ddocFile = '<?xml version="1.0" encoding="UTF-8"?><SignedDoc format="DIGIDOC-XML" version="1.3" xmlns="http://www.sk.ee/DigiDoc/v1.3.0#">';
+    foreach ($dataFiles as $m => $v) {
+      $dataFileXMLTemplate = '<DataFile xmlns="http://www.sk.ee/DigiDoc/v1.3.0#" ContentType="HASHCODE" Filename="%s" Id="%s" MimeType="%s" Size="%s" DigestType="%s" DigestValue="%s">';
+      $ddocFile .= sprintf($dataFileXMLTemplate, $v['Filename'], $v['Id'], $v['MimeType'], $v['Size'], $v['DigestType'], $v['DigestValue']);
+      $ddocFile .= "\n</DataFile>";
+    }
+    $ddocFile .= '</SignedDoc>';
+
+    // Then assembling nescessary parameters based on
+    // http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl
+    //
+    // And make the request to DigiDoc server URL. The function is
+    // called this way instead of $client->StartSession() because by
+    // using __soapCall() I can pre-form the parameter array
+    // it doesn't matter much here, but the next function call has many
+    // parameters and it's clearer to do it this way
+    $startSession_param = array(
+      'SigningProfile' => null,
+      'SigDocXML' => $ddocFile,
+      'bHoldSession' => true,
+      'datafile' => null,
+    );
+    $startSession_result = $client->__soapCall('StartSession', $startSession_param);
+
+    // Store signing session parameters in local session.
+    $sesscode = $startSession_result['Sesscode'];
+    $_SESSION['id_card_sign']['sesscode'] = $sesscode;
+
+    // Starting actual signing by calling PrepareSignature
+    // first the parameter array based on
+    // http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl
+    $prepareSignature_param = array(
+      'Sesscode' => $sesscode,
+      'SignersCertificate' => $cert,
+      'SignersTokenId' => $cert_id,
+      'Role' => $signer['Role'],
+      'City' => $signer['City'],
+      'State' => $signer['StateOrProvince'],
+      'PostalCode' => $signer['PostalCode'],
+      'Country' => $signer['CountryName'],
+      'SigningProfile' => $signer['SigningProfile'],
+    );
+    $prepareSignature_result = $client->__soapCall('PrepareSignature', $prepareSignature_param);
+
+    // Return response.
+    $status = 'OK';
+    return array(
+      'status' => $status,
+      'signature_id' => $prepareSignature_result['SignatureId'],
+      'hash' => $prepareSignature_result['SignedInfoDigest']
+    );
+  }
+  catch (Exception $e) {
+    $status = 'soaperror';
+    $status_msg = 'Sign error - ' . $e->getMessage();
+    return array('status' => $status, 'status_msg' => $status_msg);
+  }
+}
+
+/**
+ * Goes through the final steps to sign a document digitally with
+ * Estonian ID card.
+ */
+function _id_card_sign_finalize($signature_id, $signature_value) {
+  $status = 'error';
+  $status_msg = 'Unidentified error in signing implementation';
+
+  try {
+    $client = new SoapClient(
+      variable_get('digidoc_server_url', 'https://www.openxades.org:8443/?wsdl'),
+      array(
+        'trace' => true,
+        'exceptions' => true,
+        'login' => variable_get('digidoc_server_username', null),
+        'password' => variable_get('digidoc_server_password', null)
+      )
+    );
+
+    // Finalizing signature by assembling nescessary parameters and
+    // calling the function.
+    // Based on http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl
+    $finalizeSignature_param = array(
+      'Sesscode' => $_SESSION['id_card_sign']['sesscode'],
+      'SignatureId' => $signature_id,
+      'SignatureValue' => $signature_value,
+    );
+    $finalizeSignature_result = $client->__soapCall('FinalizeSignature', $finalizeSignature_param);
+
+    // One signature has been finalized, fetch the signed document.
+    $getSignedDoc_param = array(
+      'Sesscode' => $_SESSION['id_card_sign']['sesscode'],
+    );
+    $getSignedDoc_result = $client->__soapCall('GetSignedDoc', $getSignedDoc_param);
+    $signedDocData = html_entity_decode($getSignedDoc_result['SignedDocData']);
+
+    // Close sign session.
+    $closeSession_param = array(
+      'Sesscode' => $_SESSION['id_card_sign']['sesscode'],
+    );
+    $closeSession_result = $client->__soapCall('CloseSession', $closeSession_param);
+
+    // Collect datafiles.
+    // Files that actually make up the DigiDoc container.
+    $datafiles = '';
+    foreach ($_SESSION['id_card_sign']['datafiles'] as $m => $v) {
+      $datafiles .= "\n" . $v['xml'];
+    }
+
+    // Clean up session.
+    unset($_SESSION['id_card_sign']['sesscode']);
+    unset($_SESSION['id_card_sign']['datafiles']);
+
+    // Removing the datafiles that are currently in the text because
+    // the final DigiDoc file must have encoded files instead of hashes
+    // of those files. Documentation bottom of pg. 26
+    $signedDocData = preg_replace('/<DataFile\sContentType[^>]+><\/DataFile>/', '', $signedDocData);
+
+    // Insert the EMBEDDED_BASE64 versions of datafiles to the container.
+    $signedDocData = str_replace(
+      '<SignedDoc format="DIGIDOC-XML" version="1.3" xmlns="http://www.sk.ee/DigiDoc/v1.3.0#">',
+      '<SignedDoc format="DIGIDOC-XML" version="1.3" xmlns="http://www.sk.ee/DigiDoc/v1.3.0#">' . $datafiles,
+      $signedDocData
+    );
+
+    // If user developer has implemented a custom save functionality,
+    // run it, istead of the default one, where .ddoc files with
+    // random names are saved to DDOC file location defined in
+    // DigiDoc configuration.
+    $ddocFileName = '';
+    $ddoc_save_hooks = module_implements('digidoc_ddoc_save');
+    if (count($ddoc_save_hooks)) {
+      foreach($ddoc_save_hooks as $module) {
+        $function = $module . '_digidoc_ddoc_save';
+        $function($signedDocData, $ddocFileName);
+      }
+    }
+    else {
+      $ddocFileName = md5(time().rand()).'.ddoc';
+      $path = variable_get('digidoc_ddoc_file_location', 'public://ddoc');
+      file_prepare_directory($path, FILE_CREATE_DIRECTORY);
+      file_save_data($signedDocData, $path . '/' . $ddocFileName, FILE_EXISTS_REPLACE);
+    }
+
+    // Invoke digidoc finalize hook.
+    // Used to execute additional code on successful ID-Card sign or when
+    // developer does not want to override default file save functionality.
+    $finalize_hooks = module_implements('digidoc_sign_finalize');
+    foreach ($finalize_hooks as $module) {
+      $function = $module . '_digidoc_sign_finalize';
+      $function($ddocFileName);
+    }
+
+    // Return sign response.
+    $status = 'OK';
+    $status_msg = t('Report signed.');
+    return array(
+      'status' => $status,
+      'status_msg' => $status_msg,
+      'filename' => $ddocFileName,
+    );
+  }
+  catch(Exception $e) {
+    $status = 'soaperror';
+    $status_msg = 'Sign error - ' . $e->getMessage();
+    return array('status' => $status, 'status_msg' => $status_msg);
+  }
+}
+
+// @TODO: Help hook for the module

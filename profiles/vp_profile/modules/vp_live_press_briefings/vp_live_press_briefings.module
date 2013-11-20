@@ -1,0 +1,197 @@
+<?php
+
+/**
+ * @file
+ * Code for the Live press briefings feature.
+ */
+
+include_once 'vp_live_press_briefings.features.inc';
+
+/**
+ * Implements hook_menu().
+ */
+function vp_live_press_briefings_menu() {
+  $items = array();
+
+  $items['admin/config/media/live-press-briefings'] = array(
+    'title' => 'Live press briefings',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('vp_live_press_briefings_page', NULL),
+    'access callback' => TRUE,
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
+/**
+ * Admin form.
+ */
+function vp_live_press_briefings_page() {
+  $form = array();
+
+  $form['import_video_stream_status'] = array(
+    '#type' => 'radios',
+    '#title' => t('Status'),
+    '#options' => array(
+      t('Live'),
+      t('Starting'),
+      t('Previous recording'),
+    ),
+    '#default_value' => variable_get('import_video_stream_status', 2),
+  );
+
+  $form['import_video_stream_stream_url'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Stream URL'),
+    '#default_value' => variable_get('import_video_stream_stream_url'),
+  );
+
+  $form['import_video_stream_youtube_url'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Youtube URL'),
+    '#default_value' => variable_get('import_video_stream_youtube_url'),
+  );
+
+  $form['import_video_stream_time'] = array(
+    '#type' => 'date_text',
+    '#title' => t('Time'),
+    '#date_format' => 'H:i',
+    '#date_increment' => 1,
+    '#date_type' => DATE_DATETIME,
+    '#default_value' => date('Y-m-d').' '.variable_get('import_video_stream_time', '00:00'),
+  );
+
+  $form = system_settings_form($form);
+
+  $form['#submit'][] = 'vp_live_press_briefings_block_cache_clear';
+
+  return $form;
+}
+
+function vp_live_press_briefings_block_cache_clear() {
+  cache_clear_all(NULL, 'cache_block');
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function vp_live_press_briefings_block_info() {
+  $blocks = array();
+
+  $blocks['live_press_briefings'] = array(
+    'info' => t('Live press briefings'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function vp_live_press_briefings_block_view($delta = '') {
+  global $base_url;
+  $block = array();
+
+  switch ($delta) {
+    case 'live_press_briefings':
+      drupal_add_library('system', 'ui.dialog');
+      $status = (int) variable_get('import_video_stream_status', 2);
+
+      $block['subject'] = t('Live press briefings');
+      $block['content'] = '';
+
+      // Live.
+      if ($status === 0) {
+        drupal_add_js('/'.drupal_get_path('module', 'vp_live_press_briefings').'/flowplayer-3.2.12.min.js', 'file');
+        drupal_add_js('(function($){$().ready(function(){
+          $("a.import-video-stream-live").click(function(e) {
+            e.preventDefault();
+            $("body").append(\'<div id="import-video-stream-iframe" class="noresize"><a style="display:block;width:480px;height:326px" id="player"></a></div>\');
+            flowplayer("player", "/'.drupal_get_path('module', 'vp_live_press_briefings').'/flowplayer-3.2.16.swf", {
+              clip: { 
+                url: "pressikonverents", 
+                live: "true", 
+                provider: "rtmp" 
+              }, 
+              plugins: { 
+                rtmp: { 
+                  url: "/'.drupal_get_path('module', 'vp_live_press_briefings').'/flowplayer.rtmp-3.2.12.swf", 
+                  netConnectionUrl: "'.variable_get('import_video_stream_stream_url').'"
+                } 
+              } 
+            });
+            $dialog = $("#import-video-stream-iframe").dialog({
+              height: 400,
+              scrolling: false,
+              width: 556,
+              close: function(event, ui) {
+                $("#import-video-stream-iframe").remove();
+              }
+            });
+          });
+        });})(jQuery);', 'inline');
+        
+        $block['content'] .= '<div class="import-video-stream-video-wrap clearfix">'.
+            '<div id="import-video-stream-live"></div>'.
+            '<div class="aside">' . '<a href="'.variable_get('import_video_stream_stream_url').'" class="import-video-stream-live"><img src="'.$base_url.'/'.drupal_get_path('module', 'vp_live_press_briefings').'/video.png" /></a></div>' .
+            '<div class="text">' . t('LIVE').'!<br />'.t('Watch the press conference as a live stream.') . '</div>' .
+          '</div>'
+        ;
+      }
+      if ($status === 1) {
+        $hour_minute = explode(':', variable_get('import_video_stream_time', '00:00'));
+        $block['content'] .= '<div class="import-video-stream-video-wrap starting clearfix">'.
+            '<div class="aside"><span class="time-wrap"><span class="title">'.t('Live stream starts at:').'</span><span class="time"><span class="hour">'.$hour_minute[0].'</span><span class="spacer">:</span><span class="minute">'.$hour_minute[1].'</span></span></span></div>'.
+            '<div class="text">'.t('Watch the press conference as a live stream.').'</div>'.
+          '</div>'
+        ;
+      }
+      if ($status === 2) {
+        parse_str(parse_url(variable_get('import_video_stream_youtube_url'), PHP_URL_QUERY), $youtube_url_parameters);
+        $block['content'] .= '<script type="text/javascript">(function($){$().ready(function(){
+          $("a.import-video-youtube-live").click(function(e){
+            e.preventDefault();
+            $("body").append(\'<div id="import-video-stream-youtube"><iframe width="600" height="332" src="//www.youtube.com/embed/' . $youtube_url_parameters['v'] . '" frameborder="0" allowfullscreen></iframe></div>\');
+            $dialog = $("#import-video-stream-youtube")
+              .dialog({
+                close: function(event, ui) {
+                  $("#import-video-stream-youtube").remove();
+                }
+              });
+          });
+        });})(jQuery);</script>';
+        $block['content'] .=
+          '<div class="import-video-stream-video-wrap clearfix">'.
+            '<div class="aside"><a href="'.variable_get('import_video_stream_youtube_url').'" class="import-video-youtube-live"><img src="'.$base_url.'/'.drupal_get_path('module', 'vp_live_press_briefings').'/video.png" /></a></div>' .
+            '<div class="text">'.t('Watch the recording of the last press conference.').'</div>'.
+          '</div>'
+        ;
+      }
+
+      $block['content'] .= '<div class="goverment-session-list">';
+      $block['content'] .= '<h3>'.t('Session Schedule').'</h3>';
+      $block['content'] .= views_embed_view('import_video_stream_from_session');
+
+      // Title includes the date of latest news.
+      $view = views_get_view('import_video_stream_press');
+      $view->execute();
+      $block['content'] .= '<h3>'.(isset($view->result[0]) ? t('From the !date session', array('!date' => format_date($view->result[0]->node_created, 'custom', 'j. F'))) : t('From past sessions')).'</h3>';
+      $block['content'] .= views_embed_view('import_video_stream_press', 'default', array(date('Ymd', $view->result[0]->node_created)));
+      $block['content'] .= '</div>';
+
+      $terms = taxonomy_get_term_by_name('From session', 'news_types');
+      $term = reset($terms);
+      $block['content'] .= '<div class="tabs">
+        <ul class="tabs-inner">
+          <li>' . l(t('Weekly Schedule'), 'weekly-schedule') . '</li>
+          <li>' . l('Valitsuse istungid', 'news', array('query' => array('type[]' => $term->tid))) . '</li>
+        </ul>
+      </div>';
+
+    break;
+  }
+
+  return $block;
+}

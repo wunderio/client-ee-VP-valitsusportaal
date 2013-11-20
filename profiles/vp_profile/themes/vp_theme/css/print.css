@@ -1,0 +1,99 @@
+.view-display-id-galleries_page .tablediv-row:after {
+  content: "";
+  display: table;
+  clear: both; }
+
+.view-display-id-galleries_page .tablediv-cell {
+  float: left;
+  padding-left: 10px;
+  padding-right: 10px; }
+
+.view-display-id-galleries_page .tablediv-cell {
+  float: left;
+  width: 217px; }
+  .view-display-id-galleries_page .tablediv-cell.col-first {
+    padding-left: 0; }
+  .view-display-id-galleries_page .tablediv-cell.col-last {
+    padding-right: 0; }
+
+.node-gallery .field-name-field-title,
+.node-gallery .field-name-field-date-author {
+  display: none; }
+.node-gallery img {
+  max-width: 217px; }
+  .node-gallery img.normal {
+    display: block; }
+  .node-gallery img.retina {
+    display: none; }
+.node-gallery .field-name-field-pictures.field-type-field-collection > .field-items > .field-item {
+  float: left;
+  position: relative; }
+
+.node-gallery .field-name-field-pictures.field-type-field-collection {
+  margin: 0 -1%; }
+  .node-gallery .field-name-field-pictures.field-type-field-collection > .field-items > .field-item {
+    margin: 1%;
+    width: 23%; }
+
+.view-history {
+  position: static !important; }
+  .view-history .views-row {
+    position: static !important; }
+
+.front,
+#admin-menu,
+#zone-portal-navigation-wrapper,
+#block-vp-menu-second-level-menu-content,
+.block-main-menu,
+#zone-top-wrapper,
+#region-sidebar-first,
+#region-sidebar-second,
+#section-footer,
+.menu-l2-popup,
+.block-delta-blocks-breadcrumb,
+.block-addthis-custom,
+.block-delta-blocks-tabs,
+.all-news,
+.static-join-in,
+.field-name-field-gallery,
+.block-views-28b60dac48d416a8e6750a35cdd59247,
+.view-display-id-important_topics_slideshow_block {
+  display: none !important; }
+
+* {
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #000 !important;
+  text-shadow: none !important; }
+
+body .page .section-header,
+body .page .section-content {
+  background: transparent !important; }
+
+body {
+  margin: 0 2em 1em 1em; }
+
+.section-header {
+  min-height: 0; }
+
+.section,
+.zone-wrapper,
+.zone,
+.region,
+.region-inner {
+  margin: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  position: static !important;
+  width: auto !important; }
+
+.block-delta-blocks-logo {
+  padding-left: 0; }
+
+.node p a:after {
+  content: " (" attr(href) ")";
+  font-size: 80%; }
+
+img,
+.views-row {
+  page-break-inside: avoid; }

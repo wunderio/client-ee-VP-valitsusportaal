@@ -1,0 +1,83 @@
+
+
+
+@if $layout == global {
+  .block-views-32b717fa40c1fc37f8cb2ace7b065d6b {
+    background: #fff url(../img/10-global/block-announcements.png) no-repeat 50% 100%;
+    display: none;
+    padding: 8px;
+    width: 304px;
+    box-shadow: 0 -2px 14px rgba(0, 0, 0, 0.2);
+
+    // Hide shadow between this and .views-slideshow-controls-bottom.
+    &:after {
+      background: #fff;
+      bottom: 0;
+      content: "";
+      height: 40px;
+      position: absolute;
+      right: -16px;
+      width: 16px;
+      z-index: 3;
+    }
+
+    .content {
+      background-color: #EDEADF;
+      position: relative;
+      padding: 13px;
+
+      a,
+      .views-field {
+        display: block;
+      }
+
+      a {
+        .views-field-field-announcements-picture {
+          position: absolute;
+          top: 0;
+          right: 0;
+        }
+
+        .views-field-title {
+          color: #CC0000;
+          font-family: $font_museo700;
+          font-size: 18px;
+        }
+
+        .views-field-body {
+          color: #666;
+          font-family: $font_museo300;
+          line-height: 15px;
+        }
+      }
+
+      &:hover {
+      .views-field-title {
+          color: $color-text-main-blue;
+        }
+      }
+    }
+  }
+}
+
+
+
+@if $layout == tablet {
+  .block-views-32b717fa40c1fc37f8cb2ace7b065d6b {
+    display: none;
+  }
+}
+
+
+
+@if $layout == desktop {
+  .block-views-32b717fa40c1fc37f8cb2ace7b065d6b {
+    display: block;
+    float: left;
+    margin-bottom: -20px; // $content_padding
+    margin-top: -55px;
+    position: relative;
+    width: 304px;
+    z-index: 1;
+  }
+}

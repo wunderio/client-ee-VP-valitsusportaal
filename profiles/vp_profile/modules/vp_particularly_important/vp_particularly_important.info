@@ -1,0 +1,14 @@
+name = VP Particularly Important
+core = 7.x
+package = VP
+version = 7.x-1.0
+dependencies[] = ctools
+dependencies[] = fe_block
+dependencies[] = strongarm
+configure = admin/structure/particularly-important
+features[ctools][] = strongarm:strongarm:1
+features[fe_block_settings][] = vp_particularly_important-particularly_important
+features[features_api][] = api:2
+features[variable][] = vp_particularly_important_enabled
+features[variable][] = vp_particularly_important_text
+features[variable][] = vp_particularly_important_title

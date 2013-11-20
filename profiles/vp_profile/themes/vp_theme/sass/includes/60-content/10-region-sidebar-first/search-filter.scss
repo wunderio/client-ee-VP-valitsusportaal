@@ -1,0 +1,45 @@
+
+
+
+@if $layout == default {
+  .block-views-exp-news-news-page,
+  .block-views-d14a0f1aaa8753bc0fafa3efea13f117 {
+    @extend %extendable-search-form;
+
+    .region-sidebar-first & {
+      padding-bottom: 14px;
+    }
+
+    .views-widget-filter-title .views-widget {
+      margin: 9px 0;
+    }
+
+    // HTML with no content. Had to hide it.
+    #edit-body-wrapper {
+      display: none;
+    }
+
+    .views-exposed-widget {
+
+      &.views-submit-button,
+      &.views-reset-button {
+        float: left;
+        margin-bottom: 0;
+        margin-top: 0;
+
+        .form-submit {
+          margin-top: 0;
+        }
+      }
+    }
+  }
+}
+
+
+
+@if $layout == tablet {
+  .block-views-exp-news-news-page,
+  .block-views-d14a0f1aaa8753bc0fafa3efea13f117 {
+    @extend %extendable-search-form-tablet;
+  }
+}

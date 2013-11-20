@@ -1,0 +1,107 @@
+
+
+
+@if $layout == global {
+  #cboxOverlay {
+    @extend .ui-widget-overlay;
+  }
+
+  #cboxPrevious, #cboxNext, #cboxClose, #cboxSlideshow {
+    box-shadow: none;
+  }
+
+  #cboxPrevious, #cboxNext, #cboxCurrent {
+    bottom: auto;
+    top: 6px;
+  }
+
+  #cboxPrevious {
+    left: 18px;
+  }
+
+  #cboxNext {
+    left: 45px;
+  }
+
+  #cboxCurrent {
+    left: 78px;
+  }
+
+  #addthis_toolbox_colorbox {
+    position: absolute;
+    right: 18px;
+    top: 10px;
+  }
+
+  #cboxWrapper {
+    background: transparent;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+  }
+
+  #cboxTopLeft,
+  #cboxMiddleLeft,
+  #cboxBottomLeft,
+  #cboxTopRight,
+  #cboxMiddleRight,
+  #cboxBottomRight {
+    width: 10px;
+  }
+
+  #cboxTopLeft,
+  #cboxTopCenter,
+  #cboxTopRight,
+  #cboxBottomLeft,
+  #cboxBottomCenter,
+  #cboxBottomRight {
+    height: 10px;
+  }
+
+  #cboxLoadedContent {
+    padding: 25px 20px;
+    margin-bottom: 0;
+
+    .has-toolbox & {
+      padding-top: 35px;
+    }
+  }
+
+  #cboxTitle {
+    bottom: 25px;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  #cboxClose {
+    background: url(../img/10-global/ui-dialog-titlebar-close.png) !important;
+    bottom: auto;
+    filter: none;
+    height: 30px;
+    right: -17px;
+    top: -15px;
+    width: 30px;
+  }
+
+  // Make the close button visible.
+  #colorbox,
+  #cboxWrapper,
+  #cboxContent {
+    overflow: visible !important;
+  }
+
+  #cboxContent {
+    border-radius: 2px;
+  }
+
+  #cboxTopLeft,
+  #cboxTopCenter,
+  #cboxTopRight,
+  #cboxMiddleLeft,
+  #cboxMiddleRight,
+  #cboxBottomLeft,
+  #cboxBottomCenter,
+  #cboxBottomRight {
+    background: url(../img/10-global/ui-dialog-bg.png);
+  }
+}

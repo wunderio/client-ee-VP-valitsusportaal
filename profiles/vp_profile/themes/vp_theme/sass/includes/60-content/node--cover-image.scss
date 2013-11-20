@@ -1,0 +1,45 @@
+
+
+
+@if $layout == global {
+  .field-name-field-cover-image {
+    @extend %image-caption;
+    float: right;
+    margin: 5px 0 30px 30px;
+    width: 215px;
+
+    @media all and (max-width: 480px) {
+      margin-bottom: $line-height-default;
+      margin-right: 0;
+      width: 100%;
+
+      img {
+        width: 100%;
+      }
+    }
+  }
+}
+
+
+
+@if $layout == default {
+  .field-name-field-cover-image {
+    margin-bottom: 20px;
+  }
+}
+
+
+
+@if $layout == tablet {
+  .field-name-field-cover-image {
+    width: 200px;
+  }
+}
+
+
+
+@if $layout == desktop {
+  .field-name-field-cover-image {
+    width: 215px;
+  }
+}

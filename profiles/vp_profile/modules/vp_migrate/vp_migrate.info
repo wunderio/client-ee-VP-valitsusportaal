@@ -1,0 +1,24 @@
+name = "Migrate from Forte.CMS"
+description = "Module to migrate old site content to Drupal 7"
+package = Development
+version = 7.x-1.0
+core = 7.x
+
+features[features_api][] = api:2
+
+dependencies[] = migrate
+dependencies[] = date_migrate
+
+dependencies[] = vp_news
+dependencies[] = vp_weekly_schedule
+dependencies[] = vp_gallery
+
+; Include the files that contain your Migrate classes.
+files[] = vp_migrate.migrate.inc
+; VP
+files[] = migrate_classes/vp_migrate.news.inc
+files[] = migrate_classes/vp_migrate.weekly_schedule.inc
+files[] = migrate_classes/vp_migrate.gallery.inc
+; RK
+files[] = migrate_classes/vp_migrate.rk_news.inc
+files[] = migrate_classes/vp_migrate.rk_weekly_schedule.inc

@@ -1,0 +1,295 @@
+
+
+
+@if $layout == editor or
+    $layout == global {
+  .static-read-more {
+    @extend %horizontal-ruler-global;
+
+    padding-bottom: 30px;
+    padding-top: 68px;
+    margin-left: -20px;
+    margin-right: -20px;
+
+    &:before {
+      top: -14px;
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    .editor & {
+      width: 930px;
+
+      & {
+        margin: 0;
+      }
+
+      .container-12 {
+        overflow: hidden;
+      }
+
+      .grid-4 {
+        float: left;
+        width: 33.3%;
+      }
+    }
+
+    @include fontSize(12px);
+    background: #FAFAFA url(../img/10-global/static-read-more-bg.png);
+    padding: 56px 0 6px 0;
+
+    h2, h3 {
+      text-shadow: none;
+    }
+
+    // Hack grid.
+    & {
+      .grid-inner {
+        padding: 0 10px;
+      }
+    }
+
+    h2 {
+      @include fontSize(25px);
+      color: $color-link;
+      margin-bottom: 44px;
+      padding: 0 0 0 10px;
+    }
+
+    // h3 titles and their icons.
+    & {
+      h3 {
+        margin-bottom: 19px;
+      }
+
+      .icon,
+      .text {
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+      .text {
+        @include fontSize(13px);
+        font-weight: bold;
+        line-height: 19px;
+      }
+
+      .icon {
+        @include size(56 40);
+        background-repeat: no-repeat;
+        position: relative;
+        width: 56px;
+        z-index: 2;
+
+        &:before {
+          @include size(40 6);
+          background-image: url(../img/10-global/static-read-more-icon-shadow.png);
+          position: absolute;
+          z-index: 1;
+        }
+      }
+
+      .icon-download {
+        background-image: url(../img/10-global/static-read-more-icon-download.png);
+      }
+      
+      .icon-download-white {
+        background-image: url(../img/10-global/static-read-more-icon-download-white.png);
+      }
+      
+      .icon-person-white {
+        background-image: url(../img/10-global/static-read-more-icon-person-white.png);
+      }
+
+      .icon-info-external {
+        background-image: url(../img/10-global/static-read-more-icon-info-external.png);
+      }
+
+    }
+
+    // Links.
+    ul {
+      margin-bottom: 50px;
+      padding-left: 56px !important;
+
+      li {
+        background: url(../img/10-global/link-arrow-on-light-bg2.png) no-repeat 0 8px !important;
+        margin: 0 !important;
+        padding: 2px 0 3px 13px !important;
+      }
+
+      a {
+        color: $color-text;
+        text-decoration: underline;
+
+        &:hover {
+          color: $color-link;
+        }
+      }
+    }
+  }
+}
+
+
+
+@if $layout == default {
+  .static-read-more {
+    @extend %horizontal-ruler-default;
+    margin-left: -35px;
+    margin-right: -35px;
+
+    &:before {
+      top: -14px;
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    h2 {
+      padding-left: 60px
+    }
+
+    // BEGIN: Hack grid.
+      .grid-inner {
+        padding: 0 30px;
+      }
+    // END: Hack grid.
+  }
+}
+
+
+
+@if $layout == tablet {
+  .static-read-more {
+    h2 {
+      padding-left: 30px
+    }
+
+    // BEGIN: Hack grid.
+      .grid-inner {
+        padding: 0 20px;
+      }
+
+      .grid-4:first-child .grid-inner {
+        padding-left: 30px;
+      }
+
+      .grid-4:last-child .grid-inner {
+        padding-right: 30px;
+      }
+    // END: Hack grid.
+
+    // Links.
+    ul {
+      padding-left: 0 !important;
+    }
+  }
+}
+
+
+
+@if $layout == desktop {
+  .static-read-more {
+    // BEGIN: Hack grid.
+      .grid-4:first-child .grid-inner {
+        padding-left: 60px;
+      }
+
+      .grid-4:last-child .grid-inner {
+        padding-right: 60px;
+      }
+    // END: Hack grid.
+  }
+}
+
+// Added 29.10.13 by Taavi
+@if $layout == editor or
+    $layout == global {
+      h3.icon-wrap-1 {
+
+        span {
+          display: inline-block;
+          width: 45px;
+          height: 40px;
+          background-repeat: no-repeat;
+          position: relative;
+          vertical-align: middle;
+        }
+
+        a, a:visited {
+          display: inline-block;
+          color: #BD4732;
+          font-size: 14px;
+          vertical-align: middle;
+          line-height: 18px;
+        }
+		
+		a:hover {
+		  color: #00668C;
+	    }
+
+        .icon-person {
+          background-image: url(../img/10-global/static-read-more-icon-person.png);
+        }
+        .icon-list {
+          background-image: url(../img/10-global/static-read-more-icon-list.png);
+        }
+        .icon-world{
+          background-image: url(../img/10-global/static-read-more-icon-world.png);
+        }
+
+
+      }
+}
+
+// Added 30.10.13 by Taavi
+@if $layout == editor or
+    $layout == global {
+    .icons-wrap { margin-top: 40px; }
+  h3.icon-wrap-2 {
+    span {
+      display: inline-block;
+      width: 45px;
+      height: 40px;
+      background-repeat: no-repeat;
+      position: relative;
+      vertical-align: middle;
+    }
+
+    a {
+      display: inline-block;
+      vertical-align: middle;
+      padding-top: 5px;
+      color: #BD4732;
+    }
+	
+	a:hover {
+	  color: #00668C;
+	}
+
+    .text-2 {
+      width: auto;
+      font-size: 13px;
+      line-height: 15px;
+    }
+
+    .text-2 span {
+      width: auto;
+    }
+
+    .icon-graph {
+      background-image: url(../img/10-global/static-read-more-icon-graph.png);
+    }
+    .icon-case {
+      background-image: url(../img/10-global/static-read-more-icon-case.png);
+    }
+    .icon-list {
+      background-image: url(../img/10-global/static-read-more-icon-list.png);
+    }
+    .icon-bureau {
+      background-image: url(../img/10-global/static-read-more-icon-bureau.png);	
+    }		  
+    .icon-cv {
+      background-image: url(../img/10-global/static-read-more-icon-cv.png);
+    }
+  }
+}

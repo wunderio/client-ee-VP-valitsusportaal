@@ -1,0 +1,9 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function vp_redirect_install() {
+  // Set module weight for it to run after core modules
+  db_query("UPDATE {system} SET weight = -1 WHERE name = 'vp_redirect' AND type = 'module'");
+}

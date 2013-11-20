@@ -1,0 +1,12 @@
+
+@if $layout == default {
+  .zone-header-wrapper {
+    overflow: hidden;
+  }
+
+  .section-header {
+      //overflow: hidden; // Content displacement fix for FF.
+      //position: relative; // Subpage fix for not hiding part of logo and menu.
+      //z-index: 1;         // Subpage fix for not hiding part of logo and menu.
+  }
+}

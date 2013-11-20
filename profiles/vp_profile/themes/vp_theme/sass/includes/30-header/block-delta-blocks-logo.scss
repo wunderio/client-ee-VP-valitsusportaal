@@ -1,0 +1,37 @@
+
+
+
+@if $layout == global {
+  .block-delta-blocks-logo {
+    padding: 20px 0 19px 20px;
+
+    img {
+      height: 55px;
+    }
+  }
+}
+
+
+
+@if $layout == default {
+  .block-delta-blocks-logo {
+    float: left;
+    padding-left: 16px; // Left alignment.
+    padding-top: 28px;  // Center vertically if the logo is ~78px hight.
+  }
+}
+
+
+
+@if $layout == desktop {
+  .block-delta-blocks-logo {
+
+    a {
+      display: block;
+    }
+
+    img {
+      height: auto;
+    }
+  }
+}

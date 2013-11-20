@@ -1,0 +1,225 @@
+
+
+
+@if $layout == editor or
+    $layout == default {
+  .static-join-in {
+    @extend %clearfix;
+    background-position: 100% 100%;
+    font-family: $font_museo500;
+    padding-bottom: 30px;
+    position: relative;
+
+    .editor & {
+      width: 960px;
+    }
+
+    &,
+    .static-inner  {
+      background-image: url(../img/40-desktop/static-social-bg.png);
+    }
+
+    .bg {
+      bottom: 0;
+      left: 0;
+      margin: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+      z-index: 1;
+    }
+
+    .static-inner {
+      min-height: 142px;
+      overflow: hidden;
+      padding-top: 140px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .title1 {
+      @include lineartextgradient(#00507a, #00b8be, left top, right bottom);
+      @include position (absolute, 29px 0 0 42px);
+      font-family: $font_museo700;
+      font-size: 27px;
+      font-weight: normal;
+      line-height: 27px;
+      text-shadow: 0 0 4px rgba(0, 0, 0, 0.19);
+
+      &:after {
+        background-image: url(../img/20-default/static-social-arrow.png);
+        content: "";
+        height: 32px;
+        position: absolute;
+        right: -58px;
+        top: 43px;
+        width: 31px;
+        z-index: 2;
+      }
+    }
+
+    .title2 {
+      @include position (absolute, 42px 0 0 414px);
+      color: #999;
+      font-family: $font_museo300;
+      font-size: 20px;
+      width: 510px;
+    }
+
+    .box {
+      float: left;
+      line-height: 15px;
+      margin-left: 42px;
+      margin-right: 15px;
+
+      h2 {
+        font-size: 16px;
+        margin-bottom: 7px;
+      }
+
+      &.box-1 {
+        width: 170px;
+
+        h2 {
+          color: #006699;
+        }
+      }
+
+      &.box-2 {
+        width: 190px;
+
+        h2 {
+          color: #009900;
+        }
+
+        // Push text away from a design thingy.
+        .spacer {
+          float: right;
+          height: 35px;
+          width: 70px;
+
+          .editor & {
+            border: 1px dashed rgba(0, 0, 0, 0.2);
+          }
+        }
+      }
+
+      &.box-3 {
+        margin-right: 0;
+        width: 432px;
+
+        h2 {
+          color: #0099cc;
+          padding-bottom: 10px;
+        }
+
+        .social-links {
+          li {
+            float: left;
+            padding-bottom: 13px;
+            padding-right: 20px;
+            width: 196px;
+            overflow: hidden;
+          }
+
+          img {
+            float: left;
+          }
+
+          a {
+            @extend %sidefloat;
+            background-repeat: no-repeat;
+            color: $color-text;
+            height: 32px;
+            line-height: 14px;
+            padding-left: 8px;
+            padding-top: 1px;
+            vertical-align: middle;
+
+            &:hover,
+            &:focus {
+              color: $color-text-main-blue;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+@if $layout == tablet {
+  .static-join-in {
+    padding-bottom: 26px;
+
+    &,
+    .static-inner  {
+      background-image: url(../img/30-tablet/static-social-bg.png);
+    }
+
+    .static-inner {
+      padding-top: 120px;
+    }
+
+    .title2 {
+      display: none;
+    }
+
+    .box-1-2-wrap {
+      margin: 0 26px 12px 24px;
+      overflow: hidden;
+      position: relative;
+      padding: 20px 0;
+
+      .box {
+        margin-left: 20px;
+        margin-right: 0;
+        width: 255px;
+      }
+
+      .box-1 {
+        margin-right: 38px;
+      }
+
+      &,
+      &:after {
+        background-image: url(../img/30-tablet/static-social-bg-box-1-2-wrap.png);
+      }
+
+      &:after {
+        background-position: 100% 100%;
+        bottom: 0;
+        content: "";
+        height: 6px;
+        left: 0;
+        position: absolute;
+        right: 0;
+      }
+    }
+
+    .box.box-3 {
+      margin-left: 24px;
+      margin-right: 26px;
+      padding: 15px 20px;
+      position: relative;
+      width: auto;
+
+      &,
+      &:after {
+        background-image: url(../img/30-tablet/box-3.png);
+      }
+
+      &:after {
+        background-position: 100% 100%;
+        bottom: 0;
+        content: "";
+        height: 6px;
+        left: 0;
+        position: absolute;
+        right: 0;
+      }
+    }
+
+  }
+}

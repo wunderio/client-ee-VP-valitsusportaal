@@ -1,0 +1,282 @@
+
+
+
+@if $layout == global {
+  .view-history {
+    position: relative;
+
+    .view-header {
+      font-family: Museo500;
+      font-size: 15px;
+      line-height: 21px;
+      margin-top: -15px;
+      padding-bottom: 29px;
+
+      .view-header-inner-riigikantselei {
+        font-size: 18px;
+        line-height: 24px;
+        padding-top: 26px;
+      }
+
+      // Use just a image tag inside .view-header ...
+      img {
+        margin: 0 auto 15px auto;
+      }
+
+      // or ...
+
+      // use wrapper that also enables caption.
+      .styled-image-with-caption {
+        float: right;
+        margin: 0 0 0 35px;
+
+        &,
+        img {
+          border-radius: 3px;
+        }
+
+        img {
+          border-bottom-width: 15px;
+          border-color: #f9f8f5;
+          border-left-width: 27px;
+          border-right-width: 27px;
+          border-style: solid;
+          border-top-width: 19px;
+          box-shadow: -2px -2px 5px 0 rgba(0, 0, 0, 0.15);
+          margin: 0 0 10px 0;
+        }
+
+        p {
+          font-size: 10px;
+          color: #808080;
+        }
+      }
+    }
+
+    // Top shadow.
+    .view-content {
+      background-position: 50% 0;
+      background-repeat: no-repeat;
+    }
+
+    .views-row {
+      $padding_horizontal: 30px;
+
+      background-color: #F6F6F6;
+      border-radius: 5px;
+      border: 1px solid #EEE;
+      margin: 0 0 17px 0;
+      padding: 25px $padding_horizontal;
+      position: relative;
+
+      .views-field-title {
+        font-family: $font_museo300;
+        font-size: 30px;
+        line-height: 30px;
+
+        & {
+          color: #BD4832;
+        }
+
+        a {
+        }
+      }
+
+      .views-field-field-optional-date-period {
+        font-size: 14px;
+        padding-bottom: 10px;
+
+        em {
+          font-style: normal;
+        }
+      }
+
+      .responsive-layout-mobile & {
+        position: static;
+      }
+    }
+
+    .views-field-body {
+      font-size: 12px;
+    }
+
+    .read-more a {
+      color: $color-text-extra-red;
+      white-space: nowrap;
+
+      &:focus,
+      &:hover {
+        color: $color-text-main-blue;
+      }
+    }
+
+    img {
+      //margin: 0;
+    }
+
+    // Create indenting for the second column.
+    .views-dummy-row {
+      display: none;
+    }
+  }
+
+  // @todo: if this feature should be used in more places, add it to separate file.
+  #views_infinite_scroll-ajax-loader {
+    img {
+      margin: 0 auto;
+    }
+  }
+}
+
+
+
+@if $layout == default {
+  .view-history {
+    .view-header {
+      img {
+        float: right;
+        margin: -66px 0 0 80px;
+      }
+    }
+
+    // Top shadow.
+    .view-content {
+      padding-top: 39px;
+    }
+
+    .timeline {
+      bottom: 0;
+      left: 50%;
+      margin-left: -1px;
+      position: absolute;
+      top: 0;
+      width: 2px;
+
+      .dashed-line {
+        background-image: url(../img/10-global/history-page-timeline-start-end.png);
+        position: absolute;
+        width: 2px;
+      }
+
+      .start,
+      .middle,
+      .end {
+        z-index: 1;
+      }
+
+      .start {
+        height: 80px;
+      }
+
+      .middle {
+        background: #ccc;
+        bottom: 0;
+        top: 80px;
+      }
+
+      .end {
+        bottom: 0;
+      }
+    }
+
+    .views-row {
+      float: left;
+
+      // Arrows.
+      & {
+        &:after {
+          content: "";
+          height: 28px;
+          position: absolute;
+          top: 25px;
+          width: 35px;
+          z-index: 2;
+        }
+
+        &.left:after {
+          background-image: url(../img/10-global/history-page-arrow-left.png);
+          right: -35px;
+        }
+
+        &.right:after {
+          background-image: url(../img/10-global/history-page-arrow-right.png);
+          left: -35px;
+        }
+      }
+    }
+
+    .image,
+    img {
+      margin: 0;
+    }
+
+    .image {
+      .caption {
+        color: #808080;
+        font-size: 10px;
+        font-style: normal;
+        padding-bottom: 0; // P tag around the image creates spacing.
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+
+    // Create indenting for the second column.
+    .views-dummy-row {
+      display: none;
+      border-bottom: 0;
+      border-top: 0;
+      height: 40px;
+      overflow: hidden; // Hide arrow just in case.
+      padding-bottom: 0;
+      padding-top: 0;
+      visibility: hidden;
+    }
+  }
+}
+
+
+
+@if $layout == tablet {
+  .view-history {
+    // Top shadow.
+    .view-content {
+      background-image: url(../img/30-tablet/history-page-top-shadow.png);
+    }
+
+    .views-row {
+      $padding_horizontal: 30px;
+
+      width: 286px - $padding_horizontal * 2;
+    }
+  }
+}
+
+
+
+@if $layout == desktop {
+  .view-history {
+    // Top shadow.
+    .view-content {
+      background-image: url(../img/40-desktop/history-page-top-shadow.png);
+    }
+
+    .views-row {
+      $padding_horizontal: 30px;
+
+      width: 436px - $padding_horizontal * 2;
+    }
+  }
+}
+
+
+
+@if $layout == print {
+  .view-history {
+    position: static !important;
+
+    .views-row {
+      position: static !important;
+    }
+  }
+}

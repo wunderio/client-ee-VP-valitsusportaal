@@ -1,0 +1,99 @@
+﻿// CUSTOM BULLETS & MORE
+
+
+@if $layout == editor or
+    $layout == global {
+  .node .custom-bullet-list-1 {
+
+   @extend %horizontal-ruler-default;
+   background: #fafafa url(../img/10-global/static-read-more-bg.png);
+   padding: 45px 35px 50px 35px;
+   margin: 0px -35px -35px -35px;
+
+	h2 {
+	  font-size: 25px; margin-bottom: 20px;
+	}
+	ul {
+	  display: inline-block;
+    vertical-align: top;
+    width: 265px;
+    list-style-image: url(../img/10-global/kollane_bullet.png);
+    margin: 0px 0px 0px 13px;
+    padding: 0px 30px 0px 0px;
+
+      li {
+        margin: 0px 0px 0px 10px;
+        background: none;
+        padding: 0px 0px 15px 5px;
+    }
+	}
+
+  &:before {
+   top: -14px;
+   left: 35px;
+   right: 35px;
+  }
+
+  h4 {
+    float: right;
+  }
+
+  h4 a, h4 a:visited {
+    color: #BD4732;
+  }
+
+ }
+}
+
+@if $layout == editor or
+    $layout == desktop {
+  .custom-bullet-list-1 {
+
+  ul:last-child {
+    padding-left: 6px;
+  }
+ }
+}
+
+
+
+@if $layout == editor or
+    $layout == global {
+  .node .custom-list-progress {
+
+    ul {
+      padding-left: 0px;
+    }
+
+    li {
+      min-height: 23px;
+
+    }
+
+    .taidetud {
+      background: url(../img/10-global/tais.png ) no-repeat;
+    }
+    .taitmisel {
+      background: url(../img/10-global/kolmveerand.png ) no-repeat;
+    }
+    .osaliselt {
+      background: url(../img/10-global/pool.png ) no-repeat;
+    }
+    .valmistamisel {
+      background: url(../img/10-global/veerand.png ) no-repeat;
+    }
+    .hilinenud {
+      background: url(../img/10-global/tyhi.png ) no-repeat;
+    }
+  }
+}
+
+@if $layout == editor or
+    $layout == global {
+  .node .layout-7 .custom-list-progress {
+    li {
+      padding-left: 35px;
+    }
+  }
+}
+

@@ -1,0 +1,128 @@
+@import '../../../bourbon/bourbon';
+@import '../../../variables.scss';  // Get column count from here
+
+%grid-base {
+  display: inline;
+  float: left;
+  position: relative;
+  margin-left: $gw-gutter-desktop/2;
+  margin-right: $gw-gutter-desktop/2;
+}
+
+@mixin grid($columns) {
+  @extend %grid-base;
+  width: $columns * $gw-column-desktop + $columns * $gw-gutter-desktop - $gw-gutter-desktop;
+}
+
+@mixin prefix($columns) {
+  padding-left: $columns * $gw-column-desktop + $columns * $gw-gutter-desktop;
+}
+
+@mixin suffix($columns) {
+  padding-right: $columns * $gw-column-desktop + $columns * $gw-gutter-desktop;
+}
+
+@mixin pull($columns) {
+  margin-left: $columns * $gw-column-desktop + $columns * $gw-gutter-desktop * -1;
+}
+
+@mixin push($columns) {
+  margin-left: $columns * $gw-column-desktop + $columns * $gw-gutter-desktop;;
+}
+
+body {
+  min-width: $gw-count * $gw-column-desktop + $gw-count * $gw-gutter-desktop;
+}
+
+.container-#{$gw-count} {
+  margin-left: auto;
+  margin-right: auto;
+  width: $gw-count * $gw-column-desktop + $gw-count * $gw-gutter-desktop;
+  $i: 1;
+  @while $i < $gw-count + 1 {
+    .grid-#{$i} {
+      @include grid($i);
+    }
+    .prefix-#{$i} {
+      @include prefix($i);
+    }
+    .suffix-#{$i} {
+      @include suffix($i);
+    }
+    .pull-#{$i} {
+      @include pull($i);
+    }
+    .push-#{$i} {
+      @include push($i);
+    }
+    $i: $i + 1;
+  }
+}
+
+.container-12 {
+  @include clearfix;
+}
+
+/* Hacks */
+body {
+  min-width: $gw-count * $gw-column-desktop + $gw-count * $gw-gutter-desktop - $gw-gutter-desktop;
+}
+
+.container-12 {
+  width: $gw-count * $gw-column-desktop + $gw-count * $gw-gutter-desktop - $gw-gutter-desktop;
+
+  .grid-12 {
+    margin-left: $gw-gutter-desktop/2;
+    margin-right: $gw-gutter-desktop/2;
+    width: $gw-count * $gw-column-desktop + $gw-count * $gw-gutter-desktop - $gw-gutter-desktop;
+  }
+
+  .grid-1:first-child,
+  .grid-2:first-child,
+  .grid-3:first-child,
+  .grid-4:first-child,
+  .grid-5:first-child,
+  .grid-6:first-child,
+  .grid-7:first-child,
+  .grid-8:first-child,
+  .grid-9:first-child,
+  .grid-10:first-child,
+  .grid-11:first-child,
+  .grid-12:first-child {
+    margin-left: 0;
+  }
+
+  .grid-1:last-child,
+  .grid-2:last-child,
+  .grid-3:last-child,
+  .grid-4:last-child,
+  .grid-5:last-child,
+  .grid-5.last-child,
+  .grid-6:last-child,
+  .grid-6.last-child,
+  .grid-7:last-child,
+  .grid-7.last-child,
+  .grid-8:last-child,
+  .grid-9:last-child,
+  .grid-10:last-child,
+  .grid-11:last-child,
+  .grid-12:last-child {
+    margin-right: 0;
+  }
+
+  // Also add IE8 support with javascript (add .last-child class)
+  .grid-1.last-child,
+  .grid-2.last-child,
+  .grid-3.last-child,
+  .grid-4.last-child,
+  .grid-5.last-child,
+  .grid-6.last-child,
+  .grid-7.last-child,
+  .grid-8.last-child,
+  .grid-9.last-child,
+  .grid-10.last-child,
+  .grid-11.last-child,
+  .grid-12.last-child {
+    margin-right: 0;
+  }
+}

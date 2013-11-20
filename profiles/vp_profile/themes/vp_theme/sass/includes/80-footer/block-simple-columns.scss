@@ -1,0 +1,76 @@
+
+
+
+@if $layout == default {
+ .block-simple-columns {
+    padding: 55px 0;
+
+    .content {
+      text-align: center;
+
+      .col {
+        background: url(../img/10-global/footer-block-simple-columns-spacer.png) repeat-y;
+        display: inline-block;
+        text-align: left;
+        vertical-align: top;
+
+        &:first-child {
+          background-image: none;
+        }
+
+        &,
+        h2 {
+          color: shade(#fff, 10%);
+        }
+
+        li {
+          line-height: 16px;
+          padding: 3px 0;
+        }
+
+        a {
+          color: #fff;
+          display: block;
+          font-family: $font_museo500; // Museo300 and bold in design but Museo500 without bold looks better in browser.
+          font-size: 13px;
+          text-shadow: 0 0 4px rgba(0, 0, 0, 0.65);
+
+          &:focus,
+          &:hover {
+            color: shade(#fff, 20%);
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+@if $layout == tablet {
+  .region-footer {
+   .block-simple-columns {
+      .content {
+        .col {
+          padding: 0 10px 0 12px;
+          width: 130px;
+        }
+      }
+    }
+  }
+}
+
+
+
+@if $layout == desktop {
+  .region-footer {
+    .block-simple-columns {
+      .content {
+        .col {
+          padding: 0 25px 0 27px;
+          width: 150px;
+        }
+      }
+    }
+  }
+}

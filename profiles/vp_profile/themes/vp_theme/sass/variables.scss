@@ -1,0 +1,29 @@
+// GRID
+$gw-count: 12;                   // Column Count
+$gw-column-desktop: 65px;        // Desktop Column Width
+$gw-gutter-desktop: 20px;        // Desktop Gutter Width
+$gw-column-tablet: 40px;         // Tablet Column Width
+$gw-gutter-tablet: 20px;         // Tablet Gutter Width
+
+// FONTS
+$font_default: Tahoma, Verdana, Segoe, sans-serif;
+$font_museo300: Museo300, $font_default;
+$font_museo500: Museo500, $font_default;
+$font_museo700: Museo700, $font_default;
+
+// TEXT
+$line-height-default: 20px;
+$text-size-default: 12px;
+
+// COLORS
+$color-text: #333;
+$color-text-main-blue: #00698C;    // From stylebook.
+$color-text-main-black: #222;      // From stylebook.
+$color-text-extra-red: #BD4932;    // From stylebook.
+$color-text-extra-golden: #FFCC00; // From stylebook (use only on dark background).
+$color-link: #BD4832;
+$color-link-hover: #00688C;
+$color-link-visited: #A300D8;
+
+// OTHER
+$tablet-top-desktop-ratio: 0.7; // @todo: remove this variable?

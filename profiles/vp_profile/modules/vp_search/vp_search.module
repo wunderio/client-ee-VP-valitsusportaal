@@ -1,0 +1,362 @@
+<?php
+
+/**
+ * @file
+ * Code for the VP Search feature.
+ */
+
+include_once 'vp_search.features.inc';
+
+/**
+ * Implements hook_block_info().
+ */
+function vp_search_block_info() {
+  $blocks = array();
+
+  $blocks['vp_search_tabs'] = array(
+    'info' => t('Search Tabs'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function vp_search_block_view($delta = '') {
+  global $language;
+  $block = array();
+
+  switch ($delta) {
+    case 'vp_search_tabs':
+      $block['subject'] = t('Search Tabs');
+
+      $keyword = '';
+      if (arg(0) == 'contact-search') {
+        $keyword = $_GET['filter'];
+      }
+      if (arg(0) == 'search' && arg(1) == 'gss') {
+        $keyword = arg(2);
+      }
+
+      // Count contact.
+      $count = db_query("SELECT COUNT(nid) FROM node WHERE title LIKE :keyword AND status = 1 AND type LIKE 'contact' AND node.language IN (:lang, 'und')", array(
+        ':lang' => $language->language,
+        ':keyword' => '%'.$keyword.'%',
+      ))->fetchCol();
+      $count_contact = $count[0];
+
+      // Count google site search.
+      $count_gss = '';
+      if (!empty($keyword)) {
+        module_load_include('inc', 'gss', 'includes/GoogleSiteSearch');
+        $query = $keyword;
+        drupal_alter('gss_search_key', $query);
+        $extra = NULL;
+        drupal_alter('gss_search_extraparams', $extra);
+        $gss = new GoogleSiteSearch($query, variable_get('gss_api_key', ''), 20, $extra);
+        $default_lang = variable_get('gss_default_language', FALSE);
+        if ($default_lang) {
+          $gss->SetLanguage($language->language);
+        }
+        else {
+          $gss->SetLanguage(variable_get('gss_language', ''));
+        }
+        try {
+          $results = $gss->GetSearchResults($page);
+        }
+        catch(Exception $e) {
+           watchdog('gss', $e, NULL, WATCHDOG_ERROR);
+           drupal_set_message(t('Sorry, the search function is unavailable at this time.'));
+           exit();
+        }
+        $count_gss = ' (' . $gss->GetTotalResults() . ')';
+      }
+
+      $block['content'] =
+        '<ul>'.
+        '<li'.(arg(0) == 'contact-search' ? ' class="item first active "' : ' class="item first"').'>'.l(t('Contact').' ('.$count_contact.')', 'contact-search', array('query' => array('filter' => $keyword))).'</li>'.
+        '<li class="spacer">|</li>'.
+        '<li'.(arg(0) == 'search' && arg(1) == 'gss' ? ' class="item last active"' : ' class="item last"').'>'.l(t('Content'), 'search/gss/'.$keyword).$count_gss.'</li>'.
+        '</ul>';
+    break;
+  }
+
+  return $block;
+}
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function vp_search_views_query_alter(&$view, &$query) {
+  if ($view->name == 'contact_autocomplete') {
+    $query->where[1]['conditions'][2]['value'] = '%' . $view->args[0] . '%';
+  }
+  if ($view->name == 'contact_search') {
+    $get_filter_relations = array(0 => 3, 1 => 4, 2 => 5);
+
+    if (!isset($_GET['filter']) || empty($_GET['filter'])) {
+      foreach ($get_filter_relations as $field => $condition) {
+        unset($query->where[1]['conditions'][$condition]);
+      }
+    }
+    else {
+      foreach ($get_filter_relations as $field => $condition) {
+        if ((int)$field === (int)$_GET['radios']) {
+          $query->where[1]['conditions'][$condition]['value'] = '%' . $_GET['filter'] . '%';
+        }
+        else {
+          unset($query->where[1]['conditions'][$condition]);
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_js_alter().
+ */
+function vp_search_js_alter(&$javascript) {
+  unset($javascript['sites/all/modules/gss/scripts/autocomplete.js']);
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function vp_search_form_alter(&$form, &$form_state, $form_id) {
+  $form_once = &drupal_static(__FUNCTION__);
+
+  if ($form['#id'] == 'views-exposed-form-contact-search-page' && !isset($form_once)) {
+
+    drupal_add_js(array('contact_search_radios' => '<div class="views-exposed-widget">
+      <label for="edit-filter">'.t('Contact search').' </label>
+
+      <div class="form-item form-type-textfield form-item-name">
+        <input type="text" id="edit-filter" name="filter" size="30" maxlength="128" class="form-text" value="'.$_GET['filter'].'" />
+      </div>
+
+      <div class="form-item form-type-radio form-item-radios">
+       <input type="radio" id="edit-radios-0" name="radios" value="0"'.(!isset($_GET['radios']) || $_GET['radios'] == 0 ? ' checked="checked"' : '').' class="form-radio">  <label class="option" for="edit-radios-0">'.t('Name').' </label>
+      </div>
+      <div class="form-item form-type-radio form-item-radios">
+       <input type="radio" id="edit-radios-1" name="radios" value="1"'.(isset($_GET['radios']) && $_GET['radios'] == 1 ? ' checked="checked"' : '').' class="form-radio">  <label class="option" for="edit-radios-1">'.t('Phone nr').' </label>
+      </div>
+      <div class="form-item form-type-radio form-item-radios">
+       <input type="radio" id="edit-radios-2" name="radios" value="2"'.(isset($_GET['radios']) && $_GET['radios'] == 2 ? ' checked="checked"' : '').' class="form-radio">  <label class="option" for="edit-radios-2">'.t('Location').' </label>
+      </div>
+
+    </div>'), 'setting');
+    drupal_add_js('(function($){$().ready(function(){
+      $("#views-exposed-form-contact-search-page").prepend(Drupal.settings.contact_search_radios);
+    });})(jQuery);', 'inline');
+
+    $form_once = FALSE;
+  }
+  // Search block in header (Portal bar).
+  if ($form_id == 'search_block_form') {
+    // Disable browser form complete on search autocomplete.
+    $form['search_block_form']['#attributes']['autocomplete'] = 'off';
+  }
+  if ($form_id == 'search_form') {
+    global $base_root;
+    global $base_url;
+
+    drupal_add_library('system', 'ui.datepicker');
+    drupal_add_js('(function($){$().ready(function(){
+      search_form = $("#search-form");
+      edit_keys = $("#edit-keys");
+      edit_keys.attr("name", "");
+
+      search_form.find("input[name=time-between-start]").datepicker({
+        dateFormat: "dd.mm.yy",
+        autoSize: true,
+        onClose: function(selectedDate) {
+          search_form.find("input[name=time-between-end]").datepicker("option", "minDate", selectedDate);
+        }
+      });
+      search_form.find("input[name=time-between-end]").datepicker({
+        dateFormat: "dd.mm.yy",
+        autoSize: true,
+        onClose: function(selectedDate) {
+          search_form.find("input[name=time-between-start]").datepicker("option", "maxDate", selectedDate);
+        }
+      });
+
+      $.event.special.inputchange = {
+        setup: function() {
+          var self = this, val;
+          $.data(this, "timer", window.setInterval(function() {
+            val = self.value;
+            if ($.data(self, "cache") != val) {
+              $.data(self, "cache", val);
+              $(self).trigger("inputchange");
+            }
+          }, 20));
+        },
+        teardown: function() {
+          window.clearInterval( $.data(this, "timer"));
+        },
+        add: function() {
+          $.data(this, "cache", this.value);
+        }
+      };
+
+      edit_keys.on("inputchange", function() {
+        var action = "' . url('search/gss') . '";
+        if (!$(this).val().length) {
+          search_form.attr("action", action);
+        }
+        else {
+          search_form.attr("action", action + "/" + $(this).val());
+        }
+      });
+
+      search_form.submit(function() {
+        var action = "' . url('search/gss') . '";
+        if (!edit_keys.val().length) {
+          search_form.attr("action", action);
+        }
+        else {
+          search_form.attr("action", action + "/" + edit_keys.val());
+        }
+      });
+
+    });})(jQuery);', 'inline');
+
+    $form['#prefix'] = '<div class="search-sidebar" id="search-sidebar"><div class="search-sidebar-inner" id="search-sidebar-inner">';
+    $form['#suffix'] = '</div></div>';
+
+    $form['#action'] = $base_root . request_uri();
+    $form['#method'] = 'GET';
+    $form['submit'] = $form['basic']['submit'];
+    $form['submit']['#weight'] = 10;
+    unset(
+      $form['#validate'],
+      $form['#submit'],
+      $form['#theme'],
+      $form['basic']['keys']['#title'],
+      $form['#build_id'],
+      $form['form_id'],
+      $form['form_build_id'],
+      $form['#token'],
+      $form['form_token'],
+      $form['basic']['submit']
+    );
+
+    $form['basic']['#prefix'] = '<div class="views-exposed-widget"><label>' . t('Search') . '</label>';
+    $form['basic']['#suffix'] = '</div>';
+
+    // Source.
+    $form['source'] = array(
+      '#prefix' => '<div class="views-exposed-widget"><label>' . t('Source') . '</label>',
+      '#suffix' => '</div>',
+      '#type' => 'radios',
+      '#default_value' => (!isset($_GET['source']) || $_GET['source'] == 0) ? 0 : 1,
+      '#options' => array(
+        0 => t('Search from !site', array('!site' => parse_url($base_url, PHP_URL_HOST))),
+        1 => t('Search from all Government Portal sites'),
+      ),
+    );
+
+    // Intervals.
+    $intervals = array(
+      '0' => t('All'),
+      '1-week' => t('Last 7 days'),
+      '1-month' => t('Last 30 days'),
+      '12-months' => t('Last 12 months'),
+      'between' => '<div class="form-item form-type-textfield form-item-date-custom-min"><input class="bef-datepicker" type="text" name="time-between-start" value="' . (isset($_GET['time-between-start']) && !empty($_GET['time-between-start']) ? $_GET['time-between-start'] : '') . '" /></div><div class="form-item form-type-textfield form-item-date-custom-max"><input class="bef-datepicker" type="text" name="time-between-end" value="' . (isset($_GET['time-between-end']) && !empty($_GET['time-between-end']) ? $_GET['time-between-end'] : '') .'" /></div>',
+    );
+    $time = (isset($_GET['time']) ? $_GET['time'] : 0);
+    $interval_radios = '';
+    foreach ($intervals as $value => $name) {
+      $interval_radios .= '<div class="form-item form-type-radio form-item-date">';
+      $interval_radios .= '<input id="' . ($value === 'between' ? 'edit-date-4' : 'edit-date-' . $value) . '" type="radio" name="time" value="' . $value . '"' . ((string) $time === (string) $value ? ' checked' : '') . ' /> ' . ($value !== 'between' ? '<label class="option" for="' . ('edit-date-' . $value) . '">' : '<div id="form-label-filter-in-radio-field" class="option">') . $name . ($value !== 'between' ? '</label>' : '</div>');
+      $interval_radios .= '</div>';
+    }
+    $form['filters'] = array('#markup' =>
+      '<div id="edit-date-wrapper" class="views-exposed-widget"><label>' . t('Interval') . '</label>' . $interval_radios . '</div>
+      <script>
+      // Check radio if time input is focused.
+      jQuery("#form-label-filter-in-radio-field").click(function() {
+        jQuery("#edit-date-4").attr("checked", "checked");
+      });
+      </script>
+      ',
+    );
+
+    // Content types.
+    $node_types = node_type_get_types();
+    $content_type_radios = array();
+    $exclude = array('youtube_importer', 'youtube_video', 'announcements', 'background_image', 'important_announcements', 'vp_menu_dropdown_box', 'webform', 'contact');
+    foreach ($node_types as $node_type) {
+      if (in_array($node_type->type, $exclude)) continue;
+      $value = 'more:pagemap:item-type:' . $node_type->type;
+      $content_type_radios[$value] = t($node_type->name);
+    }
+    $form['type'] = array(
+      '#prefix' => '<div class="views-exposed-widget"><label>' . t('Content type') . '</label>',
+      '#suffix' => '</div>',
+      '#type' => 'checkboxes',
+      '#default_value' => $_GET['type'],
+      '#options' => $content_type_radios,
+    );
+
+    // Subject.
+    $vocabulary = taxonomy_vocabulary_machine_name_load('news_subjects');
+    $terms = taxonomy_get_tree($vocabulary->vid);
+    $subject_ratios = array();
+    foreach ($terms as $term) {
+      $value = drupal_strtolower($term->name);
+      $value = str_replace(' ', '_', drupal_strtolower($value));
+      $value = 'more:pagemap:item-subject:'.$value;
+      $subject_ratios[$value] = t($term->name);
+    }
+    $form['subject'] = array(
+      '#prefix' => '<div class="views-exposed-widget"><label>' . t('Subject') . '</label>',
+      '#suffix' => '</div>',
+      '#type' => 'checkboxes',
+      '#default_value' => $_GET['subject'],
+      '#options' => $subject_ratios,
+    );
+  }
+}
+
+function vp_search_gss_search_key_alter(&$query) {
+  if (!isset($_GET['source']) || $_GET['source'] == 0) {
+    global $base_root;
+    $site = pathinfo($base_root);
+    $query .= ' site:' . $site['basename'];
+  }
+
+  if (isset($_GET['type']) && !empty($_GET['type']) && !in_array('all', $_GET['type'])) {
+    $query .= ' ' . implode(' OR ', $_GET['type']);
+  }
+
+  if (isset($_GET['subject']) && !empty($_GET['subject']) && !in_array('all', $_GET['subject'])) {
+    $query .= ' ' . implode(' OR ', $_GET['subject']);
+  }
+}
+
+function vp_search_gss_search_extraparams_alter(&$extra) {
+  if ($_GET['time'] === '1-week') {
+    $extra = array(
+      'sort' => 'item-date:r:'.date('Ymd', strtotime('-1 week')).':'.date('Ymd')
+    );
+  }
+  elseif ($_GET['time'] === '1-month') {
+    $extra = array(
+      'sort' => 'item-date:r:'.date('Ymd', strtotime('-1 month')).':'.date('Ymd')
+    );
+  }
+  elseif ($_GET['time'] === '12-months') {
+    $extra = array(
+      'sort' => 'item-date:r:'.date('Ymd', strtotime('-12 months')).':'.date('Ymd')
+    );
+  }
+  elseif ($_GET['time'] === 'between') {
+    $extra = array(
+      'sort' => 'item-date:r:'.date('Ymd', strtotime($_GET['time-between-start'])).':'.date('Ymd', strtotime($_GET['time-between-end']))
+    );
+  }
+}

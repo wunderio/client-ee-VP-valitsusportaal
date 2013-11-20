@@ -1,0 +1,12 @@
+name = Extended File Field
+description = Extends the core File field widget and provides a new field formatter.
+core = 7.x
+package = Fields
+dependencies[] = file
+
+; Information added by drupal.org packaging script on 2013-05-19
+version = "7.x-1.x-dev"
+core = "7.x"
+project = "extended_file_field"
+datestamp = "1368925211"
+

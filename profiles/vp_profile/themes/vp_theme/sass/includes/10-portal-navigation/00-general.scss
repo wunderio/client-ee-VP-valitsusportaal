@@ -1,0 +1,114 @@
+
+
+@if $layout == global {
+  .zone-portal-navigation-wrapper {
+    $region-portal-navigation-links-padding-top: 8px;
+    $separator-light: 1px solid rgba(255, 255, 255, 0.1);
+    $separator-strong: 1px solid rgba(255, 255, 255, 0.5);
+
+    background: url(../img/10-global/zone-portal-navigation-wrapper.png) 0 100%;
+    box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.15);
+    display: block;
+    font-size: 11px;
+
+    .zone-portal-navigation {
+      min-height: 35px;
+    }
+
+    a {
+      color: #fff;
+      display: block;
+
+      &:hover,
+      &:focus {
+        color: $color-text-extra-golden;
+      }
+
+      &.active,
+      &.active-trail {
+        color: #00CCFF;
+      }
+    }
+
+    .language-switcher-locale-url,
+    .menu {
+      @extend %clearfix;
+    }
+
+    .language-switcher-locale-url li,
+    .menu-name-menu-web-portal > .menu > li,
+    .block-visually-impaired-visually-impaired .content {
+      padding-top: $region-portal-navigation-links-padding-top;
+    }
+
+    .language-switcher-locale-url li,
+    .menu-name-menu-web-portal > .menu > li {
+      float: left;
+      padding-bottom: 1px;
+      padding-left: 12px;
+      padding-right: 12px;
+      position: relative;
+      z-index: 1;
+
+      > a {
+        position: relative;
+        z-index: 3;
+      }
+
+      &.active:after,
+      &.active-trail:after {
+        $arrow-width: 24px;
+
+        @include triangle($arrow-width, #FDFDFB, up);
+        bottom: -12px;
+        content: "";
+        left: 0;
+        left: 50%;
+        margin-left: -($arrow-width/2);
+        position: absolute;
+        z-index: 2;
+
+        .vp-particularly-important & {
+          border-bottom-color: #b80000;
+        }
+      }
+    }
+
+    .region {
+      position: static !important;
+    }
+
+    .block {
+      float: left;
+      position: relative;
+      z-index: 2;
+    }
+
+    .region-portal-navigation-second {
+      float: right !important;
+      width: auto !important;
+
+      .region-inner {
+        padding-right: 8px;
+      }
+    }
+  }
+}
+
+@if $layout == default {
+
+}
+
+@if $layout == tablet {
+  .region-portal-navigation-first {
+    width: auto !important;
+  }
+
+  .zone-portal-navigation-wrapper {
+    .language-switcher-locale-url li,
+    .menu-name-menu-web-portal > .menu > li {
+      padding-left: 9px;
+      padding-right: 9px;
+    }
+  }
+}

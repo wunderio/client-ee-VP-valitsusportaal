@@ -1,0 +1,29 @@
+
+//
+// @file
+// Horizontal spacer.
+//
+
+
+
+@if $layout == editor or
+    $layout == global {
+  .hr {
+    background-image: url(../img/40-desktop/block-separator.png);
+    background-position: 50% 0;
+    background-repeat: no-repeat;
+    clear: both;
+    height: 23px;
+    margin: 30px -20px;
+  }
+}
+
+
+
+@if $layout == editor or
+    $layout == default {
+  .hr {
+    margin-left: -35px;
+    margin-right: -35px;
+  }
+}

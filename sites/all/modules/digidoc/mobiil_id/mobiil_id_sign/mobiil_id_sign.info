@@ -1,0 +1,6 @@
+core = "7.x"
+description = "Provides Mobiil-ID digital document signing using DigiDoc service"
+name = "Mobiil-ID Sign"
+package = "DigiDoc"
+version = "7.x-1.0"
+dependencies[] = digidoc

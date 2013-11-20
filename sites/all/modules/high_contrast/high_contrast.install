@@ -1,0 +1,30 @@
+<?php
+// $Id$
+
+/**
+ * Implementation of hook_install()
+ */
+function high_contrast_install() {
+  // Set variables.
+  variable_set("high_contrast_switcher_widget", "links");
+  variable_set("high_contrast_switcher_label", "Contrast:");
+  variable_set("high_contrast_high_label", "High");
+  variable_set("high_contrast_separator", "|");
+  variable_set("high_contrast_normal_label", "Normal");
+  variable_set("high_contrast_css_styles", _high_contrast_get_default_css_styles());
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function high_contrast_uninstall() {
+
+  // Delete session variables.
+  unset($_SESSION["high_contrast_activated"]);
+
+  // Delete variables.
+  $result = db_query('SELECT name FROM {variable} WHERE name LIKE "high_contrast_%"');
+  while ($row = db_fetch_object($result)) {
+    variable_del($row->name);
+  }
+}

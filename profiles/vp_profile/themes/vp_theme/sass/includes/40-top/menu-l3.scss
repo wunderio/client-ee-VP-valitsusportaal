@@ -1,0 +1,84 @@
+
+
+
+@if $layout == global {
+  .block-menu-l3 {
+    display: none;
+  }
+}
+
+
+
+@if $layout == default {
+  .block-menu-l3 {
+    background: $color-text-main-blue;
+    border-radius: 3px;
+    box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.55);
+    display: block;
+    margin-top: 20px;
+    margin: 20px -15px 20px -15px;
+    overflow: hidden;
+    padding: 8px 10px;
+    position: relative;
+    z-index: 1;
+
+    a {
+      color: #fff;
+      display: block;
+      font-family: $font_museo500;
+      line-height: 15px;
+
+      &:hover,
+      &.active-trail {
+        color: $color-text-extra-golden;
+      }
+    }
+
+    .menu {
+      white-space: nowrap;
+      position: relative;
+    }
+
+    li {
+      display: inline-block;
+      padding: 2px 15px;
+    }
+
+    // Arrows.
+    & {
+      .prev,
+      .next {
+        background-position: 0 50%;
+        background-repeat: no-repeat;
+        bottom: 0;
+        cursor: pointer;
+        display: block;
+        position: absolute;
+        top: 0;
+        width: 25px;
+        z-index: 2;
+      }
+
+      .prev {
+        background-image: url(../img/10-global/navl3-arrow-left.png);
+        border-radius: 2px 0 0 2px;
+        left: 0;
+        display: none;
+
+         &:hover {
+          background-position: 100% 50%;
+        }
+      }
+
+      .next {
+        background-image: url(../img/10-global/navl3-arrow-right.png);
+        border-radius: 0 2px 2px 0;
+        right: 0px;
+
+        &:hover {
+          background-position: 100% 50%;
+        }
+      }
+    }
+  }
+}

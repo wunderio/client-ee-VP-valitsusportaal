@@ -1,0 +1,107 @@
+<?php
+
+/**
+ * @file
+ * Code for the VP Contact feature.
+ */
+
+include_once 'vp_contact.features.inc';
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function vp_contact_views_pre_render(&$view) {
+  if ($view->name == 'contact') {
+    drupal_add_library('system', 'ui.dialog');
+    drupal_add_js('(function($){$().ready(function(){
+      $("div.view-contact td.views-field-title").click(function(){
+        $dialog = $(this).parent().next().find("div.ui-dialog-content-contact")
+          .clone()
+          .dialog();
+      });
+    });})(jQuery);', 'inline');
+
+  }
+}
+
+/**
+ * Implements hook_feeds_presave().
+ */
+function vp_contact_feeds_presave(FeedsSource $source, $entity, $item) {
+
+  // Contacts from x-road import.
+  if ($entity->feeds_item->id == 'contacts') {
+
+    // Is update.
+    if (isset($entity->nid) && !empty($entity->nid)) {
+
+      // Field lock functionality.
+      if (isset($entity->field_field_lock) && !empty($entity->field_field_lock)) {
+        $node = node_load($entity->nid, NULL, TRUE);
+        foreach ($entity->field_field_lock[LANGUAGE_NONE] as $row) {
+          $entity->{$row['value']} = $node->{$row['value']};
+        }
+      }
+
+    }
+
+  }
+
+  if ($entity->feeds_item->id == 'contacts_absentees') {
+    if (!isset($item['xpathparser:3'])) {
+      $item['xpathparser:3'] = t("On vacation");
+    }
+
+    if (strtotime($item['xpathparser:1']) <= time() && strtotime($item['xpathparser:2']) >= time()) {
+      $result = db_select('feeds_item', 'fi')
+        ->condition('fi.id', 'contacts')
+        ->condition('fi.guid', $item['xpathparser:0'])
+        ->fields('fi', array('entity_id'))
+        ->range(0, 1)
+        ->execute()
+        ->fetchCol();
+
+      if ($node = node_load($result[0])) {
+        $node->field_status[LANGUAGE_NONE][0]['value'] = $item['xpathparser:3'];
+        node_save($node);
+      }
+    }
+
+    $entity->feeds_item->skip = TRUE;
+  }
+
+  if ($entity->feeds_item->id == 'contacts_leavers') {
+    $result = db_select('feeds_item', 'fi')
+      ->condition('fi.id', 'contacts')
+      ->condition('fi.guid', $item['xpathparser:0'])
+      ->fields('fi', array('entity_id'))
+      ->range(0, 1)
+      ->execute()
+      ->fetchCol();
+
+    if (!empty($result)) {
+      node_delete($result[0]);
+    }
+
+    $entity->feeds_item->skip = TRUE;
+  }
+}
+
+/**
+ * Implements hook_feeds_before_import().
+ */
+function vp_contact_feeds_before_import(FeedsSource $source) {
+  if ($source->importer()->id == 'contacts_absentees') {
+    $query = db_select('field_data_field_status', 'f')
+      ->condition('f.bundle', 'contact')
+      ->fields('f', array('entity_id'))
+      ->execute();
+    if ($query->rowCount() > 0) {
+      while ($row = $query->fetchAssoc()) {
+        $node = node_load($row['entity_id']);
+        $node->field_status = array();
+        node_save($node);
+      }
+    }
+  }
+}

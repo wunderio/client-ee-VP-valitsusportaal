@@ -1,0 +1,16 @@
+
+
+
+@if $layout == global {
+  .section-footer {
+    display: none;
+  }
+}
+
+
+
+@if $layout == default {
+  .section-footer {
+    display: block;
+  }
+}

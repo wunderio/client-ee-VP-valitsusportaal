@@ -1,0 +1,195 @@
+
+
+
+@if $layout == editor or
+    $layout == global {
+  .node .static-module-3-1 {
+    @extend %full-width-global;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    padding: 40px 40px 200px 40px;
+    position: relative; // For :before and :after.
+
+    .editor & {
+      margin-left: 0;
+      margin-right: 0;
+      width: 1000px;
+    }
+
+    // Top shadow.
+    &:before {
+      background-image: url(../img/10-global/static-module-3-1-shadow-top.png);
+      background-position: 50% 0;
+      background-repeat: no-repeat;
+      background-size: 120%;
+      content: "";
+      height: 10px;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+
+    h2 {
+      color: #006699;
+      font-size: 25px;
+      padding-bottom: 13px;
+      text-shadow: none;
+    }
+
+    .aside {
+      background: url(../img/10-global/static-module-3-1-vspacer.png) no-repeat 50% 100%;
+      margin-bottom: -10px;
+      padding-bottom: 20px;
+    }
+
+    ul {
+      li {
+        background: none;
+        line-height: 18px;
+        margin: 0;
+        padding: 21px 15px 15px 55px;
+        position: relative; // For :before.
+
+        &.has-bullet:after {
+          background-image: url(../img/10-global/static-module-3-1-bullet.png);
+          @media
+            only screen and (-webkit-min-device-pixel-ratio: 2),
+            only screen and ( min--moz-device-pixel-ratio: 2),
+            only screen and (-o-min-device-pixel-ratio: 2/1),
+            only screen and (min-device-pixel-ratio: 2),
+            only screen and (min-resolution: 192dpi),
+            only screen and (min-resolution: 2dppx) {
+              background-image: url(../img/10-global/static-module-3-1-bullet@2x.png);
+              background-size: 100%;
+          }
+          content: "";
+          height: 56px;
+          left: 5px;
+          margin-top: -29px;
+          position: absolute;
+          top: (30/54) * 100%; // Exactly the middle point
+          width: 46px;
+        }
+
+
+        // Item bottom border.
+        &:before {
+          background-image: url(../img/10-global/static-module-3-1-border.png);
+          bottom: 0;
+          content: "";
+          height: 1px;
+          left: 0;
+          position: absolute;
+          right: 0;
+        }
+
+        &:last-child:before {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+
+
+@if $layout == editor or
+    $layout == default {
+  .node .static-module-3-1 {
+    @extend %full-width-default;
+    padding-bottom: 40px;
+    padding-left: 0;
+    padding-right: 0;
+
+    .main {
+      overflow: hidden;
+      padding-left: 37px;
+      padding-right: 105px;
+    }
+
+    .aside {
+      background: none;
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+
+    // Top shadow.
+    &:before {
+      background-size: auto;
+    }
+
+    // V-shadow.
+    &:after {
+      background-image: url(../img/20-default/static-module-3-1-vspacer.png);
+      background-repeat: no-repeat;
+      content: "";
+      height: 293px;
+      left: 320px;
+      position: absolute;
+      top: 40px;
+      width: 14px;
+      z-index: 2;
+    }
+
+    .aside {
+      float: left;
+      font-size: 15px;
+      line-height: 21px;
+      min-height: 293px;
+      padding-bottom: 80px;
+      padding-left: 60px;
+      padding-right: 35px;
+      width: 225px;
+    }
+
+    ul {
+      li {
+        padding-right: 50px;
+      }
+    }
+  }
+}
+
+
+
+@if $layout == tablet {
+  .node .static-module-3-1 {
+    // V-shadow.
+    &:after {
+      left: 280px;
+    }
+
+    .aside {
+      padding-left: 50px;
+      padding-right: 25px;
+      width: 205px;
+    }
+
+    .main {
+      padding-left: 30px;
+      padding-right: 50px;
+    }
+
+    ul {
+      li {
+        padding-right: 20px;
+      }
+    }
+  }
+}
+
+
+
+@if $layout == editor or
+    $layout == desktop {
+  .node .static-module-3-1 {
+    // Top shadow.
+    &:before {
+      background-image: url(../img/40-desktop/static-module-3-1-shadow-top.png);
+      height: 14px;
+    }
+  }
+}
+

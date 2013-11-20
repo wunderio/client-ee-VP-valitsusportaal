@@ -1,0 +1,6 @@
+name = CKeditor Styles
+description = Allows for adding custom CKeditor style rules to the styles dropdown.
+core = 7.x
+configure = admin/config/content/ckeditor_styles
+dependencies[] = wysiwyg
+dependencies[] = ctools

@@ -1,0 +1,16 @@
+
+
+
+@if $layout == global {
+  .zone-postscript-wrapper {
+    display: none;
+  }
+}
+
+
+
+@if $layout == default {
+  .zone-postscript-wrapper {
+    display: block;
+  }
+}

@@ -1,0 +1,222 @@
+<?php
+/**
+ * @file
+ * Code for the Valitsusportaal feature.
+ */
+
+include_once 'vp_core.features.inc';
+
+/**
+ * Implements hook_init().
+ */
+function vp_core_init() {
+  if (drupal_is_front_page()) {
+    drupal_add_js(drupal_get_path('module', 'vp_core') .'/js/static_fp_tab_block.js', array('scope' => 'footer'));
+  }
+
+  drupal_add_js('var addthis_config = {"data_track_addressbar":false};',
+    array('type' => 'inline', 'scope' => 'footer', 'weight' => 5)
+  );
+  drupal_add_js('//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-51f90a0115ca9e8f',
+    array('type' => 'external', 'scope' => 'footer', 'weight' => 6)
+  );
+}
+
+/**
+ * Implements hook_css_alter().
+ * Change default logic of CSS.
+ */
+function vp_core_css_alter(&$css) {
+  global $theme_key;
+  // Get current themes path.
+  $theme_path = drupal_get_path('theme', variable_get('theme_default', NULL));
+  // Get module themes path.
+  $module_path = drupal_get_path('module', 'vp_core');
+
+  // Make alpha-reset.css be the first css to be loaded in HTML.
+  if (array_key_exists('sites/all/themes/omega/alpha/css/alpha-reset.css', $css)) {
+    $css['sites/all/themes/omega/alpha/css/alpha-reset.css']['group'] = -9999;
+  }
+
+  // CSS to remove.
+  $exclude = array(
+    'modules/system/system.menus.css' => FALSE,
+    'sites/all/modules/field_group/horizontal-tabs/horizontal-tabs.css' => FALSE,
+    'sites/all/modules/mobile_navigation/mobile_navigation.css' => FALSE,
+  );
+  $css = array_diff_key($css, $exclude);
+
+  // Key in $change_path is theme path to css, value is $css key.
+  $change_path = array(
+    'sites/all/themes/omega/omega/css/formalize.css' => 'formalize.css',
+    'sites/all/themes/omega/alpha/css/alpha-reset.css' => 'alpha-reset.css',
+  );
+
+  foreach($change_path as $css_original_path => $file_name) {
+    if (array_key_exists($css_original_path, $css)) {
+      $css[$css_original_path]['data'] = $theme_path . '/css/' . $file_name;
+    }
+  }
+}
+
+/**
+ * Implements hook_js_alter().
+ * Move colorbox_inline.js to vp_theme/js folder.
+ */
+function vp_core_js_alter(&$javascript) {
+  // Get current themes path.
+  $theme_path = drupal_get_path('theme', variable_get('theme_default', NULL));
+  if (isset($javascript['sites/all/modules/colorbox/js/colorbox_inline.js'])) {
+      $javascript['sites/all/modules/colorbox/js/colorbox_inline.js']['data'] = $theme_path . '/js/colorbox_inline.js';
+
+    // Make the colorbox_inline.js be te last script to load so one could
+    // overwrite Drupal.settings.colorbox from vp_theme/js/dialog_default_settings.js
+    $javascript['sites/all/modules/colorbox/js/colorbox_inline.js']['scope'] = 'footer';
+    $javascript['sites/all/modules/colorbox/js/colorbox_inline.js']['group'] = 100;
+    $javascript['sites/all/modules/colorbox/js/colorbox_inline.js']['weight'] = 999;
+  }
+
+  if (isset($javascript['sites/all/modules/colorbox/js/colorbox.js'])) {
+      $javascript['sites/all/modules/colorbox/js/colorbox.js']['data'] = $theme_path . '/js/colorbox.js';
+
+    // Make the colorbox_inline.js be te last script to load so one could
+    // overwrite Drupal.settings.colorbox from vp_theme/js/dialog_default_settings.js
+    $javascript['sites/all/modules/colorbox/js/colorbox.js']['scope'] = 'footer';
+    $javascript['sites/all/modules/colorbox/js/colorbox.js']['group'] = 100;
+    $javascript['sites/all/modules/colorbox/js/colorbox.js']['weight'] = 999;
+  }
+}
+
+/**
+ * Implements hook_wysiwyg_editor_settings_alter().
+ * Add Omega HTML5+RDFa doctype to + body class to ckeditor
+ */
+function vp_core_wysiwyg_editor_settings_alter(&$settings, &$context) {
+  if (arg(0) == 'node') {
+    $nid = arg(1);
+  }
+
+  if ($context['profile']->editor == 'ckeditor') {
+    $settings['docType'] = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML+RDFa 1.1//EN">';
+    $settings['bodyClass'] = 'editor node' . (isset($nid) ? ' page-node-' . $nid : '');
+  }
+}
+
+/**
+ * Implements hook_views_post_build().
+ */
+function vp_core_views_post_build(&$view) {
+  if ($view->name == 'important_topics_slideshow' && $view->current_display == 'important_topics_slideshow_block') {
+    drupal_add_js(libraries_get_path('flexslider') .'/jquery.flexslider-min.js', array('scope' => 'footer'));
+    drupal_add_js(drupal_get_path('module', 'vp_core') .'/js/important_topics_slideshow_block.js', array('scope' => 'footer'));
+  }
+
+  if ($view->name == 'top_news_tabs' && $view->current_display == 'top_news_tabs_block') {
+    drupal_add_js(drupal_get_path('module', 'vp_core') .'/js/top_news_tabs_block.js', array('scope' => 'footer'));
+  }
+
+  if ($view->name == 'history') {
+    drupal_add_js(libraries_get_path('masonry') .'/jquery.masonry.min.js', array('scope' => 'footer'));
+    drupal_add_js(drupal_get_path('module', 'vp_core') .'/js/history_page.js', array('scope' => 'footer'));
+    _vp_core_add_image_description_js();
+  }
+}
+
+function vp_core_extended_file_field_output_alter(&$elements, &$context) {
+  $elements[0]['#header'] = array(
+    'date' => $elements[0]['#header']['date'],
+    'filename' => $elements[0]['#header']['filename'],
+    'filesize' => $elements[0]['#header']['filesize'],
+    'extension' => $elements[0]['#header']['extension'],
+  );
+
+/*
+  $elements[0]['#header']['date']['data'] = t($elements[0]['#header']['date']['data']);
+  $elements[0]['#header']['filename']['data'] = t($elements[0]['#header']['filename']['data']);
+  $elements[0]['#header']['filesize']['data'] = t($elements[0]['#header']['filesize']['data']);
+  $elements[0]['#header']['extension']['data'] = t($elements[0]['#header']['extension']['data']);
+*/
+
+  foreach ($elements[0]['#rows'] as &$row) {
+    $row = array(
+      'date' => $row['data']['date'],
+      'filename' => $row['data']['filename'],
+      'filesize' => $row['data']['filesize'],
+      'extension' => $row['data']['extension'],
+    );
+  }
+}
+
+function vp_core_extended_file_field_metadata_types() {
+  return array(
+    'date' => array(
+      'title' => t('Date'),
+      'formatter' => 'vp_core_extended_file_field_timestamp_formatter',
+    ),
+  );
+}
+function vp_core_extended_file_field_timestamp_formatter($item, $context) {
+  return format_date($item['timestamp'], 'short');
+}
+
+function vp_core_views_query_alter(&$view, &$query) {
+  if ($view->name == 'weekly_schedule') {
+    if (isset($query->where[0])) {
+      $query->where[0]['conditions'][0]['field'] = str_replace('<=', '<', $query->where[0]['conditions'][0]['field']);
+    }
+  }
+}
+
+function vp_core_entity_info_alter(&$entity_info) {
+  $entity_info['node']['view modes'] += array(
+    'view_mode_facebook' => array(
+      'label' => t('Facebook Teaser'),
+      'custom settings' => TRUE,
+    ),
+  );
+}
+
+/**
+ * Implements hook_node_view().
+ */
+function vp_core_node_view($node, $view_mode, $langcode) {
+  _vp_core_add_image_description_js();
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function vp_core_block_info() {
+  $blocks = array();
+
+  $blocks['vp_core_accessibility_help_link'] = array(
+    'info' => t('Accessibility help link'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function vp_core_block_view($delta = '') {
+  $block = array();
+
+  switch ($delta) {
+    case 'vp_core_accessibility_help_link':
+      $block['subject'] = '';
+      $block['content'] = l(t('Accessibility Help'), 'accessibility', array('attributes' => array('class' => 'accessibility-link')));
+    break;
+  }
+
+  return $block;
+}
+
+/**
+ * Helper function to add add_image_description.js because it's shared in 2 places.
+ */
+function _vp_core_add_image_description_js() {
+  // Add image description below the image + add better aligning for IE8.
+  drupal_add_js(drupal_get_path('module', 'vp_core') .'/js/add_image_description.js', array('scope' => 'footer'));
+}

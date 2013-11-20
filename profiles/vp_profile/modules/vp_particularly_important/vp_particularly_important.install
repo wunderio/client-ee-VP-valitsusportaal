@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function vp_particularly_important_install() {
+
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function vp_particularly_important_uninstall() {
+  variable_del('vp_particularly_important_enabled');
+  variable_del('vp_particularly_important_title');
+  variable_del('vp_particularly_important_text');
+}

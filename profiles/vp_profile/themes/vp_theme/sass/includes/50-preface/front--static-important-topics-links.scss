@@ -1,0 +1,45 @@
+
+
+
+@if $layout == editor or
+    $layout == global {
+  .static-important-topics-links {
+    .editor & {
+      background-image: url(../img/40-desktop/zone-preface-wrapper.png);
+      padding: 20px;
+      width: 300px;
+    }
+
+    &,
+    a {
+      color: #fff;
+    }
+
+    a:focus,
+    a:hover {
+      color: $color-text-extra-golden;
+    }
+
+
+    h2 {
+      color: #FFCC00;
+      font-size: 13px;
+      padding-bottom: 7px;
+    }
+
+    ul {
+      padding-left: 5px;
+
+      li {
+        background: url(../img/10-global/link-arrow-on-dark-bg.png) no-repeat 0 9px;
+        padding: 1px 0 1px 17px;
+      }
+    }
+
+    .hr {
+      background: url(../img/10-global/hr-on-dark-bg.png) repeat-x 0 50%;
+      height: 22px;
+      margin: 0 10px;
+    }
+  }
+}

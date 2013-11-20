@@ -1,0 +1,32 @@
+
+
+
+@if $layout == global {
+  .block-delta-blocks-tabs {
+    margin: 20px 0;
+    overflow: hidden;
+
+    .content {
+      ul {
+        @extend %clearfix;
+      }
+
+      li {
+        float: left;
+        padding-bottom: 1px;
+        padding-right: 1px;
+      }
+
+      a {
+        background: #eee;
+        color: $color-text-main-blue;
+        display: block;
+        padding: 10px 10px 7px;
+
+        &:hover {
+          background: tint(#eee, 50%);
+        }
+      }
+    }
+  }
+}

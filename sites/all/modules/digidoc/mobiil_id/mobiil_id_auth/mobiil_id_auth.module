@@ -1,0 +1,456 @@
+<?php
+
+/**
+ * Implements hook_init().
+ *
+ * @return void
+ */
+function mobiil_id_auth_init() {
+  $path = drupal_get_path('module', 'digidoc');
+  drupal_add_css($path . '/mobiil_id/mobiil_id.css');
+}
+
+/**
+ * Implements hook_enable().
+ *
+ * @return void
+ */
+function mobiil_id_auth_enable() {
+  db_update('system')
+    ->fields(array('weight' => 2))
+    ->condition('type', 'module')
+    ->condition('name', 'mobiil_id_auth')
+    ->execute();
+}
+
+/**
+ * Implements hook_theme().
+ *
+ * @return array
+ */
+function mobiil_id_auth_theme() {
+  $path = drupal_get_path('module', 'digidoc');
+  return array(
+    'mobiil_id_status' => array(
+      'template' => 'status',
+      'path' => $path . '/mobiil_id/templates',
+      'variables' => array(
+        'verification_code' => '',
+      ),
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_menu().
+ *
+ * @return array menu items
+ */
+function mobiil_id_auth_menu() {
+  $items = array();
+
+  $items['admin/config/services/digidoc/mobiil_id'] = array(
+    'title' => 'Mobiil-ID',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('mobiil_id_auth_admin_form'),
+    'description' => 'Configure Mobiil-ID settings.',
+    'access arguments' => array('administer mobiil id'),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'mobiil_id_auth.admin.inc',
+    'file path' => drupal_get_path('module', 'mobiil_id'),
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ *
+ * @return array
+ */
+function mobiil_id_auth_permission() {
+  return array(
+    'administer mobiil id' => array(
+      'title' => t('Administer Mobiil ID authentication and sign modules'),
+    ),
+  );
+}
+
+/**
+ * Implements "hook_form_FORM_ID_alter".
+ *
+ * @return void
+ */
+function mobiil_id_auth_form_user_login_block_alter(&$form, &$form_state) {
+  _mobiil_id_user_login_form_alter($form, $form_state);
+}
+
+/**
+ * Implements "hook_form_FORM_ID_alter".
+ *
+ * @return void
+ */
+function mobiil_id_auth_form_user_login_alter(&$form, &$form_state) {
+  _mobiil_id_user_login_form_alter($form, $form_state);
+}
+
+/**
+ *
+ * @param array $form
+ * @param array $form_state
+ * @return void
+ */
+function _mobiil_id_user_login_form_alter(&$form, &$form_state) {
+  // Check, if admin has configured to allowed login form alter.
+  $can_alter_form = (bool)variable_get('mobiil_id_alter_user_login_form', 0);
+  if (!$can_alter_form) {
+    return;
+  }
+
+  // Create DigiDoc authentication wrapper.
+  // Also used by Mobiil-ID Authenticate module.
+  if (!isset($form['digidoc_auth_service'])) {
+    $form['digidoc_auth_service'] = array(
+      'links' => array(
+        '#theme' => 'item_list',
+        '#items' => array(),
+        '#attributes' => array('id' => 'digidoc-auth-service-wrapper'),
+        '#weight' => 1,
+      ),
+    );
+  }
+  $wrapper = &$form['digidoc_auth_service'];
+
+  // Add login link.
+  $wrapper['links']['#items'][] = array(
+    'data' => l(t('Log in using Mobiil-ID'), ''),
+    'id' => array('mobiil-id-link'),
+  );
+
+  // Create a container with user's mobile number field, submit button
+  // and cancel button.
+  $wrapper['mobiil_id'] = array(
+    '#type' => 'container',
+    '#weight' => 3,
+    '#attributes' => array(
+      'id' => 'digidoc-auth-service-mobiil_id',
+      'class' => array('element-hidden'),
+    ),
+    '#attached' => array(
+      'js' => array(array(
+        'data' => drupal_get_path('module', 'digidoc') . '/mobiil_id/mobiil_id.js',
+        'type' => 'file',
+      )),
+    ),
+  );
+  $wrapper['mobiil_id']['mobiil_id_phone_number'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Insert your phone number to log in'),
+    '#size' => 20,
+    '#maxlength' => 255,
+    '#weight' => -1,
+    '#description' => l(
+      t('What is Mobiil-ID?'), 'http://mobiil.id.ee/', array('external' => TRUE)
+    ),
+    '#ajax' => array(
+      'callback' => '_mobiil_id_auth_handle_request',
+      'wrapper' => 'digidoc-auth-service-mobiil_id',
+      'event' => 'mobiil_id_auth_start',
+    ),
+  );
+  $form['mobiil_id_auth'] = array(
+    '#markup' => '<div id="mobiil-id-auth-wrapper" class="element-hidden">' .
+      l(t('Sign in'), '', array(
+      'attributes' => array(
+        'id' => 'edit-mobiil-id-auth',
+      ),
+    )),
+  );
+  $form['cancel_link'] = array(
+    '#markup' => l(t('Cancel Mobiil-ID login'), '', array(
+      'attributes' => array(
+        'id' => 'mobiil-id-cancel',
+      ),
+    )) . '</div>',
+  );
+}
+
+/**
+ * Handle AJAX form request.
+ *
+ * @param array $form
+ * @param array $form_state
+ * @return array
+ */
+function _mobiil_id_auth_handle_request($form, &$form_state) {
+  $values = &$form_state['values'];
+  $state = isset($_POST['state']) ? trim($_POST['state']) : 'initialize';
+  $wrapper = &$form['digidoc_auth_service']['mobiil_id'];
+  $commands = array();
+
+  // Remove wrapper hidden state.
+  $index = array_search('element-hidden', $wrapper['#attributes']['class']);
+  unset($wrapper['#attributes']['class'][$index]);
+
+  // Basic validation - cannot be empty.
+  if (empty($values['mobiil_id_phone_number'])) {
+    form_error($wrapper['mobiil_id_phone_number'], t('Phone number field must be filled.'));
+    return $wrapper;
+  }
+
+  // Start authentication process.
+  if ($state == 'initialize') {
+    _mobiil_id_auth_initialize($values['mobiil_id_phone_number']);
+    if (isset($_SESSION['mobiil_id'])) {
+      $mobiil_id = &$_SESSION['mobiil_id'];
+
+      // If initialization request returned error, show it to user.
+      if (isset($mobiil_id['faultstring'])) {
+        $error = $mobiil_id['faultstring'];
+        if (is_numeric($error)) {
+          $error = _mobiil_id_get_error_message($error);
+        }
+
+        form_error($wrapper['mobiil_id_phone_number'], $error);
+        return $wrapper;
+      }
+
+      // Hide sign in button.
+      $commands[] = ajax_command_invoke('#mobiil-id-auth-wrapper', 'addClass', array('element-hidden'));
+      $commands[] = ajax_command_invoke('#edit-mobiil-id-auth', 'addClass', array('element-hidden'));
+
+      // Check for authentication status periodically.
+      $commands[] = ajax_command_invoke('#digidoc-auth-service-mobiil_id', 'trigger', array(
+        'mobiil_id_auth_finalize',
+      ));
+
+      // Return status template.
+      $content = theme('mobiil_id_status', array(
+        'verification_code' => $mobiil_id['challengeid'],
+      ));
+      $commands[] = ajax_command_html('#digidoc-auth-service-mobiil_id', $content);
+    }
+  }
+  elseif ($state == 'finalize') {
+    $status_result = _mobiil_id_auth_finalize();
+    if ($status_result['error'] === TRUE) {
+      $content = $status_result['message'];
+      $commands[] = ajax_command_html('#digidoc-auth-service-mobiil_id', $content);
+      $commands[] = ajax_command_invoke('#mobiil-id-auth-wrapper', 'removeClass', array('element-hidden'));
+    }
+    else {
+      // Implement "hook_digidoc_id_card_sign_success".
+      $hooks = module_implements('digidoc_mobiil_id_auth_success');
+      foreach($hooks as $module) {
+        $function = $module . '_digidoc_mobiil_id_auth_success';
+        $function($form_state, $status_result, $commands);
+      }
+    }
+  }
+
+  // Return AJAX response.
+  return array('#type' => 'ajax', '#commands' => $commands);
+}
+
+/**
+ * Start authentication process.
+ *
+ * @param string $phone_nr
+ * @return boolean
+ */
+function _mobiil_id_auth_initialize($phone_nr) {
+  if (empty($phone_nr)) {
+    return FALSE;
+  }
+
+  // Clean up phone number.
+  $phone_nr = trim($phone_nr);
+
+  // Add the estonian area code to the phone number, if not entered
+  if (!preg_match('/^\+?372/', $phone_nr)) {
+    $phone_nr = '+372' . $phone_nr;
+  }
+
+  try {
+    $client = new SoapClient(
+      variable_get('digidoc_server_url', 'https://www.openxades.org:8443/?wsdl'),
+      array(
+        'trace' => true,
+        'exceptions' => true,
+        'login' => variable_get('digidoc_server_username', null),
+        'password' => variable_get('digidoc_server_password', null)
+      )
+    );
+
+    // If the locale module is enabled, set the message language based on
+    // what language user is in.
+    // NOTE! The Mobiil-ID service language codes are different from Drupal's.
+    if (module_exists('locale')) {
+      global $language;
+      if ($language->language == 'et') {
+        $mobiil_id_language = 'EST';
+        $mobiil_id_message = variable_get('mobiil_id_message_et', '');
+      } elseif ($language->language == 'ru') {
+        $mobiil_id_language = 'RUS';
+        $mobiil_id_message = variable_get('mobiil_id_message_ru', '');
+      // All other languages will use the english message
+      } else {
+        $mobiil_id_language = 'ENG';
+        $mobiil_id_message = variable_get('mobiil_id_message_en', '');
+      }
+    } else {
+      $mobiil_id_language = variable_get('mobiil_id_language', 'EST');
+      $mobiil_id_message = variable_get('mobiil_id_message', '');
+    }
+
+    // Generation of the random 10 byte hex SPChallenge key as stated
+    // in DigiDocService specification.
+    $spchallenge = '';
+    $hex_chars = '0123456789ABCDEF';
+    for ($i = 0; $i < 20; $i++) {
+      $spchallenge .= $hex_chars[rand(0, strlen($hex_chars) - 1)];
+    }
+
+    $param = array(
+      'IDCode' => '',
+      'Country' => 'EE',
+      'PhoneNo' => $phone_nr,
+      'Language' => $mobiil_id_language,
+      'ServiceName' => variable_get('digidoc_service_name', 'Testimine'),
+      'MessageToDisplay' => $mobiil_id_message,
+      'SPChallenge' => $spchallenge,
+      'MessagingMode' => "asynchClientServer",
+    );
+
+    $result = $client->__soapCall("MobileAuthenticate", $param);
+    if ($result['Status'] == 'OK') {
+      $_SESSION['mobiil_id'] = array();
+
+      // Verify the SPChallenge
+      if (substr($result['Challenge'], 0, 20) == $spchallenge) {
+        $_SESSION['mobiil_id']['status'] = TRUE;
+        $_SESSION['mobiil_id']['challengeid'] = $result['ChallengeID'];
+        $_SESSION['mobiil_id']['sesscode'] = $result['Sesscode'];
+        $_SESSION['mobiil_id']['idcode'] = $result['UserIDCode'];
+        $_SESSION['mobiil_id']['firstname'] = $result['UserGivenname'];
+        $_SESSION['mobiil_id']['lastname'] = $result['UserSurname'];
+        $_SESSION['mobiil_id']['country'] = $result['UserCountry'];
+        $_SESSION['mobiil_id']['spchallenge'] = $result['Challenge'];
+      }
+
+      // Store phone number in session.
+      $_SESSION['__erjk_phone_number'] = $phone_nr;
+    }
+  }
+  catch(Exception $e) {
+    $_SESSION['mobiil_id'] = array();
+    $_SESSION['mobiil_id']['faultstring'] = $e->getMessage();
+    $_SESSION['mobiil_id']['status'] = false;
+
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
+/**
+ * Check authentication status.
+ *
+ * @return string
+ */
+function _mobiil_id_auth_finalize() {
+  drupal_add_http_header('Content-Type', 'application/javascript');
+  $mobiil_id = &$_SESSION['mobiil_id'];
+
+  // Return error, if no session started.
+  if (!isset($mobiil_id['sesscode']) or empty($mobiil_id['sesscode'])) {
+    return array('error' => TRUE, 'message' => 'Session error!');
+  }
+
+  try {
+    $client = new SoapClient(
+      variable_get('digidoc_server_url', 'https://www.openxades.org:8443/?wsdl'),
+      array(
+        'trace' => true,
+        'exceptions' => true,
+        'login' => variable_get('digidoc_server_username', null),
+        'password' => variable_get('digidoc_server_password', null)
+      )
+    );
+
+    $status_param = array(
+      'Sesscode' => $mobiil_id['sesscode'],
+      'WaitSignature' => FALSE,
+    );
+    while($status_result = $client->__soapCall('GetMobileAuthenticateStatus', $status_param)) {
+      $status_code = @$status_result['Status'];
+      if (in_array($status_code, array('OUTSTANDING_TRANSACTION', 'REQUEST_OK'))) {
+        sleep(5);
+        continue;
+      }
+      elseif ($status_code == 'USER_AUTHENTICATED') {
+        global $user;
+        $mobiil_id['logged_in'] = true;
+
+        if (variable_get('mobiil_id_create_new_user', '0')) {
+          user_external_login_register($mobiil_id['idcode'], 'digidoc_idcode');
+          $all_user_roles = user_roles();
+          foreach (variable_get('mobiil_id_new_user_default_role', array()) as $value) {
+            $user->roles[$value] = $all_user_roles[$value];
+          }
+
+          // @TODO: All estonians have a @eesti.ee e-mail address, but should
+          // ask for confirmation as well.
+          $user->mail = $mobiil_id['idcode'] . '@eesti.ee';
+          user_save($user, array('roles' => $user->roles));
+        } else {
+          $user_info = user_external_load($mobiil_id['idcode']);
+
+          // Creation of new users is disabled, so check if it exists
+          if ($user_info and $user_info->status == 1) {
+            $user = $user_info;
+            user_login_finalize();
+          }
+          else {
+            return array(
+              'error' => TRUE,
+              'message' => t('Cannot login. User account not active.'),
+            );
+          }
+        }
+
+        // Implement "hook_digidoc_mobiil_id_auth_after_finalize".
+        $hooks = module_implements('digidoc_mobiil_id_auth_after_finalize');
+        foreach($hooks as $module) {
+          $function = $module . '_digidoc_mobiil_id_auth_after_finalize';
+          $function($mobiil_id);
+        }
+
+        // Set response.
+        $response = array('error' => FALSE);
+
+        // Clean up session.
+        unset($_SESSION['mobiil_id']);
+      }
+      else {
+        $response = array(
+          'error' => TRUE,
+          'message' => _mobiil_id_get_error_message($status_code),
+          'code' => $status_code,
+        );
+        break;
+      }
+
+      break;
+    }
+
+    return $response;
+  }
+  catch(Exception $e) {
+    // @todo: Add watchdog message.
+    return array(
+      'error' => TRUE,
+      'message' => _mobiil_id_get_error_message($e->getMessage()),
+    );
+  }
+}
