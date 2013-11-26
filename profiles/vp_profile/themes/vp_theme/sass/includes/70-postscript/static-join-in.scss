@@ -6,7 +6,6 @@
   .static-join-in {
     @extend %clearfix;
     background-position: 100% 100%;
-    font-family: $font_museo500;
     padding-bottom: 30px;
     position: relative;
 
@@ -74,7 +73,7 @@
 
       h2 {
         font-size: 16px;
-        margin-bottom: 7px;
+        margin-bottom: 2px;
       }
 
       &.box-1 {

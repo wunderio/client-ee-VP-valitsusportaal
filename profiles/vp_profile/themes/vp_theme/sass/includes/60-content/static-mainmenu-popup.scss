@@ -112,7 +112,7 @@
     }
 
     .widget-menu {
-      overflow: hidden;
+      @extend %clearfix;
 
       li {
         background: url(../img/10-global/mainmenu-popup-item-border.png) repeat-x 100% 100%;
@@ -210,7 +210,7 @@
     }
 
     .widget-bigmenu {
-      overflow: hidden;
+      @extend %clearfix;
 
       li {
         background-repeat: no-repeat;
@@ -395,6 +395,19 @@
         }
       }
 
+    }
+  }
+}
+
+
+
+@if $layout == default {
+  .static-mainmenu-popup {
+    .vp-menu-skip-link {
+      left: 10px;
+      position: absolute;
+      top: 8px;
+      z-index: 1;
     }
   }
 }

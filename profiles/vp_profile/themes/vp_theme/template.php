@@ -145,8 +145,7 @@ function add_facebook_meta_tags() {
  */
 function vp_theme_preprocess_page(&$variables) {
   if (drupal_is_front_page()) {
-    $variables['page']['content']['content']['#suffix'] = '
-    <script>
+    $variables['page']['content']['content']['#suffix'] = '<script>
       (function($) {
         var equal_height_blocks_in_zone_content_wrap = function() {
           var highest = 0;
@@ -170,7 +169,7 @@ function vp_theme_preprocess_page(&$variables) {
     </script>';
 
     foreach ($variables['page']['content']['content']['content'] as $key => &$var) {
-      if (isset($var['#block']) && $key !== 'delta_blocks_messages') {
+      if (isset($var['#block']->css_class) && $key !== 'delta_blocks_messages') {
         $var['#block']->css_class = 'first-content-block-in-region';
         break;
       }

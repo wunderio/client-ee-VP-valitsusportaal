@@ -1,0 +1,30 @@
+
+
+
+@if $layout == global or
+    $layout == editor {
+  .static-25-75-2columns {
+    margin: 0 0 20px 0;
+  }
+}
+
+
+
+@if $layout == default or
+    $layout == editor {
+  .static-25-75-2columns {
+    .col {
+      float: left;
+
+      &.first {
+        padding-right: 2%;
+        width: 23%
+      }
+
+      &.last {
+        padding-left: 2%;
+        width: 73%;
+      }
+    }
+  }
+}

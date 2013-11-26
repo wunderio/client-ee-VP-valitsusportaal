@@ -218,6 +218,10 @@
 
 
 @if $layout == editor {
+  .clearfix {
+    @extend %clearfix;
+  }
+
   .editor {
     margin: 15px;
     max-width: 960px;
@@ -225,6 +229,14 @@
     .wysiwyg-break {
       height: 12px !important;
       margin: 18px 0;
+    }
+  }
+
+   //=== STATIC SHARED STYLES ===//
+  .static {
+    &,
+    div {
+      outline: 1px dotted gray;
     }
   }
 }

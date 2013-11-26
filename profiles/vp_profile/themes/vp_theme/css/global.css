@@ -308,7 +308,7 @@
   margin: 0; }
 .view-contact-search .field, .ui-dialog-content-contact .field {
   overflow: hidden;
-  padding: 2px 0 1px; }
+  padding: 1px 0 0px; }
 .view-contact-search .field-name-field-position, .ui-dialog-content-contact .field-name-field-position,
 .view-contact-search .field-name-field-position-in-english,
 .ui-dialog-content-contact .field-name-field-position-in-english,
@@ -327,7 +327,8 @@
   padding-right: 10px;
   width: 70px; }
 .view-contact-search .field-items, .ui-dialog-content-contact .field-items {
-  overflow: hidden; }
+  overflow: hidden;
+  padding: 1px 0 1px 2px; }
 .view-contact-search .field-group-format, .ui-dialog-content-contact .field-group-format {
   margin-bottom: 30px; }
   .view-contact-search .field-group-format.group_main, .ui-dialog-content-contact .field-group-format.group_main {
@@ -963,6 +964,8 @@ td {
     text-shadow: 0 0 1px rgba(0, 0, 0, 0.65);
     text-transform: uppercase;
     top: 3px; }
+  .block-search-form label {
+    display: none; }
 
 #vp-autocomplete {
   display: none; }
@@ -1295,7 +1298,7 @@ td {
       color: #00698c; }
 
 .view-display-id-subjects_block ul li {
-  background: url(../img/10-global/link-arrow-on-light-bg2.png) no-repeat 3px 65%;
+  background: url(../img/10-global/link-arrow-on-light-bg2.png) no-repeat 3px 0.6em;
   margin: 0;
   padding: 2px 0 2px 16px; }
 .view-display-id-subjects_block a {
@@ -1717,6 +1720,7 @@ td {
     color: #666;
     padding-left: 0;
     padding-right: 0;
+    white-space: nowrap;
     width: 30px; }
   .block-live-press-briefings .goverment-session-list .views-field-title {
     padding-right: 0; }
@@ -2230,6 +2234,12 @@ div.item-list ul.pager {
     font-size: 12px;
     font-family: Tahoma, Verdana, Segoe, sans-serif;
     line-height: 15px; }
+
+.static-25-75-2columns {
+  margin: 0 0 20px 0; }
+
+.static-75-25-2columns {
+  margin: 0 0 20px 0; }
 
 .static-contact-header {
   padding: 28px 0 23px; }
@@ -3366,6 +3376,9 @@ h3.icon-wrap-2 .icon-bureau {
   background-image: url(../img/10-global/static-read-more-icon-bureau.png); }
 h3.icon-wrap-2 .icon-cv {
   background-image: url(../img/10-global/static-read-more-icon-cv.png); }
+
+.static-simple-2columns {
+  margin: 0 0 20px 0; }
 
 .view-history {
   position: relative; }

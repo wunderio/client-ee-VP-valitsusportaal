@@ -543,7 +543,7 @@
   & {
     .field {
       overflow: hidden;
-      padding: 2px 0 1px;
+      padding: 1px 0 0px;
     }
 
     // Bugfix for hiding empty field position html.
@@ -582,8 +582,8 @@
     }
 
     .field-items {
-      //color: #111;
       overflow: hidden;
+      padding: 1px 0 1px 2px;
     }
   }
 
