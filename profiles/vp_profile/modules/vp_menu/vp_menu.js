@@ -9,7 +9,8 @@
     hoveringOnL1MenuWrapper = false,
     noneActiveMenuPopupVisible = false,
     activeMenuPopupVisible = false,
-    animateSpeedSlide = 0;
+    animateSpeedSlide = 0,
+    $lastActiveL1MenuItem;
 
   jQuery.fn.vpMenuEqualHeight = function() {
     var $el = $(this);
@@ -43,14 +44,17 @@
   // Temporary solution (should be done with PHP): add active class to submenu.
   $('#zone-header ul.menu li.active-trail').each(function() {
     var id = $(this).attr('id');
-    var activeMenuPopup = $l2menus.filter('.' + id).addClass('active');
+    var $activeMenuPopup = $l2menus.filter('.' + id).addClass('active');
 
     // Set arrow for active menu item.
     var _vpMenuSetMenuPosition = function() {
       var $menuL1ItemActive = $l1menulinks.filter('.active-trail');
       var l1menuLeft = $menuL1ItemActive.position().left + parseInt($menuL1ItemActive.css('padding-left')) /* If has-separator class is set, there's also padding-left bigger than 0. */ + $menuL1ItemActive.width()/2 - 15/* half of arrow */ + 10/* left menu side overflow relative to content */;
-      activeMenuPopup.find('.arrow').css('left', l1menuLeft);
+      $activeMenuPopup.find('.arrow').css('left', l1menuLeft);
     }
+
+    // Disable tabindex for hidden active menu.
+    $activeMenuPopup.find('a').attr('tabindex', '-1');
 
     _vpMenuSetMenuPosition();
 
@@ -72,52 +76,66 @@
    *
    * Capsulate variables by menu items.
    */
-  $l1menulinks
-    .bind('click keypress', function(e) {
-      if (e.type === 'keypress' && e.keyCode !== 13) {
-        return true;
-      }
-      e.stopPropagation();
-      var $this = $(this);
-      var id = $(this).parent().attr('id');
-      var $menu = $('#menu-l2-popup-' + id);
+  if ('ontouchstart' in document.documentElement) {
+    $l1menulinks.on('touchstart', function(e) { l1menulinksEvent(this, e); });
+    $('body').on('touchstart', function() { closeAll(); });
+    $l2menus.on('touchstart', function(e) { e.stopPropagation(); });
+  } else {
+    $l1menulinks.bind('keydown click', function(e) { l1menulinksEvent(this, e); });
+    $('body').click(function() { closeAll(); });
+    $l2menus.click(function(e) { e.stopPropagation(); });
+  }
 
-      closeAll();
+  var l1menulinksEvent = function(that, e) {
+    if (e.type === 'keydown' && e.keyCode !== 13) {
+      return true;
+    }
 
-      if ($this.hasClass('active-trail')) {
-        _vPMenuToggleActiveMenu($menu, 'open');
-      } else {
-        _vPMenuToggleMenu($menu, $this, 'open');
-      }
+    var $this = $(that);
+    var id = $this.parent().attr('id');
+    var $menu = $('#menu-l2-popup-' + id);
 
-      if (e.type === 'keypress' && e.keyCode === 13) {
-        _vPMenuApplyAccessibiliy($menu);
-      }
-
-      var $widget_slider = $menu.find('.widget-slider');
-      if ($widget_slider.is(':visible')) {
-        $widget_slider.once().flexslider({
-          controlNav: true,
-          directionNav: false,
-          animation: 'slide',
-          direction: 'horizontal'
-        });
-      }
-
-      return false;
-    });
-
-  $l2menus.click(function(e) {
-    e.stopPropagation();
-  });
-
-  $('body').click(function() {
     closeAll();
+
+    if ($this.hasClass('active-trail')) {
+      _vPMenuToggleActiveMenu($menu, 'open');
+    } else {
+      _vPMenuToggleMenu($menu, $this, 'open');
+    }
+
+    if (e.type === 'keydown' && e.keyCode === 13) {
+      $lastActiveL1MenuItem = $this;
+      _vPMenuApplyAccessibiliy($menu);
+    }
+
+    var $widget_slider = $menu.find('.widget-slider');
+    if ($widget_slider.is(':visible')) {
+      $widget_slider.once().flexslider({
+        controlNav: true,
+        directionNav: false,
+        animation: 'slide',
+        direction: 'horizontal'
+      });
+    }
+
+    e.stopPropagation();
+    e.preventDefault();
+  }
+
+  // Close the menus if escape is used.
+  $('body').keydown(function(e) {
+    if ((activeMenuPopupVisible || noneActiveMenuPopupVisible) && e.keyCode === 27) {
+      closeAll();
+      $lastActiveL1MenuItem.focus();
+    }
   });
 
   var closeAll = function() {
+    if (noneActiveMenuPopupVisible === false && activeMenuPopupVisible === false) {
+      return false;
+    }
     _vPMenuToggleMenu($l2menus.not('.active'), false, 'close');
-    _vPMenuToggleActiveMenu($l2menus.find('.active'), 'close');
+    _vPMenuToggleActiveMenu($l2menus.filter('.active'), 'close');
   }
 
   /**
@@ -176,10 +194,16 @@
   var _vPMenuToggleActiveMenu = function($menu, action) {
     if (action === 'close') {
       var newPaddingTop = $originaPaddingOfSectionContent;
+      // Disable tabindex for hidden active menu.
+      $menu.find('a').attr('tabindex', '-1');
     } else if (action === 'open') {
       activeMenuPopupVisible = true;
       var newPaddingTop = $menu.height() - 29 - 25;
+      // Enable tabindex for shown active menu.
+      $menu.find('a').attr('tabindex', '');
     }
+
+
 
     // Wrong event trigger. Quit.
     if (typeof newPaddingTop === 'undefined') {
@@ -219,6 +243,9 @@
     $('#menu-l2-popup-overlay').hide();
   }
 
+  /**
+   * Create skip link and loop inside the menu popup.
+   */
   var _vPMenuApplyAccessibiliy = function($menu) {
     var $skipLinkWrapper = $menu.find('.vp-menu-skip-link');
     if ($skipLinkWrapper.length === 0) {
@@ -228,12 +255,16 @@
       $('<a href="#" class="element-invisible element-focusable"></a>').appendTo($menu.find('.mainmenu-popup-content'));
     }
 
+    $skipLinkWrapper.find('a').click(function(e) {
+      $lastActiveL1MenuItem.focus();
+      closeAll();
+      e.preventDefault();
+    });
+
     // Create loop inside the menu popup.
     $aElements = $menu.find('a');
     $aElements.eq(0).focus()
-    $aElements.eq($aElements.length-1).bind('focus', function() {
-      console.log('f');
-      console.log($aElements);
+    $aElements.eq($aElements.length-1).unbind('focus').bind('focus', function() {
       $aElements.eq(0).focus();
     });
   }

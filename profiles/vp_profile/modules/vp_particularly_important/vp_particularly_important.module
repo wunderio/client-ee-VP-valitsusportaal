@@ -1,7 +1,8 @@
 <?php
+
 /**
  * @file
- * Code for the VP Particularly Important feature.
+ * 
  */
 
 include_once 'vp_particularly_important.features.inc';

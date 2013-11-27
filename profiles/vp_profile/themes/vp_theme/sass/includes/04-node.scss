@@ -159,6 +159,18 @@
         }
       }
 
+      &[border='0'] {
+        thead tr,
+        tr {
+          border: 0;
+        }
+
+        th,
+        td {
+          background: none;
+        }
+      }
+
       .responsive-layout-mobile & {
         img {
           width: auto !important;
@@ -236,6 +248,13 @@
   .static {
     &,
     div {
+      outline: 1px dotted gray;
+    }
+  }
+
+  table[border='0'] {
+    th,
+    td {
       outline: 1px dotted gray;
     }
   }

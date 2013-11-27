@@ -1,10 +1,9 @@
 <?php
+
 /**
  * @file
- * Code for the Weekly Schedule feature.
+ * 
  */
-
-include_once 'vp_menu.features.inc';
 
 /**
  * Implements hook_block_info().

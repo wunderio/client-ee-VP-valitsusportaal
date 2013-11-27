@@ -2,10 +2,8 @@
 
 /**
  * @file
- * Code for the VP Contact feature.
+ * 
  */
-
-include_once 'vp_contact.features.inc';
 
 /**
  * Implements hook_views_pre_render().

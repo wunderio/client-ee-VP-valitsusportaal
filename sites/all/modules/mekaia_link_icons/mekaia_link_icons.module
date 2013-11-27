@@ -93,8 +93,23 @@ function _mekaia_link_icons_process($text, $filter, $format, $langcode, $cache, 
     $url = $a->getAttribute('href');
     $class = $a->getAttribute('class');
 
-    // If only hash then skip url.
-    if (substr($url, 0, 1) === '#') {
+    // If only hash then skip.
+    if (drupal_substr($url, 0, 1) === '#') {
+      continue;
+    }
+    
+    // If email link then skip.
+    if (drupal_substr(drupal_strtolower($url), 0, 7) === 'mailto:') {
+      continue;
+    }
+    
+    // If link attatched to an image then skip.
+    $img_tags = $a->getElementsByTagName('img');
+    $continue = FALSE;
+    foreach ($img_tags as $img_tag) {
+      $continue = TRUE;
+    }
+    if ($continue) {
       continue;
     }
 

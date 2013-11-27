@@ -1,10 +1,9 @@
 <?php
+
 /**
  * @file
- * Code for the Valitsusportaal feature.
+ * 
  */
-
-include_once 'vp_core.features.inc';
 
 /**
  * Implements hook_init().
@@ -50,6 +49,7 @@ function vp_core_css_alter(&$css) {
   $change_path = array(
     'sites/all/themes/omega/omega/css/formalize.css' => 'formalize.css',
     'sites/all/themes/omega/alpha/css/alpha-reset.css' => 'alpha-reset.css',
+    'sites/all/libraries/flexslider/flexslider.css' => 'flexslider.css',
   );
 
   foreach($change_path as $css_original_path => $file_name) {
@@ -206,7 +206,7 @@ function vp_core_block_view($delta = '') {
   switch ($delta) {
     case 'vp_core_accessibility_help_link':
       $block['subject'] = '';
-      $block['content'] = l(t('Accessibility Help'), 'accessibility', array('attributes' => array('class' => 'accessibility-link')));
+      $block['content'] = l(t('Accessibility Help'), drupal_get_normal_path('accessibility', 'en'), array('attributes' => array('class' => array('accessibility-link'))));
     break;
   }
 

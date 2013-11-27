@@ -2,10 +2,8 @@
 
 /**
  * @file
- * Code for the VP Search feature.
+ * 
  */
-
-include_once 'vp_search.features.inc';
 
 /**
  * Implements hook_block_info().

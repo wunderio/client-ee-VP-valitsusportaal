@@ -15,11 +15,13 @@
 @if $layout == editor or
     $layout == global {
    .two-float-container {
-     overflow: hidden; width: 100%;
+      overflow: hidden; width: 100%;
     }
+
     .two-float-container div {
-     float: left;
+      float: left;
     }
+
     .float-left-col-2 h3 {
       margin-bottom: 15px;
     }
@@ -27,10 +29,10 @@
 
 @if $layout == editor or
     $layout == desktop {
-     .float-left-col-1 {
-        width: 66%;
-        margin-right: 40px;
-      }
+  .float-left-col-1 {
+    width: 66%;
+    margin-right: 40px;
+  }
 }
 
 @if $layout == editor or
@@ -92,13 +94,13 @@
     overflow: hidden;
     padding-bottom: 15px;
 
-	.main h2 {
-	  font-size: 18px;
+  .main h2 {
+    font-size: 18px;
     color:#BD4732;
     line-height: 22px;
-	}
-	.aside {
-	  width: auto;
+  }
+  .aside {
+    width: auto;
     height: auto;
     float: left;
     background-color: #fbf8f3;
@@ -106,23 +108,23 @@
     -moz-box-shadow: 2px 2px 10px #e1e1e1;
     -webkit-box-shadow: 2px 2px 10px #e1e1e1;
     box-shadow: 2px 2px 10px #e1e1e1;
-	}
+  }
     h2 {
-	  padding-bottom: 0px;
-	}
+    padding-bottom: 0px;
+  }
     h3 {
-	  font-size: 13px;
-	  margin-bottom: 15px;
-	}
+    font-size: 13px;
+    margin-bottom: 15px;
+  }
 
-	h5 {
-	  margin-top: 10px;
+  h5 {
+    margin-top: 10px;
     margin-bottom: 15px;
     color: #00668C;
     text-shadow: none;
-	}
+  }
 
-	ul {
+  ul {
      li {
         padding: 20px 15px 15px 0px;
         background: none;
@@ -134,20 +136,20 @@
           }
       }
 
-	}
+  }
     ul span {
-	  font-weight: 600;
-	}
+    font-weight: 600;
+  }
 
   &:before {
-	  background-image: none;
-	}
-	&:after	{
-	  background-image: none;
-	}
-	& img {
-	  margin: 0;
-	}
+    background-image: none;
+  }
+  &:after  {
+    background-image: none;
+  }
+  & img {
+    margin: 0;
+  }
 
   }
 }
@@ -159,11 +161,11 @@
 
   .main {
     padding-left: 0px;
-	  padding-right: 30px;
-	}
-	.aside {
+    padding-right: 30px;
+  }
+  .aside {
     margin-top: 15px;
-	}
+  }
 
  }
 }
@@ -197,10 +199,10 @@
 
     margin-bottom: 45px;
 
-	.aside {
-	  width: 265px;
+  .aside {
+    width: 265px;
     float: left;
-	}
+  }
 
   .main {
     overflow: hidden;
@@ -209,16 +211,16 @@
   }
 
     h2 {
-	  padding-bottom: 25px;
-	}
+    padding-bottom: 25px;
+  }
     h3 {
-	  font-size: 16px;
+    font-size: 16px;
     margin-bottom: 30px;
     color: #000;
     line-height: 20px;
-	}
+  }
 
-	ul {
+  ul {
 
     float: left;
     width: 263px;
@@ -238,14 +240,14 @@
       font-weight: 600;
       color: #006699;
     }
-	}
+  }
 
-	&:before {
-	  background-image: none;
-	}
-	&:after	{
-	  background-image: none;
-	}
+  &:before {
+    background-image: none;
+  }
+  &:after  {
+    background-image: none;
+  }
 
   }
 }
@@ -335,7 +337,7 @@
              @include list-lines;
           }
       }
-	}
+  }
 
 
  }
@@ -346,21 +348,19 @@
 @if $layout == editor or
     $layout == desktop {
   .node .layout-4 {
-
     padding-top: 10px;
     padding-bottom: 0px;
     margin-bottom: 70px;
     background: url(../img/10-global/subject-related-news-column-separator-top.png) 30% 0px no-repeat;
 
-  .inner {
-    background: url(../img/10-global/view-id-top_news_tabs--separator-overlay-bottom.png) 30% 100% no-repeat;
-  }
+    .inner {
+      background: url(../img/10-global/view-id-top_news_tabs--separator-overlay-bottom.png) 30% 100% no-repeat;
+    }
 
-  .main {
-    padding-left: 60px;
+    .main {
+      padding-left: 60px;
+    }
   }
-
- }
 }
 
 
@@ -370,9 +370,18 @@
 @if $layout == editor or
     $layout == global {
   .node .layout-5 {
-    img {padding:0; margin:0;}
-    .block-19eef6f0bee85264121542d861111bec { padding-top: 50px; }
-    h2 { padding-bottom: 40px; }
+    img {
+      padding:0;
+      margin:0;
+    }
+
+    .block-19eef6f0bee85264121542d861111bec {
+      padding-top: 50px;
+    }
+
+    h2 {
+      padding-bottom: 40px;
+    }
   }
 }
 
@@ -386,6 +395,7 @@
     .main h3 {
       display: inline; font-size: 16px;
     }
+
     .aside {
       padding-bottom: 0px;
       margin-right: 0px;
@@ -406,6 +416,7 @@
     .main h2 {
       padding-top:40px;
     }
+
     h3 {
       font-size: 13px; margin-bottom: 15px;
     }
@@ -419,7 +430,7 @@
       margin-bottom: 15px;
     }
 
-    & before {
+    &:before {
       background-image: none;
     }
 
@@ -433,14 +444,15 @@
     ul li:before {
       background-image: none;
     }
-    ul a, ul a:visited {
+
+    ul a,
+    ul a:visited {
       color: #006699;
     }
 
     img {
       margin-bottom: 30px;
     }
-
   }
 }
 
@@ -448,17 +460,13 @@
 
 @if $layout == editor or
     $layout == default {
-  .layout-6 {
 
-  }
 }
 
 
 
 @if $layout == tablet {
-  .layout-6 {
 
-  }
 }
 
 
@@ -466,7 +474,6 @@
 @if $layout == editor or
     $layout == desktop {
   .layout-6 {
-
     padding-top: 10px;
     padding-bottom: 0px;
     background: url(../img/10-global/subject-related-news-column-separator-top.png) 29% 0px no-repeat;
@@ -474,9 +481,11 @@
     .inner {
       background: url(../img/10-global/view-id-top_news_tabs--separator-overlay-bottom.png) 29% 100% no-repeat;
     }
+
     .main {
       float: left; width: 67%;
     }
+
     .aside {
       width: 230px; float: left; margin-right: 76px;
     }
@@ -491,7 +500,6 @@
 @if $layout == editor or
     $layout == global {
   .layout-7 {
-
     .custom-list-progress {
       padding-left: 0px;
     }
@@ -520,23 +528,18 @@
 
 @if $layout == editor or
     $layout == default {
-  .layout-7 {
 
-  }
 }
 
 
 @if $layout == tablet {
-  .layout-7 {
 
-  }
 }
 
 
 @if $layout == editor or
     $layout == desktop {
   .layout-7 {
-
     padding-top: 10px;
     padding-bottom: 0px;
     background: url(../img/10-global/subject-related-news-column-separator-top.png) 29% 0px no-repeat;
@@ -544,9 +547,11 @@
     .inner {
       background: url(../img/10-global/view-id-top_news_tabs--separator-overlay-bottom.png) 29% 100% no-repeat;
     }
+
     .main {
       float: left; width: 67%;
     }
+
     .aside {
       width: 230px; float: left; margin-right: 76px;
     }
@@ -570,9 +575,9 @@
     $layout == global {
   .layout-pm {
 
-	h2 {
-	  font-size: 24px;
-	}
+    h2 {
+      font-size: 24px;
+    }
 
     .section-one {
       background: url(../img/10-global/peaminister.jpg) no-repeat 40% 20%;
@@ -580,31 +585,30 @@
       -moz-box-shadow: 2px 2px 10px #e1e1e1;
       -webkit-box-shadow: 2px 2px 10px #e1e1e1;
       box-shadow: 2px 2px 10px #e1e1e1;
-	  text-align: right;
-      //padding: 15px 15px 35px 15px;
+      text-align: right;
 
       ul {
         line-height: 15px;
         padding: 25px 15px 0px 15px;
-		text-align: left;
+        text-align: left;
 
-         li {
-            padding: 0px 15px 20px 0px;
-			margin: 20px 0;
-            background: none;
-            position: relative;
+        li {
+          padding: 0px 15px 20px 0px;
+          margin: 20px 0;
+          background: none;
+          position: relative;
 
-            &:before {
-                @include list-lines;
-				 background-image: url(../img/10-global/static-module-3-1-border-2.png);
-            }
+          &:before {
+            @include list-lines;
+            background-image: url(../img/10-global/static-module-3-1-border-2.png);
           }
+        }
 
-		 .no-line {
-			&:before {
-			 background-image: none;
-            }
-      }
+       .no-line {
+          &:before {
+            background-image: none;
+          }
+        }
 
         span {
           font-weight: 600;
@@ -618,9 +622,8 @@
           font-weight: 400;
           display: inline-block;
           margin-top: 10px;
-          }
-
         }
+      }
 
       h5 {
         margin-top: 30px;
@@ -629,7 +632,6 @@
         font-size: 13px;
         display: none;
       }
-
     }
 
     .section-two {
@@ -670,7 +672,6 @@
         background-color: #f8f8f8;
       }
 
-
       span {
         font-weight: bold;
       }
@@ -687,85 +688,83 @@
         margin-bottom: 15px;
       }
 
-      p, a, span {
+      p,
+      a,
+      span {
         font-size: 12px;
       }
-
     }
 
-	.section-four {
-	  padding-left: 15px;
-	  padding-right: 15px;
-	  margin-top: 40px;
-	  margin-bottom: 40px;
-	}
+    .section-four {
+      padding-left: 15px;
+      padding-right: 15px;
+      margin-top: 40px;
+      margin-bottom: 40px;
+    }
 
     .section-five {
-	  padding-left: 15px;
-	  padding-right: 15px;
-	  overflow: hidden;
+      padding-left: 15px;
+      padding-right: 15px;
+      overflow: hidden;
 
-	  h2 {
-		margin-bottom: 40px;
-	  }
+      h2 {
+        margin-bottom: 40px;
+      }
 
-	  ul {
-	   float: left;
+      ul {
+        float: left;
 
-		 li {
-			background: none;
-			padding: 0;
-			margin: 0;
+        li {
+          background: none;
+          padding: 0;
+          margin: 0;
+        }
+      }
 
-			}
-	  }
+      div {
+        border-top: solid 1px #ccc;
+        overflow: hidden;
+        padding-top: 15px;
+        padding-bottom: 15px;
+      }
 
-	  div {
-	  border-top: solid 1px #ccc;
-		overflow: hidden;
-		padding-top: 15px;
-		padding-bottom: 15px;
-	  }
+      .first-row {
+        border: none;
+      }
 
-	  .first-row {
-		border: none;
-	  }
+      .schedule-dates {
+        margin-right: 60px;
+        margin-bottom: 0px;
+        font-size: 12px;
+        line-height: 15px;
+      }
 
-	  .schedule-dates {
-		margin-right: 60px;
-		margin-bottom: 0px;
-		font-size: 12px;
-		line-height: 15px;
-	  }
-
-	  a {
-	    display: block;
-		margin-top: 25px;
-	  }
-
+      a {
+        display: block;
+        margin-top: 25px;
+      }
     }
 
-	.section-six  {
-	  span, .intro-text {
-	    font-weight: bold;
-	  }
-	  h2 {
-		margin-bottom: 40px;
-	  }
+  .section-six  {
+    span, .intro-text {
+      font-weight: bold;
+    }
+    h2 {
+    margin-bottom: 40px;
+    }
 
-	  ul {
-	    li {
-		  padding: 0px 0px 0px 36px;
-		  margin: 0px 0px 14px 0px;
-		}
-	  }
+    ul {
+      li {
+      padding: 0px 0px 0px 36px;
+      margin: 0px 0px 14px 0px;
+    }
+    }
 
-	  .main {
-	    font-size: 12px;
-	  }
+    .main {
+      font-size: 12px;
+    }
 
-	}
-
+    }
   }
 }
 
@@ -774,53 +773,53 @@
 @if $layout == editor or
     $layout == desktop {
   .layout-pm {
-
     .section-one {
-      //width: 938px;
       height: 525px;
 
-	  ul {
-		width: 465px;
-		padding-left: 40px;
-	  }
+      ul {
+        width: 465px;
+        padding-left: 40px;
+      }
 
-	  h5 {
-	    display: block;
-	  }
+      h5 {
+        display: block;
+      }
     }
 
-	.section-three {
-	   .middle {
-          margin: 0px 15px 0px 15px;
-       }
-	   div {
-	     margin-bottom: 0px;
-	   }
-	}
+    .section-three {
+      .middle {
+        margin: 0px 15px 0px 15px;
+      }
 
-	.section-six {
-	  overflow: hidden;
-	  padding-left: 15px;
-	  padding-right: 15px;
+      div {
+        margin-bottom: 0px;
+      }
+    }
 
-	  .info-area {
-	    margin-top: 45px;
+    .section-six {
+      overflow: hidden;
+      padding-left: 15px;
+      padding-right: 15px;
+
+      .info-area {
+        margin-top: 45px;
         margin-bottom: 60px;
         background: url(../img/10-global/subject-related-news-column-separator-top.png) 31% 0px no-repeat;
-	  }
+      }
 
       .inner {
         background: url(../img/10-global/view-id-top_news_tabs--separator-overlay-bottom.png) 31% 100% no-repeat;
       }
+
       .main {
         float: left; width: 66%;
       }
+
       .aside {
         width: 230px; float: left; margin-right: 76px;
       }
-
+    }
   }
- }
 }
 
 
@@ -828,15 +827,14 @@
 @if $layout == editor or
     $layout == tablet {
   .layout-pm {
-
-	  ul {
-		width: 405px;
-	  }
-
-	  h5 {
-	    display: none;
-	  }
+    ul {
+      width: 405px;
     }
+
+    h5 {
+      display: none;
+    }
+  }
 }
 
 
@@ -846,28 +844,23 @@
 @if $layout == editor or
     $layout == global {
   .node .layout-personal {
-
     .layout-3 {
-
       .main {
         font-size: 12px;
         margin-top: -15px;
 
         ul {
-        margin-right: 50px;
+          margin-right: 50px;
 
           li {
             margin: 0px 0;
           }
-
         }
 
         .margin-remover {
           margin-right: 0px;
         }
-
       }
-
     }
 
     .section-picture {
@@ -879,7 +872,6 @@
       height: 375px;
       position: relative;
       margin-bottom: 70px;
-
     }
 
     h5 {
@@ -904,12 +896,11 @@
 @if $layout == editor or
     $layout == desktop {
   .node .layout-personal {
-
     .layout-3 {
       background: url(../img/10-global/subject-related-news-column-separator-top.png) 33% 20px no-repeat;
 
       .inner {
-      background:url(../img/10-global/view-id-top_news_tabs--separator-overlay-bottom.png) 33% 100% no-repeat;
+        background:url(../img/10-global/view-id-top_news_tabs--separator-overlay-bottom.png) 33% 100% no-repeat;
       }
     }
   }
@@ -922,16 +913,15 @@
 @if $layout == editor or
     $layout == global {
   .node .layout-10 {
-
     font-size: 12px;
     line-height: 18px;
 
     .main {
        float: left;
 
-       h2{
+      h2{
         margin-top: 50px;
-       }
+      }
     }
 
     .aside {
@@ -954,10 +944,8 @@
       background-color: #fbfaf6;
       padding: 15px;
 
-
       p {
         margin-left: 55px;
-
       }
 
       h3 {
@@ -974,15 +962,14 @@
       padding:0;
       margin:0;
 
-        &:before {
-            background: none;
-        }
+      &:before {
+          background: none;
+      }
     }
 
     table#extended-file-field-table-field-files tbody td:first-child {
-      font-weight: normal;
       color: #BD4732;
-
+      font-weight: normal;
     }
 
     table th, table td {
@@ -998,8 +985,7 @@
         text-decoration: underline;
       }
     }
-
- }
+  }
 }
 
 @if $layout == editor or
@@ -1010,7 +996,7 @@
       background: url(../img/10-global/subject-related-news-column-separator-top.png) 70% 20px no-repeat;
 
       .inner {
-      background:url(../img/10-global/view-id-top_news_tabs--separator-overlay-bottom.png) 70% 100% no-repeat;
+        background:url(../img/10-global/view-id-top_news_tabs--separator-overlay-bottom.png) 70% 100% no-repeat;
       }
     }
 
@@ -1022,8 +1008,5 @@
     .main {
        width: 615px;
     }
-
-
-
   }
 }

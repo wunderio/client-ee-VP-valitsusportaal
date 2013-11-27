@@ -2,10 +2,8 @@
 
 /**
  * @file
- * Code for the VP Gallery feature.
+ * 
  */
-
-include_once 'vp_gallery.features.inc';
 
 /**
  * Implements hook_views_pre_view().

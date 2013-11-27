@@ -739,6 +739,12 @@ td {
       .node table th.last-child,
       .node table td.last-child {
         background: none; }
+    .node table[border='0'] thead tr,
+    .node table[border='0'] tr {
+      border: 0; }
+    .node table[border='0'] th,
+    .node table[border='0'] td {
+      background: none; }
     .responsive-layout-mobile .node table img {
       width: auto !important; }
 
@@ -2731,7 +2737,7 @@ div.item-list ul.pager {
 .layout-6 h4 {
   margin-top: 35px;
   margin-bottom: 15px; }
-.layout-6 before {
+.layout-6:before {
   background-image: none; }
 .layout-6 ul {
   margin-left: -10px;
@@ -2740,7 +2746,8 @@ div.item-list ul.pager {
   line-height: 15px; }
 .layout-6 ul li:before {
   background-image: none; }
-.layout-6 ul a, .layout-6 ul a:visited {
+.layout-6 ul a,
+.layout-6 ul a:visited {
   color: #006699; }
 .layout-6 img {
   margin-bottom: 30px; }
@@ -2841,7 +2848,9 @@ div.item-list ul.pager {
     padding: 5px;
     margin-top: 10px;
     margin-bottom: 15px; }
-  .layout-pm .section-three p, .layout-pm .section-three a, .layout-pm .section-three span {
+  .layout-pm .section-three p,
+  .layout-pm .section-three a,
+  .layout-pm .section-three span {
     font-size: 12px; }
 .layout-pm .section-four {
   padding-left: 15px;
@@ -2943,8 +2952,8 @@ div.item-list ul.pager {
     .node .layout-10 .static-read-more:before {
       background: none; }
   .node .layout-10 table#extended-file-field-table-field-files tbody td:first-child {
-    font-weight: normal;
-    color: #BD4732; }
+    color: #BD4732;
+    font-weight: normal; }
   .node .layout-10 table th, .node .layout-10 table td {
     background: none;
     padding: 12px 14px 12px 19px; }

@@ -1,6 +1,0 @@
-name = UUID Path
-description = Provides export functionality for url aliases.
-core = 7.x
-package = UUID
-dependencies[] = uuid
-

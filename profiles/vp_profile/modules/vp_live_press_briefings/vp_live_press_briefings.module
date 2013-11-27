@@ -2,10 +2,8 @@
 
 /**
  * @file
- * Code for the Live press briefings feature.
+ * 
  */
-
-include_once 'vp_live_press_briefings.features.inc';
 
 /**
  * Implements hook_menu().

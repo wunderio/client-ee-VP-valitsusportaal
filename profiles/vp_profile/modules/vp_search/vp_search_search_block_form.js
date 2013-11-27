@@ -72,7 +72,7 @@
                 $vpAutocompletePopup.empty().append(
                   '<h2>' + Drupal.t('Contacts') + '</h2><ul id="contact-autocomplete"></ul>' +
                   '<h2>' + Drupal.t('Other') + '</h2><ul>' + lis + '</ul>').show();
-                input.parent().parent().after($vpAutocompletePopup);
+                input.parent().after($vpAutocompletePopup);
                 $.ajax({
                   url: Drupal.settings.basePath + Drupal.settings.pathPrefix + "contact-autocomplete/" + encodeURIComponent(input.val()),
                   dataType: "json",
