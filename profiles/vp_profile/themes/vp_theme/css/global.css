@@ -329,6 +329,8 @@
 .view-contact-search .field-items, .ui-dialog-content-contact .field-items {
   overflow: hidden;
   padding: 1px 0 1px 2px; }
+.view-contact-search .field-label-hidden .field-items, .ui-dialog-content-contact .field-label-hidden .field-items {
+  padding-left: 0; }
 .view-contact-search .field-group-format, .ui-dialog-content-contact .field-group-format {
   margin-bottom: 30px; }
   .view-contact-search .field-group-format.group_main, .ui-dialog-content-contact .field-group-format.group_main {
@@ -2526,6 +2528,128 @@ div.item-list ul.pager {
   .node .static-infobox03 .download:before {
     background-image: url(../img/10-global/static-read-more-icon-download-white.png); }
 
+.node .layout-3 {
+  margin-bottom: 45px; }
+  .node .layout-3 .aside {
+    width: 265px;
+    float: left;
+    padding-right: 60px; }
+  .node .layout-3 .main {
+    overflow: hidden;
+    margin-right: 0px; }
+  .node .layout-3 h2 {
+    padding-bottom: 25px; }
+  .node .layout-3 h3 {
+    font-size: 16px;
+    margin-bottom: 30px;
+    color: #000;
+    line-height: 20px; }
+  .node .layout-3 ul {
+    float: left;
+    width: 263px;
+    list-style-type: none;
+    margin-right: 40px; }
+    .node .layout-3 ul li {
+      padding: 20px 15px 15px 0px;
+      background: none;
+      position: relative; }
+      .node .layout-3 ul li:before {
+        background-image: url(../img/10-global/static-module-3-1-border.png);
+        bottom: 0;
+        content: "";
+        height: 1px;
+        left: 0;
+        position: absolute;
+        right: 0; }
+    .node .layout-3 ul p {
+      margin: 0; }
+    .node .layout-3 ul span,
+    .node .layout-3 ul em {
+      color: #006699;
+      font-style: normal;
+      font-weight: 600; }
+  .node .layout-3:before {
+    background-image: none; }
+  .node .layout-3:after {
+    background-image: none; }
+
+.node .layout-4 .aside {
+  padding-bottom: 15px; }
+.node .layout-4 h2 {
+  font-size: 25px;
+  padding-bottom: 0px; }
+.node .layout-4 h3 {
+  font-size: 16px;
+  line-height: 21px;
+  color: #000;
+  margin-bottom: 15px; }
+.node .layout-4 .main h3 {
+  display: inline;
+  font-size: 15px;
+  color: #BD4732; }
+.node .layout-4 ul {
+  padding: 0; }
+  .node .layout-4 ul li {
+    background: none;
+    margin: 0px;
+    padding: 20px 15px 15px 0px;
+    position: relative; }
+    .node .layout-4 ul li:before {
+      background-image: url(../img/10-global/static-module-3-1-border.png);
+      bottom: 0;
+      content: "";
+      height: 1px;
+      left: 0;
+      position: absolute;
+      right: 0; }
+
+.node ul.static-list-1column-dotted-border li {
+  background: none;
+  margin: 0px;
+  padding: 20px 15px 15px 0px;
+  position: relative; }
+  .node ul.static-list-1column-dotted-border li p {
+    margin: 0; }
+  .node ul.static-list-1column-dotted-border li:before {
+    background-image: url(../img/10-global/static-module-3-1-border.png);
+    bottom: 0;
+    content: "";
+    height: 1px;
+    left: 0;
+    position: absolute;
+    right: 0; }
+
+.node .static-list-2column-dotted-border {
+  margin-bottom: 18px; }
+  .node .static-list-2column-dotted-border ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 100%; }
+    .node .static-list-2column-dotted-border ul li {
+      padding: 20px 15px 15px 0px;
+      background: none;
+      position: relative; }
+      .node .static-list-2column-dotted-border ul li:before {
+        background-image: url(../img/10-global/static-module-3-1-border.png);
+        bottom: 0;
+        content: "";
+        height: 1px;
+        left: 0;
+        position: absolute;
+        right: 0; }
+    .node .static-list-2column-dotted-border ul p {
+      margin: 0; }
+    .node .static-list-2column-dotted-border ul em {
+      color: #006699;
+      font-style: normal;
+      font-weight: 600; }
+.node .layout-3 .static-list-2column-dotted-border {
+  margin-bottom: 0; }
+  .node .layout-3 .static-list-2column-dotted-border ul {
+    margin-right: 0;
+    width: 100%; }
+
 .static-module-2 {
   padding-bottom: 40px;
   padding-top: 40px;
@@ -2627,82 +2751,6 @@ div.item-list ul.pager {
     background-image: none; }
   .node .layout-2 img {
     margin: 0; }
-
-.node .layout-3 {
-  margin-bottom: 45px; }
-  .node .layout-3 .aside {
-    width: 265px;
-    float: left; }
-  .node .layout-3 .main {
-    overflow: hidden;
-    float: right;
-    margin-right: 0px; }
-  .node .layout-3 h2 {
-    padding-bottom: 25px; }
-  .node .layout-3 h3 {
-    font-size: 16px;
-    margin-bottom: 30px;
-    color: #000;
-    line-height: 20px; }
-  .node .layout-3 ul {
-    float: left;
-    width: 263px;
-    list-style-type: none;
-    margin-right: 40px; }
-    .node .layout-3 ul li {
-      padding: 20px 15px 15px 0px;
-      background: none;
-      position: relative; }
-      .node .layout-3 ul li:before {
-        background-image: url(../img/10-global/static-module-3-1-border.png);
-        bottom: 0;
-        content: "";
-        height: 1px;
-        left: 0;
-        position: absolute;
-        right: 0; }
-    .node .layout-3 ul span {
-      font-weight: 600;
-      color: #006699; }
-  .node .layout-3:before {
-    background-image: none; }
-  .node .layout-3:after {
-    background-image: none; }
-
-.node .layout-4 .aside {
-  float: left;
-  width: 230px;
-  padding-right: 35px;
-  padding-bottom: 0px; }
-.node .layout-4 h2 {
-  font-size: 25px;
-  padding-bottom: 0px; }
-.node .layout-4 h3 {
-  font-size: 16px;
-  line-height: 21px;
-  color: #000;
-  margin-bottom: 15px; }
-.node .layout-4 .main {
-  overflow: hidden;
-  padding-right: 40px;
-  min-width: 230px; }
-  .node .layout-4 .main h3 {
-    display: inline;
-    font-size: 15px;
-    color: #BD4732; }
-.node .layout-4 ul li {
-  padding: 20px 15px 15px 0px;
-  background: none;
-  margin: 0px;
-  position: relative; }
-  .node .layout-4 ul li:before {
-    background-image: url(../img/10-global/static-module-3-1-border.png);
-    bottom: 0;
-    content: "";
-    height: 1px;
-    left: 0;
-    position: absolute;
-    right: 0; }
 
 .node .layout-5 img {
   padding: 0;
@@ -2884,7 +2932,8 @@ div.item-list ul.pager {
   .layout-pm .section-five a {
     display: block;
     margin-top: 25px; }
-.layout-pm .section-six span, .layout-pm .section-six .intro-text {
+.layout-pm .section-six span,
+.layout-pm .section-six .intro-text {
   font-weight: bold; }
 .layout-pm .section-six h2 {
   margin-bottom: 40px; }

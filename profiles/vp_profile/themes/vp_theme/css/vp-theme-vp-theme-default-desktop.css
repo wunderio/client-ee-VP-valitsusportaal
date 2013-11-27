@@ -163,6 +163,46 @@ td {
 .static-contact-header .contact {
   padding-left: 20px; }
 
+.node .layout-3 {
+  margin-bottom: 45px;
+  padding-bottom: 0px;
+  padding-top: 10px;
+  position: relative; }
+  .node .layout-3 .main {
+    margin-right: 0px; }
+  .node .layout-3 .aside:before, .node .layout-3 .aside:after {
+    bottom: 0;
+    content: "";
+    left: 29.3%;
+    position: absolute;
+    top: 0;
+    width: 22px; }
+  .node .layout-3 .aside:before {
+    background: url(../img/10-global/subject-related-news-column-separator-top.png) 0 0 no-repeat;
+    z-index: 1; }
+  .node .layout-3 .aside:after {
+    background: url(../img/10-global/view-id-top_news_tabs--separator-overlay-bottom.png) 0 100% no-repeat;
+    z-index: 2; }
+
+.node .layout-4 {
+  margin-bottom: 70px;
+  padding-bottom: 0px;
+  padding-top: 10px;
+  position: relative; }
+  .node .layout-4 .aside:before, .node .layout-4 .aside:after {
+    bottom: 0;
+    content: "";
+    left: 29.3%;
+    position: absolute;
+    top: 0;
+    width: 22px; }
+  .node .layout-4 .aside:before {
+    background: url(../img/10-global/subject-related-news-column-separator-top.png) 0 0 no-repeat;
+    z-index: 1; }
+  .node .layout-4 .aside:after {
+    background: url(../img/10-global/view-id-top_news_tabs--separator-overlay-bottom.png) 0 100% no-repeat;
+    z-index: 2; }
+
 .static-mainmenu-popup {
   /* Hacking grid because of design (6). */ }
   .static-mainmenu-popup .container-12 .grid-3 {
@@ -224,33 +264,13 @@ td {
   color: #BD4732; }
 
 .node .layout-2 .main {
-  width: 515px;
-  padding-right: 40px;
+  float: left;
   padding-left: 0px;
-  float: left; }
+  padding-right: 40px;
+  width: 515px; }
 .node .layout-2 .aside {
   margin-left: 0px;
   margin-top: 0px; }
-
-.node .layout-3 {
-  padding-top: 10px;
-  padding-bottom: 0px;
-  margin-bottom: 45px;
-  background: url(../img/10-global/subject-related-news-column-separator-top.png) 29% 20px no-repeat; }
-  .node .layout-3 .inner {
-    background: url(../img/10-global/view-id-top_news_tabs--separator-overlay-bottom.png) 29% 100% no-repeat; }
-  .node .layout-3 .main {
-    margin-right: 0px; }
-
-.node .layout-4 {
-  padding-top: 10px;
-  padding-bottom: 0px;
-  margin-bottom: 70px;
-  background: url(../img/10-global/subject-related-news-column-separator-top.png) 30% 0px no-repeat; }
-  .node .layout-4 .inner {
-    background: url(../img/10-global/view-id-top_news_tabs--separator-overlay-bottom.png) 30% 100% no-repeat; }
-  .node .layout-4 .main {
-    padding-left: 60px; }
 
 .layout-6 {
   padding-top: 10px;

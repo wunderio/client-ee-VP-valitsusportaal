@@ -1,0 +1,105 @@
+// LAYOUT 4 - MAJANDUSVALDKOND AVALEHT
+// The class should be static-layout-4 but for legacy support (this was
+// originally made by Taavi)
+
+
+
+@if $layout == editor or
+    $layout == global {
+  .node .layout-4 {
+    .aside {
+       padding-bottom: 15px;
+    }
+
+    h2 {
+      font-size: 25px;
+      padding-bottom: 0px;
+    }
+
+    h3 {
+      font-size: 16px;
+      line-height: 21px;
+      color: #000;
+      margin-bottom: 15px;
+    }
+
+    .main {
+      h3 {
+        display: inline;
+        font-size: 15px;
+        color: #BD4732;
+      }
+    }
+
+    // For legacy support. Use .static-list-1column-dotter-border in html instead.
+    ul {
+      padding: 0;
+
+      li {
+        background: none;
+        margin: 0px;
+        padding: 20px 15px 15px 0px;
+        position: relative;
+
+        &:before {
+          @include list-lines;
+        }
+      }
+    }
+  }
+}
+
+
+
+@if $layout == editor or
+    $layout == default {
+  .node .layout-4 {
+    .aside {
+       float: left;
+       width: 230px;
+       padding-right: 95px;
+       padding-bottom: 0;
+    }
+
+    .main {
+      overflow: hidden;
+      min-width: 230px;
+    }
+  }
+}
+
+
+
+@if $layout == editor or
+    $layout == desktop {
+  .node .layout-4 {
+    margin-bottom: 70px;
+    padding-bottom: 0px;
+    padding-top: 10px;
+    position: relative;
+
+    // Separator for left and right column. If you remove the left column,
+    // separator will also be removed.
+    .aside {
+      &:before,
+      &:after {
+        bottom: 0;
+        content: "";
+        left: 29.3%;
+        position: absolute;
+        top: 0;
+        width: 22px;
+      }
+
+      &:before {
+        background: url(../img/10-global/subject-related-news-column-separator-top.png) 0 0 no-repeat;
+        z-index: 1;
+      }
+
+      &:after {
+        background: url(../img/10-global/view-id-top_news_tabs--separator-overlay-bottom.png) 0 100% no-repeat;
+        z-index: 2;
+      }
+    }
+  }
+}

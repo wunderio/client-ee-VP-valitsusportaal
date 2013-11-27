@@ -1,0 +1,120 @@
+// LAYOUT 3 - MINISTRID - TEINE BLOKK
+
+@if $layout == editor or
+    $layout == global {
+  .node .layout-3 {
+    margin-bottom: 45px;
+
+    .aside {
+      width: 265px;
+      float: left;
+      padding-right: 60px;
+    }
+
+    .main {
+      overflow: hidden;
+      margin-right: 0px;
+    }
+
+    h2 {
+      padding-bottom: 25px;
+    }
+
+    h3 {
+      font-size: 16px;
+      margin-bottom: 30px;
+      color: #000;
+      line-height: 20px;
+    }
+
+    // For legacy support. Use .static-list-2column-dotter-border in html instead.
+    ul {
+      float: left;
+      width: 263px;
+      list-style-type: none;
+      margin-right: 40px;
+
+      li {
+        padding: 20px 15px 15px 0px;
+        background: none;
+        position: relative;
+
+        &:before {
+           @include list-lines;
+        }
+      }
+
+      p {
+        margin: 0;
+      }
+
+      span,
+      em {
+        color: #006699;
+        font-style: normal;
+        font-weight: 600;
+      }
+    }
+
+    &:before {
+      background-image: none;
+    }
+
+    &:after  {
+      background-image: none;
+    }
+  }
+}
+
+
+
+@if $layout == editor or
+    $layout == default {
+  .node .layout-3 {
+
+    .main {
+      margin-right: 20px;
+    }
+
+  }
+}
+
+
+
+@if $layout == editor or
+    $layout == desktop {
+  .node .layout-3 {
+    margin-bottom: 45px;
+    padding-bottom: 0px;
+    padding-top: 10px;
+    position: relative;
+
+    .main {
+      margin-right: 0px;
+    }
+
+    // Separator for left and right column. If you remove the left column,
+    // separator will also be removed.
+    .aside {
+      &:before,
+      &:after {
+        bottom: 0;
+        content: "";
+        left: 29.3%;
+        position: absolute;
+        top: 0;
+        width: 22px;
+      }
+
+      &:before {
+        background: url(../img/10-global/subject-related-news-column-separator-top.png) 0 0 no-repeat;
+        z-index: 1;
+      }
+
+      &:after {
+        background: url(../img/10-global/view-id-top_news_tabs--separator-overlay-bottom.png) 0 100% no-repeat;
+        z-index: 2;
+      }
+    }
+  }
+}

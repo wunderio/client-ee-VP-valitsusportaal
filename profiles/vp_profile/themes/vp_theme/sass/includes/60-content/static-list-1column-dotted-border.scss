@@ -1,0 +1,56 @@
+// A list with title, content and dotted border between.
+//
+// EXAMPLE:
+//
+// <ul class="static-list-1column-dotted-border">
+//  <li>
+//     <h3>Edenemine ülemaailmses väärtusahelas</h3>
+//     <p>
+//     Eesti majanduskasvu võtmeks on edenemine ülemaailmses väärtusahelas &ndash;
+//     Eestis tehtu ja loodu peab muutuma oluliselt väärtuslikumaks ja
+//     konkurentsivõimelisemaks. Töö tootlikkus ja hind peab kasvama &ndash; vaid
+//     sellisel juhul saavad kasvada ettevõtlustulu ja palgad. Prioriteetseks on
+//     just inimeste sissetulekute kasv, mis pikemas perspektiivis tagab ka avalike
+//     teenuste osutamiseks vajalike vahendite piisavuse.</p>
+//   </li>
+//   <li>
+//     <h3>Atraktiivne ja usaldusväärne keskkond</h3>
+//     <p>Riik panustab majanduskasvu atraktiivse ja usaldusväärse keskkonna
+//     loomisega: hariduse, teaduse ja kultuuri arendamisega, tööturupoliitika,
+//     taristu-, IT-, energia- ja transpordipoliitika, õiguspoliitika ja
+//     majandusdiplomaatiaga. Kõiki riigi ja kohalike omavalitsuste poolt
+//     ettevõetavaid samme, mis mõjutavad majanduskeskkonda, tuleb hinnata
+//     nende mõju alusel Eesti rahvusvahelisele konkurentsivõimele.</p>
+//   </li>
+//   <li>
+//     <h3>Elujõuline riigieelarve</h3>
+//     <p>Riigi suur vastutus, mis võimaldab seda keskkonda rahastada, on
+//     elujõuline riigieelarve, stabiilne maksusüsteem, võimalikult madal
+//     ning majanduslikult mõistlikult jaotuv maksukoormus. Tuleb luua olukord,
+//     kus halbadele aegadele majanduses ei pea reageerima ühegi maksu tõstmisega.
+//     Maksukoormuse alandamine ning teised konkurentsivõimet tõstvad meetmed
+//     peavad sõltuma eelarve struktuurse ülejäägi suurusest.</p>
+//   </li>
+// </ul>
+
+
+
+@if $layout == editor or
+    $layout == global {
+  .node ul.static-list-1column-dotted-border {
+    li {
+      background: none;
+      margin: 0px;
+      padding: 20px 15px 15px 0px;
+      position: relative;
+
+      p {
+        margin: 0;
+      }
+
+      &:before {
+        @include list-lines;
+      }
+    }
+  }
+}

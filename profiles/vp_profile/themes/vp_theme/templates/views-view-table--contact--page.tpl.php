@@ -1,3 +1,32 @@
+<?php
+global $language;
+if ($language->language == 'et') {
+  unset($header['field_position_in_english']);
+  unset($header['field_position_in_russian']);
+}
+if ($language->language == 'en') {
+  unset($header['field_position']);
+  unset($header['field_position_in_russian']);
+}
+if ($language->language == 'ru') {
+  unset($header['field_position_in_english']);
+  unset($header['field_position']);
+}
+foreach ($rows as &$row) {
+  if ($language->language == 'et') {
+    unset($row['field_position_in_english']);
+    unset($row['field_position_in_russian']);
+  }
+  if ($language->language == 'en') {
+    unset($row['field_position']);
+    unset($row['field_position_in_russian']);
+  }
+  if ($language->language == 'ru') {
+    unset($row['field_position_in_english']);
+    unset($row['field_position']);
+  }
+}
+?>
 <table <?php if ($classes) { print 'class="'. $classes . '" '; } ?>>
 <?php if (!empty($title) || !empty($caption)) : ?>
   <caption><?php print $caption . $title; ?></caption>

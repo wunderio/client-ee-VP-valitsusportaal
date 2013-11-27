@@ -13,3 +13,13 @@
   font-size: $size; // Fallback in px.
   font-size: ($size / 16px) * 1rem;
 }
+
+@mixin list-lines {
+  background-image: url(../img/10-global/static-module-3-1-border.png);
+  bottom: 0;
+  content: "";
+  height: 1px;
+  left: 0;
+  position: absolute;
+  right: 0;
+}
