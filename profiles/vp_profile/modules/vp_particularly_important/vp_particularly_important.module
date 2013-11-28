@@ -5,8 +5,6 @@
  * 
  */
 
-include_once 'vp_particularly_important.features.inc';
-
 /**
  * Implements hook_block_info().
  */
