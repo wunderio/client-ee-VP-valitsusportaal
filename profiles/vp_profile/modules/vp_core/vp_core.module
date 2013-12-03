@@ -2,7 +2,7 @@
 
 /**
  * @file
- * 
+ *
  */
 
 /**
@@ -219,4 +219,23 @@ function vp_core_block_view($delta = '') {
 function _vp_core_add_image_description_js() {
   // Add image description below the image + add better aligning for IE8.
   drupal_add_js(drupal_get_path('module', 'vp_core') .'/js/add_image_description.js', array('scope' => 'footer'));
+}
+
+/**
+ * Implements hook_wysiwyg_plugin().
+ */
+function vp_core_wysiwyg_plugin($editor, $version) {
+  switch ($editor) {
+    case 'ckeditor':
+      return array(
+        'overwrite_default_table_options' => array(
+          'path' => drupal_get_path('module', 'vp_core') . '/ckeditor/overwrite_default_table_options',
+          'buttons' => array(
+            'overwrite_default_table_options_button' => t('Remove default table width'),
+          ),
+          'load' => TRUE,
+        ),
+      );
+      break;
+  }
 }

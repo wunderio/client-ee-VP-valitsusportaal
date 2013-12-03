@@ -110,6 +110,10 @@
       box-shadow: 2px 2px 10px #e1e1e1;
     }
 
+    .image {
+      @include image-class-reset;
+    }
+
     h2 {
       padding-bottom: 0px;
     }
@@ -127,16 +131,16 @@
     }
 
     ul {
-       li {
-          padding: 20px 15px 15px 0px;
-          background: none;
-          margin: 0px;
-          position: relative;
+      li {
+        padding: 20px 15px 15px 0px;
+        background: none;
+        margin: 0px;
+        position: relative;
 
-          &:before {
-             @include list-lines;
-          }
+        &:before {
+          @include list-lines;
         }
+      }
     }
 
     ul span {
@@ -149,10 +153,6 @@
 
     &:after  {
       background-image: none;
-    }
-
-    & img {
-      margin: 0;
     }
   }
 }
@@ -520,6 +520,10 @@
       a,
       span {
         font-size: 12px;
+      }
+
+      .image {
+        @include image-class-reset;
       }
     }
 

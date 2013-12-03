@@ -312,8 +312,8 @@ function vp_theme_alpha_preprocess_block(&$vars) {
     );
 
     $last = $data['#breadcrumb'][count($data['#breadcrumb'])-1];
-    if(!empty($last) && strpos($last, '<a') === FALSE && strlen($last) > 30) {
-      $data['#breadcrumb'][count($data['#breadcrumb'])-1] = substr($data['#breadcrumb'][count($data['#breadcrumb'])-1], 0, 30) . '...';
+    if(!empty($last) && strpos($last, '<a') === FALSE && strlen($last) > 50) {
+      $data['#breadcrumb'][count($data['#breadcrumb'])-1] = substr($data['#breadcrumb'][count($data['#breadcrumb'])-1], 0, 50) . '...';
     }
 
     $active_trail = array();
@@ -334,7 +334,39 @@ function vp_theme_alpha_preprocess_block(&$vars) {
 }
 
 function vp_theme_preprocess_date_views_pager(&$vars) {
+  global $language;
+  
   if ($vars['plugin']->view->name == 'weekly_schedule') {
+    // Limit pager.
+    $lang_condition = db_or();
+    $lang_condition->condition('d.language', LANGUAGE_NONE);
+    $lang_condition->condition('d.language', $language->language);
+    $min = db_select('field_data_field_weekly_schedule_date', 'd')
+      ->condition($lang_condition)
+      ->fields('d', array('field_weekly_schedule_date_value'))
+      ->range(0, 1)
+      ->orderBy('field_weekly_schedule_date_value', 'ASC')
+      ->execute()
+      ->fetchCol();
+    $min = date('U', strtotime($min[0]));
+    $max = db_select('field_data_field_weekly_schedule_date', 'd')
+      ->condition($lang_condition)
+      ->fields('d', array('field_weekly_schedule_date_value'))
+      ->range(0, 1)
+      ->orderBy('field_weekly_schedule_date_value', 'DESC')
+      ->execute()
+      ->fetchCol();
+    $max = date('U', strtotime($max[0]));
+    $current_min = $vars['plugin']->view->argument['field_weekly_schedule_date_value']->min_date->format('U');
+    $current_max = $vars['plugin']->view->argument['field_weekly_schedule_date_value']->max_date->format('U');
+    if ($current_min < $min && $current_min < time()) {
+      unset($vars['prev_url']);
+    }
+    if ($current_max > $max && $current_max > time()) {
+      unset($vars['next_url']);
+    }
+  
+    // Change naigation title.
     $vars['nav_title'] = date('d.m.Y', strtotime('monday', strtotime($vars['plugin']->view->date_info->date_arg))).' - '.date('d.m.Y', strtotime('sunday', strtotime('sunday this week', strtotime($vars['plugin']->view->date_info->date_arg))));
   }
 }

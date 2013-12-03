@@ -3,10 +3,24 @@
 
 @if $layout == global {
   .field-name-field-cover-image {
-    @extend %image-caption;
+    background-color: shade(#fbfbfb, 2.5%); // It's impossible to see the background color that is defined on the original design.
+    display: inline-block;
     float: right;
     margin: 5px 0 30px 30px;
     width: 215px;
+
+    img {
+      margin: 0 !important;
+    }
+
+    .caption {
+      color: #8a8a8a;
+      display: inline-block;
+      font-size: 11px;
+      font-style: italic;
+      line-height: 14px;
+      padding: 10px 14px 12px 14px; // Bottom padding should be 16 but it looks weird when only 1 line text is in the caption.
+    }
 
     @media all and (max-width: 480px) {
       margin-bottom: $line-height-default;

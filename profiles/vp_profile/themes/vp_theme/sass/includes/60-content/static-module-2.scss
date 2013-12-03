@@ -24,29 +24,6 @@
       top: -14px;
     }
 
-    // BEGIN: Text styles.
-      h2,
-      p {
-        margin: 0 0 15px;
-      }
-
-      h2 {
-        color: $color-text-extra-red;
-        font-family: $font_museo500;
-        text-shadow: none;
-      }
-
-      p {
-        font-size: 13px;
-        line-height: 16px;
-      }
-
-      .lead {
-        line-height: 19px;
-        font-size: 14px;
-      }
-    // END: Text styles.
-
     .left-col,
     .right-col {
       background-color: #F6F6F6;
@@ -71,13 +48,6 @@
 @if $layout == default {
   .static-module-2 {
     @extend %static-module-2-default;
-  }
-}
-
-
-
-@if $layout == tablet {
-  .static-module-2 {
     // BEGIN: Make equal height boxes and the seal in the middle.
       padding-bottom: 100px;
       padding-top: 100px;
@@ -86,6 +56,19 @@
       .right-col:before {
         bottom: 62px;
         top: 62px;
+        width: 296px;
+      }
+    // END: Make equal height boxes and the seal in the middle.
+  }
+}
+
+
+
+@if $layout == tablet {
+  .static-module-2 {
+    // BEGIN: Make equal height boxes and the seal in the middle.
+      .left-col:before,
+      .right-col:before {
         width: 296px;
       }
     // END: Make equal height boxes and the seal in the middle.
@@ -117,8 +100,8 @@
 
 
 %static-module-2-default {
-  padding-bottom: 30px;
-  padding-top: 68px;
+  padding-top: 82px;
+  padding-bottom: 72px;
 
   // BEGIN: Make equal height boxes and the seal in the middle.
     .left-col:before,
@@ -126,9 +109,11 @@
       background-color: #F6F6F6;
       border-radius: 5px;
       border: 1px solid #EEE;
+      bottom: 17px;
       content: "";
       margin: 0 0 18px 0;
       position: absolute;
+      top: 40px;
       z-index: -1;
     }
 
@@ -183,13 +168,8 @@
 
 %static-module-2-desktop {
   // BEGIN: Make equal height boxes and the seal in the middle.
-    padding-top: 142px;
-    padding-bottom: 142px;
-
     .left-col:before,
     .right-col:before {
-      bottom: 104px;
-      top: 104px;
       width: 446px;
     }
   // END: Make equal height boxes and the seal in the middle.

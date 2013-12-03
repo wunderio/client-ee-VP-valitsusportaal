@@ -23,3 +23,16 @@
   position: absolute;
   right: 0;
 }
+
+@mixin image-class-reset {
+  background: none;
+  box-shadow: none;
+  display: inline;
+  margin: 0;
+  padding: 0;
+
+  .image-inner {
+    display: inline;
+    padding: 0;
+  }
+}

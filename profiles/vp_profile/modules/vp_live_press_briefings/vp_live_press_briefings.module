@@ -2,7 +2,7 @@
 
 /**
  * @file
- * 
+ *
  */
 
 /**
@@ -106,31 +106,31 @@ function vp_live_press_briefings_block_view($delta = '') {
         drupal_add_js('(function($){$().ready(function(){
           $("a.import-video-stream-live").click(function(e) {
             e.preventDefault();
-            $("body").append(\'<div id="import-video-stream-iframe" class="noresize"><a style="display:block;width:480px;height:326px" id="player"></a></div>\');
+            $("body").append(\'<div id="import-video-stream-iframe" class="noresize"><a style="display:block;width:480px;height:270px" id="player"></a></div>\');
             flowplayer("player", "/'.drupal_get_path('module', 'vp_live_press_briefings').'/flowplayer-3.2.16.swf", {
-              clip: { 
-                url: "pressikonverents", 
-                live: "true", 
-                provider: "rtmp" 
-              }, 
-              plugins: { 
-                rtmp: { 
-                  url: "/'.drupal_get_path('module', 'vp_live_press_briefings').'/flowplayer.rtmp-3.2.12.swf", 
+              clip: {
+                url: "pressikonverents",
+                live: "true",
+                provider: "rtmp"
+              },
+              plugins: {
+                rtmp: {
+                  url: "/'.drupal_get_path('module', 'vp_live_press_briefings').'/flowplayer.rtmp-3.2.12.swf",
                   netConnectionUrl: "'.variable_get('import_video_stream_stream_url').'"
-                } 
-              } 
+                }
+              }
             });
             $dialog = $("#import-video-stream-iframe").dialog({
-              height: 400,
+              height: 330,
               scrolling: false,
-              width: 556,
+              width: 540,
               close: function(event, ui) {
                 $("#import-video-stream-iframe").remove();
               }
             });
           });
         });})(jQuery);', 'inline');
-        
+
         $block['content'] .= '<div class="import-video-stream-video-wrap clearfix">'.
             '<div id="import-video-stream-live"></div>'.
             '<div class="aside">' . '<a href="'.variable_get('import_video_stream_stream_url').'" class="import-video-stream-live"><img src="'.$base_url.'/'.drupal_get_path('module', 'vp_live_press_briefings').'/video.png" /></a></div>' .

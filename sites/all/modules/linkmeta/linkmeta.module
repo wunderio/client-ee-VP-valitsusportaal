@@ -10,40 +10,40 @@
  *
  * Add css on pages exept administration theme.
  */
-function mekaia_link_icons_init() {
+function linkmeta_init() {
   global $conf;
   global $theme_info;
 
   // Add css if administration theme is not active theme.
   if ($conf['admin_theme'] != $theme_info->name) {
-    module_load_include('inc', 'mekaia_link_icons', 'mekaia_link_icons.generate_css');
+    module_load_include('inc', 'linkmeta', 'linkmeta.generate_css');
 
-    drupal_add_css(mekaia_link_icons_generate_css(), 'inline');
+    drupal_add_css(linkmeta_generate_css(), 'inline');
   }
 }
 
 /**
  * Implements hook_menu().
  */
-function mekaia_link_icons_menu() {
+function linkmeta_menu() {
   $items = array();
 
-  $items['admin/structure/link_icons'] = array(
-    'title' => 'Link Icons',
+  $items['admin/structure/linkmeta'] = array(
+    'title' => 'Link meta display filter',
     'description' => 'Put links behind icons.',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('mekaia_link_icons_admin_page', NULL),
-    'access arguments' => array('administer mekaia link icons'),
+    'page arguments' => array('linkmeta_admin_page', NULL),
+    'access arguments' => array('administer link meta display filter'),
     'type' => MENU_NORMAL_ITEM,
-    'file' => 'mekaia_link_icons.admin.inc',
+    'file' => 'linkmeta.admin.inc',
   );
 
-  $items['module/mekaia_link_icons/mekaia_link_icons'] = array(
-    'title' => 'Mekaia link icons css',
-    'page callback' => 'mekaia_link_icons_css_page',
+  $items['linkmeta/css'] = array(
+    'title' => 'Link meta display filter css',
+    'page callback' => 'linkmeta_css_page',
     'access callback' => TRUE,
     'type' => MENU_CALLBACK,
-    'file' => 'mekaia_link_icons.generate_css.inc',
+    'file' => 'linkmeta.generate_css.inc',
   );
 
   return $items;
@@ -52,10 +52,10 @@ function mekaia_link_icons_menu() {
 /**
  * Implements hook_permission().
  */
-function mekaia_link_icons_permission() {
+function linkmeta_permission() {
   return array(
-    'administer mekaia link icons' => array(
-      'title' => t('Administer link icons settings'),
+    'administer link meta display filter' => array(
+      'title' => t('Administer link meta display filter'),
     ),
   );
 }
@@ -63,10 +63,10 @@ function mekaia_link_icons_permission() {
 /**
  * Implements hook_filter_info().
  */
-function mekaia_link_icons_filter_info() {
-  $filters['mekaia_link_icons'] = array(
-    'title' => t('Mekaia link icons'),
-    'process callback' => '_mekaia_link_icons_process',
+function linkmeta_filter_info() {
+  $filters['linkmeta'] = array(
+    'title' => t('Link meta display filter'),
+    'process callback' => '_linkmeta_process',
   );
   return $filters;
 }
@@ -74,7 +74,7 @@ function mekaia_link_icons_filter_info() {
 /**
  * Scan for images and insert corresponding classes.
  */
-function _mekaia_link_icons_process($text, $filter, $format, $langcode, $cache, $cache_id) {
+function _linkmeta_process($text, $filter, $format, $langcode, $cache, $cache_id) {
   global $base_url;
 
   $dom = new DOMDocument();
@@ -97,19 +97,15 @@ function _mekaia_link_icons_process($text, $filter, $format, $langcode, $cache, 
     if (drupal_substr($url, 0, 1) === '#') {
       continue;
     }
-    
+
     // If email link then skip.
     if (drupal_substr(drupal_strtolower($url), 0, 7) === 'mailto:') {
       continue;
     }
-    
+
     // If link attatched to an image then skip.
     $img_tags = $a->getElementsByTagName('img');
-    $continue = FALSE;
-    foreach ($img_tags as $img_tag) {
-      $continue = TRUE;
-    }
-    if ($continue) {
+    if ($img_tags->length > 0) {
       continue;
     }
 
@@ -133,11 +129,11 @@ function _mekaia_link_icons_process($text, $filter, $format, $langcode, $cache, 
     $extension = '';
     if (isset($current_url['extension'])) {
       $extension = preg_replace('/[^a-z]/i', '', drupal_strtolower($current_url['extension']));
-      $types = variable_get('mekaia_link_icon_types', array());
+      $types = variable_get('linkmeta_types', array());
       if (!in_array($extension, $types)) {
         $types[] = $extension;
       }
-      variable_set('mekaia_link_icon_types', $types);
+      variable_set('linkmeta_types', $types);
 
       if (strpos($class, 'icon-' . $extension) === FALSE) {
         $class .= ' icon-' . $extension;
@@ -150,7 +146,7 @@ function _mekaia_link_icons_process($text, $filter, $format, $langcode, $cache, 
     // Enrichments.
     $enrichments = array();
     // File size.
-    if ((bool) variable_get('mekaia_link_icon_file_size', 0) && $internal) {
+    if ((bool) variable_get('linkmeta_file_size', 0) && $internal) {
       $size = filesize(trim($a->getAttribute('href'), '/'));
       if ($size) {
         $units = array('B', 'KB', 'MB', 'GB', 'TB');
@@ -163,7 +159,7 @@ function _mekaia_link_icons_process($text, $filter, $format, $langcode, $cache, 
     }
 
     // File extension.
-    if ((bool) variable_get('mekaia_link_icon_file_extension', 0) && !empty($extension)) {
+    if ((bool) variable_get('linkmeta_file_extension', 0) && !empty($extension)) {
       $enrichments[] = drupal_strtoupper($extension);
     }
 
@@ -181,10 +177,10 @@ function _mekaia_link_icons_process($text, $filter, $format, $langcode, $cache, 
 /**
  * Implements hook_help().
  */
-function mekaia_link_icons_help($path, $arg) {
+function linkmeta_help($path, $arg) {
   switch ($path) {
     // Help for administration page.
-    case 'admin/structure/link_icons':
+    case 'admin/structure/linkmeta':
       return '<p>' . t('Uploaded icons will be resized to 16x16px. Upload icon files in correct size for best visual result.') . '</p>';
   }
 }

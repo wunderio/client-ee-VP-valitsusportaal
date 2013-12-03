@@ -8,12 +8,12 @@
 /**
  * Generate css for link icons.
  */
-function mekaia_link_icons_generate_css($reset = FALSE) {
+function linkmeta_generate_css($reset = FALSE) {
   static $css;
 
   if (!isset($css) || $reset) {
     // Load css from cache.
-    if (!$reset && ($cache = cache_get('mekaia_link_icons_css')) && !empty($cache->data)) {
+    if (!$reset && ($cache = cache_get('linkmeta_css')) && !empty($cache->data)) {
       $css = $cache->data;
     }
     // Generate css and write it to cache.
@@ -21,27 +21,27 @@ function mekaia_link_icons_generate_css($reset = FALSE) {
       $css = '';
 
       // Add internal image css, if uri is set.
-      if ($file = file_load(variable_get('mekaia_link_icon_internal_img'))) {
+      if ($file = file_load(variable_get('linkmeta_internal_img'))) {
         $css .= '.icon-internal{background:transparent url(' . file_create_url($file->uri) . ') no-repeat right center;padding-right:18px}';
       }
 
       // Add external image css, if uri is set.
-      if ($file = file_load(variable_get('mekaia_link_icon_external_img'))) {
+      if ($file = file_load(variable_get('linkmeta_external_img'))) {
         $css .= '.icon-external{background:transparent url(' . file_create_url($file->uri) . ') no-repeat right center;padding-right:18px}';
       }
 
       // Add extensions images css, if uris are set.
-      $types = variable_get('mekaia_link_icon_types', '');
-      if (is_array($types)) {
+      $types = variable_get('linkmeta_types', array());
+      if (!empty($types)) {
         foreach ($types as $extension) {
-          $file = file_load(variable_get('mekaia_link_icon_' . $extension, ''));
+          $file = file_load(variable_get('linkmeta_' . $extension));
           if (isset($file->uri)) {
             $css .= '.icon-' . $extension . '{background:transparent url(' . file_create_url($file->uri) . ') no-repeat right center;padding-right:18px}';
           }
         }
       }
 
-      cache_set('mekaia_link_icons_css', 'cache', $css);
+      cache_set('linkmeta_css', 'cache', $css);
     }
   }
 

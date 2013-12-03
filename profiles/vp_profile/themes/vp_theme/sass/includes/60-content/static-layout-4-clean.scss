@@ -1,0 +1,68 @@
+// LAYOUT 4 - MAJANDUSVALDKOND AVALEHT
+// Layout 4 but no content styles are overwritten.
+
+
+
+@if $layout == editor or
+    $layout == global {
+  .node .layout-4-clean {
+    .aside {
+       padding-bottom: 15px;
+    }
+  }
+}
+
+
+
+@if $layout == editor or
+    $layout == default {
+  .node .layout-4-clean {
+    .aside {
+       float: left;
+       width: 230px;
+       padding-right: 95px;
+       padding-bottom: 0;
+    }
+
+    .main {
+      overflow: hidden;
+      min-width: 230px;
+    }
+  }
+}
+
+
+
+@if $layout == editor or
+    $layout == desktop {
+  .node .layout-4-clean {
+    margin-bottom: 70px;
+    padding-bottom: 0px;
+    padding-top: 10px;
+    position: relative;
+
+    // Separator for left and right column. If you remove the left column,
+    // separator will also be removed.
+    .aside {
+      &:before,
+      &:after {
+        bottom: 0;
+        content: "";
+        left: 29.3%;
+        position: absolute;
+        top: 0;
+        width: 22px;
+      }
+
+      &:before {
+        background: url(../img/10-global/subject-related-news-column-separator-top.png) 0 0 no-repeat;
+        z-index: 1;
+      }
+
+      &:after {
+        background: url(../img/10-global/view-id-top_news_tabs--separator-overlay-bottom.png) 0 100% no-repeat;
+        z-index: 2;
+      }
+    }
+  }
+}

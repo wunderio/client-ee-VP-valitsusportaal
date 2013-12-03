@@ -1,7 +1,0 @@
-name = Icons
-description = "Associate icons with different links and file types."
-core = 7.x
-
-dependencies[] = file
-
-stylesheets[all][] = mekaia_link_icons.css

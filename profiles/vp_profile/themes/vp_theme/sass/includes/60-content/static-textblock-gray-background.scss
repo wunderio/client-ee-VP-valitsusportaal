@@ -1,0 +1,139 @@
+
+
+
+@if $layout == global or
+    $layout == editor  {
+  .node .static-textblock-gray-background {
+    @extend %full-width-global;
+    @extend %horizontal-ruler-default;
+    background-color: #f7f6f1;
+    padding: 30px 40px 15px 40px;
+
+    &:before {
+      top: -14px;
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    h2 {
+      font-size: 30px;
+      line-height: 40px;
+      margin-bottom: 8px;
+      text-shadow: none;
+    }
+
+    h3 {
+      font-family: $font_museo700;
+      font-size: 16px;
+      text-shadow: none;
+      margin-bottom: 12px;
+    }
+
+    .container-12 {
+      margin-top: 23px;
+    }
+
+    .textbox {
+      background: #fff;
+      font-size: 12px;
+      margin-bottom: 20px;
+
+      .responsive-layout-mobile & {
+        margin-left: 0;
+        margin-right: 0;
+      }
+
+      p:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    .textbox-inner {
+      padding: 20px 20px 30px 20px;
+    }
+  }
+}
+
+
+
+@if $layout == editor {
+  .node .static-textblock-gray-background {
+    .container-12 {
+      @extend %clearfix;
+      width: 100%;
+      margin-left: -1%;
+      margin-right: -1%;
+
+      $i: 1;
+      @while $i < $gw-count + 1 {
+        .grid-#{$i} {
+          float: left;
+          margin-left: 1%;
+          margin-right: 1%;
+        }
+        $i: $i + 1;
+      }
+
+      // Got the grids from http://grids.heroku.com/fluid_grid?column_amount=12.
+
+      .grid-1 {
+        width:6.333%;
+      }
+
+      .grid-2 {
+        width:14.667%;
+      }
+
+      .grid-3 {
+        width:23.0%;
+      }
+
+      .grid-4 {
+        width:31.333%;
+      }
+
+      .grid-5 {
+        width:39.667%;
+      }
+
+      .grid-6 {
+        width:48.0%;
+      }
+
+      .grid-7 {
+        width:56.333%;
+      }
+
+      .grid-8 {
+        width:64.667%;
+      }
+
+      .grid-9 {
+        width:73.0%;
+      }
+
+      .grid-10 {
+        width:81.333%;
+      }
+
+      .grid-11 {
+        width:89.667%;
+      }
+
+      .grid-12 {
+        width:98.0%;
+      }
+    }
+
+  }
+}
+
+
+
+@if $layout == default or
+    $layout == editor {
+  .node .static-textblock-gray-background {
+    @extend %full-width-default;
+    padding: 43px 55px;
+  }
+}

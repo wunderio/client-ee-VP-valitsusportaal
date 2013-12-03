@@ -212,17 +212,12 @@
     margin-left: 0;
     width: auto; }
 
-.static-module-2 {
-  padding-bottom: 100px;
-  padding-top: 100px; }
-  .static-module-2 .left-col:before,
-  .static-module-2 .right-col:before {
-    bottom: 62px;
-    top: 62px;
-    width: 296px; }
-  .static-module-2 .left-col,
-  .static-module-2 .right-col {
-    width: 218px; }
+.static-module-2 .left-col:before,
+.static-module-2 .right-col:before {
+  width: 296px; }
+.static-module-2 .left-col,
+.static-module-2 .right-col {
+  width: 218px; }
 
 .layout-pm ul {
   width: 405px; }

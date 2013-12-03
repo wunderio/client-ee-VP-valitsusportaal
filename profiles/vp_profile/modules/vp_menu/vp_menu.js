@@ -1,8 +1,8 @@
 (function($) {
   var
     $l2menus = $('#block-vp-menu-second-level-menu-content-content > div'),
-    $l1menu = $('#zone-header div.block-main-menu ul.menu'),
-    $l1menulinks = $l1menu.find('a'),
+    $l1menu = $('#zone-header div.block-main-menu .menu-block-wrapper > ul.menu'),
+    $l1menulinks = $l1menu.find('> li > a'),
     // For sliding down active menu in _vPMenuToggleActiveMenu().
     $sectionContent = $('#section-content'),
     $originaPaddingOfSectionContent = $sectionContent.css('padding-top'),
@@ -10,7 +10,8 @@
     noneActiveMenuPopupVisible = false,
     activeMenuPopupVisible = false,
     animateSpeedSlide = 0,
-    $lastActiveL1MenuItem;
+    $lastActiveL1MenuItem,
+    $breadCrumbLinks = $('#block-delta-blocks-breadcrumb a');
 
   jQuery.fn.vpMenuEqualHeight = function() {
     var $el = $(this);
@@ -85,6 +86,17 @@
     $('body').click(function() { closeAll(); });
     $l2menus.click(function(e) { e.stopPropagation(); });
   }
+
+  $breadCrumbLinks.click(function(e) {
+    var $breadCrumbsLink = $(this);
+
+    $l1menulinks.each(function() {
+      if (!$(this).hasClass('hide-for-desktop') && $(this).attr('href') === $breadCrumbsLink.attr('href')) {
+        l1menulinksEvent(this, e);
+        e.preventDefault();
+      }
+    });
+  });
 
   var l1menulinksEvent = function(that, e) {
     if (e.type === 'keydown' && e.keyCode !== 13) {

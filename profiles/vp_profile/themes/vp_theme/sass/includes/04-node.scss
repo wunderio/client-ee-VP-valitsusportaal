@@ -98,14 +98,27 @@
       margin-left: 20px;
     }
 
+
+
     img,
     .image {
-      margin: 18px auto;
+      margin: 8px 18px 18px 18px;
       max-width: 100%;
 
       .responsive-layout-mobile & {
         float: none !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
         width: 100% !important;
+      }
+
+      &[style*="float: left"] {
+        margin-left: 0;
+      }
+
+      &[style*="float: right;"],
+      .float-right {
+        margin-right: 0;
       }
     }
 
@@ -114,7 +127,36 @@
     }
 
     .image {
-      @extend %image-caption;
+      background: #f9f8f5;
+      box-shadow: -1px -1px 3px 0 rgba(0, 0, 0, 0.15);
+      display: inline-block;
+
+      .image-inner {
+        display: block;
+        padding: 10px;
+      }
+
+      img {
+        margin: 0;
+      }
+
+      .caption {
+        color: $color-text-main-blue;
+        display: inline-block;
+        font-family: $font_museo500;
+        font-size: 12px;
+        line-height: 15px;
+        padding-top: 9px;
+      }
+    }
+
+    p[style="text-align: center;"],
+    p[style*="text-align: center;"] {
+      .image,
+      img {
+        margin-left: auto;
+        margin-right: auto;
+      }
     }
 
     table {
@@ -177,6 +219,10 @@
         }
       }
     }
+  }
+
+  .file > .image {
+    @include image-class-reset;
   }
 
   //=== STATIC SHARED STYLES ===//
@@ -260,23 +306,3 @@
   }
 }
 
-
-
-@if $layout == default {
-  .node {
-    img,
-    .image {
-      margin-left: 18px;
-      margin-right: 18px;
-
-      &[style*="float:left"] {
-        margin-left: 0;
-      }
-
-      &[style*="float: right;"],
-      .float-right {
-        margin-right: 0;
-      }
-    }
-  }
-}

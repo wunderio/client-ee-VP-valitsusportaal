@@ -5,64 +5,70 @@
   .static-module-3-3 {
     @extend %clearfix;
 
-    // Titles.
-    & {
-      h2 {
-        margin-bottom: 0px;
-		font-size: 24px;
+      // Titles.
+      & {
+        h2 {
+          margin-bottom: 0px;
+      font-size: 24px;
+        }
+
+      h3.introduction {
+      color: #000;
+      }
+      h3 {
+        margin-top: 30px;
       }
 
-	  h3.introduction {
-		color: #000;
-	  }
-	  h3 {
-	    margin-top: 30px;
-	  }
+        .text {
+          display: inline-block;
+      vertical-align: middle;
+      line-height:15px;
+      font-size:14px;
+          color:#000;
+        }
 
-      .text {
-        display: inline-block;
-		vertical-align: middle;
-		line-height:15px;
-		font-size:14px;
-        color:#000;
+      .text a {
+      color: #bd4932;
       }
 
-	  .text a {
-		color: #bd4932;
-	  }
+      h4 {
+      margin-bottom: 5px;
+      font-size: 14px
+      }
 
-	  h4 {
-		margin-bottom: 5px;
-		font-size: 14px
-	  }
+      }
 
+    .entry-wrapper {
+      overflow: hidden;
+        margin: 10px 0px 40px 15px;
+     }
+
+    .image {
+      @include image-class-reset;
+      float: left;
+      margin-right: 30px;
     }
 
-	.entry-wrapper {
-	  float: left;
-	  width: 75%;
-      margin: 10px 0px 40px 15px;
-	 }
+    img  {
+      float: left;
+      box-shadow: 2px 2px 2px #eeeeee;
+      -moz-box-shadow: 2px 2px 2px #eeeeee;
+      -webkit-box-shadow: 2px 2px 2px #eeeeee;
+      padding: 5px;
+      margin-top: 0px;
+      margin-right: 18px;
+      .node & { margin-left: 0px; }
+    }
 
-	img  {
-	  float: left;
-	  box-shadow: 2px 2px 2px #eeeeee;
-	  -moz-box-shadow: 2px 2px 2px #eeeeee;
-	  -webkit-box-shadow: 2px 2px 2px #eeeeee;
-	  padding: 5px;
-	  margin-top: 0px;
-	  .node & { margin-left: 0px; }
-	}
-
-	.icon-info-telephone {
-	  background-image: url(../img/10-global/static-read-more-icon-telephone.png );
-	  width: 53px;
-	  height: 40px;
-	  background-repeat: no-repeat;
-	  position: relative;
-	  display: inline-block;
-	  vertical-align: middle;
-	}
+    .icon-info-telephone {
+      background-image: url(../img/10-global/static-read-more-icon-telephone.png );
+      width: 53px;
+      height: 40px;
+      background-repeat: no-repeat;
+      position: relative;
+      display: inline-block;
+      vertical-align: middle;
+    }
 
   }
 }
@@ -85,84 +91,88 @@
 
 @if $layout == editor or
     $layout == global {
-  .layout-9 {
+  .node .layout-9 {
 
-	.two-float-container {
-		overflow: hidden;
+    .two-float-container {
+      overflow: hidden;
 
-		div {
-			float:left;
-		}
+      div {
+        float:left;
+      }
 
-		h3 {
-			color: #000000;
-			margin-bottom: 40px;
-		}
+      h3 {
+        color: #000000;
+        margin-bottom: 40px;
+      }
 
-	}
-
-
-	.float-left-col-2 {
-		min-width: 370px;
-		background-color: #f9f9f7;
-		padding: 15px 0px 30px 15px;
-	}
-
-	.custom-bullet-list {
-		padding-top: 15px;
-		line-height: 15px;
-	}
-
-	.entry-wrapper {
-		float: left; width: 75%;
-		margin-bottom: 40px;
-		margin-left: 15px;
-
-		.list-no-bullets {
-			list-style-type: none;
-			padding: 0px;
-			margin: 0px;
-
-			li {
-				padding: 0px;
-				margin: 0px;
-			}
-		}
-
-		h2 {
-			margin-bottom: 20px;
-		}
-
-	}
-
-	img {
-		margin: 0px;
-		float:left;
-		padding: 5px;
-		box-shadow: 2px 2px 2px #eeeeee;
-		-moz-box-shadow: 2px 2px 2px #eeeeee;
-		-webkit-box-shadow: 2px 2px 2px #eeeeee;
     }
 
-	.bold-black {
-		font-weight: 600;
+
+    .float-left-col-2 {
+      min-width: 370px;
+      background-color: #f9f9f7;
+      padding: 15px 0px 30px 15px;
     }
 
- }
+    .custom-bullet-list {
+      padding-top: 15px;
+      line-height: 15px;
+    }
+
+    .entry-wrapper {
+      float: left; width: 75%;
+      margin-bottom: 40px;
+      margin-left: 15px;
+
+      .list-no-bullets {
+        list-style-type: none;
+        margin: 0px;
+        padding: 0px;
+
+        li {
+          background: none;
+          padding: 0px;
+          margin: 0px;
+        }
+      }
+
+      h2 {
+        margin-bottom: 20px;
+      }
+
+    }
+
+    img {
+      margin: 0px;
+      float:left;
+      padding: 5px;
+      box-shadow: 2px 2px 2px #eeeeee;
+      -moz-box-shadow: 2px 2px 2px #eeeeee;
+      -webkit-box-shadow: 2px 2px 2px #eeeeee;
+    }
+
+    .image {
+      @include image-class-reset;
+    }
+
+    .bold-black {
+      font-weight: 600;
+    }
+  }
 }
 
 @if $layout == editor or
     $layout == desktop {
-  .layout-9 {
+  .node .layout-9 {
 
-	.float-left-col-1 {
-		width: 50%;
-	}
+  .float-left-col-1 {
+    width: 50%;
+  }
 
-	.float-left-col-2 {
-		width: 41%;
-		margin-left: 25px;
-	}
+  .float-left-col-2 {
+    width: 41%;
+    margin-left: 25px;
+  }
 
  }
 }

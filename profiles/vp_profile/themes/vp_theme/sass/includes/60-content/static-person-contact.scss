@@ -1,0 +1,87 @@
+// LAYOUT 4 - MAJANDUSVALDKOND AVALEHT
+// Layout 4 but no content styles are overwritten.
+
+
+
+@if $layout == editor or
+    $layout == global {
+  .node .static-person-contact {
+    .image {
+      background: #fff;
+      box-shadow: 2px 2px 2px #eeeeee;
+      margin: 0;
+
+      .image-inner {
+        padding: 5px;
+
+      }
+
+      img {
+      }
+    }
+
+
+
+    h2 {
+      margin-bottom: 0px;
+      font-size: 24px;
+    }
+
+    h4 {
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+
+    h3 {
+      margin-top: 30px;
+
+      .icon-info-telephone {
+        background-image: url(../img/10-global/static-read-more-icon-telephone.png );
+        width: 53px;
+        height: 40px;
+        background-repeat: no-repeat;
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+      .text {
+        display: inline-block;
+        vertical-align: middle;
+        line-height:15px;
+        font-size:14px;
+        color:#000;
+
+        a {
+          color: #bd4932;
+        }
+      }
+    }
+  }
+}
+
+
+
+@if $layout == editor or
+    $layout == default {
+  .node .static-person-contact {
+    .aside {
+      margin-right: 30px;
+      float: left;
+    }
+
+    .main {
+      @extend %sidefloat;
+      padding: 10px 0px 40px 0;
+    }
+  }
+}
+
+
+
+@if $layout == editor or
+    $layout == desktop {
+  .node .static-person-contact {
+
+  }
+}

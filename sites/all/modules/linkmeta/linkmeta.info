@@ -1,0 +1,8 @@
+name = Link Meta Display Filter
+description = Associate icons with different links and file types.
+core = 7.x
+configure = admin/structure/linkmeta
+
+dependencies[] = file
+
+stylesheets[all][] = linkmeta.css

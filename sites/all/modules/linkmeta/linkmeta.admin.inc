@@ -2,62 +2,62 @@
 
 /**
  * @file
- * Provides mekaia link icons module admin pages.
+ * Provides link meta display filter module admin pages.
  */
 
 /**
  * Menu callback; administer settings and upload images.
  */
-function mekaia_link_icons_admin_page() {
+function linkmeta_admin_page() {
   $form = array();
 
   // Append file size to link.
-  $form['mekaia_link_icon_file_size'] = array(
+  $form['linkmeta_file_size'] = array(
     '#title' => t('Append file size to link'),
     '#type' => 'checkbox',
-    '#default_value' => variable_get('mekaia_link_icon_file_size', 0),
+    '#default_value' => variable_get('linkmeta_file_size', 0),
   );
 
   // Append extention to link.
-  $form['mekaia_link_icon_file_extension'] = array(
+  $form['linkmeta_file_extension'] = array(
     '#title' => t('Append extention to link'),
     '#type' => 'checkbox',
-    '#default_value' => variable_get('mekaia_link_icon_file_extension', 0),
+    '#default_value' => variable_get('linkmeta_file_extension', 0),
   );
 
   // Icon for internal links.
-  $form['mekaia_link_icon_internal_img'] = array(
+  $form['linkmeta_internal_img'] = array(
     '#title' => t('Internal link image'),
     '#type' => 'managed_file',
-    '#default_value' => variable_get('mekaia_link_icon_internal_img', ''),
-    '#upload_location' => 'public://mekaia_link_icons/',
+    '#default_value' => variable_get('linkmeta_internal_img', ''),
+    '#upload_location' => 'public://linkmeta/',
   );
 
   // Icon for external links.
-  $form['mekaia_link_icon_external_img'] = array(
+  $form['linkmeta_external_img'] = array(
     '#title' => t('External link image'),
     '#type' => 'managed_file',
-    '#default_value' => variable_get('mekaia_link_icon_external_img', ''),
-    '#upload_location' => 'public://mekaia_link_icons/',
+    '#default_value' => variable_get('linkmeta_external_img', ''),
+    '#upload_location' => 'public://linkmeta/',
   );
 
   // Images for automatically detected extensions.
-  $types = variable_get('mekaia_link_icon_types', '');
+  $types = variable_get('linkmeta_types', '');
   $hidden_types = array('com', 'net', 'info', 'org');
   if (is_array($types)) {
     foreach ($types as $extension) {
       if (!in_array($extension, $hidden_types) && strlen($extension) > 2) {
-        $form['mekaia_link_icon_' . $extension] = array(
+        $form['linkmeta_' . $extension] = array(
           '#title' => t('Icon for @extension', array('@extension' => $extension)),
           '#type' => 'managed_file',
-          '#default_value' => variable_get('mekaia_link_icon_' . $extension, ''),
-          '#upload_location' => 'public://mekaia_link_icons/',
+          '#default_value' => variable_get('linkmeta_' . $extension, ''),
+          '#upload_location' => 'public://linkmeta/',
         );
       }
     }
   }
 
-  $form['#validate'] = array('mekaia_link_icons_admin_form_validate');
+  $form['#validate'] = array('linkmeta_admin_form_validate');
 
   return system_settings_form($form);
 }
@@ -65,10 +65,9 @@ function mekaia_link_icons_admin_page() {
 /**
  * Validate: Code for uploaded images.
  */
-function mekaia_link_icons_admin_form_validate($form, &$form_state) {
-  foreach ($form_state['input'] as $key => $array) {
-    if (substr($key, 0, 17) === 'mekaia_link_icon_') {
-
+function linkmeta_admin_form_validate($form, &$form_state) {
+  foreach ($form_state['values'] as $key => $array) {
+    if (substr($key, 0, 9) === 'linkmeta_' && $key !== 'linkmeta_file_size' && $key !== 'linkmeta_file_extension') {
       if ((int) $form_state['values'][$key] > 0 && $file = file_load($form_state['values'][$key])) {
         // Change status to permanent.
         $file->status = FILE_STATUS_PERMANENT;
@@ -84,7 +83,7 @@ function mekaia_link_icons_admin_form_validate($form, &$form_state) {
         variable_set($key, $form_state['values'][$key]);
 
         // Record that the module is using the file.
-        file_usage_add($file, 'mekaia_link_icons', 'file', $file->fid);
+        file_usage_add($file, 'linkmeta', 'file', $file->fid);
       }
       else {
         $delete_fid = variable_get($key);
@@ -103,6 +102,6 @@ function mekaia_link_icons_admin_form_validate($form, &$form_state) {
   }
 
   // Regenerate css.
-  module_load_include('inc', 'mekaia_link_icons', 'mekaia_link_icons.generate_css');
-  mekaia_link_icons_generate_css(TRUE);
+  module_load_include('inc', 'linkmeta', 'linkmeta.generate_css');
+  linkmeta_generate_css(TRUE);
 }

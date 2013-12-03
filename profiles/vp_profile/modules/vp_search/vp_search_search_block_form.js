@@ -1,7 +1,7 @@
 (function($){
   Drupal.behaviors.gssAutocomplete = {
     attach: function(context, settings) {
-      if (settings.gss.key == undefined) {
+      if (typeof settings.gss == undefined) {
         return;
       }
 

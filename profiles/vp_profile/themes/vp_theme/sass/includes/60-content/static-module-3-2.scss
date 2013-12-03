@@ -14,29 +14,6 @@ $static_module_3_2_col_padding_right: 30px;
     padding-bottom: 30px;
     padding-top: 50px;
 
-    // Titles.
-    & {
-      h2 {
-        font-size: 30px;
-        line-height: 40px;
-      }
-
-      h3 {
-        font-family: $font_museo700;
-        font-size: 17px;
-        line-height: 20px;
-        text-shadow: none;
-        margin-bottom: 16px;
-      }
-    }
-
-    // Text
-    p {
-      font-size: 13px;
-      line-height: 18px;
-      margin-bottom: 18px;
-    }
-
     // Real columns
     .col {
       background-color: #f8f8f8;
@@ -50,6 +27,10 @@ $static_module_3_2_col_padding_right: 30px;
       &.col-1 {
         margin-top: 20px;
       }
+    }
+
+    .image {
+      @include image-class-reset;
     }
   }
 }
@@ -72,16 +53,16 @@ $static_module_3_2_col_padding_right: 30px;
     $layout == desktop {
   .static-module-3-2 {
     // BEGIN: Make columns look equal height.
-      padding-bottom: 142px;
-      padding-top: 68px;
+      padding-bottom: 60px;
+      padding-top: 38px;
 
       .col:before {
         background-color: #f8f8f8;
         border-radius: 3px;
-        bottom: 135px;
+        bottom: 40px;
         content: "";
         position: absolute;
-        top: 135px;
+        top: 85px;
         width: $static_module_3_2_desktop_col_width;
         z-index: -1;
       }
@@ -106,7 +87,7 @@ $static_module_3_2_col_padding_right: 30px;
       float: left;
       margin-bottom: 0;
       margin-right: 18px;
-      padding-top: 58px;
+      padding-top: 50px;
       width: $static_module_3_2_desktop_col_width - $static_module_3_2_col_padding_left - $static_module_3_2_col_padding_right;
 
       &.col-1 {

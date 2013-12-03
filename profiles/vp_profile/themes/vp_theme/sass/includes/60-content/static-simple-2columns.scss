@@ -1,3 +1,24 @@
+// 2 column content.
+//
+// This has 2 versions with and without spacer between. Use has-spacer class
+// on the outer div to add spacer image.
+//
+// EXAMPLE:
+//
+// <div class="static static-simple-2columns clearfix">
+//   <div class="col first">
+//     <p>Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem
+//     ipsum Lorem ipsum Lorem ipsum</p>
+//   </div>
+//   <div class="col last">
+//     <p>Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem
+//     ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
+//     Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
+//     Lorem ipsum Lorem ipsum Lorem ipsum</p>
+//     <p>Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem
+//     ipsum</p>
+//   </div>
+// </div>
 
 
 
@@ -13,6 +34,8 @@
 @if $layout == default or
     $layout == editor {
   .static-simple-2columns {
+    position: relative;
+
     .col {
       float: left;
       width: 48%;
@@ -23,6 +46,43 @@
 
       &.last {
         padding-left: 2%;
+      }
+    }
+
+    &.has-spacer { // Clearfix class uses :after pseudo-class.
+      .col {
+        float: left;
+        width: 46%;
+
+        &.first {
+          padding-right: 4%;
+        }
+
+        &.last {
+          padding-left: 4%;
+        }
+      }
+
+      .col.first {
+        &:before,
+        &:after {
+          bottom: 0;
+          content: "";
+          left: 50%;
+          position: absolute;
+          top: 0;
+          width: 22px;
+        }
+
+        &:before {
+          background: url(../img/10-global/subject-related-news-column-separator-top.png) 0 0 no-repeat;
+          z-index: 1;
+        }
+
+        &:after {
+          background: url(../img/10-global/view-id-top_news_tabs--separator-overlay-bottom.png) 0 100% no-repeat;
+          z-index: 2;
+        }
       }
     }
   }

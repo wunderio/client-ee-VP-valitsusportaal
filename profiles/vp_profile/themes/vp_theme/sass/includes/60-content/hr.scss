@@ -15,6 +15,10 @@
     clear: both;
     height: 23px;
     margin: 30px -20px;
+
+    &.clean {
+      background-image: url(../img/40-desktop/block-separator-clean.png);
+    }
   }
 }
 

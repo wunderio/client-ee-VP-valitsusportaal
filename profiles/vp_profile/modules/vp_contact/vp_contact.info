@@ -4,3 +4,4 @@ package = VP
 version = 7.x-1.0
 project = vp_contact
 dependencies[] = vp_core
+

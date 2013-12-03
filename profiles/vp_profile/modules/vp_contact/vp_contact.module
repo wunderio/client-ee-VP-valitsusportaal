@@ -5,6 +5,7 @@
  * 
  */
 
+
 /**
  * Implements hook_views_pre_render().
  */
@@ -18,7 +19,6 @@ function vp_contact_views_pre_render(&$view) {
           .dialog();
       });
     });})(jQuery);', 'inline');
-
   }
 }
 
@@ -47,7 +47,7 @@ function vp_contact_feeds_presave(FeedsSource $source, $entity, $item) {
 
   if ($entity->feeds_item->id == 'contacts_absentees') {
     if (!isset($item['xpathparser:3'])) {
-      $item['xpathparser:3'] = t("On vacation");
+      $item['xpathparser:3'] = 'Puhkusel';
     }
 
     if (strtotime($item['xpathparser:1']) <= time() && strtotime($item['xpathparser:2']) >= time()) {

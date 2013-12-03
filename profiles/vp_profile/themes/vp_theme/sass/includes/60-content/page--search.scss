@@ -38,6 +38,10 @@
     .gss-search-url {
       font-style: normal !important;
     }
+
+    .gss-info {
+      @extend %news-date;
+    }
   }
 
   .page-search div.item-list ul.pager {

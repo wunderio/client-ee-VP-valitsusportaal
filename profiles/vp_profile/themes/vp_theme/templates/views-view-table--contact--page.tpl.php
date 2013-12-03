@@ -44,10 +44,10 @@ foreach ($rows as &$row) {
     </thead>
   <?php endif; ?>
   <tbody>
-    <?php foreach ($rows as $row_count => $row): ?>
+    <?php foreach ($rows as $row_count => &$row): ?>
       <tr <?php if ($row_classes[$row_count]) { print 'class="' . implode(' ', $row_classes[$row_count]) .'"';  } ?>>
         <?php foreach ($row as $field => $content): ?>
-          <?php end($row); ?>
+          <?php //end($row); ?>
           <td <?php if ($field_classes[$field][$row_count]) { print 'class="'. $field_classes[$field][$row_count] . ( $field === key($header) ?  ' last' : '' ) . '" '; } ?><?php print drupal_attributes($field_attributes[$field][$row_count]); ?>>
             <?php print $content; ?>
           </td>
