@@ -116,7 +116,7 @@ class GalleryNodeMigration extends Migration {
           $mob_image = image_load($mob->uri);
           image_scale($mob_image, 720);
           image_save($mob_image);
-          file_usage_add($mob, 'imagefield_crop', 'file', $file->fid);
+          file_usage_add($mob, 'imagefield_crop', 'retina', $file->fid);
         }
 
         // Copy file to keep original.
