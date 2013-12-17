@@ -1,0 +1,7 @@
+name = VP Logo files
+core = 7.x
+package = VP
+version = 7.x-1.0
+project = vp_logo_files
+dependencies[] = features
+features[features_api][] = api:2

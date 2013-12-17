@@ -131,3 +131,21 @@
     }
   }
 }
+
+
+
+@if $layout == high_contrast {
+  .view-display-id-important_topics_slideshow_block {
+    .flex-control-nav {
+      li {
+        a {
+          background: url(../img/10-global/cycle-important-topics-slideshow-nav-high-contrast.png) !important;
+
+          &.flex-active {
+            background-position: 100% 0 !important;
+          }
+        }
+      }
+    }
+  }
+}

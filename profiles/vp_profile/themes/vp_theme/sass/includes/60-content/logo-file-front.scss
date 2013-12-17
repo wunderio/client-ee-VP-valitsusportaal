@@ -1,0 +1,236 @@
+
+
+
+@if $layout == global {
+  .block-logo-file-page-description {
+    margin: 30px 0 50px;
+
+    .content {
+      font-family: $font_museo300;
+      font-size: 20px;
+      font-weight: 300;
+      line-height: 120%;
+
+    }
+  }
+
+  .block-views-exp-logo-file-search,
+  .block--exp-logo-file-taxonomy,
+  .block--exp-logo-file-alphabet {
+    margin: 0 0 30px 0;
+
+    h2 {
+      font-family: $font_museo500;
+      padding-bottom: 10px;
+      text-shadow: none;
+    }
+
+    .page-logo-file-search &,
+    .page-logo-file-taxonomy &,
+    .page-logo-file-alphabet & {
+      border: 0;
+      float: none;
+      margin: 0;
+      min-height: 0;
+      padding: 0;
+      width: auto;
+    }
+
+    .views-exposed-widget .form-submit {
+      margin: 0;
+      margin-left: 10px;
+    }
+
+    .views-exposed-widget {
+      padding: 0;
+    }
+  }
+
+  .block-views-exp-logo-file-search {
+    #edit-title-wrapper {
+      width: 60%;
+    }
+
+    .form-text {
+      height: 2.7em;
+      width: 100%;
+    }
+  }
+
+  .block--exp-logo-file-taxonomy {
+    color: #00698c;
+
+    .form-type-select {
+      font-family: $font_museo300;
+      margin: 13px 0 20px 30px;
+      padding: 0;
+
+      .form-item {
+        margin: 5px 0;
+        font-size: 14px;
+
+        .form-item {
+          &:first-child {
+            display: none;
+          }
+
+          a {
+            text-decoration: underline;
+            color: #bd4832;
+          }
+        }
+      }
+    }
+
+    .page-logo-file-taxonomy & {
+      h2 {
+        padding-bottom: 5px; // 20px should be accoding to psd but it's ugly (Hannes).
+      }
+
+      .form-type-select {
+        margin: 0;
+
+        .form-item {
+          margin: 6px 0;
+
+          .form-item {
+            float: left;
+            margin: 0;
+            padding-right: 18px;
+          }
+        }
+      }
+    }
+  }
+
+
+  .block--exp-logo-file-alphabet {
+    #edit-letter-wrapper {
+      display: none;
+    }
+
+    .abc-list {
+      margin: 0 0 10px 0;
+      background: #fff;
+      padding: 2.5px;
+      -webkit-border-radius: 5px;
+      border-radius: 5px;
+      border: 1px solid #e6e6e6;
+      -webkit-box-shadow: inset 0px 0px 7px 0px rgba(0, 0, 0, .15);
+      box-shadow: inset 0px 0px 7px 0px rgba(0, 0, 0, .15);
+
+      li {
+        margin: 0;
+        float: left;
+      }
+
+      a {
+        font-family: $font_museo300;
+        text-decoration: none;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        border: 1px solid #c5c5c5;
+        -webkit-box-shadow: inset -1px -2px 3px 0px rgba(0, 0, 0, .4);
+        box-shadow: inset -1px -2px 3px 0px rgba(0, 0, 0, .4);
+        color: #006488;
+        display: block;
+        width: 23px;
+        //height: 23px;
+        height: 20px;
+        margin: 2.5px;
+        text-align: center;
+        line-height: 21px;
+        font-size: 14px;
+      }
+
+      li.active {
+        a {
+          border-top: 1px solid #d5806a;
+          border-left: 1px solid #cb644a;
+          border-right: 1px solid #953015;
+          border-bottom: 1px solid #88280d;
+          background: #c44e30;
+          -webkit-box-shadow: inset -1px -2px 3px 0px rgba(0, 0, 0, .3), inset 0 2px 1px 0 rgba(255, 255, 255, 0.13);
+            box-shadow: inset -1px -2px 3px 0px rgba(0, 0, 0, .3), inset 0 2px 1px 0 rgba(255, 255, 255, 0.13);
+          color: #fff;
+        }
+
+        a:hover,
+        a:focus {
+          background: #d45b3d;
+        }
+
+        a:active {
+          border-top: 1px solid #953015;
+          border-left: 1px solid #953015;
+          border-right: 1px solid #88280d;
+          border-bottom: 1px solid #88280d;
+          background: #d45b3d;
+          -webkit-box-shadow: inset -1px -2px 3px 0px rgba(0, 0, 0, .3), inset 0 2px 2px 0 rgba(0, 0, 0, 0.15);
+            box-shadow: inset -1px -2px 3px 0px rgba(0, 0, 0, .3), inset 0 2px 2px 0 rgba(0, 0, 0, 0.15);
+        }
+      }
+    }
+  }
+}
+
+
+
+@if $layout == default {
+  .block-views-exp-logo-file-search,
+  .block--exp-logo-file-taxonomy,
+  .block--exp-logo-file-alphabet {
+    border-left: 1px dashed #ccc;
+    float: left;
+    padding: 7px 2% 0 2%;
+    width: 29%;
+  }
+
+  .block-views-exp-logo-file-search {
+    border-left: 0 none !important;
+    padding-left: 0 !important;
+
+    #edit-title-wrapper {
+      .page-logo-file-search & {
+        width: 230px;
+      }
+    }
+  }
+}
+
+
+
+@if $layout == tablet {
+  .block-views-exp-logo-file-search,
+  .block--exp-logo-file-taxonomy,
+  .block--exp-logo-file-alphabet {
+    min-height: 220px;
+
+    .views-exposed-widget .form-submit {
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+  }
+
+  block-views-exp-logo-file-search {
+    #edit-title-wrapper {
+      width: 100px;
+    }
+  }
+}
+
+
+
+@if $layout == desktop {
+  .block-views-exp-logo-file-search,
+  .block--exp-logo-file-taxonomy,
+  .block--exp-logo-file-alphabet {
+    min-height: 259px;
+  }
+
+  .block-views-exp-logo-file-search {
+    #edit-title-wrapper {
+      width: 180px;
+    }
+  }
+}

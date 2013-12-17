@@ -34,8 +34,8 @@
   });
 */
   $liExpanded.find('> a')
-    .bind('focus', function() {
-      mouseenterEvent(this);
+    .bind('focus', function(e) {
+      mouseenterEvent(this, e);
     });
   $liNotExpanded.find('> a').bind('blur', function() {
     hideAllMenus();

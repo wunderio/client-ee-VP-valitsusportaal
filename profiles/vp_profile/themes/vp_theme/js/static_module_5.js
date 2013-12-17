@@ -26,7 +26,7 @@
       $h3 = $module5.find('h3');
       $h3.each(function(i) {
         $this = $(this);
-        aside += '<li class="tab tab-' + i  + (i===0 ? ' active' : '') + '"><div>' + $this.text() + '</div></li>';
+        aside += '<li class="tab tab-' + i  + (i===0 ? ' active' : '') + '"><a href="#" onclick="return false;">' + $this.text() + '</a></li>';
       });
       aside += '</ul></div>';
       $(aside).prependTo($module5);

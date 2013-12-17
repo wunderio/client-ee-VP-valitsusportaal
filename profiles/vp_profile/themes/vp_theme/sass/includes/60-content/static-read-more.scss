@@ -3,7 +3,7 @@
 
 @if $layout == editor or
     $layout == global {
-  .static-read-more {
+  .node .static-read-more {
     @extend %horizontal-ruler-global;
 
     padding-bottom: 30px;
@@ -92,11 +92,11 @@
       .icon-download {
         background-image: url(../img/10-global/static-read-more-icon-download.png);
       }
-      
+
       .icon-download-white {
         background-image: url(../img/10-global/static-read-more-icon-download-white.png);
       }
-      
+
       .icon-person-white {
         background-image: url(../img/10-global/static-read-more-icon-person-white.png);
       }
@@ -133,7 +133,7 @@
 
 
 @if $layout == default {
-  .static-read-more {
+  .node .static-read-more {
     @extend %horizontal-ruler-default;
     margin-left: -35px;
     margin-right: -35px;
@@ -159,7 +159,7 @@
 
 
 @if $layout == tablet {
-  .static-read-more {
+  .node .static-read-more {
     h2 {
       padding-left: 30px
     }
@@ -188,7 +188,7 @@
 
 
 @if $layout == desktop {
-  .static-read-more {
+  .node .static-read-more {
     // BEGIN: Hack grid.
       .grid-4:first-child .grid-inner {
         padding-left: 60px;
@@ -204,41 +204,41 @@
 // Added 29.10.13 by Taavi
 @if $layout == editor or
     $layout == global {
-      h3.icon-wrap-1 {
+  h3.icon-wrap-1 {
+    span {
+      background-repeat: no-repeat;
+      display: inline-block;
+      height: 40px;
+      position: relative;
+      vertical-align: middle;
+      width: 45px;
+    }
 
-        span {
-          display: inline-block;
-          width: 45px;
-          height: 40px;
-          background-repeat: no-repeat;
-          position: relative;
-          vertical-align: middle;
-        }
+    a,
+    a:visited {
+      display: inline-block;
+      color: #BD4732;
+      font-size: 14px;
+      vertical-align: middle;
+      line-height: 18px;
+    }
 
-        a, a:visited {
-          display: inline-block;
-          color: #BD4732;
-          font-size: 14px;
-          vertical-align: middle;
-          line-height: 18px;
-        }
-		
-		a:hover {
-		  color: #00668C;
-	    }
+    a:hover {
+      color: #00668C;
+    }
 
-        .icon-person {
-          background-image: url(../img/10-global/static-read-more-icon-person.png);
-        }
-        .icon-list {
-          background-image: url(../img/10-global/static-read-more-icon-list.png);
-        }
-        .icon-world{
-          background-image: url(../img/10-global/static-read-more-icon-world.png);
-        }
+    .icon-person {
+      background-image: url(../img/10-global/static-read-more-icon-person.png);
+    }
 
+    .icon-list {
+      background-image: url(../img/10-global/static-read-more-icon-list.png);
+    }
 
-      }
+    .icon-world{
+      background-image: url(../img/10-global/static-read-more-icon-world.png);
+    }
+  }
 }
 
 // Added 30.10.13 by Taavi
@@ -261,7 +261,7 @@
       padding-top: 5px;
       color: #BD4732;
     }
-	
+
 	a:hover {
 	  color: #00668C;
 	}
@@ -286,10 +286,23 @@
       background-image: url(../img/10-global/static-read-more-icon-list.png);
     }
     .icon-bureau {
-      background-image: url(../img/10-global/static-read-more-icon-bureau.png);	
-    }		  
+      background-image: url(../img/10-global/static-read-more-icon-bureau.png);
+    }
     .icon-cv {
       background-image: url(../img/10-global/static-read-more-icon-cv.png);
+    }
+  }
+}
+
+
+
+@if $layout == high_contrast {
+  .node .static-read-more {
+    // Links.
+    ul {
+      li {
+        background-image: url(../img/10-global/link-arrow-on-light-bg2-high-contrast.png) !important;
+      }
     }
   }
 }

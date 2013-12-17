@@ -23,8 +23,14 @@
 
       .accessibility-link {
         background: url(../img/40-desktop/accessibility.png) no-repeat 0 50%;
+        color: #fff;
         display: inline-block;
         padding-left: 21px;
+
+        &:focus,
+        &:hover {
+          color: $color-text-extra-golden;
+        }
       }
     }
   }

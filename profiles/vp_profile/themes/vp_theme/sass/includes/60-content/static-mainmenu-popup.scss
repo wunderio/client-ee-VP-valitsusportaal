@@ -582,3 +582,32 @@
     }
   }
 }
+
+
+
+@if $layout == high_contrast {
+  .static-mainmenu-popup {
+    // Column separators.
+    & {
+      .has-big-column-separators .column {
+        background-image: url(../img/10-global/mainmenu-popup-column-separator-big-high-contrast.png) !important;
+      }
+
+      .column {
+        background-image: url(../img/10-global/mainmenu-popup-column-separator-high-contrast.png) !important;
+
+        &:last-child {
+          background-image: none !important;
+        }
+        // IE8 support.
+        &.last-child {
+          background-image: none !important;
+        }
+      }
+    }
+
+    .widget-menu li {
+      background: none !important;
+    }
+  }
+}

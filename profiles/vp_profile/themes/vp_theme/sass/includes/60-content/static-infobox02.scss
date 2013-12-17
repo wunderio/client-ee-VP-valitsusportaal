@@ -27,7 +27,8 @@
     }
 
     ul {
-      li {
+      li,
+      li li {
         background-position: 0 4px;
         background-repeat: no-repeat;
         background-image: url(../img/10-global/static-infobox02-arrow.png);

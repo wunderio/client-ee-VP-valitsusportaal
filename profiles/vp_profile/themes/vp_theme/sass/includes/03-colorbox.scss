@@ -105,3 +105,21 @@
     background: url(../img/10-global/ui-dialog-bg.png);
   }
 }
+
+
+
+@if $layout == high_contrast {
+  #cboxTitle {
+    color: #fff;
+    background: black !important;
+
+    a {
+      color: yellow !important;
+      text-decoration: underline !important;
+
+      &:focus {
+        outline: yellow dotted 2px !important;
+      }
+    }
+  }
+}

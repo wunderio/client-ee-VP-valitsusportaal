@@ -134,6 +134,14 @@
     // BEGIN: IMAGE GRID.
     $image_margin: 10px;
 
+    .image {
+      @include image-class-reset;
+    }
+
+    a {
+      display: block;
+    }
+
     img {
       margin: 0 !important;
       width: 100%;
@@ -287,6 +295,25 @@
       }
     }
     // END: IMAGE GRID.
+  }
+}
+
+
+
+@if $layout == high_contrast {
+  .node-gallery {
+    // Begin: edit links.
+    ul.field-collection-view-links {
+      li {
+        a {
+          background: black !important;
+
+          &:hover {
+            background: yellow !important;
+          }
+        }
+      }
+    }
   }
 }
 

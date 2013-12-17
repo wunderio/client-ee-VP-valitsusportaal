@@ -39,3 +39,15 @@
     }
   }
 }
+
+
+
+@if $layout == high_contrast {
+  .block-views-f09b2921de187cba152bbeb961c4a0e1 {
+    ul {
+      li {
+        background-image: url(../img/10-global/link-arrow-on-light-bg2-high-contrast.png) !important;
+      }
+    }
+  }
+}

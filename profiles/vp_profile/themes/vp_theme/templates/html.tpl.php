@@ -10,9 +10,8 @@
 <body<?php print $attributes;?>>
   <div id="skip-link">
     <a href="#main-content" class="element-invisible element-focusable"><?php print t('Skip to main content'); ?></a>
-    <!--<a href="" class=""><?php print t('Toggle high contrast'); ?></a>-->
-    <?php print l(t('Toggle high contrast'), 'high_contrast_toggle', array('query' => array('destination' => (isset($current_url) ? $current_url : '')), 'attributes' => array('class' => array('element-invisible', 'element-focusable')))); ?>
-    <?php print l(t('Accessibility Help'), 'accessibility', array('attributes' => array('class' => array('element-invisible', 'element-focusable')))); ?>
+    <?php print l(t('Toggle high contrast'), 'high_contrast_toggle', array('query' => array('destination' => _high_contrast_get_current_url()), 'attributes' => array('class' => array('element-invisible', 'element-focusable')))); ?>
+    <?php print l(t('Accessibility Help'), drupal_get_normal_path('accessibility', 'en'), array('attributes' => array('class' => array('element-invisible', 'element-focusable')))); ?>
   </div>
   <?php print $page_top; ?>
   <?php print $page; ?>

@@ -69,3 +69,23 @@
     background: url(../img/40-desktop/zone-preface-wrapper.png) 50% 0 repeat-y;
   }
 }
+
+
+
+@if $layout == high_contrast {
+  .zone-preface-wrapper {
+    background: url(../img/40-desktop/zone-preface-wrapper-high-contrast.png) 50% 0 repeat-y;
+
+    * {
+      background-color: transparent !important;
+    }
+
+    .zone-preface {
+      background-image: url(../img/20-default/zone-preface-separator.png) !important;
+    }
+  }
+
+  .page .zone-content-wrapper .zone-content {
+    margin-bottom: 0 !important;
+  }
+}

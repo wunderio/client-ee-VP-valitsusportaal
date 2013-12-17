@@ -22,3 +22,15 @@
     }
   }
 }
+
+
+
+@if $layout == high_contrast {
+  .view-display-id-subjects_block {
+    ul {
+      li {
+        background-image: url(../img/10-global/link-arrow-on-light-bg2-high-contrast.png) !important;
+      }
+    }
+  }
+}

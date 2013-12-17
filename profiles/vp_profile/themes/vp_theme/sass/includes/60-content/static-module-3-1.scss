@@ -193,3 +193,14 @@
   }
 }
 
+
+
+@if $layout == high_contrast {
+  .node .static-module-3-1 {
+    ul {
+      li {
+        background: none !important;
+      }
+    }
+  }
+}

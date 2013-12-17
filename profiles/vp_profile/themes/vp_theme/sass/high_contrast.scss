@@ -1,0 +1,288 @@
+@import 'functions.scss';
+$layout: high_contrast;
+@import 'extendables.scss';
+
+body {
+  background: #1b1b1b;
+}
+
+.ui-dialog-content,
+.ui-dialog-content *,
+#cboxLoadedContent,
+#cboxLoadedContent *,
+.static-mainmenu-popup,
+.zone,
+.zone * {
+  background-color: transparent !important;
+  background-image: none !important;
+  border-color: white !important;
+}
+
+.page textarea,
+input:focus,
+button:focus,
+a:focus {
+  outline: yellow dotted 2px !important;
+}
+
+.ui-dialog-content,
+.ui-dialog-content *,
+#cboxLoadedContent,
+#cboxLoadedContent *,
+.ui-datepicker,
+.ui-datepicker *,
+.static-join-in .title1,
+.static-mainmenu-popup,
+.static-mainmenu-popup *,
+.zone-portal-navigation-wrapper,
+.zone,
+.zone *,
+.zone *:before,
+.zone *:after {
+  color: white !important;
+  text-shadow: none !important;
+}
+
+.ui-datepicker,
+.ui-widget-header,
+.portal-navigation-menupopup,
+.zone-portal-navigation-wrapper,
+.ui-dialog-content,
+#cboxLoadedContent,
+.zone,
+.zone *:before,
+.zone *:after {
+  background-color: black !important;
+  background-image: none !important;
+}
+
+/* Remove background color. */
+.block-delta-blocks-logo a:hover,
+.block-delta-blocks-logo a:hover img,
+.view-display-id-important_topics_slideshow_block .flex-control-nav,
+.not-front.has-sidebar-second .page .region-sidebar-first .region-inner,
+.not-front.has-sidebar-second .page .region-sidebar-second .region-inner,
+.block-delta-blocks-logo a:focus,
+.block-delta-blocks-logo a:focus img {
+  background-color: transparent !important;
+}
+
+.ui-datepicker a,
+.ui-datepicker a *,
+.static-mainmenu-popup a,
+.static-mainmenu-popup a *,
+.view-id-top_news_tabs .views-slideshow-controls-bottom .views-slideshow-pager-field-item .views-content-name,
+.zone a,
+.zone a * {
+  background-color: transparent !important;
+  color: yellow !important;
+  text-decoration: underline !important;
+}
+
+.ui-datepicker a,
+.ui-datepicker a * {
+  background: none !important;
+}
+
+.block-delta-blocks-tabs .content a {
+  background: #2F2F2F !important;
+}
+
+.block-main-menu .menu-block-wrapper ul li a.active-trail,
+.zone-portal-navigation-wrapper .block-language-switcher-fallback li.active a,
+.view-id-top_news_tabs .views-slideshow-controls-bottom .views-slideshow-pager-field-item.flex-active .views-content-name,
+.view-id-top_news_tabs .views-slideshow-controls-bottom .views-slideshow-pager-field-item .views-content-name:hover,
+.static-mainmenu-popup a:hover,
+.static-mainmenu-popup a:hover *,
+.zone a:hover,
+.zone a:hover * {
+  background: yellow !important;
+  color: black !important;
+  text-decoration: none !important;
+}
+
+.zone input[type=submit],
+.zone input[type=button],
+.zone button{
+  background: yellow !important;
+  color: black !important;
+}
+
+.zone input[type=submit]:hover,
+.zone input[type=button]:hover,
+.zone button:hover {
+  text-decoration: underline !important;
+}
+
+
+
+
+.menu-l2-popup {
+  border: 1px solid white;
+}
+
+.menu-l2-popup .arrow {
+  display: none !important;
+}
+
+.zone-portal-navigation-wrapper {
+  border-bottom: 1px solid #fff;
+}
+
+/* Remove white arrow from language menu. */
+.zone-portal-navigation-wrapper .language-switcher-locale-url li.active:after,
+.zone-portal-navigation-wrapper .language-switcher-locale-url li.active-trail:after,
+.zone-portal-navigation-wrapper .menu-name-menu-web-portal > .menu > li.active:after,
+.zone-portal-navigation-wrapper .menu-name-menu-web-portal > .menu > li.active-trail:after {
+  border: 0;
+}
+
+/* Remove arrow from .block-web-portal-navigation-menu. */
+.portal-navigation-menupopup:before {
+  display: none;
+}
+
+/* Unmerge zones. */
+/*
+.not-front .zone-preface-wrapper {
+  margin-top: 0;
+  padding: 0;
+}
+.not-front .page .zone-content-wrapper {
+  bottom: 0;
+  padding-top: 0;
+}
+.page .zone-postscript-wrapper {
+  bottom: 0;
+}
+.page .zone-postscript-wrapper .zone-postscript {
+  margin-top: 0;
+}
+.not-front .page .zone-top-wrapper .zone-top {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+*/
+
+/* Zone bordes. */
+.page .zone-postscript-wrapper .zone-postscript {
+  border-top: 1px solid #fff;
+}
+
+/*
+.zone-preface {
+  border-bottom: 1px solid #fff;
+  border-top: 1px solid #fff;
+  padding-top: 15px;
+  padding-bottom: 10px;
+}
+*/
+
+.block-views-32b717fa40c1fc37f8cb2ace7b065d6b {
+  border: 1px solid white;
+  border-bottom: 0;
+}
+
+.block-views-32b717fa40c1fc37f8cb2ace7b065d6b:after {
+  display: none;
+}
+
+/* Blocks. */
+.static-mainmenu-popup,
+.zone .form-text,
+input[type=text],
+.page textarea,
+.all-news,
+.front .page .zone-content-wrapper .region-inner .block,
+.region-sidebar-first .block,
+.region-sidebar-second .block,
+#vp-autocomplete,
+.search-sidebar,
+.block-menu-l3 {
+  background: #2F2F2F !important;
+}
+
+.static-join-in .title1 {
+  -webkit-text-fill-color: currentcolor;
+}
+
+/* Center block-vp-core-accessibility-help-link. */
+.zone-portal-navigation-wrapper .block-vp-core-accessibility-help-link .accessibility-link {
+  padding-left: 0;
+}
+
+.portal-navigation-menupopup {
+  border: 1px solid white !important;
+}
+
+.zone .form-text {
+  color: white !important;
+}
+
+.ui-widget-header .ui-icon {
+  background-image: url(/profiles/vp_profile/themes/vp_theme/img/40-desktop/ui-icons-high-contrast.png) !important;
+}
+.ui-datepicker .ui-icon-circle-triangle-w {
+  background-position: -80px -192px !important;
+}
+.ui-datepicker .ui-icon-circle-triangle-e {
+  background-position: -48px -192px !important;
+}
+
+.block-addthis-custom {
+  display: none !important;
+}
+
+.page .zone-footer {
+  background: transparent !important;
+}
+
+/* Bottom tail of page, above footer */
+.page .zone-postscript-wrapper {
+  overflow: visible;
+}
+.page .zone-postscript {
+  position: relative;
+}
+.page .zone-postscript:before {
+  content: "";
+  display: block;
+  position: absolute;
+  bottom: -15px;
+  height: 20px;
+  left: 0;
+  right: 0;
+  background: black;
+}
+
+.block--exp-contact-contact-page .form-item a:before,
+.block-views-d14a0f1aaa8753bc0fafa3efea13f117 .form-item a:before {
+  background-image: url(/profiles/vp_profile/themes/vp_theme/img/10-global/filter-bullet-high-contrast.png) !important;
+}
+
+/* Remove arrow from history view */
+.view-history .views-row:after {
+  display: none !important;
+}
+
+div.item-list ul.pager .pager-first a,
+div.item-list ul.pager .pager-previous a,
+div.item-list ul.pager .pager-next a,
+div.item-list ul.pager .pager-last a {
+  background-image: url(/profiles/vp_profile/themes/vp_theme/img/10-global/pager-arrows-high-contrast.png) !important;
+}
+
+.block-menu-l3 .prev {
+  background-image: url(/profiles/vp_profile/themes/vp_theme/img/10-global/navl3-arrow-left-high-contrast.png) !important;
+}
+
+.block-menu-l3 .next {
+  background-image: url(/profiles/vp_profile/themes/vp_theme/img/10-global/navl3-arrow-right-high-contrast.png) !important;
+}
+
+.view-youtube-videos .views-row,
+.view-display-id-news-page .views-row {
+  background-image: url(/profiles/vp_profile/themes/vp_theme/img/20-default/news-page-separator-high-contrast.png) !important;
+}
+
+@import 'includes/**/*';

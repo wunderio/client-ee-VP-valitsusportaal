@@ -1,0 +1,108 @@
+<?php
+/**
+ * @file
+ * Drupal needs this blank file.
+ */
+ 
+/**
+ * Implements hook_init().
+ */
+function vp_logo_files_init() {
+  global $language;
+  
+  if (substr($_GET['q'], 0, 9) === 'logo-file' && $language->language !== 'et') {
+    drupal_not_found();
+  }
+}
+
+/**
+ * Implements hook_views_pre_build().
+ */
+function vp_logo_files_views_pre_build(&$view) {
+  if ($view->name === 'logo_file') {
+    drupal_add_js(drupal_get_path('module', 'vp_logo_files').'/vp_logo_files.js', array('scope' => 'footer'));
+  }
+}
+
+/**
+ * Implements hook_block_view_alter().
+ */
+function vp_logo_files_block_view_alter(&$data, $block) {
+  global $language;
+
+  if ($block->machine_name === 'logo_file_page_description' && $language->language !== 'et') {
+    $data['content'] = '';
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function vp_logo_files_form_views_exposed_form_alter(&$form, &$form_state, $form_id) {
+  global $language;
+  
+  if (substr($_GET['q'], 0, 9) === 'logo-file' && $language->language !== 'et') {
+    $form = array();
+    return;
+  }
+
+  if ($form['#id'] === 'views-exposed-form-logo-file-search' && $_GET['q'] === 'logo-file') {
+    $form['#prefix'] = '<h2>'.t('Search by keyword:').'</h2>';
+  }
+  elseif ($form['#id'] === 'views-exposed-form-logo-file-search') {
+    $form['#prefix'] = '<h2>'.t('Search by keyword:').'</h2>';
+  }
+  if ($form['#id'] === 'views-exposed-form-logo-file-taxonomy' && $_GET['q'] === 'logo-file') {
+    $form['#prefix'] = '<h2>'.t('or by group:').'</h2>';
+  } 
+  elseif ($form['#id'] === 'views-exposed-form-logo-file-taxonomy') {
+    $form['#prefix'] = '<h2>'.t('Search by group:').'</h2>';
+  }
+  if ($form['#id'] === 'views-exposed-form-logo-file-alphabet' && $_GET['q'] === 'logo-file') {
+    $form['#prefix'] = '<h2>'.t('or by alphabet:').'</h2>';
+  }
+  elseif ($form['#id'] === 'views-exposed-form-logo-file-alphabet') {
+    $form['#prefix'] = '<h2>'.t('Search by alphabet:').'</h2>';
+  }
+  
+  if ($form['#id'] === 'views-exposed-form-logo-file-alphabet') {
+    // Fetch all titles.
+    $query = db_select('node', 'n')
+      ->condition('n.type', 'logo_file')
+      ->groupBy('n.title', 'ASC');
+    $query->addExpression('LEFT(n.title, 1)', 'letter');
+    $results = $query->execute()->fetchCol();
+    
+    $letters = '';
+    foreach ($results as $result) {
+      $letters .= '<li'.($_GET['letter'] === $result ? ' class="active"' : '').'>' . l($result, 'logo-file/alphabet', array('query' => array('letter' => $result))) . '</li>';
+    }
+    
+    $form['letters'] = array(
+      '#markup' => '<ul class="abc-list clearfix">' . $letters . '</ul>',
+    );
+  }
+}
+
+/**
+ * Implements hook_menu().
+ */
+function vp_logo_files_menu() {
+  $items = array();
+ 
+  $items['logo-file'] = array(
+    'title' => 'Logo files',
+    'page callback' => 'vp_logo_files_page',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+ 
+  return $items;
+}
+ 
+/**
+ * Logo files page.
+ */
+function vp_logo_files_page() {
+  return '';
+}

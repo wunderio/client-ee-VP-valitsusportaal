@@ -43,3 +43,16 @@
     }
   }
 }
+
+
+
+@if $layout == high_contrast {
+  .static-important-topics-links {
+    ul {
+      li {
+        background-image: url(../img/10-global/link-arrow-on-dark-bg.png) !important;
+        padding: 1px 0 1px 17px;
+      }
+    }
+  }
+}

@@ -4,6 +4,8 @@
 @if $layout == global {
   .block-addthis-custom {
     padding-bottom: 15px;
+    position: relative;
+    z-index: 1;
 
     .responsive-layout-mobile & {
       a {
@@ -78,8 +80,13 @@
     overflow: hidden;
   }
 
+
   .block-addthis-custom {
     float: right;
     padding: 9px 0 0 15px;
+
+    .addthis_toolbox {
+      min-width: 80px;
+    }
   }
 }

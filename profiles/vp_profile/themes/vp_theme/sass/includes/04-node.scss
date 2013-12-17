@@ -5,30 +5,53 @@
 // Path: sass\includes\04-node.scss
 // Because node can be used in views and thus can appear in any region, this
 // file is in the includes root folder.
-//
 
-@if $layout == editor or
-    $layout == global {
-  .node {
-    font-size: 14px;
 
-    p,
-    dl,
-    ul,
-    ol {
-      margin: 0 0 18px;
+@mixin node_default_ul($layout) {
+  @if $layout == editor {
+    ul {
+      padding: 0;
+
+      li {
+        background: url(../img/10-global/custom-bullet-romb.png) no-repeat 10px 3px;
+        padding: 0 0 0 30px;
+        margin: 14px 0;
+      }
+
+      ul,
+      ol {
+        padding-bottom: 0;
+        margin-bottom: 0;
+      }
+
+      ul {
+        padding-left: 7px;
+
+        li {
+          background-image: url(../img/10-global/kollane-bullet-small.png);
+          background-position: 10px 4px;
+        }
+
+        // Third level (ul and ol).
+        & {
+          ul,
+          ol {
+            padding-left: 30px;
+
+            li {
+              background: none;
+              padding-left: 0;
+            }
+          }
+
+          ul {
+            list-style-type: circle;
+          }
+        }
+      }
     }
-
-    ul,
-    ol {
-      list-style-position: outside;
-      padding-left: 30px;
-    }
-
-    ol {
-      list-style-type: decimal;
-    }
-
+  }
+  @elseif $layout == global {
     .field-name-body {
       ul {
         padding: 0;
@@ -72,6 +95,35 @@
         }
       }
     }
+  }
+}
+
+
+
+
+@if $layout == editor or
+    $layout == global {
+  .node {
+    font-size: 14px;
+
+    p,
+    dl,
+    ul,
+    ol {
+      margin: 0 0 18px;
+    }
+
+    ul,
+    ol {
+      list-style-position: outside;
+      padding-left: 30px;
+    }
+
+    ol {
+      list-style-type: decimal;
+    }
+
+    @include node_default_ul($layout);
 
     // BEGIN: A little fix for page /rss-feeds.
     #rsseses {
@@ -97,8 +149,6 @@
     dd.content {
       margin-left: 20px;
     }
-
-
 
     img,
     .image {
@@ -306,3 +356,22 @@
   }
 }
 
+
+
+@if $layout == high_contrast {
+  .node {
+    .field-name-body {
+      ul {
+        li {
+          background-image: url(../img/10-global/custom-bullet-romb-high-contrast.png) !important;
+        }
+
+        ul {
+          li {
+            background-image: url(../img/10-global/kollane-bullet-small-high-contrast.png) !important;
+          }
+        }
+      }
+    }
+  }
+}

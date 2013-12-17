@@ -44,10 +44,10 @@
   .field-name-field-files .field-label a:hover {
     color: #00698c; }
 
-.node-article .field-name-field-gallery, .block-views-19eef6f0bee85264121542d861111bec, .static-read-more {
+.node-article .field-name-field-gallery, .block-views-19eef6f0bee85264121542d861111bec, .node .static-read-more {
   position: relative;
   z-index: 1; }
-  .node-article .field-name-field-gallery:before, .block-views-19eef6f0bee85264121542d861111bec:before, .static-read-more:before {
+  .node-article .field-name-field-gallery:before, .block-views-19eef6f0bee85264121542d861111bec:before, .node .static-read-more:before {
     background-image: url(../img/40-desktop/block-separator.png);
     background-position: 50% 0;
     content: "";
@@ -60,7 +60,7 @@
     top: -9px;
     z-index: 2; }
 
-.node-article .field-name-field-gallery:before, .block-views-19eef6f0bee85264121542d861111bec:before, .static-read-more:before {
+.node-article .field-name-field-gallery:before, .block-views-19eef6f0bee85264121542d861111bec:before, .node .static-read-more:before {
   margin-left: -35px;
   margin-right: -35px; }
 
@@ -796,6 +796,8 @@ body {
 .block-addthis-custom {
   float: right;
   padding: 9px 0 0 15px; }
+  .block-addthis-custom .addthis_toolbox {
+    min-width: 80px; }
 
 .block-delta-blocks-breadcrumb {
   margin-bottom: 0; }
@@ -842,6 +844,30 @@ body {
 #user-login {
   width: 300px;
   margin: 0 auto; }
+
+.block-views-exp-logo-file-search,
+.block--exp-logo-file-taxonomy,
+.block--exp-logo-file-alphabet {
+  border-left: 1px dashed #ccc;
+  float: left;
+  padding: 7px 2% 0 2%;
+  width: 29%; }
+
+.block-views-exp-logo-file-search {
+  border-left: 0 none !important;
+  padding-left: 0 !important; }
+  .page-logo-file-search .block-views-exp-logo-file-search #edit-title-wrapper {
+    width: 230px; }
+
+.view-logo-file .item-trigger {
+  float: left;
+  width: 31%; }
+.view-logo-file .item-content {
+  float: left;
+  margin: 0 0 0 3.5%;
+  width: 31%; }
+.view-logo-file .logo-wrapper > div > div {
+  height: 82px; }
 
 .field-name-field-cover-image {
   margin-bottom: 20px; }
@@ -1371,11 +1397,13 @@ div.item-list ul.pager li.pager-ellipsis, div.item-list ul.pager li.pager-curren
     position: relative;
     width: 293px;
     z-index: 1; }
-    #static-module-5 .aside ul li div {
+    #static-module-5 .aside ul li a {
+      border: 1px dashed transparent;
+      color: #333333;
+      display: block;
       padding: 8px 50px 11px 22px;
-      position: relative;
-      border: 1px dashed transparent; }
-      #static-module-5 .aside ul li div:after {
+      position: relative; }
+      #static-module-5 .aside ul li a:after {
         background: url(../img/10-global/static-module-5-tab-normal-border.png) 0 100% repeat-x;
         bottom: -7px;
         content: "";
@@ -1384,13 +1412,14 @@ div.item-list ul.pager li.pager-ellipsis, div.item-list ul.pager li.pager-curren
         position: absolute;
         right: 37px;
         z-index: 2; }
-    #static-module-5 .aside ul li:last-child div:after {
+    #static-module-5 .aside ul li:last-child a:after {
       display: none; }
     #static-module-5 .aside ul li.active {
       background-color: #BB3F2B;
       background-image: url(../img/40-desktop/static-module-5-tab-mid.png);
       color: #fff; }
-      #static-module-5 .aside ul li.active div {
+      #static-module-5 .aside ul li.active a {
+        color: #fff;
         background: none;
         border-radius: 3px;
         border-color: #DDA297; }
@@ -1431,16 +1460,16 @@ div.item-list ul.pager li.pager-ellipsis, div.item-list ul.pager li.pager-curren
 .node .static-person-contact .main {
   padding: 10px 0px 40px 0; }
 
-.static-read-more {
+.node .static-read-more {
   margin-left: -35px;
   margin-right: -35px; }
-  .static-read-more:before {
+  .node .static-read-more:before {
     top: -14px;
     margin-left: 0;
     margin-right: 0; }
-  .static-read-more h2 {
+  .node .static-read-more h2 {
     padding-left: 60px; }
-  .static-read-more .grid-inner {
+  .node .static-read-more .grid-inner {
     padding: 0 30px; }
 
 .static-simple-2columns {
@@ -1627,8 +1656,7 @@ div.item-list ul.pager li.pager-ellipsis, div.item-list ul.pager li.pager-curren
         float: left;
         padding-bottom: 13px;
         padding-right: 20px;
-        width: 196px;
-        overflow: hidden; }
+        width: 196px; }
       .static-join-in .box.box-3 .social-links img {
         float: left; }
       .static-join-in .box.box-3 .social-links a {

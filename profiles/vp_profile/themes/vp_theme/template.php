@@ -11,6 +11,102 @@
  * for more information on this topic.
  */
 
+function vp_theme_select_as_links($vars) {
+  $element = $vars['element'];
+
+  $output = '';
+  $name = $element['#name'];
+
+  // Collect selected values so we can properly style the links later
+  $selected_options = array();
+  if (empty($element['#value'])) {
+    if (!empty($element['#default_values'])) {
+      $selected_options[] = $element['#default_values'];
+    }
+  }
+  else {
+    $selected_options[] = $element['#value'];
+  }
+
+  // Add to the selected options specified by Views whatever options are in the 
+  // URL query string, but only for this filter
+  $urllist = parse_url(request_uri());
+  if (isset($urllist['query'])) {
+    $query = array();
+    parse_str(urldecode($urllist['query']), $query);
+    foreach ($query as $key => $value) {
+      if ($key != $name) {
+        continue;
+      }
+      if (is_array($value)) {
+        // This filter allows multiple selections, so put each one on the selected_options array
+        foreach ($value as $option) {
+          $selected_options[] = $option;
+        }
+      }
+      else {
+        $selected_options[] = $value;
+      }
+    }
+  }
+
+  // Go through each filter option and build the appropriate link or plain text
+  foreach ($element['#options'] as $option => $elem) {
+    // Check for Taxonomy-based filters
+    if (is_object($elem)) {
+      list($option, $elem) = each(array_slice($elem->option, 0, 1, TRUE));
+    }
+
+    /*
+     * Check for optgroups.  Put subelements in the $element_set array and add a group heading.
+     * Otherwise, just add the element to the set
+     */
+    $element_set = array();
+    if (is_array($elem)) {
+      $element_set = $elem;
+    }
+    else {
+      $element_set[$option] = $elem;
+    }
+
+    $links = array();
+    $multiple = !empty($element['#multiple']);
+
+    foreach ($element_set as $key => $value) {
+      // Custom ID for each link based on the <select>'s original ID
+      $id = drupal_html_id($element['#id'] . '-' . $key);
+      if (array_search($key, $selected_options) === FALSE) {
+        if ($_GET['q'] === 'logo-file') {
+          $link = l($value, 'logo-file/taxonomy', array('query' => array($name => $key)));
+        }
+        else {
+          $link = l($value, bef_replace_query_string_arg($name, $key, $multiple));
+        }
+        $output .= theme('form_element', array('element' => array('#id' => $id, '#children' => $link)));
+      }
+      else {
+        // Selected value is output without a link
+        // TODO: add link to remove this option from the filter?
+        $elem = array(
+          '#id' => $id, 
+          '#children' => $value,
+        );
+        _form_set_class($elem, array('bef-select-as-links-selected'));
+        $output .= theme('form_element', array('element' => $elem));
+      }
+    }
+  }
+
+  $properties = array(
+    '#description' => isset($element['#description']) ? $element['#description'] : '', 
+    '#children' => $output,
+  );
+
+  return '<div class="bef-select-as-links">'
+    . theme('form_element', array('element' => $properties))
+    . '</div>';
+}
+
 /**
  * Implements theme_menu_link().
  *

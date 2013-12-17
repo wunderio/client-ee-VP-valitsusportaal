@@ -154,6 +154,13 @@
       $(".ui-dialog-content").dialog('close');
     });
 
+    $('.ui-dialog-titlebar-close').live('keydown', function(e) {
+      if (e.keyCode === 13) {
+        $(".ui-dialog-content").dialog('close');
+        e.preventDefault();
+      }
+    });
+
     // On resize center and set width.
     $(window).resize(function () {
       setUIDialogDefaultSettings();

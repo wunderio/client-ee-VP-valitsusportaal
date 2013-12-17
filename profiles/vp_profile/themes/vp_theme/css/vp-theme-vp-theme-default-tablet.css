@@ -26,7 +26,7 @@
   margin-right: -20px;
   padding-right: 0; }
 .not-front.has-sidebar-second .page .region-content .region-inner {
-  margin-right: 30px; }
+  margin-right: 10px; }
 .not-front.has-sidebar-second .page .region-sidebar-second .region-inner {
   padding-left: 0; }
 
@@ -77,7 +77,8 @@
   padding-top: 30px; }
   .view-id-top_news_tabs .flexslider_views_slideshow_main .view-id-top_news_first .views-field-field-cover-image {
     padding-right: 4%;
-    width: 48%; }
+    width: 48%;
+    padding-left: 1px; }
   .view-id-top_news_tabs .flexslider_views_slideshow_main .view-id-news_tabs_right_side {
     overflow: hidden;
     padding-top: 20px; }
@@ -149,6 +150,19 @@
       margin-left: 0; }
     .field-name-field-gallery .node-gallery .field-name-field-pictures.field-type-field-collection > .field-items > .field-item.col-tablet-last {
       margin-right: 0; }
+
+.block-views-exp-logo-file-search,
+.block--exp-logo-file-taxonomy,
+.block--exp-logo-file-alphabet {
+  min-height: 220px; }
+  .block-views-exp-logo-file-search .views-exposed-widget .form-submit,
+  .block--exp-logo-file-taxonomy .views-exposed-widget .form-submit,
+  .block--exp-logo-file-alphabet .views-exposed-widget .form-submit {
+    padding-left: 8px;
+    padding-right: 8px; }
+
+block-views-exp-logo-file-search #edit-title-wrapper {
+  width: 100px; }
 
 .field-name-field-cover-image {
   width: 200px; }
@@ -236,15 +250,15 @@
 .node .static-module-3-1 ul li {
   padding-right: 20px; }
 
-.static-read-more h2 {
+.node .static-read-more h2 {
   padding-left: 30px; }
-.static-read-more .grid-inner {
+.node .static-read-more .grid-inner {
   padding: 0 20px; }
-.static-read-more .grid-4:first-child .grid-inner {
+.node .static-read-more .grid-4:first-child .grid-inner {
   padding-left: 30px; }
-.static-read-more .grid-4:last-child .grid-inner {
+.node .static-read-more .grid-4:last-child .grid-inner {
   padding-right: 30px; }
-.static-read-more ul {
+.node .static-read-more ul {
   padding-left: 0 !important; }
 
 .view-history .view-content {

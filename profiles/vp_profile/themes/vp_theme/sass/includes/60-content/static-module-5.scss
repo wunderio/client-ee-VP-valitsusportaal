@@ -159,10 +159,12 @@ $static-module-5-global-padding-top: 55px;
           width: 301px - $horizontal-padding * 2;
           z-index: 1;
 
-          div {
+          a {
+            border: 1px dashed transparent;
+            color: $color-text;
+            display: block;
             padding: 8px 50px 11px 22px;
             position: relative;
-            border: 1px dashed transparent;
 
             // Spacer for normal tabs.
             &:after {
@@ -178,7 +180,7 @@ $static-module-5-global-padding-top: 55px;
           }
 
           // Remove the spacer from last tab.
-          &:last-child div:after {
+          &:last-child a:after {
             display: none;
           }
 
@@ -188,7 +190,8 @@ $static-module-5-global-padding-top: 55px;
             color: #fff;
 
 
-            div {
+            a {
+              color: #fff;
               background: none;
               border-radius: 3px;
               border-color: #DDA297;
@@ -248,6 +251,30 @@ $static-module-5-global-padding-top: 55px;
 
      .main-inner {
       border-left-width: 0;
+    }
+  }
+}
+
+
+
+@if $layout == high_contrast {
+  #static-module-5 {
+    .aside {
+      ul {
+        li {
+          background: none !important;
+
+          &.active {
+            a {
+              border-color: yellow !important;
+            }
+
+            &:before {
+              display: none !important;
+            }
+          }
+        }
+      }
     }
   }
 }
