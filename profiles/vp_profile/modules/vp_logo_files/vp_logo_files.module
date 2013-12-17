@@ -12,6 +12,7 @@ function vp_logo_files_init() {
   
   if (substr($_GET['q'], 0, 9) === 'logo-file' && $language->language !== 'et') {
     drupal_not_found();
+    drupal_exit();
   }
 }
 
