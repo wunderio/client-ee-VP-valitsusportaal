@@ -34,7 +34,7 @@ $gallery = node_load($gallery_nids[0]);
     if (isset($item['#entity']->field_title[LANGUAGE_NONE][0]['value']) && !empty($item['#entity']->field_title[LANGUAGE_NONE][0]['value'])) {
       $title = $item['#entity']->field_title[LANGUAGE_NONE][0]['value'];
     }
-    $title = htmlspecialchars($title, ENT_QUOTES);
+    $title = preg_replace('@[\s]{2,}@', ' ', strip_tags($title));
     ?>
     <div class="field-item <?php print $delta % 2 ? 'odd' : 'even'; ?>"<?php print $item_attributes[$delta]; ?>>
 
@@ -77,7 +77,7 @@ $gallery = node_load($gallery_nids[0]);
                 '<a class="addthis_button_linkedin"></a>' +
               '</div>');
               }
-              $addthis_colorbox.attr('addthis:title', '<?php echo $item['#entity']->field_title[LANGUAGE_NONE][0]['value']; ?>');
+              $addthis_colorbox.attr('addthis:title', '<?php echo $title; ?>');
               $addthis_colorbox.attr('addthis:url', '<?php $path = isset($_GET['q']) ? $_GET['q'] : '<front>';
 print url($path, array('absolute' => TRUE)); ?>#colorbox-<?php echo $id; ?>');
               $('#cboxTitle').after($addthis_colorbox);
