@@ -19,6 +19,9 @@ function vp_core_init() {
   drupal_add_js('//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-51f90a0115ca9e8f',
     array('type' => 'external', 'scope' => 'footer', 'weight' => 6)
   );
+
+  // Force IE8, IE9 or IE10
+  drupal_add_http_header('X-UA-Compatible', 'IE=8,9,10');
 }
 
 /**

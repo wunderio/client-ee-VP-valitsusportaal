@@ -154,6 +154,13 @@ td {
 
 .view-logo-file {
   background-image: url(../img/40-desktop/files-search-top-shadow.png); }
+  .view-logo-file .item-content {
+    margin: 0 0 0 32px; }
+    .view-logo-file .item-content .logo-wrapper img {
+      max-width: 288px; }
+  .view-logo-file .item-trigger,
+  .view-logo-file .item-content {
+    width: 288px; }
 
 .field-name-field-cover-image {
   width: 215px; }

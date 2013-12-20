@@ -1,8 +1,12 @@
 <?php
-// $Id$
 
 /**
- * Implementation of hook_install()
+ * @file
+ * Install, update, and uninstall functions for the High Contrast module.
+ */
+
+/**
+ * Implements hook_install().
  */
 function high_contrast_install() {
   // Set variables.
@@ -15,7 +19,7 @@ function high_contrast_install() {
 }
 
 /**
- * Implementation of hook_uninstall().
+ * Implements hook_uninstall().
  */
 function high_contrast_uninstall() {
 

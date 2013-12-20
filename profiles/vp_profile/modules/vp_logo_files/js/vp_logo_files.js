@@ -15,7 +15,7 @@
         $(this).find("div.field-name-field-logo-files-lang").hide();
         options += '<option value="logo-files-' + vr_i + "-" + fc_i + '">' + option + "</option>";
 
-        var img_src = $(this).find("div.group-logo-files-web a.sml-btn").attr("href");
+        var img_src = $(this).find("div.group-logo-files-web span.full-url").eq(0).text();
         $(this).prepend('<div class="logo-wrapper"><div><div><img src="'+img_src+'" /></div></div></div>');
       });
       $(this).prepend("<select>" + options + "</select>");

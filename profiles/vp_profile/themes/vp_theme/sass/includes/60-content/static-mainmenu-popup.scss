@@ -113,6 +113,7 @@
 
     .widget-menu {
       @extend %clearfix;
+      @extend %sidefloat;
 
       li {
         background: url(../img/10-global/mainmenu-popup-item-border.png) repeat-x 100% 100%;

@@ -156,7 +156,7 @@
       }
 
       // Logo file button.s
-      .sml-btn {
+      .zipcart {
         -webkit-appearance: none;
         -moz-background-clip: padding;
         -webkit-background-clip: padding;
@@ -237,15 +237,9 @@
 @if $layout == default {
   .view-logo-file {
 
-    .item-trigger {
-      float:left;
-      width: 31%;
-    }
-
+    .item-trigger,
     .item-content {
       float: left;
-      margin: 0 0 0 3.5%;
-      width: 31%;
     }
 
     .logo-wrapper {
@@ -259,10 +253,44 @@
 }
 
 
+@if $layout == tablet {
+  .view-logo-file {
+    $colwidth: 195px;
+
+    .item-content {
+      margin: 0 0 0 22px;
+
+      .logo-wrapper img {
+        max-width: $colwidth;
+      }
+    }
+
+    .item-trigger,
+    .item-content {
+      width: $colwidth;
+    }
+  }
+}
+
+
 
 @if $layout == desktop {
   .view-logo-file {
+    $colwidth: 288px;
     background-image: url(../img/40-desktop/files-search-top-shadow.png);
+
+    .item-content {
+      margin: 0 0 0 32px;
+
+      .logo-wrapper img {
+        max-width: $colwidth;
+      }
+    }
+
+    .item-trigger,
+    .item-content {
+      width: $colwidth;
+    }
   }
 }
 

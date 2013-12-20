@@ -261,7 +261,7 @@
   var _vPMenuApplyAccessibiliy = function($menu) {
     var $skipLinkWrapper = $menu.find('.vp-menu-skip-link');
     if ($skipLinkWrapper.length === 0) {
-      $skipLinkWrapper = $('<div class="vp-menu-skip-link"><a href="#" class="element-invisible element-focusable">' + Drupal.t('Skip/exit menu popup') + '</a></div>');
+      $skipLinkWrapper = $('<div class="vp-menu-skip-link"><a href="#" class="element-invisible element-focusable">' + Drupal.t('Exit submenu') + '</a></div>');
       $skipLinkWrapper.prependTo($menu.find('.mainmenu-popup-content'));
       // Add dummy link so that we can create loop with tab index inside the menu popup.
       $('<a href="#" class="element-invisible element-focusable"></a>').appendTo($menu.find('.mainmenu-popup-content'));

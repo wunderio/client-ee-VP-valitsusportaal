@@ -7,7 +7,12 @@
       <div class="field-item <?php print $delta % 2 ? 'odd' : 'even'; ?>"<?php print $item_attributes[$delta]; ?>><?php print render($item); ?></div>
     <?php endforeach; ?>
   </div>
-  <div class="caption">
-    <?php echo $element['#object']->field_cover_image[LANGUAGE_NONE][0]['title']; ?>
-  </div>
+  <?php
+    /* Check for 3 or more characters to omit accidental white-space without using trim() function.  */
+    if (strlen($element['#object']->field_cover_image[LANGUAGE_NONE][0]['title']) > 2):
+  ?>
+    <div class="caption">
+      <?php echo $element['#object']->field_cover_image[LANGUAGE_NONE][0]['title']; ?>
+    </div>
+  <?php endif; ?>
 </div>

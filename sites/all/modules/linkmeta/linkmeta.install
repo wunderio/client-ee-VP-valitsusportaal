@@ -21,7 +21,4 @@ function linkmeta_uninstall() {
   variable_del('linkmeta_external_img');
   variable_del('linkmeta_file_size');
   variable_del('linkmeta_file_extension');
-
-  // Clear the variable cache.
-  cache_clear_all('variables', 'cache_bootstrap');
 }

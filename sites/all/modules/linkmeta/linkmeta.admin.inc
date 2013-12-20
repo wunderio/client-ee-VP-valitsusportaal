@@ -18,11 +18,17 @@ function linkmeta_admin_page() {
     '#default_value' => variable_get('linkmeta_file_size', 0),
   );
 
-  // Append extention to link.
+  // Append extension to link.
   $form['linkmeta_file_extension'] = array(
-    '#title' => t('Append extention to link'),
+    '#title' => t('Append file extension to link'),
     '#type' => 'checkbox',
     '#default_value' => variable_get('linkmeta_file_extension', 0),
+  );
+
+  // Help text for icons.
+  $form['help'] = array(
+    '#type' => 'item',
+    '#markup' => t('Uploaded icons will be resized to 16x16px. Upload icon files in correct size for best visual result.'),
   );
 
   // Icon for internal links.
@@ -31,7 +37,21 @@ function linkmeta_admin_page() {
     '#type' => 'managed_file',
     '#default_value' => variable_get('linkmeta_internal_img', ''),
     '#upload_location' => 'public://linkmeta/',
+    '#theme' => 'image_widget',
   );
+  if ($file = file_load(variable_get('linkmeta_internal_img', ''))) {
+    $form['linkmeta_internal_img'] += array(
+      '#attached' => array(
+        'css' => array(
+          'image-preview' => drupal_get_path('module', 'image') . '/image.css',
+        ),
+      ),
+      'preview' => array(
+        '#theme' => 'image',
+        '#path' => $file->uri,
+      ),
+    );
+  }
 
   // Icon for external links.
   $form['linkmeta_external_img'] = array(
@@ -39,7 +59,21 @@ function linkmeta_admin_page() {
     '#type' => 'managed_file',
     '#default_value' => variable_get('linkmeta_external_img', ''),
     '#upload_location' => 'public://linkmeta/',
+    '#theme' => 'image_widget',
   );
+  if ($file = file_load(variable_get('linkmeta_external_img', ''))) {
+    $form['linkmeta_external_img'] += array(
+      '#attached' => array(
+        'css' => array(
+          'image-preview' => drupal_get_path('module', 'image') . '/image.css',
+        ),
+      ),
+      'preview' => array(
+        '#theme' => 'image',
+        '#path' => $file->uri,
+      ),
+    );
+  }
 
   // Images for automatically detected extensions.
   $types = variable_get('linkmeta_types', '');
@@ -52,7 +86,21 @@ function linkmeta_admin_page() {
           '#type' => 'managed_file',
           '#default_value' => variable_get('linkmeta_' . $extension, ''),
           '#upload_location' => 'public://linkmeta/',
+          '#theme' => 'image_widget',
         );
+        if ($file = file_load(variable_get('linkmeta_' . $extension, ''))) {
+          $form['linkmeta_' . $extension] += array(
+            '#attached' => array(
+              'css' => array(
+                'image-preview' => drupal_get_path('module', 'image') . '/image.css',
+              ),
+            ),
+            'preview' => array(
+              '#theme' => 'image',
+              '#path' => $file->uri,
+            ),
+          );
+        }
       }
     }
   }

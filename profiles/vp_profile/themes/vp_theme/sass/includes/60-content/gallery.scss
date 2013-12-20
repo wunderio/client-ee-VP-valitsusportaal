@@ -21,6 +21,14 @@
 
     img {
       width: 100%;
+
+      &.normal {
+        display: none;
+      }
+
+      &.retina {
+        display: block;
+      }
     }
 
     .tablediv-cell {
@@ -48,6 +56,16 @@
       float: left;
       padding-left: 10px;
       padding-right: 10px;
+    }
+
+    img {
+      &.normal {
+        display: block;
+      }
+
+      &.retina {
+        display: none;
+      }
     }
   }
 }

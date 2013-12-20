@@ -11,7 +11,7 @@
     margin-left: 0;
     padding-left: 0; }
 
-.node .static-person-contact .main, .static-join-in .box.box-3 .social-links a {
+.static-mainmenu-popup .widget-menu, .node .static-person-contact .main, .static-join-in .box.box-3 .social-links a {
   display: table-cell;
   vertical-align: top;
   width: 10000px; }
@@ -291,6 +291,12 @@ sub {
       background: none; }
     .responsive-layout-mobile .node table img {
       width: auto !important; }
+  .node .parent_link_info_data {
+    display: inline-block;
+    height: 1px;
+    width: 4px; }
+    .node .parent_link_info_data img {
+      display: none; }
 
 .file > .image {
   background: none;

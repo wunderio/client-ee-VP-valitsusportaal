@@ -1,0 +1,54 @@
+diff --git a/js/flexslider_views_slideshow.js b/js/flexslider_views_slideshow.js
+index 45ad23f..723322b 100644
+--- a/js/flexslider_views_slideshow.js
++++ b/js/flexslider_views_slideshow.js
+@@ -22,7 +22,7 @@
+ 
+         // @todo map the settings from the form to their javascript equivalents
+         settings.targetId = fullId;
+-        
++
+         settings.loaded = false;
+ 
+         // Assign default settings
+@@ -70,8 +70,23 @@
+           manualControls:settings.manualControls,
+           start: function(slider) {
+             flexslider_views_slideshow_register(fullId, slider);
++            slider.trigger('start', [slider]);
++          },
++          before: function(slider) {
++            slider.trigger('before', [slider]);
++          },
++          after: function(slider) {
++            slider.trigger('after', [slider]);
++          },
++          end: function(slider) {
++            slider.trigger('end', [slider]);
++          },
++          added: function(slider) {
++            slider.trigger('added', [slider]);
++          },
++          removed: function(slider) {
++            slider.trigger('removed', [slider]);
+           }
+-          // @todo register other callbacks
+         };
+ 
+         Drupal.flexsliderViewsSlideshow.load(fullId);
+@@ -106,7 +121,7 @@
+     Drupal.flexsliderViewsSlideshow.active['#flexslider_views_slideshow_main_' + options.slideshowID].resume();
+     Drupal.flexsliderViewsSlideshow.active['#flexslider_views_slideshow_main_' + options.slideshowID].manualPause = false;
+   }
+-  
++
+   Drupal.flexsliderViewsSlideshow.nextSlide = function (options) {
+     var target = Drupal.flexsliderViewsSlideshow.active['#flexslider_views_slideshow_main_' + options.slideshowID].getTarget('next');
+ 
+@@ -122,4 +137,4 @@
+     }
+   }
+   // @todo add support for jquery mobile page init
+-})(jQuery);
+\ No newline at end of file
++})(jQuery);

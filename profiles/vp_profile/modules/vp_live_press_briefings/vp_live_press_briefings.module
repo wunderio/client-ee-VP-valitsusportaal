@@ -104,7 +104,8 @@ function vp_live_press_briefings_block_view($delta = '') {
       if ($status === 0) {
         drupal_add_js('/'.drupal_get_path('module', 'vp_live_press_briefings').'/flowplayer-3.2.12.min.js', 'file');
         drupal_add_js('(function($){$().ready(function(){
-          $("a.import-video-stream-live").click(function(e) {
+          var $link = $("a.import-video-stream-live");
+          $link.click(function(e) {
             e.preventDefault();
             $("body").append(\'<div id="import-video-stream-iframe" class="noresize"><a style="display:block;width:480px;height:270px" id="player"></a></div>\');
             flowplayer("player", "/'.drupal_get_path('module', 'vp_live_press_briefings').'/flowplayer-3.2.16.swf", {
@@ -126,6 +127,7 @@ function vp_live_press_briefings_block_view($delta = '') {
               width: 540,
               close: function(event, ui) {
                 $("#import-video-stream-iframe").remove();
+                $link.focus();
               }
             });
           });

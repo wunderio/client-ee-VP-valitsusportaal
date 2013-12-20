@@ -3,13 +3,16 @@
  * @file
  * Code changes for logo files.
  */
- 
+
+// Define root folder for logos under public://.
+define('LOGO_FILES_ROOT_PATH', 'logo-files');
+
 /**
  * Implements hook_init().
  */
 function vp_logo_files_init() {
   global $language;
-  
+
   if (substr($_GET['q'], 0, 9) === 'logo-file' && $language->language !== 'et') {
     drupal_not_found();
     drupal_exit();
@@ -21,7 +24,7 @@ function vp_logo_files_init() {
  */
 function vp_logo_files_views_pre_build(&$view) {
   if ($view->name === 'logo_file') {
-    drupal_add_js(drupal_get_path('module', 'vp_logo_files').'/vp_logo_files.js', array('scope' => 'footer'));
+    drupal_add_js(drupal_get_path('module', 'vp_logo_files').'/js/vp_logo_files.js', array('scope' => 'footer'));
   }
 }
 
@@ -41,7 +44,7 @@ function vp_logo_files_block_view_alter(&$data, $block) {
  */
 function vp_logo_files_form_views_exposed_form_alter(&$form, &$form_state, $form_id) {
   global $language;
-  
+
   if (substr($_GET['q'], 0, 9) === 'logo-file' && $language->language !== 'et') {
     $form = array();
     return;
@@ -55,7 +58,7 @@ function vp_logo_files_form_views_exposed_form_alter(&$form, &$form_state, $form
   }
   if ($form['#id'] === 'views-exposed-form-logo-file-taxonomy' && $_GET['q'] === 'logo-file') {
     $form['#prefix'] = '<h2>'.t('or by group:').'</h2>';
-  } 
+  }
   elseif ($form['#id'] === 'views-exposed-form-logo-file-taxonomy') {
     $form['#prefix'] = '<h2>'.t('Search by group:').'</h2>';
   }
@@ -65,7 +68,7 @@ function vp_logo_files_form_views_exposed_form_alter(&$form, &$form_state, $form
   elseif ($form['#id'] === 'views-exposed-form-logo-file-alphabet') {
     $form['#prefix'] = '<h2>'.t('Search by alphabet:').'</h2>';
   }
-  
+
   if ($form['#id'] === 'views-exposed-form-logo-file-alphabet') {
     // Fetch all titles.
     $query = db_select('node', 'n')
@@ -73,12 +76,12 @@ function vp_logo_files_form_views_exposed_form_alter(&$form, &$form_state, $form
       ->groupBy('n.title', 'ASC');
     $query->addExpression('LEFT(n.title, 1)', 'letter');
     $results = $query->execute()->fetchCol();
-    
+
     $letters = '';
     foreach ($results as $result) {
       $letters .= '<li'.($_GET['letter'] === $result ? ' class="active"' : '').'>' . l($result, 'logo-file/alphabet', array('query' => array('letter' => $result))) . '</li>';
     }
-    
+
     $form['letters'] = array(
       '#markup' => '<ul class="abc-list clearfix">' . $letters . '</ul>',
     );
@@ -90,20 +93,227 @@ function vp_logo_files_form_views_exposed_form_alter(&$form, &$form_state, $form
  */
 function vp_logo_files_menu() {
   $items = array();
- 
+
   $items['logo-file'] = array(
     'title' => 'Logo files',
     'page callback' => 'vp_logo_files_page',
     'access callback' => TRUE,
     'type' => MENU_CALLBACK,
   );
- 
+
+  $items['logo-file/download-bar'] = array(
+    'title' => 'Downlaod bar',
+    'description' => '',
+    'page callback' => '_vp_logo_files_download_bar_get',
+    'page arguments' => array(TRUE),
+    'type' => MENU_CALLBACK,
+    'access arguments' => array('access zipcart downloads'),
+  );
+
+  $items['logo-file/clear-download-list'] = array(
+    'title' => 'Clear download list',
+    'description' => '',
+    'page callback' => '_vp_logo_files_clear_list',
+    'type' => MENU_CALLBACK,
+    'access arguments' => array('access zipcart downloads'),
+  );
+
   return $items;
 }
- 
+
 /**
  * Logo files page.
  */
 function vp_logo_files_page() {
   return '';
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function vp_logo_files_block_info() {
+  $blocks = array();
+
+  $blocks['vp_logo_files_block_download_bar'] = array(
+    'info' => t('Logo files download bar'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function vp_logo_files_block_view($delta = '') {
+  if (user_access('access zipcart downloads')) {
+    if (function_exists($delta . '_view')) {
+      return call_user_func($delta . '_view');
+    }
+  }
+}
+
+/**
+ * Download bar view block function.
+ * @return array Block content for download bar.
+ */
+function vp_logo_files_block_download_bar_view() {
+  drupal_add_library('system', 'jquery.cookie');
+  drupal_add_js(drupal_get_path('module', 'vp_logo_files').'/js/vp_logo_files_download_bar.js', array('scope' => 'footer'));
+  /* This line is from zipcart module. Because we're not using default zipcart
+   * block, we need to add this here.
+   */
+  drupal_add_js(array('zipcart' => array('path_add' => ZIPCART_PATH_ADD, 'path_add_ajax' => ZIPCART_PATH_ADD . '/AJAX')), 'setting');
+  drupal_add_js(array('vpLogoFiles' => array('downloadBarPath' => url('logo-file/download-bar'))), 'setting');
+  return array(
+    'subject' => '<none>',
+    'content' => _vp_logo_files_download_bar_get(),
+  );
+}
+
+/**
+ * Implements hook_theme().
+ */
+function vp_logo_files_theme($existing, $type, $theme, $path) {
+  $path = drupal_get_path('module', 'vp_logo_files');
+  return array(
+    'vp_logo_files_download_bar' => array(
+      'template' => 'vp_logo_files_download_bar',
+      'path' => $path . '/theme',
+    ),
+  );
+}
+
+/**
+ * Return structured array for download bar theme.
+ * @return array Structured array for vp_logo_files_download_bar theme.
+ */
+function _vp_logo_files_get_files_from_cart() {
+  $out = array();
+
+  $sql_like_query = '';
+  $sql_like_array = array();
+  $i = 0;
+  foreach($_SESSION['zipcart']['files'] as $key => $filename) {
+    if ($i > 0) {
+      $sql_like_query .= ' OR ';
+    }
+    $sql_like_query .= 'uri LIKE :like_' . $key;
+    $sql_like_array[':like_' . $key] = '%' . substr($_SESSION['zipcart']['files'][$key], strpos($_SESSION['zipcart']['files'][$key], '/' . LOGO_FILES_ROOT_PATH . '/') + 1);
+    $i++;
+  }
+
+  if (count($sql_like_array)) {
+    $results = db_query('
+      SELECT
+        fid
+      FROM
+        file_managed
+      WHERE ' . $sql_like_query,
+      $sql_like_array
+    )->fetchAll(PDO::FETCH_ASSOC);
+
+    foreach ($results as $result) {
+      $file = file_load($result['fid']);
+      $file_ref = file_get_file_references($file);
+      $model = entity_load_single('field_collection_item', reset(reset(reset($file_ref)))->item_id);
+      $node = $model->hostEntity();
+
+      // Get language part for file title.
+      if ($model->field_logo_files_lang['und'][0]['value'] === 'et') {
+        $lang = t('Estonian version');
+      }
+      elseif ($model->field_logo_files_lang['und'][0]['value'] === 'en') {
+        $lang = t('English version');
+      }
+      elseif ($model->field_logo_files_lang['und'][0]['value'] === 'ru') {
+        $lang = t('Russian version');
+      }
+      elseif ($model->field_logo_files_lang['und'][0]['value'] === 'hu') {
+        $lang = t('Hungarian version');
+      }
+      else {
+        $lang = t($model->field_logo_files_lang['und'][0]['value'] . ' version');
+      }
+
+      // Get color type for file title.
+      $file_path_exploded = explode('/', $file->uri);
+      $file_color_type = strtoupper($file_path_exploded[5]);
+      unset($file_path_exploded);
+
+      // Get extension for file title.
+      $file_ext = pathinfo($file->uri, PATHINFO_EXTENSION);
+
+
+      $filename_in_session = parse_url(file_create_url($file->uri));
+      $filename_in_session = trim($filename_in_session['path'], '/');
+
+      // Get image dimensions for thumbnail - no jumping in frontend.
+      $image_dimentions = getimagesize(image_style_path('vp_logo_files_download_bar_thumbnail', $file->uri));
+
+      $out[$node->nid]['title'] = $node->title;
+      $out[$node->nid]['files'][] = array(
+        'fid' => $file->fid,
+        'lang' => $model->field_logo_files_lang['und'][0]['value'],
+        'thumbnail' => theme('image_style', array('style_name' => 'vp_logo_files_download_bar_thumbnail', 'path' => $file->uri, 'attributes' => array('width' => $image_dimentions[0], 'height' => $image_dimentions[1]))),
+        'lang' => $lang,
+        'color_type' => $file_color_type,
+        'ext' => $file_ext,
+        'filename' => $file->filename,
+        'remove_url' => url('logo-file/clear-download-list', array('query' => array('file' => $filename_in_session))),
+      );
+    }
+  }
+
+  return $out;
+}
+
+/**
+ * Get HTML for current download bar.
+ * @return string Download bar html.
+ */
+function _vp_logo_files_download_bar_get($ajax = FALSE) {
+  $download_bar = theme('vp_logo_files_download_bar', array(
+    'file_groups' => _vp_logo_files_get_files_from_cart(),
+    'count' => (!empty($_SESSION['zipcart']['files'])) ? sizeof($_SESSION['zipcart']['files']) : 0,
+    // @todo: if javascript is disabled, clear_download_list_link should have destionation set
+    'clear_download_list_link' => l('Clear list', 'logo-file/clear-download-list', array('attributes' => array('class' => array('reset-list')))),
+  ));
+
+  if ($ajax === FALSE) {
+    return $download_bar;
+  }
+  else {
+     print $download_bar;
+  }
+}
+
+/**
+ * Clear download list callback.
+ * @return void
+ */
+function _vp_logo_files_clear_list() {
+  if (isset($_REQUEST['file'])) {
+    foreach ($_SESSION['zipcart']['files'] as $key => $filename) {
+      if ($_REQUEST['file'] === $filename) {
+        unset($_SESSION['zipcart']['files'][$key]);
+      }
+    }
+  }
+  else {
+    $_SESSION['zipcart']['files'] = array();
+  }
+
+  // Unset all open/close settings for file groups.
+  if (count($_SESSION['zipcart']['files']) === 0) {
+    foreach($_COOKIE as $key => $var) {
+      if (strpos($key, 'vp_logo_files_download_bar_files_group') !== FALSE) {
+        unset($_COOKIE[$key]);
+        setcookie($key, null, -1, '/');
+      }
+    }
+  }
+
+  // @todo: Until this page is called with ajax, don't forward.
+  // drupal_goto();
 }

@@ -30,10 +30,3 @@ features[menu_custom][] = menu-flexslider-example
 features[node][] = flexslider_example
 features[variable][] = field_bundle_settings_node__flexslider_example
 features[views_view][] = flexslider_views_example
-
-; Information added by drupal.org packaging script on 2013-09-08
-version = "7.x-2.0-alpha3"
-core = "7.x"
-project = "flexslider"
-datestamp = "1378663043"
-

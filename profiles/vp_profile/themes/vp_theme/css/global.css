@@ -777,6 +777,12 @@ td {
       background: none; }
     .responsive-layout-mobile .node table img {
       width: auto !important; }
+  .node .parent_link_info_data {
+    display: inline-block;
+    height: 1px;
+    width: 4px; }
+    .node .parent_link_info_data img {
+      display: none; }
 
 .file > .image {
   background: none;
@@ -1786,6 +1792,10 @@ td {
   padding-top: 11px; }
 .view-display-id-galleries_page img {
   width: 100%; }
+  .view-display-id-galleries_page img.normal {
+    display: none; }
+  .view-display-id-galleries_page img.retina {
+    display: block; }
 .view-display-id-galleries_page .tablediv-cell {
   margin: 0 auto;
   padding-bottom: 37px; }
@@ -1968,6 +1978,147 @@ td {
 
 #digidoc-auth-service-mobiil_id {
   font-weight: bold; }
+
+.bottom-download-bar {
+  background: #f7f7f7;
+  border-top: 1px solid #fff;
+  bottom: 0;
+  box-shadow: 0 -3px 5px 0 rgba(0, 0, 0, 0.15);
+  left: 0;
+  padding: 10px 0;
+  position: fixed;
+  width: 100%;
+  z-index: 2; }
+  .bottom-download-bar .inner-wrapper {
+    margin: auto;
+    max-width: 1000px; }
+  .bottom-download-bar .bar-title {
+    float: left;
+    cursor: pointer;
+    font-size: 20px;
+    color: #666;
+    font-family: Museo300, Tahoma, Verdana, Segoe, sans-serif;
+    font-weight: bold;
+    line-height: 100%;
+    margin: 3px 0 0 10px; }
+    .bottom-download-bar .bar-title .icon-dl-list {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      margin: 0 7px 0 0;
+      background: url(../img/10-global/icon-dl-bar.png) no-repeat 0 100%; }
+  .bottom-download-bar.opened .bar-title .icon-dl-list {
+    background-position: 0 0; }
+  .bottom-download-bar .bar-actions {
+    float: right; }
+    .bottom-download-bar .bar-actions a {
+      display: inline-block;
+      margin: 0 0 0 10px; }
+      .bottom-download-bar .bar-actions a.reset-list {
+        color: #666;
+        font-family: Museo300, Tahoma, Verdana, Segoe, sans-serif;
+        font-size: 16px;
+        text-decoration: underline; }
+  .bottom-download-bar .files-container {
+    display: none;
+    max-height: 260px;
+    overflow: auto;
+    -webkit-transition: all 300ms ease-out;
+    -moz-transition: all 300ms ease-out;
+    -ms-transition: all 300ms ease-out;
+    -o-transition: all 300ms ease-out;
+    transition: all 300ms ease-out; }
+  .bottom-download-bar.opened .files-container {
+    display: block;
+    margin: 10px 0; }
+  .bottom-download-bar .files-group {
+    padding: 8px 15px 10px;
+    border-top: 1px solid #d9d9d9;
+    border-bottom: 1px solid #d9d9d9; }
+  .bottom-download-bar .item-trigger a {
+    color: #006488;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 16px; }
+    .bottom-download-bar .item-trigger a .icon-arrow {
+      width: 11px;
+      height: 12px;
+      display: inline-block;
+      vertical-align: middle;
+      margin: 0 4px 0 0;
+      background: url(../img/10-global/icon-blue-arrow.png) no-repeat; }
+  .bottom-download-bar .files-group.opened .item-trigger .icon-arrow {
+    background-position: 0 100%; }
+  .bottom-download-bar .files-list {
+    margin: 5px 0 20px;
+    display: none; }
+  .bottom-download-bar .files-group.opened .files-list {
+    display: block; }
+  .bottom-download-bar .file-item {
+    padding: 5px 0;
+    margin: 0 10px;
+    border-bottom: 1px solid #d9d9d9; }
+    .bottom-download-bar .file-item p {
+      float: left;
+      margin: 0 5px 0 0;
+      font-size: 12px; }
+    .bottom-download-bar .file-item .file-thumb {
+      min-width: 80px;
+      margin: 0 5px 0 0; }
+    .bottom-download-bar .file-item .remove-file {
+      background-image: url(../img/10-global/icon-red-cross.png);
+      direction: ltr;
+      float: right;
+      height: 11px;
+      overflow: hidden;
+      text-indent: -10000px;
+      width: 11px; }
+  .bottom-download-bar .bottom-download-bar-loader {
+    background-image: url(/misc/throbber.gif);
+    background-position: 0 100%;
+    display: inline-block;
+    height: 20px;
+    margin: 0 0 0 5px;
+    position: relative;
+    top: 1px;
+    vertical-align: middle;
+    width: 15px; }
+    .bottom-download-bar .bottom-download-bar-loader.element-hidden {
+      display: none; }
+  .bottom-download-bar .btn {
+    -webkit-appearance: none;
+    -moz-background-clip: padding;
+    -webkit-background-clip: padding;
+    background-clip: padding-box;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    border-radius: 5px;
+    display: inline-block;
+    background: #0085b1;
+    background: -moz-linear-gradient(top, #0085b1 0%, #006a8e 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #0085b1), color-stop(100%, #006a8e));
+    background: linear, to bottom, #0085b1 0%, #006a8e 100%;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0085b1', endColorstr='#006a8e',GradientType=0 );
+    border: 0;
+    box-shadow: inset 0 2px 1px 0 rgba(255, 255, 255, 0.13), inset 0 -2px 1px 0 rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    color: #fff;
+    font-family: Museo300, Tahoma, Verdana, Segoe, sans-serif;
+    font-weight: bold;
+    font-size: 18px;
+    margin: 5px 7px 5px 0;
+    overflow: visible;
+    padding: 3px 10px;
+    text-shadow: none;
+    width: auto; }
+    .bottom-download-bar .btn .icon {
+      background-image: url(../img/10-global/icon-dl-arrow.png);
+      display: inline-block;
+      height: 29px;
+      margin: 0 3px 0 0;
+      vertical-align: middle;
+      width: 20px; }
 
 .block-logo-file-page-description {
   margin: 30px 0 50px; }
@@ -2198,7 +2349,7 @@ td {
       .view-logo-file .item-content .entity-field-collection-item .field-items .field-item {
         display: inline-block;
         margin: 5px 10px 5px 0; }
-    .view-logo-file .item-content .entity-field-collection-item .sml-btn {
+    .view-logo-file .item-content .entity-field-collection-item .zipcart {
       -webkit-appearance: none;
       -moz-background-clip: padding;
       -webkit-background-clip: padding;
@@ -2224,14 +2375,14 @@ td {
       padding: 3px 10px;
       text-shadow: none;
       width: auto; }
-      .view-logo-file .item-content .entity-field-collection-item .sml-btn:hover, .view-logo-file .item-content .entity-field-collection-item .sml-btn:focus {
+      .view-logo-file .item-content .entity-field-collection-item .zipcart:hover, .view-logo-file .item-content .entity-field-collection-item .zipcart:focus {
         background: #0085b2;
         background: -moz-linear-gradient(top, #0085b2 0%, #0085b2 26%, #007ca5 100%);
         background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #0085b2), color-stop(26%, #0085b2), color-stop(100%, #007ca5));
         background: linear, to bottom, #0085b2 0%, #0085b2 26%, #007ca5 100%;
         filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0085b2', endColorstr='#007ca5',GradientType=0 );
         box-shadow: inset 0 2px 1px 0 rgba(255, 255, 255, 0.13), inset 0 -2px 1px 0 rgba(0, 0, 0, 0.2), 0 0 8px rgba(0, 0, 0, 0.22); }
-      .view-logo-file .item-content .entity-field-collection-item .sml-btn:active {
+      .view-logo-file .item-content .entity-field-collection-item .zipcart:active {
         background: #00698c;
         background: -moz-linear-gradient(top, #00698c 0%, #004d67 100%);
         background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #00698c), color-stop(100%, #004d67));
@@ -2342,10 +2493,12 @@ td {
 
 .view-display-id-contact_page table {
   margin-bottom: 72px; }
-.view-display-id-contact_page td.views-field-title {
-  cursor: pointer;
-  font-weight: bold; }
-  .view-display-id-contact_page td.views-field-title:hover {
+.view-display-id-contact_page td.views-field-title a {
+  color: #333333;
+  display: block;
+  font-weight: bold;
+  text-decoration: none; }
+  .view-display-id-contact_page td.views-field-title a:focus, .view-display-id-contact_page td.views-field-title a:hover {
     color: #00698c; }
 .view-display-id-contact_page .modal-tr {
   display: none; }

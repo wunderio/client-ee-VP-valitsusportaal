@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * 
+ *
  */
 
 /**
@@ -59,8 +59,14 @@ function vp_video_gallery_views_query_alter(&$view, &$query) {
     drupal_add_js('(function($){$().ready(function(){
       $("div.view-id-youtube_videos div.views-row a").click(function(e){
         e.preventDefault();
+        $link = $(this);
         $views_row = $(this).parent().parent();
-        $.colorbox({html:\'<iframe width="850" height="470" src="\'+$(this).attr("href")+\'" frameborder="0" allowfullscreen></iframe><div class="date">\'+$views_row.find("div.views-field-created").text()+\'</div><div class="title">\'+$views_row.find("h2").text()+\'</div><div class="description">\'+$views_row.find("div.views-field-body").text()+\'</div>\'});
+        $.colorbox({
+          html:\'<iframe width="850" height="470" src="\'+$(this).attr("href")+\'" frameborder="0" allowfullscreen></iframe><div class="date">\'+$views_row.find("div.views-field-created").text()+\'</div><div class="title">\'+$views_row.find("h2").text()+\'</div><div class="description">\'+$views_row.find("div.views-field-body").text()+\'</div>\',
+          onClosed: function() {
+            $link.focus();
+          }
+        });
       });
     });})(jQuery);', 'inline');
   }

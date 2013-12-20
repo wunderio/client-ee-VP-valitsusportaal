@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the VP Logo Files module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function vp_logo_files_install() {
+  $style = image_style_save(array('name' => 'vp_logo_files_download_bar_thumbnail'));
+  $effect = array(
+    'name' => 'image_scale',
+    'data' => array(
+      'width' => 67,
+      'upscale' => TRUE,
+    ),
+    'isid' => $style['isid'],
+  );
+  image_effect_save($effect);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function vp_logo_files_uninstall() {
+  image_style_delete(image_style_load('vp_logo_files_download_bar_thumbnail'));
+}

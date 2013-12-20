@@ -7,6 +7,10 @@
   float: left;
   padding-left: 10px;
   padding-right: 10px; }
+.view-display-id-galleries_page img.normal {
+  display: block; }
+.view-display-id-galleries_page img.retina {
+  display: none; }
 
 .view-display-id-galleries_page .tablediv-cell {
   float: left;

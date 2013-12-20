@@ -269,6 +269,17 @@
         }
       }
     }
+
+    // File icon they didn't remove during migrate.
+    .parent_link_info_data {
+      display: inline-block;
+      height: 1px;
+      width: 4px;
+
+      img {
+        display: none;
+      }
+    }
   }
 
   .file > .image {

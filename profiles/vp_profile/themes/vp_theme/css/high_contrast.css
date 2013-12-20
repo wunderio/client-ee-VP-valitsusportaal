@@ -285,6 +285,30 @@ div.item-list ul.pager .pager-last a {
   .node-gallery ul.field-collection-view-links li a:hover {
     background: yellow !important; }
 
+.bottom-download-bar {
+  background: #000 !important; }
+  .bottom-download-bar .bar-title .icon-dl-list {
+    background-image: url(../img/10-global/icon-dl-bar-high-contrast.png) !important; }
+  .bottom-download-bar .bar-title,
+  .bottom-download-bar .item-trigger h3 {
+    color: yellow !important; }
+  .bottom-download-bar .item-trigger h3 .icon-arrow {
+    background-image: url(../img/10-global/icon-blue-arrow-high-contrast.png) !important; }
+  .bottom-download-bar .file-item .remove-file {
+    background-image: url(../img/10-global/icon-red-cross-high-contrast.png) !important; }
+  .bottom-download-bar .btn {
+    background: yellow !important;
+    color: #000 !important;
+    text-decoration: none !important;
+      /*
+      background: -moz-linear-gradient(top, #0085b1 0%, #006a8e 100%);
+      background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #0085b1), color-stop(100%, #006a8e));
+      background: linear, to bottom, #0085b1 0%, #006a8e 100%;
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0085b1', endColorstr='#006a8e',GradientType=0 );
+*/ }
+    .bottom-download-bar .btn .icon {
+      background-image: url(../img/10-global/icon-dl-arrow-high-contrast.png) !important; }
+
 .view-logo-file .item-trigger-title:before {
   background-color: transparent !important;
   background-image: url(../img/10-global/icon-blue-arrow-high-contrast.png) !important; }

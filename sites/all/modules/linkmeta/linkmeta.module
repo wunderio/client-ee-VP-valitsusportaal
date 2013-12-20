@@ -8,7 +8,7 @@
 /**
  * Implements hook_init().
  *
- * Add css on pages exept administration theme.
+ * Add css on pages except administration theme.
  */
 function linkmeta_init() {
   global $conf;
@@ -64,10 +64,13 @@ function linkmeta_permission() {
  * Implements hook_filter_info().
  */
 function linkmeta_filter_info() {
+  $filters = array();
+
   $filters['linkmeta'] = array(
     'title' => t('Link meta display filter'),
     'process callback' => '_linkmeta_process',
   );
+
   return $filters;
 }
 
@@ -92,14 +95,17 @@ function _linkmeta_process($text, $filter, $format, $langcode, $cache, $cache_id
     // Get url and class attributes from a tag.
     $url = $a->getAttribute('href');
     $class = $a->getAttribute('class');
+    $url_host = parse_url($url, PHP_URL_HOST);
+    $base_url_host = parse_url($base_url, PHP_URL_HOST);
+    $url_scheme = drupal_strtolower(parse_url($url, PHP_URL_SCHEME));
 
     // If only hash then skip.
     if (drupal_substr($url, 0, 1) === '#') {
       continue;
     }
 
-    // If email link then skip.
-    if (drupal_substr(drupal_strtolower($url), 0, 7) === 'mailto:') {
+    // Skip if not http://, https://, //, relative or absolute path.
+    if (!empty($url_scheme) && $url_scheme !== 'http' && $url_scheme !== 'https') {
       continue;
     }
 
@@ -110,8 +116,6 @@ function _linkmeta_process($text, $filter, $format, $langcode, $cache, $cache_id
     }
 
     // Detect if link is internal or external.
-    $url_host = parse_url($url, PHP_URL_HOST);
-    $base_url_host = parse_url($base_url, PHP_URL_HOST);
     $internal = (($url_host == $base_url_host || empty($url_host)) ? TRUE : FALSE);
     if ($internal) {
       if (strpos($class, 'icon-internal') === FALSE) {
@@ -132,8 +136,8 @@ function _linkmeta_process($text, $filter, $format, $langcode, $cache, $cache_id
       $types = variable_get('linkmeta_types', array());
       if (!in_array($extension, $types)) {
         $types[] = $extension;
+        variable_set('linkmeta_types', $types);
       }
-      variable_set('linkmeta_types', $types);
 
       if (strpos($class, 'icon-' . $extension) === FALSE) {
         $class .= ' icon-' . $extension;
@@ -149,12 +153,7 @@ function _linkmeta_process($text, $filter, $format, $langcode, $cache, $cache_id
     if ((bool) variable_get('linkmeta_file_size', 0) && $internal) {
       $size = filesize(trim($a->getAttribute('href'), '/'));
       if ($size) {
-        $units = array('B', 'KB', 'MB', 'GB', 'TB');
-        $decimals = array(0, 0, 1, 2, 2);
-        $power = $size > 0 ? floor(log($size, 1024)) : 0;
-        $size = number_format($size / pow(1024, $power), $decimals[$power], '.', ',') . ' ' . $units[$power];
-
-        $enrichments[] = drupal_strtoupper($size);
+        $enrichments[] = drupal_strtoupper(format_size($size));
       }
     }
 
@@ -172,15 +171,4 @@ function _linkmeta_process($text, $filter, $format, $langcode, $cache, $cache_id
   }
 
   return preg_replace('~<(?:!DOCTYPE|/?(?:html|head|body))[^>]*>\s*~i', '', $dom->saveHTML());
-}
-
-/**
- * Implements hook_help().
- */
-function linkmeta_help($path, $arg) {
-  switch ($path) {
-    // Help for administration page.
-    case 'admin/structure/linkmeta':
-      return '<p>' . t('Uploaded icons will be resized to 16x16px. Upload icon files in correct size for best visual result.') . '</p>';
-  }
 }
