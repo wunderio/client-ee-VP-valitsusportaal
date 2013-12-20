@@ -180,10 +180,11 @@ function vp_news_page() {
 
   $options['all'] = t('All');
 
+  $field_instance = field_info_instance('node', 'field_source', 'news');
   $form['vp_news_filters'] = array(
     '#title' => t('Pick filters for the block'),
     '#type' => 'checkboxes',
-    '#default_value' => variable_get('vp_news_filters', array()),
+    '#default_value' => $field_instance['default_value'][0]['tid'],
     '#options' => $options,
   );
 
