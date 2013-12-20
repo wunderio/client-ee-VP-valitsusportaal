@@ -35,3 +35,6 @@ sass-watch.bat
 *.tar
 *.zip
 *.tgz
+
+# custom htaccess restrictions
+.htpasswd
