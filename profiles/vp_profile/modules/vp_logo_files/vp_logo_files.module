@@ -73,7 +73,7 @@ function vp_logo_files_form_views_exposed_form_alter(&$form, &$form_state, $form
     // Fetch all titles.
     $query = db_select('node', 'n')
       ->condition('n.type', 'logo_file')
-      ->groupBy('n.title', 'ASC');
+      ->groupBy('letter', 'ASC');
     $query->addExpression('LEFT(n.title, 1)', 'letter');
     $results = $query->execute()->fetchCol();
 
