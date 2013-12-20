@@ -90,7 +90,8 @@ function vp_news_views_query_alter(&$view, &$query) {
 function vp_news_views_pre_build(&$view) {
   if ($view->name == 'news') {
     if (!isset($_GET['source'])) {
-      $_GET['source'] = 9;
+      $field_instance = field_info_instance('node', 'field_source', 'news');
+      $_GET['source'] = $field_instance['default_value'][0]['tid'];
     }
   }
 }
@@ -180,11 +181,10 @@ function vp_news_page() {
 
   $options['all'] = t('All');
 
-  $field_instance = field_info_instance('node', 'field_source', 'news');
   $form['vp_news_filters'] = array(
     '#title' => t('Pick filters for the block'),
     '#type' => 'checkboxes',
-    '#default_value' => $field_instance['default_value'][0]['tid'],
+    '#default_value' => variable_get('vp_news_filters', array()),
     '#options' => $options,
   );
 
