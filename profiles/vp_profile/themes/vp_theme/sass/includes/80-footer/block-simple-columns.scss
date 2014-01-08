@@ -23,6 +23,10 @@
           color: shade(#fff, 10%);
         }
 
+        h2 {
+          @include fontSize(20px);
+        }
+
         li {
           line-height: 16px;
           padding: 3px 0;

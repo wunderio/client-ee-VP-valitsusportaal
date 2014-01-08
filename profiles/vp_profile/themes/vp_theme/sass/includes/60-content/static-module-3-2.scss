@@ -14,6 +14,15 @@ $static_module_3_2_col_padding_right: 30px;
     padding-bottom: 30px;
     padding-top: 50px;
 
+    h2 {
+      @include fontSize(20px);
+    }
+
+    h3 {
+      @include fontSize(16px);
+      margin-bottom: 2px;
+    }
+
     // Real columns
     .col {
       background-color: #f8f8f8;

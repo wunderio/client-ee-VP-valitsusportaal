@@ -21,12 +21,12 @@ function linkmeta_generate_css($reset = FALSE) {
       $css = '';
 
       // Add internal image css, if uri is set.
-      if ($file = file_load(variable_get('linkmeta_internal_img'))) {
+      if ($file = file_load(variable_get('linkmeta_internal_img', 0))) {
         $css .= '.icon-internal{background:transparent url(' . file_create_url($file->uri) . ') no-repeat right center;padding-right:18px}';
       }
 
       // Add external image css, if uri is set.
-      if ($file = file_load(variable_get('linkmeta_external_img'))) {
+      if ($file = file_load(variable_get('linkmeta_external_img', 0))) {
         $css .= '.icon-external{background:transparent url(' . file_create_url($file->uri) . ') no-repeat right center;padding-right:18px}';
       }
 
@@ -34,7 +34,7 @@ function linkmeta_generate_css($reset = FALSE) {
       $types = variable_get('linkmeta_types', array());
       if (!empty($types)) {
         foreach ($types as $extension) {
-          $file = file_load(variable_get('linkmeta_' . $extension));
+          $file = file_load(variable_get('linkmeta_' . $extension, 0));
           if (isset($file->uri)) {
             $css .= '.icon-' . $extension . '{background:transparent url(' . file_create_url($file->uri) . ') no-repeat right center;padding-right:18px}';
           }

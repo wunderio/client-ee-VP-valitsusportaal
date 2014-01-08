@@ -9,6 +9,8 @@
  * Implements hook_init().
  */
 function vp_core_init() {
+  global $base_url;
+
   if (drupal_is_front_page()) {
     drupal_add_js(drupal_get_path('module', 'vp_core') .'/js/static_fp_tab_block.js', array('scope' => 'footer'));
   }
@@ -21,7 +23,14 @@ function vp_core_init() {
   );
 
   // Force IE8, IE9 or IE10
-  drupal_add_http_header('X-UA-Compatible', 'IE=8,9,10');
+  drupal_add_http_header('X-UA-Compatible', 'IE=Edge');
+  
+  // Message for static views.
+  if (strpos($_SERVER['HTTP_USER_AGENT'], 'Wget') !== FALSE) {
+    drupal_add_js('(function($){$().ready(function(){
+      $("body").prepend("<div style="+\'"background:#b80000;color:#fff;padding:10px 0;text-align: center"\'+">'.t('Attention! This is the static version of !url, due to special circumstances. Some of the dynamic functionality, such as search or filtering, will not work.', array('!url' => $base_url)).'</div>");
+    });})(jQuery);', 'inline');
+  }
 }
 
 /**

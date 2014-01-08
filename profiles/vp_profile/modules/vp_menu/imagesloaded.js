@@ -539,7 +539,7 @@ function defineImagesLoaded( EventEmitter, eventie ) {
 
     this.getImages();
 
-    if ( $ ) {
+    if ($ instanceof jQuery) {
       // add jQuery Deferred object
       this.jqDeferred = new $.Deferred();
     }

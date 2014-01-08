@@ -15,7 +15,10 @@
         $(this).find("div.field-name-field-logo-files-lang").hide();
         options += '<option value="logo-files-' + vr_i + "-" + fc_i + '">' + option + "</option>";
 
-        var img_src = $(this).find("div.group-logo-files-web span.full-url").eq(0).text();
+        var img_src = $(this).find("div.group-logo-files-web span.full-url").eq(1).text();
+        if (img_src == '') {
+          img_src = $(this).find("div.group-logo-files-web span.full-url").eq(0).text();
+        }
         $(this).prepend('<div class="logo-wrapper"><div><div><img src="'+img_src+'" /></div></div></div>');
       });
       $(this).prepend("<select>" + options + "</select>");
@@ -32,16 +35,10 @@
   // Toggle views-row.
   $(window).load(function() {
     setTimeout(function() {
-      // Open first row.
+
       $views_row.each(function(i) {
-        var $el = $(this);
-        if (i !== 0) {
-          $el.addClass('closed');
+          $(this).addClass('closed');
           fix_vertical_logo_alignment($(this));
-        }
-        else {
-          $el.addClass('opened');
-        }
       });
 
       $views_row.find('.item-trigger-title').click(function(e) {

@@ -1,6 +1,7 @@
 <?php print $doctype; ?>
 <html lang="<?php print $language->language; ?>" dir="<?php print $language->dir; ?>"<?php print $rdf->version . $rdf->namespaces; ?>>
 <head<?php print $rdf->profile; ?>>
+  <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,300,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
   <?php print $head; ?>
   <title><?php print $head_title; ?></title>
   <?php print $styles; ?>
@@ -10,7 +11,6 @@
 <body<?php print $attributes;?>>
   <div id="skip-link">
     <a href="#main-content" class="element-invisible element-focusable"><?php print t('Skip to main content'); ?></a>
-    <?php print l(t('Toggle high contrast'), 'high_contrast_toggle', array('query' => array('destination' => _high_contrast_get_current_url()), 'attributes' => array('class' => array('element-invisible', 'element-focusable')))); ?>
     <?php print l(t('Accessibility Help'), drupal_get_normal_path('accessibility', 'en'), array('attributes' => array('class' => array('element-invisible', 'element-focusable')))); ?>
   </div>
   <?php print $page_top; ?>

@@ -6,20 +6,12 @@
  */
 
 /**
- * Implements hook_init().
- *
- * Add css on pages except administration theme.
+ * Implements hook_page_build().
  */
-function linkmeta_init() {
-  global $conf;
-  global $theme_info;
+function linkmeta_page_build(&$page) {
+  module_load_include('inc', 'linkmeta', 'linkmeta.generate_css');
 
-  // Add css if administration theme is not active theme.
-  if ($conf['admin_theme'] != $theme_info->name) {
-    module_load_include('inc', 'linkmeta', 'linkmeta.generate_css');
-
-    drupal_add_css(linkmeta_generate_css(), 'inline');
-  }
+  drupal_add_css(linkmeta_generate_css(), 'inline');
 }
 
 /**
@@ -151,8 +143,9 @@ function _linkmeta_process($text, $filter, $format, $langcode, $cache, $cache_id
     $enrichments = array();
     // File size.
     if ((bool) variable_get('linkmeta_file_size', 0) && $internal) {
-      $size = filesize(trim($a->getAttribute('href'), '/'));
-      if ($size) {
+      $path_to_file = trim($a->getAttribute('href'), '/');
+      if (file_exists($path_to_file)) {
+        $size = filesize($path_to_file);
         $enrichments[] = drupal_strtoupper(format_size($size));
       }
     }

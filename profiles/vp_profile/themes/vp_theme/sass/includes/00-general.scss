@@ -14,7 +14,6 @@
 
 @if $layout == editor or
     $layout == global {
-  @import url('fonts/fonts.css');
   //=== HEADINGS (based on stylebook, @todo: what to set for globally and what to .node? ) ===//
 
   h1,
@@ -24,6 +23,10 @@
   h5 {
     font-weight: normal;
     text-shadow: 0 0 4px rgba(0, 0, 0, 0.18);
+  }
+
+  h6 {
+    font-weight: normal;
   }
 
   h1,
@@ -36,42 +39,50 @@
     font-family: $font_museo500;
   }
 
-  h5 {
+  h5,
+  h6 {
     font-family: $font_museo700;
   }
 
   h1 {
+    @include fontSize(36px);
     color: #00668C;
-    font-size: 30px;
-    line-height: 36px;
+    font-weight: 300;
+    line-height: 100%;
     margin-bottom: 20px;
   }
 
   h2 {
+    @include fontSize(30px);
     color: #00668C;
-    font-size: 20px;
-    line-height: 24px;
+    line-height: 120%;
   }
 
   h3 {
+    @include fontSize(18px);
     color: #BD4732;
-    font-size: 18px;
-    line-height: 22px;
+    line-height: 120%;
   }
 
   h4 {
+    @include fontSize(18px);
     color: #00678C;
-    font-size: 16px;
-    line-height: 20px;
+    line-height: 120%;
   }
 
   h5 {
+    @include fontSize(16px);
     color: #111;
-    font-size: 14px;
-    line-height: 17px;
+    font-weight: bold;
+    line-height: 120%;
   }
 
-
+  h6 {
+    @include fontSize(14px);
+    color: #000;
+    font-weight: bold;
+    line-height: 120%;
+  }
 
   //=== GLOBAL FONT SETTINGS ===//
 
@@ -137,6 +148,12 @@
   sub {
     vertical-align: sub;
   }
+}
+
+
+
+@if $layout == editor {
+  @import url('http://fonts.googleapis.com/css?family=Roboto+Condensed:400,300,700&subset=latin,cyrillic');
 }
 
 

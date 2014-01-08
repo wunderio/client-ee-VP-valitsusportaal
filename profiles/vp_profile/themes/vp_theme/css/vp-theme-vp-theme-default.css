@@ -25,14 +25,14 @@
 
 .region-sidebar-first .block-title, .region-sidebar-first .views-exposed-widget > label {
   color: #bd4932;
-  font-family: Museo500, Tahoma, Verdana, Segoe, sans-serif;
+  font-family: "Roboto Condensed", sans-serif;
   font-size: 17px;
   font-weight: normal;
   margin-bottom: 10px;
   text-shadow: none; }
 
 .field-name-field-files .field-label {
-  font-family: Museo500, Tahoma, Verdana, Segoe, sans-serif;
+  font-family: "Roboto Condensed", sans-serif;
   font-size: 17px;
   font-weight: normal;
   line-height: 20px;
@@ -74,7 +74,7 @@
   .block-views-exp-news-news-page .views-exposed-widget > label,
   .block-views-d14a0f1aaa8753bc0fafa3efea13f117 .views-exposed-widget > label, .search-sidebar .views-exposed-widget > label, .block-views-exp-youtube-videos-page .views-exposed-widget > label {
     color: #bd4932;
-    font-family: Museo500, Tahoma, Verdana, Segoe, sans-serif;
+    font-family: "Roboto Condensed", sans-serif;
     font-size: 17px;
     font-weight: normal;
     margin-bottom: 4px;
@@ -515,7 +515,7 @@ body {
   top: -4px; }
   #vp-autocomplete h2 {
     color: #ffcc00;
-    font-family: Museo700, Tahoma, Verdana, Segoe, sans-serif;
+    font-family: "Roboto Condensed", sans-serif;
     font-size: 13px;
     margin-top: 14px;
     text-shadow: none; }
@@ -560,7 +560,7 @@ body {
           background: transparent;
           color: #222;
           display: block;
-          font-family: Museo500, Tahoma, Verdana, Segoe, sans-serif;
+          font-family: "Roboto Condensed", sans-serif;
           height: 60px;
           line-height: 15px;
           padding-top: 16px;
@@ -613,9 +613,11 @@ body {
   position: relative;
   z-index: 1; }
   .block-menu-l3 a {
+    font-size: 13px;
+    font-size: 0.8125rem;
     color: #fff;
     display: block;
-    font-family: Museo500, Tahoma, Verdana, Segoe, sans-serif;
+    font-family: "Roboto Condensed", sans-serif;
     line-height: 15px; }
     .block-menu-l3 a:hover, .block-menu-l3 a.active-trail {
       color: #ffcc00; }
@@ -674,7 +676,7 @@ body {
     float: left;
     color: #717171;
     cursor: pointer;
-    font-family: Museo700, Tahoma, Verdana, Segoe, sans-serif;
+    font-family: "Roboto Condensed", sans-serif;
     font-size: 10px;
     font-weight: bold;
     padding: 10px 12px;
@@ -732,7 +734,7 @@ body {
       min-height: 154px;
       padding: 23px 25px; }
     .view-display-id-important_topics_slideshow_block .flexslider-important-topics-slideshow .views-field-title {
-      font-family: Museo300, Tahoma, Verdana, Segoe, sans-serif;
+      font-family: "Roboto Condensed", sans-serif;
       font-size: 22px;
       line-height: 22px;
       padding-bottom: 12px; }
@@ -765,8 +767,8 @@ body {
 .front .zone-content .block {
   display: block; }
 
-.region-sidebar-first .block {
-  background-color: #f5f4ef; }
+.has-sidebar-first .region-sidebar-first {
+  display: block; }
 .region-sidebar-first .views-exposed-widget > label {
   margin-bottom: 4px; }
 
@@ -867,7 +869,7 @@ body {
 .view-logo-file .item-content {
   float: left; }
 .view-logo-file .logo-wrapper > div > div {
-  height: 82px; }
+  height: 115px; }
 
 .field-name-field-cover-image {
   margin-bottom: 20px; }
@@ -1175,7 +1177,7 @@ div.item-list ul.pager li.pager-ellipsis, div.item-list ul.pager li.pager-curren
       background-image: url(../img/20-default/mainmenu-popup-case-beige.png); }
   .static-mainmenu-popup .widget-bigmenu h3 {
     color: #ffda2d;
-    font-family: Museo500, Tahoma, Verdana, Segoe, sans-serif;
+    font-family: "Roboto Condensed", sans-serif;
     font-size: 14px;
     line-height: 15px; }
   .static-mainmenu-popup .widget-icon-menu li {
@@ -1189,7 +1191,7 @@ div.item-list ul.pager li.pager-ellipsis, div.item-list ul.pager li.pager-curren
     vertical-align: middle; }
   .static-mainmenu-popup .widget-icon-menu a {
     color: #ffd300;
-    font-family: Museo500, Tahoma, Verdana, Segoe, sans-serif;
+    font-family: "Roboto Condensed", sans-serif;
     font-size: 13px;
     line-height: 14px;
     padding-left: 8px;
@@ -1216,12 +1218,12 @@ div.item-list ul.pager li.pager-ellipsis, div.item-list ul.pager li.pager-curren
       text-decoration: underline; }
   .static-mainmenu-popup h2 {
     color: #ffcc00;
-    font-family: Museo700, Tahoma, Verdana, Segoe, sans-serif;
+    font-family: "Roboto Condensed", sans-serif;
     font-size: 14px;
     line-height: 16px;
     margin-bottom: 13px; }
     .static-mainmenu-popup h2.bigger {
-      font-family: Museo500, Tahoma, Verdana, Segoe, sans-serif;
+      font-family: "Roboto Condensed", sans-serif;
       font-size: 18px;
       line-height: 18px;
       margin-top: -2px; }
@@ -1248,7 +1250,7 @@ div.item-list ul.pager li.pager-ellipsis, div.item-list ul.pager li.pager-curren
   position: relative; }
   .widget-slider h3 {
     color: #fff;
-    font-family: Museo300, Tahoma, Verdana, Segoe, sans-serif;
+    font-family: "Roboto Condensed", sans-serif;
     font-size: 15px;
     text-shadow: none; }
   .widget-slider .slides > li {
@@ -1596,13 +1598,10 @@ div.item-list ul.pager li.pager-ellipsis, div.item-list ul.pager li.pager-curren
     z-index: 2; }
   .static-join-in .title1 {
     color: #00507a;
-    background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, #00507a), color-stop(100%, #00b8be));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     position: absolute;
     top: 29px;
     left: 42px;
-    font-family: Museo700, Tahoma, Verdana, Segoe, sans-serif;
+    font-family: "Roboto Condensed", sans-serif;
     font-size: 27px;
     font-weight: normal;
     line-height: 27px;
@@ -1621,7 +1620,7 @@ div.item-list ul.pager li.pager-ellipsis, div.item-list ul.pager li.pager-curren
     top: 42px;
     left: 414px;
     color: #999;
-    font-family: Museo300, Tahoma, Verdana, Segoe, sans-serif;
+    font-family: "Roboto Condensed", sans-serif;
     font-size: 20px;
     width: 510px; }
   .static-join-in .box {
@@ -1687,13 +1686,16 @@ div.item-list ul.pager li.pager-ellipsis, div.item-list ul.pager li.pager-curren
       .block-simple-columns .content .col,
       .block-simple-columns .content .col h2 {
         color: #e5e5e5; }
+      .block-simple-columns .content .col h2 {
+        font-size: 20px;
+        font-size: 1.25rem; }
       .block-simple-columns .content .col li {
         line-height: 16px;
         padding: 3px 0; }
       .block-simple-columns .content .col a {
         color: #fff;
         display: block;
-        font-family: Museo500, Tahoma, Verdana, Segoe, sans-serif;
+        font-family: "Roboto Condensed", sans-serif;
         font-size: 13px;
         text-shadow: 0 0 4px rgba(0, 0, 0, 0.65); }
         .block-simple-columns .content .col a:focus, .block-simple-columns .content .col a:hover {

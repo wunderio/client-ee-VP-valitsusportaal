@@ -1,4 +1,4 @@
-@import url("fonts/fonts.css");
+@import url("http://fonts.googleapis.com/css?family=Roboto+Condensed:400,300,700&subset=latin,cyrillic");
 .editor .static-fp-block-minister .tabs .tabs-inner:after, .clearfix:after, .static-contact-header .location-wrap:after, .static-contact-header .contact:after, .static-mainmenu-popup .widget-menu:after, .static-mainmenu-popup .widget-bigmenu:after, .static-module-2 .static-inner:after, .static-module-3-2:after, .static-module-3-3:after, #static-module-5:after, .node .static-textblock-gray-background .container-12:after, .static-join-in:after, .static-footer:after {
   content: "";
   display: table;
@@ -31,7 +31,7 @@
       padding-right: 17px; }
       .editor .static-fp-block-minister .tabs .tabs-inner li a {
         color: #666;
-        font-family: Museo700, Tahoma, Verdana, Segoe, sans-serif;
+        font-family: "Roboto Condensed", sans-serif;
         font-size: 10px;
         font-weight: bold;
         text-transform: uppercase; }
@@ -97,42 +97,60 @@ h5 {
   font-weight: normal;
   text-shadow: 0 0 4px rgba(0, 0, 0, 0.18); }
 
+h6 {
+  font-weight: normal; }
+
 h1,
 h2,
 h3 {
-  font-family: Museo300, Tahoma, Verdana, Segoe, sans-serif; }
+  font-family: "Roboto Condensed", sans-serif; }
 
 h4 {
-  font-family: Museo500, Tahoma, Verdana, Segoe, sans-serif; }
+  font-family: "Roboto Condensed", sans-serif; }
 
-h5 {
-  font-family: Museo700, Tahoma, Verdana, Segoe, sans-serif; }
+h5,
+h6 {
+  font-family: "Roboto Condensed", sans-serif; }
 
 h1 {
+  font-size: 36px;
+  font-size: 2.25rem;
   color: #00668C;
-  font-size: 30px;
-  line-height: 36px;
+  font-weight: 300;
+  line-height: 100%;
   margin-bottom: 20px; }
 
 h2 {
+  font-size: 30px;
+  font-size: 1.875rem;
   color: #00668C;
-  font-size: 20px;
-  line-height: 24px; }
+  line-height: 120%; }
 
 h3 {
-  color: #BD4732;
   font-size: 18px;
-  line-height: 22px; }
+  font-size: 1.125rem;
+  color: #BD4732;
+  line-height: 120%; }
 
 h4 {
+  font-size: 18px;
+  font-size: 1.125rem;
   color: #00678C;
-  font-size: 16px;
-  line-height: 20px; }
+  line-height: 120%; }
 
 h5 {
+  font-size: 16px;
+  font-size: 1rem;
   color: #111;
+  font-weight: bold;
+  line-height: 120%; }
+
+h6 {
   font-size: 14px;
-  line-height: 17px; }
+  font-size: 0.875rem;
+  color: #000;
+  font-weight: bold;
+  line-height: 120%; }
 
 body,
 input,
@@ -169,7 +187,9 @@ sub {
   vertical-align: sub; }
 
 .node {
-  font-size: 14px; }
+  font-size: 14px;
+  font-size: 0.875rem;
+  line-height: 130%; }
   .node p,
   .node dl,
   .node ul,
@@ -250,7 +270,7 @@ sub {
     .node .image .caption {
       color: #00698c;
       display: inline-block;
-      font-family: Museo500, Tahoma, Verdana, Segoe, sans-serif;
+      font-family: "Roboto Condensed", sans-serif;
       font-size: 12px;
       line-height: 15px;
       padding-top: 9px; }
@@ -323,13 +343,13 @@ sub {
   font-size: 85.714%; }
 
 .node-lead-default {
-  font-family: Museo500, Tahoma, Verdana, Segoe, sans-serif;
+  font-family: "Roboto Condensed", sans-serif;
   font-size: 18px;
   line-height: 1.22222222; }
 
 .node-lead-emphasized {
   color: #00698c;
-  font-family: Museo500, Tahoma, Verdana, Segoe, sans-serif;
+  font-family: "Roboto Condensed", sans-serif;
   font-size: 18px;
   line-height: 1.22222222; }
 
@@ -483,7 +503,7 @@ table[border='0'] td {
       font-size: 17px;
       font-size: 1.0625rem;
       color: #00688C;
-      font-family: Museo500, Tahoma, Verdana, Segoe, sans-serif;
+      font-family: "Roboto Condensed", sans-serif;
       font-style: normal; }
     .static-contact-header .styled-textbox:before {
       background-image: url(../img/10-global/static-contact-header-styled-textbox.png);
@@ -601,7 +621,7 @@ table[border='0'] td {
 .static-fp-tab-block .static-fp-tabs {
   background: url(../img/10-global/front-content-block-title.png) no-repeat 50% 100%;
   color: #006699;
-  font-family: Museo700, Tahoma, Verdana, Segoe, sans-serif;
+  font-family: "Roboto Condensed", sans-serif;
   font-size: 12px;
   margin: -20px -20px 20px;
   overflow: hidden;
@@ -649,7 +669,7 @@ table[border='0'] td {
         color: #bd4932; }
 
 .node .static-infobox01 {
-  font-family: Museo500, Tahoma, Verdana, Segoe, sans-serif;
+  font-family: "Roboto Condensed", sans-serif;
   line-height: 14px;
   margin: 0 0 18px 0; }
   .node .static-infobox01 a {
@@ -685,7 +705,7 @@ table[border='0'] td {
   margin: 0 0 18px 0; }
   .node .static-infobox02 h2 {
     color: #bd4932;
-    font-family: Museo500, Tahoma, Verdana, Segoe, sans-serif;
+    font-family: "Roboto Condensed", sans-serif;
     font-size: 18px;
     margin-bottom: 15px;
     text-shadow: none; }
@@ -1075,7 +1095,7 @@ table[border='0'] td {
       background-image: url(../img/20-default/mainmenu-popup-case-beige.png); }
   .static-mainmenu-popup .widget-bigmenu h3 {
     color: #ffda2d;
-    font-family: Museo500, Tahoma, Verdana, Segoe, sans-serif;
+    font-family: "Roboto Condensed", sans-serif;
     font-size: 14px;
     line-height: 15px; }
   .static-mainmenu-popup .widget-icon-menu li {
@@ -1089,7 +1109,7 @@ table[border='0'] td {
     vertical-align: middle; }
   .static-mainmenu-popup .widget-icon-menu a {
     color: #ffd300;
-    font-family: Museo500, Tahoma, Verdana, Segoe, sans-serif;
+    font-family: "Roboto Condensed", sans-serif;
     font-size: 13px;
     line-height: 14px;
     padding-left: 8px;
@@ -1116,12 +1136,12 @@ table[border='0'] td {
       text-decoration: underline; }
   .static-mainmenu-popup h2 {
     color: #ffcc00;
-    font-family: Museo700, Tahoma, Verdana, Segoe, sans-serif;
+    font-family: "Roboto Condensed", sans-serif;
     font-size: 14px;
     line-height: 16px;
     margin-bottom: 13px; }
     .static-mainmenu-popup h2.bigger {
-      font-family: Museo500, Tahoma, Verdana, Segoe, sans-serif;
+      font-family: "Roboto Condensed", sans-serif;
       font-size: 18px;
       line-height: 18px;
       margin-top: -2px; }
@@ -1148,7 +1168,7 @@ table[border='0'] td {
   position: relative; }
   .widget-slider h3 {
     color: #fff;
-    font-family: Museo300, Tahoma, Verdana, Segoe, sans-serif;
+    font-family: "Roboto Condensed", sans-serif;
     font-size: 15px;
     text-shadow: none; }
   .widget-slider .slides > li {
@@ -1224,6 +1244,9 @@ table[border='0'] td {
   padding-top: 40px;
   position: relative;
   z-index: 1; }
+  .static-module-2 h2 {
+    font-size: 20px;
+    font-size: 1.25rem; }
   .editor .static-module-2 {
     width: 930px; }
   .static-module-2:before {
@@ -1881,6 +1904,13 @@ table[border='0'] td {
 .static-module-3-2 {
   padding-bottom: 30px;
   padding-top: 50px; }
+  .static-module-3-2 h2 {
+    font-size: 20px;
+    font-size: 1.25rem; }
+  .static-module-3-2 h3 {
+    font-size: 16px;
+    font-size: 1rem;
+    margin-bottom: 2px; }
   .static-module-3-2 .col {
     background-color: #f8f8f8;
     border-radius: 3px;
@@ -2372,7 +2402,7 @@ h3.icon-wrap-2 .icon-cv {
     margin-bottom: 8px;
     text-shadow: none; }
   .node .static-textblock-gray-background h3 {
-    font-family: Museo700, Tahoma, Verdana, Segoe, sans-serif;
+    font-family: "Roboto Condensed", sans-serif;
     font-size: 16px;
     text-shadow: none;
     margin-bottom: 12px; }
@@ -2495,13 +2525,10 @@ h3.icon-wrap-2 .icon-cv {
     z-index: 2; }
   .static-join-in .title1 {
     color: #00507a;
-    background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, #00507a), color-stop(100%, #00b8be));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     position: absolute;
     top: 29px;
     left: 42px;
-    font-family: Museo700, Tahoma, Verdana, Segoe, sans-serif;
+    font-family: "Roboto Condensed", sans-serif;
     font-size: 27px;
     font-weight: normal;
     line-height: 27px;
@@ -2520,7 +2547,7 @@ h3.icon-wrap-2 .icon-cv {
     top: 42px;
     left: 414px;
     color: #999;
-    font-family: Museo300, Tahoma, Verdana, Segoe, sans-serif;
+    font-family: "Roboto Condensed", sans-serif;
     font-size: 20px;
     width: 510px; }
   .static-join-in .box {

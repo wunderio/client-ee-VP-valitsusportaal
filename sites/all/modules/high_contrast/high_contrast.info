@@ -1,3 +1,4 @@
 name = High contrast
 description = "Allows users to switch to a high contrast version of the active theme"
 core = 7.x
+configure = admin/config/user-interface/high-contrast

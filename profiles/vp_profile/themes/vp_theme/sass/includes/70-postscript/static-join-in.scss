@@ -37,7 +37,8 @@
     }
 
     .title1 {
-      @include lineartextgradient(#00507a, #00b8be, left top, right bottom);
+      //@include lineartextgradient(#00507a, #00b8be, left top, right bottom);
+      color: #00507a;
       @include position (absolute, 29px 0 0 42px);
       font-family: $font_museo700;
       font-size: 27px;

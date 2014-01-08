@@ -20,9 +20,9 @@ function vp_menu_block_info() {
 }
 
 /**
- * Implements hook_init().
+ * Implements hook_page_build().
  */
-function vp_menu_init() {
+function vp_menu_page_build(&$page) {
   drupal_add_js(drupal_get_path('module', 'vp_menu') .'/imagesloaded.js', array('scope' => 'footer'));
   drupal_add_library('flexslider', 'flexslider');
   drupal_add_js(drupal_get_path('module', 'vp_menu') .'/vp_menu.js', array('scope' => 'footer'));
@@ -42,21 +42,30 @@ function vp_menu_block_view($delta = '') {
       $menu_tree = menu_tree_all_data('main-menu', NULL, 1);
       foreach ($menu_tree as $menu_link) {
         if ($menu_link['link']['hidden'] == 1) continue;
-
-        $node = node_load(substr($menu_link['link']['link_path'], 5));
-        $block['content'] .=
-          '<div id="menu-l2-popup-menu-mlid-'.$menu_link['link']['mlid'].'" class="menu-l2-popup menu-mlid menu-mlid-'.$menu_link['link']['mlid'].'">'.
-            '<div class="arrow"></div>'.
-            (isset($node->body[LANGUAGE_NONE][0]['value']) ? $node->body[LANGUAGE_NONE][0]['value'] : '').
-          '</div>';
+        $nid = (int) substr($menu_link['link']['link_path'], 5);
+        if ($nid > 0) {
+          $node = node_load($nid);
+          $block['content'] .=
+            '<div id="menu-l2-popup-menu-mlid-'.$menu_link['link']['mlid'].'" class="menu-l2-popup menu-mlid menu-mlid-'.$menu_link['link']['mlid'].'">'.
+              '<div class="arrow"></div>'.
+              (isset($node->body[LANGUAGE_NONE][0]['value']) ? $node->body[LANGUAGE_NONE][0]['value'] : '').
+            '</div>';
+        }
       }
       $block['content'] .= '</div>';
 
-      drupal_add_js(array('vp_menu' => $block['content']), 'setting');
+      // Use js output to avoid indexing.
+      if (strpos($_SERVER['HTTP_USER_AGENT'], 'Wget') === FALSE) {
+        drupal_add_js(array('vp_menu' => $block['content']), 'setting');
 
-      $block['content'] = '<script type="text/javascript">document.write(Drupal.settings.vp_menu)</script>';
-
-    break;
+        $block['content'] = '<script type="text/javascript">document.write(Drupal.settings.vp_menu)</script>';
+      }
+      // Use html output so static website would work.
+      else {
+        $block['content'] = $block['content'];
+      }
+      
+      break;
   }
 
   return $block;

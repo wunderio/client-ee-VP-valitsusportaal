@@ -34,8 +34,10 @@ function vp_logo_files_views_pre_build(&$view) {
 function vp_logo_files_block_view_alter(&$data, $block) {
   global $language;
 
-  if ($block->machine_name === 'logo_file_page_description' && $language->language !== 'et') {
-    $data['content'] = '';
+  if (isset($block->machine_name)) {
+    if ($block->machine_name === 'logo_file_page_description' && $language->language !== 'et') {
+      $data['content'] = '';
+    }
   }
 }
 
@@ -73,7 +75,7 @@ function vp_logo_files_form_views_exposed_form_alter(&$form, &$form_state, $form
     // Fetch all titles.
     $query = db_select('node', 'n')
       ->condition('n.type', 'logo_file')
-      ->groupBy('letter', 'ASC');
+      ->groupBy('n.title', 'ASC');
     $query->addExpression('LEFT(n.title, 1)', 'letter');
     $results = $query->execute()->fetchCol();
 
@@ -189,6 +191,7 @@ function vp_logo_files_theme($existing, $type, $theme, $path) {
  * @return array Structured array for vp_logo_files_download_bar theme.
  */
 function _vp_logo_files_get_files_from_cart() {
+  $path = drupal_get_path('module', 'vp_logo_files');
   $out = array();
 
   $sql_like_query = '';
@@ -216,24 +219,26 @@ function _vp_logo_files_get_files_from_cart() {
     foreach ($results as $result) {
       $file = file_load($result['fid']);
       $file_ref = file_get_file_references($file);
-      $model = entity_load_single('field_collection_item', reset(reset(reset($file_ref)))->item_id);
+      $model_item_id = (int) reset(reset(reset($file_ref)))->item_id;
+      $model = entity_load_single('field_collection_item', $model_item_id);
       $node = $model->hostEntity();
+      $thumbnail = '';
 
       // Get language part for file title.
-      if ($model->field_logo_files_lang['und'][0]['value'] === 'et') {
+      if ($model->field_logo_files_lang[LANGUAGE_NONE][0]['value'] === 'et') {
         $lang = t('Estonian version');
       }
-      elseif ($model->field_logo_files_lang['und'][0]['value'] === 'en') {
+      elseif ($model->field_logo_files_lang[LANGUAGE_NONE][0]['value'] === 'en') {
         $lang = t('English version');
       }
-      elseif ($model->field_logo_files_lang['und'][0]['value'] === 'ru') {
+      elseif ($model->field_logo_files_lang[LANGUAGE_NONE][0]['value'] === 'ru') {
         $lang = t('Russian version');
       }
-      elseif ($model->field_logo_files_lang['und'][0]['value'] === 'hu') {
+      elseif ($model->field_logo_files_lang[LANGUAGE_NONE][0]['value'] === 'hu') {
         $lang = t('Hungarian version');
       }
       else {
-        $lang = t($model->field_logo_files_lang['und'][0]['value'] . ' version');
+        $lang = t($model->field_logo_files_lang[LANGUAGE_NONE][0]['value'] . ' version');
       }
 
       // Get color type for file title.
@@ -244,18 +249,43 @@ function _vp_logo_files_get_files_from_cart() {
       // Get extension for file title.
       $file_ext = pathinfo($file->uri, PATHINFO_EXTENSION);
 
-
       $filename_in_session = parse_url(file_create_url($file->uri));
       $filename_in_session = trim($filename_in_session['path'], '/');
 
       // Get image dimensions for thumbnail - no jumping in frontend.
       $image_dimentions = getimagesize(image_style_path('vp_logo_files_download_bar_thumbnail', $file->uri));
 
+      // Check if file is image.
+      // If not, then show icons instead of logo thumbnail.
+      if (image_get_info($file->uri)) {
+        $thumbnail = theme('image_style', array('style_name' => 'vp_logo_files_download_bar_thumbnail', 'path' => $file->uri, 'attributes' => array('width' => $image_dimentions[0], 'height' => $image_dimentions[1])));
+      }
+      else {
+        $image_variables = array(
+          'alt' => $file_ext,
+          'attributes' => array('class' => 'icon'),
+          'height' => 16,
+          'width' => 16,
+        );
+        if ($file_ext === 'ai') {
+          $image_variables['path'] = $path . '/img/file-extension-ai-icon.png';
+          $thumbnail = theme('image', $image_variables);
+        }
+        elseif ($file_ext === 'pdf') {
+          $image_variables['path'] = 'modules/file/icons/application-pdf.png';
+          $thumbnail = theme('image', $image_variables);
+        }
+        else {
+          $image_variables['path'] = 'modules/file/icons/image-x-generic.png';
+          $thumbnail = theme('image', $image_variables);
+        }
+      }
+
       $out[$node->nid]['title'] = $node->title;
       $out[$node->nid]['files'][] = array(
         'fid' => $file->fid,
-        'lang' => $model->field_logo_files_lang['und'][0]['value'],
-        'thumbnail' => theme('image_style', array('style_name' => 'vp_logo_files_download_bar_thumbnail', 'path' => $file->uri, 'attributes' => array('width' => $image_dimentions[0], 'height' => $image_dimentions[1]))),
+        'lang' => $model->field_logo_files_lang[LANGUAGE_NONE][0]['value'],
+        'thumbnail' => $thumbnail,
         'lang' => $lang,
         'color_type' => $file_color_type,
         'ext' => $file_ext,

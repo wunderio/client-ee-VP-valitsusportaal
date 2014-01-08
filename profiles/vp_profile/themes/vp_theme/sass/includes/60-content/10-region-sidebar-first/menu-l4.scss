@@ -1,0 +1,30 @@
+
+
+
+@if $layout == global {
+  .region-sidebar-first div.block-menu-l4 {
+    @include fontSize(12px);
+    background-color: #f5f4ef;
+    display: block;
+    line-height: 18px;
+    padding: 15px 20px;
+
+    li {
+      background-image: url(../img/10-global/static-infobox02-arrow.png);
+      background-position: 0 4px;
+      background-repeat: no-repeat;
+      line-height: 16px;
+      margin: 7px 0;
+      padding: 0 0 0 13px;
+    }
+
+    a {
+      color: #333333;
+
+      &:focus,
+      &:hover {
+        color: $color-link;
+      }
+    }
+  }
+}

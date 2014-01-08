@@ -104,7 +104,8 @@
 @if $layout == editor or
     $layout == global {
   .node {
-    font-size: 14px;
+    @include fontSize(14px);
+    line-height: 130%;
 
     p,
     dl,

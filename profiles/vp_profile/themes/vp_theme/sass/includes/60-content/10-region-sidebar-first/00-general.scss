@@ -1,12 +1,28 @@
 
 
 
+@if $layout == global {
+  .region-sidebar-first {
+    display: none;
+
+    .has-block-menu-l4 & {
+      display: block;
+    }
+
+    .block {
+      background-color: #f5f4ef;
+    }
+  }
+}
+
+
+
 @if $layout == default {
   .region-sidebar-first {
     @extend %extendable-region-sidebar-first;
 
-    .block {
-      background-color: #f5f4ef;
+    .has-sidebar-first & {
+      display: block;
     }
 
     .views-exposed-widget > label {

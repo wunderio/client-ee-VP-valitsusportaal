@@ -10,6 +10,10 @@
     position: relative;
     z-index: 1;
 
+    h2 {
+      @include fontSize(20px);
+    }
+
     .editor & {
       width: 930px;
     }

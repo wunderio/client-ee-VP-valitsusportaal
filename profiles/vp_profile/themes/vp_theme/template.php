@@ -28,7 +28,7 @@ function vp_theme_select_as_links($vars) {
     $selected_options[] = $element['#value'];
   }
 
-  // Add to the selected options specified by Views whatever options are in the 
+  // Add to the selected options specified by Views whatever options are in the
   // URL query string, but only for this filter
   $urllist = parse_url(request_uri());
   if (isset($urllist['query'])) {
@@ -88,7 +88,7 @@ function vp_theme_select_as_links($vars) {
         // Selected value is output without a link
         // TODO: add link to remove this option from the filter?
         $elem = array(
-          '#id' => $id, 
+          '#id' => $id,
           '#children' => $value,
         );
         _form_set_class($elem, array('bef-select-as-links-selected'));
@@ -98,7 +98,7 @@ function vp_theme_select_as_links($vars) {
   }
 
   $properties = array(
-    '#description' => isset($element['#description']) ? $element['#description'] : '', 
+    '#description' => isset($element['#description']) ? $element['#description'] : '',
     '#children' => $output,
   );
 
@@ -174,7 +174,7 @@ function add_facebook_meta_tags() {
     ),
   );
 
-  if (arg(0) == 'node' && is_numeric(arg(1))) {
+  if (arg(0) == 'node' && (int) arg(1) > 0) {
     $node = node_load(arg(1));
     $teaser_object = node_view($node, 'view_mode_facebook');
     $teaser = '';
@@ -206,6 +206,14 @@ function add_facebook_meta_tags() {
  function vp_theme_preprocess_html(&$vars) {
   if (isset($vars['page']['content']['content']['sidebar_first'])) {
     $vars['attributes_array']['class'][] = 'has-sidebar-first';
+
+    foreach ($vars['page']['content']['content']['sidebar_first'] as $key => $item) {
+      if (strpos($key, '#') === FALSE) {
+        if (isset($item['#block']) && isset($item['#block']->css_class) && $item['#block']->css_class === 'block-menu-l4') {
+          $vars['attributes_array']['class'][] = 'has-block-menu-l4';
+        }
+      }
+    }
   }
 
   if (isset($vars['page']['content']['content']['sidebar_second'])) {
@@ -431,7 +439,7 @@ function vp_theme_alpha_preprocess_block(&$vars) {
 
 function vp_theme_preprocess_date_views_pager(&$vars) {
   global $language;
-  
+
   if ($vars['plugin']->view->name == 'weekly_schedule') {
     // Limit pager.
     $lang_condition = db_or();
@@ -461,7 +469,7 @@ function vp_theme_preprocess_date_views_pager(&$vars) {
     if ($current_max > $max && $current_max > time()) {
       unset($vars['next_url']);
     }
-  
+
     // Change naigation title.
     $vars['nav_title'] = date('d.m.Y', strtotime('monday', strtotime($vars['plugin']->view->date_info->date_arg))).' - '.date('d.m.Y', strtotime('sunday', strtotime('sunday this week', strtotime($vars['plugin']->view->date_info->date_arg))));
   }
