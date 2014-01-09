@@ -18,7 +18,10 @@ $gallery = node_load($gallery_nids[0]);
     $thumb_file_url = file_create_url($item['#item']['uri']);
     $id = 'cb-'.$item['#item']['fid'];
     // Author
-    $author = $item['#entity']->field_author[LANGUAGE_NONE][0]['value'];
+    $author = '';
+    if (isset($item['#entity']->field_author[LANGUAGE_NONE])) {
+      $author = $item['#entity']->field_author[LANGUAGE_NONE][0]['value'];
+    }
     if (empty($author)) $author = $gallery->field_author[LANGUAGE_NONE][0]['value'];
     if (!empty($author)) $author = ' | ' . $author;
     // Date
