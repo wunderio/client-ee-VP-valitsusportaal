@@ -38,3 +38,7 @@ sass-watch.bat
 
 # custom htaccess restrictions
 .htpasswd
+
+# Ignore validation htmls.
+google*.html
+
