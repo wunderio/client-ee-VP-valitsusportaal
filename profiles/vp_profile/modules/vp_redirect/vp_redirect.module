@@ -4,6 +4,7 @@
  * Implements hook_init().
  */
 function vp_redirect_init() {
+  /*
   $args = arg();
   if ($args[0] === 'node') return;
   unset($args[0]);
@@ -20,4 +21,5 @@ function vp_redirect_init() {
       }
     }
   }
+  */
 }
