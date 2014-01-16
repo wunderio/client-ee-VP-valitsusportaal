@@ -9,9 +9,10 @@
  * Import RK Weekly Schedule Day nodes.
  */
 class RKWeeklyScheduleDayNodeMigration extends Migration {
-  public $forte_db = 'vp_old';
-  public $forte_user = 'vp-migrate';
-  public $forte_pass = '9AJAAur2nj56xZ9j';
+  public $forte_db = variable_get('vp_migrate_database', '');
+  public $forte_user = variable_get('vp_migrate_username', '');
+  public $forte_pass = variable_get('vp_migrate_password', '');
+  public $forte_host = variable_get('vp_migrate_host', '');
 
   public function __construct() {
     parent::__construct();
@@ -22,7 +23,7 @@ class RKWeeklyScheduleDayNodeMigration extends Migration {
       'database' => $this->forte_db,
       'username' => $this->forte_user,
       'password' => $this->forte_pass,
-      'host' => 'localhost',
+      'host' => $this->forte_host,
     ));
 
     $this->description = t('Migrate weekly schedule day nodes!');

@@ -9,10 +9,10 @@
  * Import Gallery nodes.
  */
 class GalleryNodeMigration extends Migration {
-  public $forte_db = '';
-  public $forte_user = '';
-  public $forte_pass = '';
-  public $forte_host = '';
+  public $forte_db = variable_get('vp_migrate_database', '');
+  public $forte_user = variable_get('vp_migrate_username', '');
+  public $forte_pass = variable_get('vp_migrate_password', '');
+  public $forte_host = variable_get('vp_migrate_host', '');
   
   // Create gallery nodes.
   public function __construct() {
