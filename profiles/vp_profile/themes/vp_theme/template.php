@@ -471,7 +471,7 @@ function vp_theme_preprocess_date_views_pager(&$vars) {
     }
 
     // Change naigation title.
-    $vars['nav_title'] = date('d.m.Y', strtotime('monday', strtotime($vars['plugin']->view->date_info->date_arg))).' - '.date('d.m.Y', strtotime('sunday', strtotime('sunday this week', strtotime($vars['plugin']->view->date_info->date_arg))));
+    $vars['nav_title'] = date('d.m.Y', strtotime($vars['plugin']->view->date_info->date_range[0]->originalTime)).' - '.date('d.m.Y', strtotime($vars['plugin']->view->date_info->date_range[1]->originalTime));
   }
 }
 
