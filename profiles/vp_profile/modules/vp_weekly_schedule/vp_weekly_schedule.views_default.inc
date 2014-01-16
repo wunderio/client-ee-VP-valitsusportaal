@@ -101,7 +101,7 @@ function vp_weekly_schedule_views_default_views() {
       'empty_column' => 0,
     ),
   );
-  /* Suhte: Sisu: Taxonomy terms on node */
+  /* Relationship: Content: Taxonomy terms on node */
   $handler->display->display_options['relationships']['term_node_tid']['id'] = 'term_node_tid';
   $handler->display->display_options['relationships']['term_node_tid']['table'] = 'node';
   $handler->display->display_options['relationships']['term_node_tid']['field'] = 'term_node_tid';
@@ -114,13 +114,13 @@ function vp_weekly_schedule_views_default_views() {
     'yt_category' => 0,
     'yt_tags' => 0,
   );
-  /* Väli: Sisu: Body */
+  /* Field: Content: Body */
   $handler->display->display_options['fields']['body']['id'] = 'body';
   $handler->display->display_options['fields']['body']['table'] = 'field_data_body';
   $handler->display->display_options['fields']['body']['field'] = 'body';
   $handler->display->display_options['fields']['body']['label'] = '';
   $handler->display->display_options['fields']['body']['element_label_colon'] = FALSE;
-  /* Väli: Sisu: Date */
+  /* Field: Content: Date */
   $handler->display->display_options['fields']['field_weekly_schedule_date']['id'] = 'field_weekly_schedule_date';
   $handler->display->display_options['fields']['field_weekly_schedule_date']['table'] = 'field_data_field_weekly_schedule_date';
   $handler->display->display_options['fields']['field_weekly_schedule_date']['field'] = 'field_weekly_schedule_date';
@@ -134,7 +134,7 @@ function vp_weekly_schedule_views_default_views() {
     'multiple_from' => '',
     'multiple_to' => '',
   );
-  /* Väli: Sisu: Pealkiri */
+  /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
   $handler->display->display_options['fields']['title']['field'] = 'title';
@@ -145,53 +145,52 @@ function vp_weekly_schedule_views_default_views() {
   $handler->display->display_options['fields']['title']['element_wrapper_type'] = '0';
   $handler->display->display_options['fields']['title']['element_default_classes'] = FALSE;
   $handler->display->display_options['fields']['title']['link_to_node'] = FALSE;
-  /* Väli: Sisu: Tee */
+  /* Field: Content: Path */
   $handler->display->display_options['fields']['path']['id'] = 'path';
   $handler->display->display_options['fields']['path']['table'] = 'node';
   $handler->display->display_options['fields']['path']['field'] = 'path';
   $handler->display->display_options['fields']['path']['label'] = '';
   $handler->display->display_options['fields']['path']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['path']['absolute'] = TRUE;
-  /* Väli: Sisu: Source */
+  /* Field: Content: Source */
   $handler->display->display_options['fields']['field_weekly_schedule_source']['id'] = 'field_weekly_schedule_source';
   $handler->display->display_options['fields']['field_weekly_schedule_source']['table'] = 'field_data_field_weekly_schedule_source';
   $handler->display->display_options['fields']['field_weekly_schedule_source']['field'] = 'field_weekly_schedule_source';
   $handler->display->display_options['fields']['field_weekly_schedule_source']['label'] = '';
   $handler->display->display_options['fields']['field_weekly_schedule_source']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_weekly_schedule_source']['type'] = 'taxonomy_term_reference_plain';
-  /* Väli: Sisu: Keel */
+  /* Field: Content: Language */
   $handler->display->display_options['fields']['language']['id'] = 'language';
   $handler->display->display_options['fields']['language']['table'] = 'node';
   $handler->display->display_options['fields']['language']['field'] = 'language';
   $handler->display->display_options['fields']['language']['label'] = '';
   $handler->display->display_options['fields']['language']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['language']['native_language'] = TRUE;
-  /* Lühike kriteerium: Sisu: Postituse kuupäev */
+  /* Sort criterion: Content: Post date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'node';
   $handler->display->display_options['sorts']['created']['field'] = 'created';
   $handler->display->display_options['sorts']['created']['order'] = 'DESC';
-  /* Kontekstifilter: Sisu: Date (field_weekly_schedule_date) */
+  /* Contextual filter: Content: Date (field_weekly_schedule_date) */
   $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['id'] = 'field_weekly_schedule_date_value';
   $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['table'] = 'field_data_field_weekly_schedule_date';
   $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['field'] = 'field_weekly_schedule_date_value';
   $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['default_action'] = 'default';
   $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['exception']['title'] = 'Kõik';
-  $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['default_argument_type'] = 'php';
   $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['default_argument_skip_url'] = TRUE;
   $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['summary_options']['items_per_page'] = '25';
   $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['year_range'] = '2000:+1';
   $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['granularity'] = 'week';
-  /* Filtri kriteeriumid: Sisu: Avaldatud */
+  /* Filter criterion: Content: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';
   $handler->display->display_options['filters']['status']['value'] = '1';
   $handler->display->display_options['filters']['status']['group'] = 1;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
-  /* Filtri kriteeriumid: Sisu: Liik */
+  /* Filter criterion: Content: Type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'node';
   $handler->display->display_options['filters']['type']['field'] = 'type';
@@ -199,7 +198,7 @@ function vp_weekly_schedule_views_default_views() {
     'weekly_schedule_day' => 'weekly_schedule_day',
   );
   $handler->display->display_options['filters']['type']['group'] = 1;
-  /* Filtri kriteeriumid: Sisu: Keel */
+  /* Filter criterion: Content: Language */
   $handler->display->display_options['filters']['language']['id'] = 'language';
   $handler->display->display_options['filters']['language']['table'] = 'node';
   $handler->display->display_options['filters']['language']['field'] = 'language';
@@ -208,7 +207,7 @@ function vp_weekly_schedule_views_default_views() {
     'und' => 'und',
   );
   $handler->display->display_options['filters']['language']['group'] = 1;
-  /* Filtri kriteeriumid: Sisu: Has taxonomy term (translated) */
+  /* Filter criterion: Content: Has taxonomy term (translated) */
   $handler->display->display_options['filters']['tid_i18n']['id'] = 'tid_i18n';
   $handler->display->display_options['filters']['tid_i18n']['table'] = 'taxonomy_index';
   $handler->display->display_options['filters']['tid_i18n']['field'] = 'tid_i18n';
@@ -275,7 +274,7 @@ function vp_weekly_schedule_views_default_views() {
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['exposed_block'] = TRUE;
   $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Väli: Taksonoomia termin: Name (translated) */
+  /* Field: Taxonomy term: Name (translated) */
   $handler->display->display_options['fields']['name_i18n']['id'] = 'name_i18n';
   $handler->display->display_options['fields']['name_i18n']['table'] = 'taxonomy_term_data';
   $handler->display->display_options['fields']['name_i18n']['field'] = 'name_i18n';
@@ -283,7 +282,7 @@ function vp_weekly_schedule_views_default_views() {
   $handler->display->display_options['fields']['name_i18n']['label'] = '';
   $handler->display->display_options['fields']['name_i18n']['exclude'] = TRUE;
   $handler->display->display_options['fields']['name_i18n']['element_label_colon'] = FALSE;
-  /* Väli: Sisu: Date */
+  /* Field: Content: Date */
   $handler->display->display_options['fields']['field_weekly_schedule_date']['id'] = 'field_weekly_schedule_date';
   $handler->display->display_options['fields']['field_weekly_schedule_date']['table'] = 'field_data_field_weekly_schedule_date';
   $handler->display->display_options['fields']['field_weekly_schedule_date']['field'] = 'field_weekly_schedule_date';
@@ -296,14 +295,14 @@ function vp_weekly_schedule_views_default_views() {
     'multiple_from' => '',
     'multiple_to' => '',
   );
-  /* Väli: Sisu: Body */
+  /* Field: Content: Body */
   $handler->display->display_options['fields']['body']['id'] = 'body';
   $handler->display->display_options['fields']['body']['table'] = 'field_data_body';
   $handler->display->display_options['fields']['body']['field'] = 'body';
   $handler->display->display_options['fields']['body']['label'] = '';
   $handler->display->display_options['fields']['body']['element_label_colon'] = FALSE;
   $handler->display->display_options['defaults']['sorts'] = FALSE;
-  /* Lühike kriteerium: Sisu: Date (field_weekly_schedule_date) */
+  /* Sort criterion: Content: Date (field_weekly_schedule_date) */
   $handler->display->display_options['sorts']['field_weekly_schedule_date_value_1']['id'] = 'field_weekly_schedule_date_value_1';
   $handler->display->display_options['sorts']['field_weekly_schedule_date_value_1']['table'] = 'field_data_field_weekly_schedule_date';
   $handler->display->display_options['sorts']['field_weekly_schedule_date_value_1']['field'] = 'field_weekly_schedule_date_value';
@@ -381,7 +380,7 @@ function vp_weekly_schedule_views_default_views() {
   );
   $handler->display->display_options['defaults']['relationships'] = FALSE;
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Kontekstifilter: Sisu: Source (field_weekly_schedule_source) */
+  /* Contextual filter: Content: Source (field_weekly_schedule_source) */
   $handler->display->display_options['arguments']['field_weekly_schedule_source_tid']['id'] = 'field_weekly_schedule_source_tid';
   $handler->display->display_options['arguments']['field_weekly_schedule_source_tid']['table'] = 'field_data_field_weekly_schedule_source';
   $handler->display->display_options['arguments']['field_weekly_schedule_source_tid']['field'] = 'field_weekly_schedule_source_tid';
@@ -394,14 +393,14 @@ return $field_info[\'default_value\'][0][\'tid\'];';
   $handler->display->display_options['arguments']['field_weekly_schedule_source_tid']['summary_options']['items_per_page'] = '25';
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filtri kriteeriumid: Sisu: Avaldatud */
+  /* Filter criterion: Content: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';
   $handler->display->display_options['filters']['status']['value'] = '1';
   $handler->display->display_options['filters']['status']['group'] = 1;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
-  /* Filtri kriteeriumid: Sisu: Liik */
+  /* Filter criterion: Content: Type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'node';
   $handler->display->display_options['filters']['type']['field'] = 'type';
