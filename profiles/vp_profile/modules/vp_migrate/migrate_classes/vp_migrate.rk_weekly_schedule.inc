@@ -43,8 +43,8 @@ class RKWeeklyScheduleDayNodeMigration extends Migration {
           'alias' => 'ws',
         ),
       ),
-      MigrateDestinationNode::getKeySchema(
-)    );
+      MigrateDestinationNode::getKeySchema()
+    );
 
     // Query.
     $query = Database::getConnection('default', 'forte')
@@ -54,9 +54,8 @@ class RKWeeklyScheduleDayNodeMigration extends Migration {
 
     $query->fields('ws', array('id', 'schedule', 'week_start'));
 
-    $query->addExpression('DATE_FORMAT(ws.created, \'%d.%m.%Y\')', 'title');
-    $query->addExpression('UNIX_TIMESTAMP(ws.created)', 'created');
-    $query->addExpression('UNIX_TIMESTAMP(ws.updated)', 'updated');
+    $query->addExpression('DATE_FORMAT(ws.week_start, \'%Y-%m-%d\')', 'week_day');
+    $query->addExpression('UNIX_TIMESTAMP(ws.date_time)', 'created');
 
     $query->distinct();
 
@@ -67,10 +66,10 @@ class RKWeeklyScheduleDayNodeMigration extends Migration {
     $this->destination = new MigrateDestinationNode('weekly_schedule_day', array('text_format' => 'full_html'));
 
     // Assign mappings TO destination fields FROM source fields.
-    $this->addFieldMapping('title', 'title');
+    $this->addFieldMapping('title', 'week_start');
     $this->addFieldMapping('uid')->defaultValue(0);
     $this->addFieldMapping('created', 'created');
-    $this->addFieldMapping('changed', 'updated');
+    $this->addFieldMapping('changed', 'created');
     $this->addFieldMapping('field_simplenews_term')->defaultValue('Imported');
     $this->addFieldMapping('field_simplenews_term:create_term')->defaultValue(TRUE);
     $this->addFieldMapping('language')->defaultValue('et');
@@ -78,6 +77,12 @@ class RKWeeklyScheduleDayNodeMigration extends Migration {
     $this->addFieldMapping('body:format')->defaultValue('full_html');
     $this->addFieldMapping('field_weekly_schedule_source')->defaultValue('Riigikantselei');
     $this->addFieldMapping('field_weekly_schedule_source:create_term')->defaultValue(TRUE);
-    $this->addFieldMapping('field_weekly_schedule_date', 'week_start');
+    $this->addFieldMapping('field_weekly_schedule_date', 'week_day');
+  }
+  public function prepareRow($current_row) {
+  
+    $current_row->week_day = $current_row->week_day.' +0000';
+    
+    return TRUE;
   }
 }
