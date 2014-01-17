@@ -13,48 +13,72 @@
     }
 
     ul {
+      // Assume we need to insert this template inside another one
+      // but we'll not going to insert any ul's inside this one.
+      // So use important on all the properties.
       li {
-        background-position: 23px 0;
-        background-repeat: no-repeat;
-        margin: 15px 0;
-        padding: 8px 0 8px 75px;
+        background-image: none;
+        background-position: 21px 50% !important;
+        background-repeat: no-repeat !important;
+        margin: 0 !important;
+        min-height: 28px !important;
+        padding: 14px 0 14px 75px !important;
+        position: relative !important;
+
+        // If inside
+        &:before {
+          bottom: auto !important;
+          content: "" !important;
+          display: block !important;
+          height: 40px !important;
+          left: 21px !important;
+          margin-top: -20px !important;
+          position: absolute !important;
+          top: 50% !important;
+          width: 40px !important;
+        }
       }
     }
 
-    .world {
+    .world:before {
       background-image: url(../img/10-global/static-read-more-icon-world.png)
     }
 
-    .telephone {
+    .telephone:before {
       background-image: url(../img/10-global/static-read-more-icon-telephone.png)
     }
 
-    .shadow {
+    .shadow:before {
       background-image: url(../img/10-global/static-read-more-icon-shadow.png)
     }
 
-    .person {
+    .person:before {
       background-image: url(../img/10-global/static-read-more-icon-person.png)
     }
 
-    .list {
+    .list:before {
       background-image: url(../img/10-global/static-read-more-icon-list.png)
     }
 
-    .external {
+    .external:before {
       background-image: url(../img/10-global/static-read-more-icon-info-external.png)
     }
 
-    .graph {
+    .graph:before {
       background-image: url(../img/10-global/static-read-more-icon-graph.png)
     }
 
-    .download {
+    .download:before {
       background-image: url(../img/10-global/static-read-more-icon-download.png)
     }
 
-    .case {
+    .case:before {
       background-image: url(../img/10-global/static-read-more-icon-case.png)
     }
+  }
+
+  .node .layout-4 ul li {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
   }
 }
