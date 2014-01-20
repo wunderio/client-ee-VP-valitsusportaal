@@ -10,7 +10,7 @@
     margin-left: 0;
     padding-left: 0; }
 
-.static-mainmenu-popup .widget-menu, .node .static-person-contact .main, .static-join-in .box.box-3 .social-links a {
+.node .layout-4 .main, .static-mainmenu-popup .widget-menu, .node .static-person-contact .main, .static-join-in .box.box-3 .social-links a {
   display: table-cell;
   vertical-align: top;
   width: 10000px; }
@@ -1039,9 +1039,6 @@ div.item-list ul.pager li.pager-ellipsis, div.item-list ul.pager li.pager-curren
   width: 230px;
   padding-right: 95px;
   padding-bottom: 0; }
-.node .layout-4 .main {
-  overflow: hidden;
-  min-width: 230px; }
 
 .node .static-list-2column-dotted-border ul {
   float: left;

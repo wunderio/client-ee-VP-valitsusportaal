@@ -232,10 +232,13 @@ td {
   .node .layout-4 .aside:before, .node .layout-4 .aside:after {
     bottom: 0;
     content: "";
-    left: 29.3%;
+    left: 272px;
     position: absolute;
     top: 0;
     width: 22px; }
+    @media all and (max-width: 560px) {
+      .node .layout-4 .aside:before, .node .layout-4 .aside:after {
+        display: none; } }
   .node .layout-4 .aside:before {
     background: url(../img/10-global/subject-related-news-column-separator-top.png) 0 0 no-repeat;
     z-index: 1; }

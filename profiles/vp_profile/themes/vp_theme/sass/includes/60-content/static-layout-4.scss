@@ -62,8 +62,7 @@
     }
 
     .main {
-      overflow: hidden;
-      min-width: 230px;
+      @extend %sidefloat;
     }
   }
 }
@@ -85,10 +84,14 @@
       &:after {
         bottom: 0;
         content: "";
-        left: 29.3%;
+        left: 272px;
         position: absolute;
         top: 0;
         width: 22px;
+
+        @media all and (max-width: 560px) {
+          display: none;
+        }
       }
 
       &:before {
