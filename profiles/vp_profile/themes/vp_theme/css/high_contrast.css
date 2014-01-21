@@ -313,6 +313,10 @@ div.item-list ul.pager .pager-last a {
   background-color: transparent !important;
   background-image: url(../img/10-global/icon-blue-arrow-high-contrast.png) !important; }
 
+.view-medium .item-trigger-title:before {
+  background-color: transparent !important;
+  background-image: url(../img/10-global/icon-blue-arrow-high-contrast.png) !important; }
+
 .static-mainmenu-popup .has-big-column-separators .column {
   background-image: url(../img/10-global/mainmenu-popup-column-separator-big-high-contrast.png) !important; }
 .static-mainmenu-popup .column {

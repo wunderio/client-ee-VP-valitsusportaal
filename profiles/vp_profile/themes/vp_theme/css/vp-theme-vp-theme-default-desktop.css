@@ -162,6 +162,24 @@ td {
   .view-logo-file .item-content {
     width: 288px; }
 
+.block-views-exp-medium-search,
+.block--exp-medium-taxonomy,
+.block--exp-medium-alphabet {
+  min-height: 259px; }
+
+.block-views-exp-medium-search #edit-title-wrapper {
+  width: 180px; }
+
+.view-medium {
+  background-image: url(../img/40-desktop/files-search-top-shadow.png); }
+  .view-medium .item-content {
+    margin: 0 0 0 32px; }
+    .view-medium .item-content .logo-wrapper img {
+      max-width: 288px; }
+  .view-medium .item-trigger,
+  .view-medium .item-content {
+    width: 288px; }
+
 .field-name-field-cover-image {
   width: 215px; }
 

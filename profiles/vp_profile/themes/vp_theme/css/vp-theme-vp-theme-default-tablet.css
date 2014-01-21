@@ -172,6 +172,27 @@ block-views-exp-logo-file-search #edit-title-wrapper {
 .view-logo-file .item-content {
   width: 195px; }
 
+.block-views-exp-medium-search,
+.block--exp-medium-taxonomy,
+.block--exp-medium-alphabet {
+  min-height: 220px; }
+  .block-views-exp-medium-search .views-exposed-widget .form-submit,
+  .block--exp-medium-taxonomy .views-exposed-widget .form-submit,
+  .block--exp-medium-alphabet .views-exposed-widget .form-submit {
+    padding-left: 8px;
+    padding-right: 8px; }
+
+block-views-exp-medium-search #edit-title-wrapper {
+  width: 100px; }
+
+.view-medium .item-content {
+  margin: 0 0 0 22px; }
+  .view-medium .item-content .logo-wrapper img {
+    max-width: 195px; }
+.view-medium .item-trigger,
+.view-medium .item-content {
+  width: 195px; }
+
 .field-name-field-cover-image {
   width: 200px; }
 

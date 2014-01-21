@@ -38,7 +38,7 @@
 @if $layout == editor or
     $layout == global {
   .node ul.static-list-1column-dotted-border {
-    li {
+    > li {
       background: none;
       margin: 0px;
       padding: 20px 15px 15px 0px;

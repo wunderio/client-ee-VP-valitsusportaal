@@ -871,6 +871,26 @@ body {
 .view-logo-file .logo-wrapper > div > div {
   height: 115px; }
 
+.block-views-exp-medium-search,
+.block--exp-medium-taxonomy,
+.block--exp-medium-alphabet {
+  border-left: 1px dashed #ccc;
+  float: left;
+  padding: 7px 2% 0 2%;
+  width: 29%; }
+
+.block-views-exp-medium-search {
+  border-left: 0 none !important;
+  padding-left: 0 !important; }
+  .page-medium-search .block-views-exp-medium-search #edit-title-wrapper {
+    width: 230px; }
+
+.view-medium .item-trigger,
+.view-medium .item-content {
+  float: left; }
+.view-medium .logo-wrapper > div > div {
+  height: 115px; }
+
 .field-name-field-cover-image {
   margin-bottom: 20px; }
 
@@ -1648,6 +1668,10 @@ div.item-list ul.pager li.pager-ellipsis, div.item-list ul.pager li.pager-curren
       .static-join-in .box.box-3 h2 {
         color: #0099cc;
         padding-bottom: 10px; }
+      .static-join-in .box.box-3 .social-links li {
+        background: none;
+        margin: 0;
+        padding: 0; }
       .static-join-in .box.box-3 .social-links li {
         float: left;
         padding-bottom: 13px;

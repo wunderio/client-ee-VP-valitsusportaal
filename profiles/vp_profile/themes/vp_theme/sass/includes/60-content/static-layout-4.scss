@@ -32,10 +32,10 @@
     }
 
     // For legacy support. Use .static-list-1column-dotter-border in html instead.
-    ul {
+    > ul {
       padding: 0;
 
-      li {
+      > li {
         background-image: none;
         margin: 0px;
         padding: 20px 15px 15px 0px;

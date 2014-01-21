@@ -201,29 +201,29 @@ sub {
     padding-left: 30px; }
   .node ol {
     list-style-type: decimal; }
-  .node ul {
+  html .node ul {
     padding: 0; }
-    .node ul li {
+    html .node ul li {
       background: url(../img/10-global/custom-bullet-romb.png) no-repeat 10px 3px;
       padding: 0 0 0 30px;
       margin: 14px 0; }
-    .node ul ul,
-    .node ul ol {
+    html .node ul ul,
+    html .node ul ol {
       padding-bottom: 0;
       margin-bottom: 0; }
-    .node ul ul {
+    html .node ul ul {
       padding-left: 7px; }
-      .node ul ul li {
+      html .node ul ul li {
         background-image: url(../img/10-global/kollane-bullet-small.png);
         background-position: 10px 4px; }
-      .node ul ul ul,
-      .node ul ul ol {
+      html .node ul ul ul,
+      html .node ul ul ol {
         padding-left: 30px; }
-        .node ul ul ul li,
-        .node ul ul ol li {
+        html .node ul ul ul li,
+        html .node ul ul ol li {
           background: none;
           padding-left: 0; }
-      .node ul ul ul {
+      html .node ul ul ul {
         list-style-type: circle; }
   .node #rsseses {
     margin-top: 10px; }
@@ -468,6 +468,10 @@ table[border='0'] td {
       font-size: 14px; }
     .static-contact-header .textbox ul {
       margin-top: 18px; }
+      .static-contact-header .textbox ul li {
+        background: none;
+        margin: 0;
+        padding: 0; }
     .static-contact-header .textbox .label {
       display: inline-block;
       min-width: 61px;
@@ -527,6 +531,10 @@ table[border='0'] td {
     .static-contact-header .contact p,
     .static-contact-header .contact ul {
       margin-left: 119px; }
+    .static-contact-header .contact li {
+      background: none;
+      margin: 0;
+      padding: 0; }
     @media all and (max-width: 430px) {
       .static-contact-header .contact img {
         float: none;
@@ -711,10 +719,6 @@ table[border='0'] td {
   .node .static-infobox01 .case:before {
     background-image: url(../img/10-global/static-read-more-icon-case.png); }
 
-.node .layout-4 ul li {
-  padding-top: 8px !important;
-  padding-bottom: 8px !important; }
-
 .node .static-infobox02 {
   background-color: #faf9f5;
   font-size: 12px;
@@ -887,14 +891,14 @@ table[border='0'] td {
   display: inline;
   font-size: 15px;
   color: #BD4732; }
-.node .layout-4 ul {
+.node .layout-4 > ul {
   padding: 0; }
-  .node .layout-4 ul li {
+  .node .layout-4 > ul > li {
     background-image: none;
     margin: 0px;
     padding: 20px 15px 15px 0px;
     position: relative; }
-    .node .layout-4 ul li:before {
+    .node .layout-4 > ul > li:before {
       background-image: url(../img/10-global/static-module-3-1-border.png);
       bottom: 0;
       content: "";
@@ -931,14 +935,14 @@ table[border='0'] td {
     background: url(../img/10-global/view-id-top_news_tabs--separator-overlay-bottom.png) 0 100% no-repeat;
     z-index: 2; }
 
-.node ul.static-list-1column-dotted-border li {
+.node ul.static-list-1column-dotted-border > li {
   background: none;
   margin: 0px;
   padding: 20px 15px 15px 0px;
   position: relative; }
-  .node ul.static-list-1column-dotted-border li p {
+  .node ul.static-list-1column-dotted-border > li p {
     margin: 0; }
-  .node ul.static-list-1column-dotted-border li:before {
+  .node ul.static-list-1column-dotted-border > li:before {
     background-image: url(../img/10-global/static-module-3-1-border.png);
     bottom: 0;
     content: "";
@@ -2595,6 +2599,10 @@ h3.icon-wrap-2 .icon-cv {
       .static-join-in .box.box-3 h2 {
         color: #0099cc;
         padding-bottom: 10px; }
+      .static-join-in .box.box-3 .social-links li {
+        background: none;
+        margin: 0;
+        padding: 0; }
       .static-join-in .box.box-3 .social-links li {
         float: left;
         padding-bottom: 13px;

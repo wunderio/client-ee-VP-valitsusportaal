@@ -114,6 +114,13 @@
         }
 
         .social-links {
+          // Reset.
+          li {
+            background: none;
+            margin: 0;
+            padding: 0;
+          }
+
           li {
             float: left;
             padding-bottom: 13px;
