@@ -31,7 +31,7 @@
   .view-id-top_news_tabs .flexslider .slides .flexslider_views_slideshow_slide.views-row-1 {
     display: block; }
 
-.view-youtube-videos .col-right, .view-display-id-news-page .col-right, .view-logo-file .item-content .entity-field-collection-item .field-items, .view-medium .item-content .entity-field-collection-item .field-items {
+.view-youtube-videos .col-right, .view-display-id-news-page .col-right, .view-logo-file .item-content .entity-field-collection-item .field-items, .view-medium .item-content .entity-field-collection-item > .content .field-items {
   display: table-cell;
   vertical-align: top;
   width: 10000px; }
@@ -2598,7 +2598,7 @@ td {
     display: inline-block;
     font-size: 16px;
     font-weight: 400;
-    margin: 8px 0 28px 0;
+    margin: 8px 0 18px 0;
     padding-left: 17px;
     position: relative; }
     .view-medium .item-trigger-title:before {
@@ -2633,41 +2633,69 @@ td {
       .view-medium .logo-wrapper > div > div {
         display: table-cell;
         vertical-align: middle; }
-  .view-medium .item-content .entity-field-collection-item {
-    background: #f7f7f7;
-    border-radius: 5px;
-    padding: 10px 20px;
-    position: relative; }
-    .view-medium .item-content .entity-field-collection-item h3 {
-      color: #006488;
-      font-size: 16px;
-      font-weight: normal;
-      line-height: 20px;
-      margin: 10px 0 4px 0; }
-    .view-medium .item-content .entity-field-collection-item .field-group-div .field-group-div {
-      border-top: 1px solid #d9d9d9;
-      margin: 10px 0; }
-      .view-medium .item-content .entity-field-collection-item .field-group-div .field-group-div h3 {
-        color: #a0a0a0;
-        font-family: Tahoma, Verdana, Segoe, sans-serif;
-        font-weight: bold;
-        font-size: 14px; }
-    .view-medium .item-content .entity-field-collection-item .field-label {
-      color: #333;
-      display: block;
-      float: left;
-      font-size: 12px;
-      font-weight: normal;
-      margin: 6px 0 0 0;
-      padding-right: 5px;
-      text-align: right;
-      width: 65px; }
-    .view-medium .item-content .entity-field-collection-item .field-items {
+  .view-medium .item-content .entity-field-collection-item > .content {
+    /*
+          h3 {
+            color: #006488;
+            font-size: 16px;
+            font-weight: normal;
+            line-height: 20px;
+            margin: 10px 0 4px 0;
+          }*/
+    /*
+          .field-group-div .field-group-div {
+            border-top: 1px solid #d9d9d9;
+            margin: 10px 0;
+    
+            h3 {
+              color: #a0a0a0;
+              font-family: $font_default;
+              font-weight: bold;
+              font-size: 14px;
+            }
+          }
+    
+          .field-label {
+            color: #333;
+            display: block;
+            float: left;
+            font-size: 12px;
+            //font-weight: bold;
+            font-weight: normal;
+            margin: 6px 0 0 0;
+            padding-right: 5px;
+            text-align: right;
+            width: 65px;
+          }*/ }
+    .view-medium .item-content .entity-field-collection-item > .content > .field-group-div > h3 {
+      color: #000;
+      padding: 52px 0 12px 0; }
+    .view-medium .item-content .entity-field-collection-item > .content > .field-group-div .field-group-div {
+      background: #f7f7f7;
+      border-radius: 5px;
+      padding: 10px 20px;
+      position: relative; }
+      .view-medium .item-content .entity-field-collection-item > .content > .field-group-div .field-group-div h3 {
+        color: #006488;
+        font-size: 16px;
+        font-weight: normal;
+        line-height: 20px;
+        margin: 0 0 4px 0; }
+      .view-medium .item-content .entity-field-collection-item > .content > .field-group-div .field-group-div .field {
+        border-top: 1px solid #d9d9d9;
+        margin: 10px 0;
+        padding-top: 10px; }
+        .view-medium .item-content .entity-field-collection-item > .content > .field-group-div .field-group-div .field .field-label {
+          color: #a0a0a0;
+          font-family: Tahoma, Verdana, Segoe, sans-serif;
+          font-weight: bold;
+          font-size: 14px; }
+    .view-medium .item-content .entity-field-collection-item > .content .field-items {
       float: none; }
-      .view-medium .item-content .entity-field-collection-item .field-items .field-item {
+      .view-medium .item-content .entity-field-collection-item > .content .field-items .field-item {
         display: inline-block;
         margin: 5px 10px 5px 0; }
-    .view-medium .item-content .entity-field-collection-item .zipcart {
+    .view-medium .item-content .entity-field-collection-item > .content .zipcart {
       -webkit-appearance: none;
       -moz-background-clip: padding;
       -webkit-background-clip: padding;
@@ -2693,14 +2721,14 @@ td {
       padding: 3px 10px;
       text-shadow: none;
       width: auto; }
-      .view-medium .item-content .entity-field-collection-item .zipcart:hover, .view-medium .item-content .entity-field-collection-item .zipcart:focus {
+      .view-medium .item-content .entity-field-collection-item > .content .zipcart:hover, .view-medium .item-content .entity-field-collection-item > .content .zipcart:focus {
         background: #0085b2;
         background: -moz-linear-gradient(top, #0085b2 0%, #0085b2 26%, #007ca5 100%);
         background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #0085b2), color-stop(26%, #0085b2), color-stop(100%, #007ca5));
         background: linear, to bottom, #0085b2 0%, #0085b2 26%, #007ca5 100%;
         filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0085b2', endColorstr='#007ca5',GradientType=0 );
         box-shadow: inset 0 2px 1px 0 rgba(255, 255, 255, 0.13), inset 0 -2px 1px 0 rgba(0, 0, 0, 0.2), 0 0 8px rgba(0, 0, 0, 0.22); }
-      .view-medium .item-content .entity-field-collection-item .zipcart:active {
+      .view-medium .item-content .entity-field-collection-item > .content .zipcart:active {
         background: #00698c;
         background: -moz-linear-gradient(top, #00698c 0%, #004d67 100%);
         background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #00698c), color-stop(100%, #004d67));

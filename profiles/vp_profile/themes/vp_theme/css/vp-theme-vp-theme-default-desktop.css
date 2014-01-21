@@ -179,6 +179,8 @@ td {
   .view-medium .item-trigger,
   .view-medium .item-content {
     width: 288px; }
+  .view-medium .has-1-item-content .item-trigger {
+    width: 610px; }
 
 .field-name-field-cover-image {
   width: 215px; }

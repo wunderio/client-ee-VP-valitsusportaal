@@ -10,6 +10,15 @@
       $views_row.each(function(i) {
           $(this).addClass('closed');
           fix_vertical_logo_alignment($(this));
+
+          // Add class to .views_row to show if there are 1 or 2 entity_field_collections.
+          $item_content = $(this).find('.item-content');
+          if ($item_content.length === 2) {
+            $(this).addClass('has-2-item-contents');
+          }
+          else if ($item_content.length === 1) {
+            $(this).addClass('has-1-item-content');
+          }
       });
 
       $views_row.find('.item-trigger-title').click(function(e) {
