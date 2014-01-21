@@ -20,7 +20,7 @@
               <?php foreach ($group['files'] as $file): ?>
                 <div class="file-item clearfix">
                   <p class="file-thumb"><?php print $file['thumbnail']; ?></p>
-                  <p class="file-name"><?php print !empty($file['lang']) ? $file['lang'] . ' / ' : ''; ?><?php print !empty($file['color_type']) ? $file['color_type'] . ': ' . '<strong>' . $file['ext'] . '</strong>' : ''; ?> <?php print !empty($file['color_type']) ? '<em>(' : ''; ?><?php print $file['filename']; ?><?php print !empty($file['color_type']) ? ')</em>' : ''; ?></p>
+                  <p class="file-name"><?php print $file['lang']; ?> / <?php print $file['color_type']; ?>: <strong><?php print $file['ext']; ?></strong> <em>(<?php print $file['filename']; ?>)</em></p>
                   <a href="<?php print $file['remove_url']; ?>" class="remove-file"><?php print t('Remove !file from download list', array('!file' => $file['filename'])); ?></a>
                 </div> <!-- /file-item -->
               <?php endforeach; ?>
