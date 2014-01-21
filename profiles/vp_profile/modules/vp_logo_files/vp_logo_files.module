@@ -137,7 +137,7 @@ function vp_logo_files_block_info() {
   $blocks = array();
 
   $blocks['vp_logo_files_block_download_bar'] = array(
-    'info' => t('Logo files download bar'),
+    'info' => t('VP Download Bar'),
     'cache' => DRUPAL_NO_CACHE,
   );
 
@@ -202,7 +202,8 @@ function _vp_logo_files_get_files_from_cart() {
       $sql_like_query .= ' OR ';
     }
     $sql_like_query .= 'uri LIKE :like_' . $key;
-    $sql_like_array[':like_' . $key] = '%' . substr($_SESSION['zipcart']['files'][$key], strpos($_SESSION['zipcart']['files'][$key], '/' . LOGO_FILES_ROOT_PATH . '/') + 1);
+    preg_match('/sites\/default\/files\/.*?(\/.*)/', $filename, $matches);
+    $sql_like_array[':like_' . $key] = '%' . $matches[1];
     $i++;
   }
 
@@ -224,27 +225,30 @@ function _vp_logo_files_get_files_from_cart() {
       $node = $model->hostEntity();
       $thumbnail = '';
 
-      // Get language part for file title.
-      if ($model->field_logo_files_lang[LANGUAGE_NONE][0]['value'] === 'et') {
-        $lang = t('Estonian version');
-      }
-      elseif ($model->field_logo_files_lang[LANGUAGE_NONE][0]['value'] === 'en') {
-        $lang = t('English version');
-      }
-      elseif ($model->field_logo_files_lang[LANGUAGE_NONE][0]['value'] === 'ru') {
-        $lang = t('Russian version');
-      }
-      elseif ($model->field_logo_files_lang[LANGUAGE_NONE][0]['value'] === 'hu') {
-        $lang = t('Hungarian version');
-      }
-      else {
-        $lang = t($model->field_logo_files_lang[LANGUAGE_NONE][0]['value'] . ' version');
-      }
+      $lang = $file_color_type = '';
+      if ($node->type === 'logo_file') {
+        // Get language part for file title.
+        if ($model->field_logo_files_lang[LANGUAGE_NONE][0]['value'] === 'et') {
+          $lang = t('Estonian version');
+        }
+        elseif ($model->field_logo_files_lang[LANGUAGE_NONE][0]['value'] === 'en') {
+          $lang = t('English version');
+        }
+        elseif ($model->field_logo_files_lang[LANGUAGE_NONE][0]['value'] === 'ru') {
+          $lang = t('Russian version');
+        }
+        elseif ($model->field_logo_files_lang[LANGUAGE_NONE][0]['value'] === 'hu') {
+          $lang = t('Hungarian version');
+        }
+        else {
+          $lang = t($model->field_logo_files_lang[LANGUAGE_NONE][0]['value'] . ' version');
+        }
 
-      // Get color type for file title.
-      $file_path_exploded = explode('/', $file->uri);
-      $file_color_type = strtoupper($file_path_exploded[5]);
-      unset($file_path_exploded);
+        // Get color type for file title.
+        $file_path_exploded = explode('/', $file->uri);
+        $file_color_type = strtoupper($file_path_exploded[5]);
+        unset($file_path_exploded);
+      }
 
       // Get extension for file title.
       $file_ext = pathinfo($file->uri, PATHINFO_EXTENSION);

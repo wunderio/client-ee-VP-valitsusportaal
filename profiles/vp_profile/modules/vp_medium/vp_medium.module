@@ -1,0 +1,104 @@
+<?php
+/**
+ * @file
+ * Code for the VP Medium feature.
+ */
+
+// Define root folder for logos under public://.
+define('VP_MEDIUM_ROOT_PATH', 'medium');
+
+include_once 'vp_medium.features.inc';
+
+/**
+ * Implements hook_init().
+ */
+function vp_medium_init() {
+  global $language;
+
+  if (substr($_GET['q'], 0, 6) === 'medium' && $language->language !== 'et') {
+    drupal_not_found();
+    drupal_exit();
+  }
+}
+
+/**
+ * Implements hook_views_pre_build().
+ */
+function vp_medium_views_pre_build(&$view) {
+  if ($view->name === 'medium') {
+    drupal_add_js(drupal_get_path('module', 'vp_medium').'/js/vp_medium_files.js', array('scope' => 'footer'));
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function vp_medium_form_views_exposed_form_alter(&$form, &$form_state, $form_id) {
+  global $language;
+
+  if (substr($_GET['q'], 0, 6) === 'medium' && $language->language !== 'et') {
+    $form = array();
+    return;
+  }
+
+  if ($form['#id'] === 'views-exposed-form-medium-search' && $_GET['q'] === 'medium') {
+    $form['#prefix'] = '<h2>'.t('Search by keyword:').'</h2>';
+  }
+  elseif ($form['#id'] === 'views-exposed-form-medium-search') {
+    $form['#prefix'] = '<h2>'.t('Search by keyword:').'</h2>';
+  }
+  if ($form['#id'] === 'views-exposed-form-medium-taxonomy' && $_GET['q'] === 'medium') {
+    $form['#prefix'] = '<h2>'.t('or by group:').'</h2>';
+  }
+  elseif ($form['#id'] === 'views-exposed-form-medium-taxonomy') {
+    $form['#prefix'] = '<h2>'.t('Search by group:').'</h2>';
+  }
+  if ($form['#id'] === 'views-exposed-form-medium-alphabet' && $_GET['q'] === 'medium') {
+    $form['#prefix'] = '<h2>'.t('or by alphabet:').'</h2>';
+  }
+  elseif ($form['#id'] === 'views-exposed-form-medium-alphabet') {
+    $form['#prefix'] = '<h2>'.t('Search by alphabet:').'</h2>';
+  }
+
+  if ($form['#id'] === 'views-exposed-form-medium-alphabet') {
+    // Fetch all titles.
+    $query = db_select('node', 'n')
+      ->condition('n.type', 'medium')
+      ->groupBy('letter', 'ASC');
+    $query->addExpression('LEFT(n.title, 1)', 'letter');
+    $results = $query->execute()->fetchCol();
+
+    $letters = '';
+    foreach ($results as $result) {
+      $letters .= '<li'.($_GET['letter'] === $result ? ' class="active"' : '').'>' . l($result, 'medium/alphabet', array('query' => array('letter' => $result))) . '</li>';
+    }
+
+    $form['letters'] = array(
+      '#markup' => '<ul class="abc-list clearfix">' . $letters . '</ul>',
+    );
+  }
+}
+
+
+/**
+ * Implements hook_menu().
+ */
+function vp_medium_menu() {
+  $items = array();
+
+  $items['medium'] = array(
+    'title' => 'Medium',
+    'page callback' => 'vp_medium_page',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
+ * Logo files page.
+ */
+function vp_medium_page() {
+  return '';
+}
