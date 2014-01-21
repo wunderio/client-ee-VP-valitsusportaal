@@ -28,7 +28,7 @@ function vp_medium_node_info() {
     'medium' => array(
       'name' => t('Medium'),
       'base' => 'node_content',
-      'description' => '',
+      'description' => t('The description and associated files for a type of document, communication guidline, print material or similar. '),
       'has_title' => '1',
       'title_label' => t('Title'),
       'help' => '',

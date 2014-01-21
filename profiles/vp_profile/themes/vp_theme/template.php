@@ -79,6 +79,9 @@ function vp_theme_select_as_links($vars) {
         if ($_GET['q'] === 'logo-file') {
           $link = l($value, 'logo-file/taxonomy', array('query' => array($name => $key)));
         }
+        elseif ($_GET['q'] === 'medium') {
+          $link = l($value, 'medium/taxonomy', array('query' => array($name => $key)));
+        }
         else {
           $link = l($value, bef_replace_query_string_arg($name, $key, $multiple));
         }

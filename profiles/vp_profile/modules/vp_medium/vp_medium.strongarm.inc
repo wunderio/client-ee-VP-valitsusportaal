@@ -68,19 +68,19 @@ function vp_medium_strongarm() {
     'extra_fields' => array(
       'form' => array(
         'title' => array(
-          'weight' => '-5',
-        ),
-        'path' => array(
-          'weight' => '30',
-        ),
-        'rabbit_hole' => array(
           'weight' => '0',
         ),
+        'path' => array(
+          'weight' => '4',
+        ),
+        'rabbit_hole' => array(
+          'weight' => '1',
+        ),
         'redirect' => array(
-          'weight' => '30',
+          'weight' => '2',
         ),
         'xmlsitemap' => array(
-          'weight' => '30',
+          'weight' => '3',
         ),
       ),
       'display' => array(),

@@ -22,6 +22,7 @@ function vp_medium_views_default_views() {
 
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
+  $handler->display->display_options['title'] = 'Infokandjad';
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['use_more_text'] = 'veel';
   $handler->display->display_options['access']['type'] = 'perm';
@@ -96,6 +97,7 @@ function vp_medium_views_default_views() {
   $handler->display->display_options['fields']['field_mediums']['element_wrapper_type'] = 'div';
   $handler->display->display_options['fields']['field_mediums']['element_wrapper_class'] = 'item-content';
   $handler->display->display_options['fields']['field_mediums']['element_default_classes'] = FALSE;
+  $handler->display->display_options['fields']['field_mediums']['hide_empty'] = TRUE;
   $handler->display->display_options['fields']['field_mediums']['settings'] = array(
     'edit' => '',
     'delete' => '',
@@ -112,6 +114,7 @@ function vp_medium_views_default_views() {
   $handler->display->display_options['fields']['field_protocolic_mediums']['element_wrapper_type'] = 'div';
   $handler->display->display_options['fields']['field_protocolic_mediums']['element_wrapper_class'] = 'item-content';
   $handler->display->display_options['fields']['field_protocolic_mediums']['element_default_classes'] = FALSE;
+  $handler->display->display_options['fields']['field_protocolic_mediums']['hide_empty'] = TRUE;
   $handler->display->display_options['fields']['field_protocolic_mediums']['settings'] = array(
     'edit' => '',
     'delete' => '',
