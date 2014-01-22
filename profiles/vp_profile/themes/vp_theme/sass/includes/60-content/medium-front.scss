@@ -134,13 +134,14 @@
         box-shadow: inset -1px -2px 3px 0px rgba(0, 0, 0, .4);
         color: #006488;
         display: block;
-        width: 23px;
+        font-size: 14px;
         //height: 23px;
         height: 20px;
+        line-height: 21px;
         margin: 2.5px;
         text-align: center;
-        line-height: 21px;
-        font-size: 14px;
+        text-transform: uppercase;
+        width: 23px;
       }
 
       li.active {
