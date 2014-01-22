@@ -44,7 +44,7 @@ function vp_medium_views_default_views() {
     ),
   );
   $handler->display->display_options['row_plugin'] = 'fields';
-  /* Väli: Sisu: Type */
+  /* Field: Content: Type */
   $handler->display->display_options['fields']['field_medium_type']['id'] = 'field_medium_type';
   $handler->display->display_options['fields']['field_medium_type']['table'] = 'field_data_field_medium_type';
   $handler->display->display_options['fields']['field_medium_type']['field'] = 'field_medium_type';
@@ -52,7 +52,7 @@ function vp_medium_views_default_views() {
   $handler->display->display_options['fields']['field_medium_type']['exclude'] = TRUE;
   $handler->display->display_options['fields']['field_medium_type']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_medium_type']['type'] = 'taxonomy_term_reference_plain';
-  /* Väli: Sisu: Pealkiri */
+  /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
   $handler->display->display_options['fields']['title']['field'] = 'title';
@@ -63,7 +63,7 @@ function vp_medium_views_default_views() {
   $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['title']['hide_alter_empty'] = FALSE;
   $handler->display->display_options['fields']['title']['link_to_node'] = FALSE;
-  /* Väli: Sisu: Body */
+  /* Field: Content: Body */
   $handler->display->display_options['fields']['body']['id'] = 'body';
   $handler->display->display_options['fields']['body']['table'] = 'field_data_body';
   $handler->display->display_options['fields']['body']['field'] = 'body';
@@ -76,7 +76,7 @@ function vp_medium_views_default_views() {
   $handler->display->display_options['fields']['body']['element_default_classes'] = FALSE;
   $handler->display->display_options['fields']['body']['hide_alter_empty'] = FALSE;
   $handler->display->display_options['fields']['body']['type'] = 'text_plain';
-  /* Väli: Title and Body rewrite */
+  /* Field: Title and Body rewrite */
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
   $handler->display->display_options['fields']['nid']['table'] = 'node';
   $handler->display->display_options['fields']['nid']['field'] = 'nid';
@@ -88,7 +88,7 @@ function vp_medium_views_default_views() {
   $handler->display->display_options['fields']['nid']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['nid']['element_wrapper_type'] = '0';
   $handler->display->display_options['fields']['nid']['element_default_classes'] = FALSE;
-  /* Väli: Sisu: Mediums */
+  /* Field: Content: Mediums */
   $handler->display->display_options['fields']['field_mediums']['id'] = 'field_mediums';
   $handler->display->display_options['fields']['field_mediums']['table'] = 'field_data_field_mediums';
   $handler->display->display_options['fields']['field_mediums']['field'] = 'field_mediums';
@@ -105,7 +105,7 @@ function vp_medium_views_default_views() {
     'description' => 1,
     'view_mode' => 'full',
   );
-  /* Väli: Sisu: Protocolic mediums */
+  /* Field: Content: Protocolic mediums */
   $handler->display->display_options['fields']['field_protocolic_mediums']['id'] = 'field_protocolic_mediums';
   $handler->display->display_options['fields']['field_protocolic_mediums']['table'] = 'field_data_field_protocolic_mediums';
   $handler->display->display_options['fields']['field_protocolic_mediums']['field'] = 'field_protocolic_mediums';
@@ -122,22 +122,22 @@ function vp_medium_views_default_views() {
     'description' => 1,
     'view_mode' => 'full',
   );
-  /* Lühike kriteerium: Sisu: Type (field_medium_type) */
+  /* Sort criterion: Content: Type (field_medium_type) */
   $handler->display->display_options['sorts']['field_medium_type_tid']['id'] = 'field_medium_type_tid';
   $handler->display->display_options['sorts']['field_medium_type_tid']['table'] = 'field_data_field_medium_type';
   $handler->display->display_options['sorts']['field_medium_type_tid']['field'] = 'field_medium_type_tid';
-  /* Lühike kriteerium: Sisu: Pealkiri */
+  /* Sort criterion: Content: Title */
   $handler->display->display_options['sorts']['title']['id'] = 'title';
   $handler->display->display_options['sorts']['title']['table'] = 'node';
   $handler->display->display_options['sorts']['title']['field'] = 'title';
-  /* Filtri kriteeriumid: Sisu: Avaldatud */
+  /* Filter criterion: Content: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';
   $handler->display->display_options['filters']['status']['value'] = 1;
   $handler->display->display_options['filters']['status']['group'] = 1;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
-  /* Filtri kriteeriumid: Sisu: Liik */
+  /* Filter criterion: Content: Type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'node';
   $handler->display->display_options['filters']['type']['field'] = 'type';
@@ -150,21 +150,21 @@ function vp_medium_views_default_views() {
   $handler->display->display_options['exposed_block'] = TRUE;
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filtri kriteeriumid: Sisu: Avaldatud */
+  /* Filter criterion: Content: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';
   $handler->display->display_options['filters']['status']['value'] = 1;
   $handler->display->display_options['filters']['status']['group'] = 1;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
-  /* Filtri kriteeriumid: Sisu: Liik */
+  /* Filter criterion: Content: Type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'node';
   $handler->display->display_options['filters']['type']['field'] = 'type';
   $handler->display->display_options['filters']['type']['value'] = array(
     'medium' => 'medium',
   );
-  /* Filtri kriteeriumid: Sisu: Pealkiri */
+  /* Filter criterion: Content: Title */
   $handler->display->display_options['filters']['title']['id'] = 'title';
   $handler->display->display_options['filters']['title']['table'] = 'node';
   $handler->display->display_options['filters']['title']['field'] = 'title';
@@ -214,21 +214,21 @@ function vp_medium_views_default_views() {
   $handler->display->display_options['exposed_block'] = TRUE;
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filtri kriteeriumid: Sisu: Avaldatud */
+  /* Filter criterion: Content: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';
   $handler->display->display_options['filters']['status']['value'] = 1;
   $handler->display->display_options['filters']['status']['group'] = 1;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
-  /* Filtri kriteeriumid: Sisu: Liik */
+  /* Filter criterion: Content: Type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'node';
   $handler->display->display_options['filters']['type']['field'] = 'type';
   $handler->display->display_options['filters']['type']['value'] = array(
     'medium' => 'medium',
   );
-  /* Filtri kriteeriumid: Sisu: Has taxonomy term (translated) */
+  /* Filter criterion: Content: Has taxonomy term (translated) */
   $handler->display->display_options['filters']['tid_i18n']['id'] = 'tid_i18n';
   $handler->display->display_options['filters']['tid_i18n']['table'] = 'taxonomy_index';
   $handler->display->display_options['filters']['tid_i18n']['field'] = 'tid_i18n';
@@ -259,21 +259,21 @@ function vp_medium_views_default_views() {
   $handler->display->display_options['exposed_block'] = TRUE;
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filtri kriteeriumid: Sisu: Avaldatud */
+  /* Filter criterion: Content: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';
   $handler->display->display_options['filters']['status']['value'] = 1;
   $handler->display->display_options['filters']['status']['group'] = 1;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
-  /* Filtri kriteeriumid: Sisu: Liik */
+  /* Filter criterion: Content: Type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'node';
   $handler->display->display_options['filters']['type']['field'] = 'type';
   $handler->display->display_options['filters']['type']['value'] = array(
     'medium' => 'medium',
   );
-  /* Filtri kriteeriumid: Sisu: Pealkiri */
+  /* Filter criterion: Content: Title */
   $handler->display->display_options['filters']['title']['id'] = 'title';
   $handler->display->display_options['filters']['title']['table'] = 'node';
   $handler->display->display_options['filters']['title']['field'] = 'title';
