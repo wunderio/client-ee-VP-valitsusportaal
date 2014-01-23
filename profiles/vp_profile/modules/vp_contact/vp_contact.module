@@ -111,3 +111,4 @@ function vp_contact_feeds_before_import(FeedsSource $source) {
     }
   }
 }
+

@@ -3,5 +3,7 @@ core = 7.x
 package = VP
 version = 7.x-1.0
 project = vp_contact
+dependencies[] = image
 dependencies[] = vp_core
-
+features[features_api][] = api:2
+features[image][] = search_contact_thumbnail
