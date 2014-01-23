@@ -567,3 +567,62 @@ function vp_theme_preprocess_entity(&$variables) {
 function vp_theme_preprocess_simplenews_multi_block(&$vars) {
   $vars['message'] = t($vars['message']);
 }
+
+/**
+ * Implements theme_image_formatter().
+ *
+ * Default image for vp_contacts.
+ */
+function vp_theme_image_formatter($variables) {
+  $item = $variables['item'];
+  $image = array(
+    'path' => $item['uri'],
+  );
+
+  if (array_key_exists('alt', $item)) {
+    $image['alt'] = $item['alt'];
+  }
+
+  if (isset($item['attributes'])) {
+    $image['attributes'] = $item['attributes'];
+  }
+
+  if (isset($item['width']) && isset($item['height'])) {
+    $image['width'] = $item['width'];
+    $image['height'] = $item['height'];
+  }
+
+  // Do not output an empty 'title' attribute.
+  if (isset($item['title']) && drupal_strlen($item['title']) > 0) {
+    $image['title'] = $item['title'];
+  }
+
+  if ($variables['image_style']) {
+    $image['style_name'] = $variables['image_style'];
+    $output = theme('image_style', $image);
+  }
+  else {
+    $output = theme('image', $image);
+  }
+
+  // Default image for vp_contacts.
+  if ($variables['image_style'] === 'search_contact_thumbnail' && strpos($image['path'], 'no-profile-image') !== FALSE) {
+    $style = image_style_load('search_contact_thumbnail');
+    $dimensions = array();
+    image_style_transform_dimensions('search_contact_thumbnail', $dimensions);
+    $output = '<img src="/' . drupal_get_path('module', 'vp_contact') . '/no-profile-image_w104.png" height="'.$dimensions['height'].'" width="'.$dimensions['width'].'" alt="" />';
+  }
+
+  // The link path and link options are both optional, but for the options to be
+  // processed, the link path must at least be an empty string.
+  if (isset($variables['path']['path'])) {
+    $path = $variables['path']['path'];
+    $options = isset($variables['path']['options']) ? $variables['path']['options'] : array();
+    // When displaying an image inside a link, the html option must be TRUE.
+    $options['html'] = TRUE;
+    $output = l($output, $path, $options);
+  }
+
+  return $output;
+}
+
