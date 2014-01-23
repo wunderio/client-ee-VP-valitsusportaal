@@ -39,15 +39,13 @@ td {
 .block-delta-blocks-logo a {
   display: block; }
 .block-delta-blocks-logo img {
-  height: auto; }
+  width: auto; }
 
-.block-main-menu {
-  padding-top: 49px; }
-  .block-main-menu .menu-block-wrapper ul li a {
-    font-size: 14px;
-    margin-right: 30px; }
-    .block-main-menu .menu-block-wrapper ul li a.has-separator {
-      padding-left: 28px; }
+.block-main-menu .menu-block-wrapper ul li a {
+  font-size: 14px;
+  margin-right: 30px; }
+  .block-main-menu .menu-block-wrapper ul li a.has-separator {
+    padding-left: 28px; }
 
 .menu-l2-popup {
   left: 50%;

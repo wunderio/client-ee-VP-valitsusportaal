@@ -545,7 +545,19 @@ body {
   position: relative; }
 
 .block-main-menu {
-  float: right; }
+  bottom: 0;
+  position: absolute;
+  right: 0;
+  /*
+  // Alaternative menu positioning.
+  top: 49px;
+  div,
+  ul,
+  li,
+  a {
+    height: 100% !important;
+  }
+  */ }
   .block-main-menu .menu-block-wrapper {
     display: table; }
     .block-main-menu .menu-block-wrapper ul {

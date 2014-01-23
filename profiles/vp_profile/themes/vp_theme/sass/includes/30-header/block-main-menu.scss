@@ -270,7 +270,20 @@
   }
 
   .block-main-menu {
-    float: right;
+    bottom: 0;
+    position: absolute;
+    right: 0;
+
+    /*
+    // Alaternative menu positioning.
+    top: 49px;
+    div,
+    ul,
+    li,
+    a {
+      height: 100% !important;
+    }
+    */
 
     .menu-block-wrapper {
       display: table;
@@ -365,14 +378,9 @@
   }
 
   .block-main-menu {
-    padding-top: 25px;
-
     .menu-block-wrapper {
-
       ul {
-
         li {
-
           a {
             font-size: 12px;
             margin-right: 20px;
@@ -409,8 +417,6 @@
 
 @if $layout == desktop {
   .block-main-menu {
-    padding-top: 49px;
-
     .menu-block-wrapper {
       ul {
         li {

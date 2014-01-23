@@ -57,13 +57,11 @@
 .page .section-header {
   min-height: 136px; }
 
-.block-main-menu {
-  padding-top: 25px; }
-  .block-main-menu .menu-block-wrapper ul li a {
-    font-size: 12px;
-    margin-right: 20px; }
-    .block-main-menu .menu-block-wrapper ul li a.has-separator {
-      padding-left: 18px; }
+.block-main-menu .menu-block-wrapper ul li a {
+  font-size: 12px;
+  margin-right: 20px; }
+  .block-main-menu .menu-block-wrapper ul li a.has-separator {
+    padding-left: 18px; }
 
 .menu-l2-popup {
   left: 50%;

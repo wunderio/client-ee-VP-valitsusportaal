@@ -1076,7 +1076,7 @@ td {
 .block-delta-blocks-logo {
   padding: 20px 0 19px 20px; }
   .block-delta-blocks-logo img {
-    height: 55px; }
+    width: 70%; }
 
 .responsive-layout-mobile .menu-l2-popup {
   display: none !important; }
