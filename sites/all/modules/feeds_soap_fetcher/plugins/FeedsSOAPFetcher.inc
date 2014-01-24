@@ -19,6 +19,13 @@ class FeedsSOAPFetcher extends FeedsFetcher {
 
     $client = new nusoap_client($this->config['endpoint']);
 
+    $err = $client->getError();
+    if ($err) {
+      $err_msg = '<h2>Constructor error</h2><pre>' . $err . '</pre>'.
+	      '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
+	    throw new Exception($err_msg);
+    }
+    
     $envelope = $this->config['envelope'];
     $envelope = format_string($envelope, array(
       '!yesterday' => date('Y-m-d', strtotime('-1 day')),
@@ -26,7 +33,20 @@ class FeedsSOAPFetcher extends FeedsFetcher {
       '!tomorrow' => date('Y-m-d', strtotime('+1 day')),
     ));
 
-    $result = $client->send($this->config['envelope']);
+    $result = $client->send($envelope);
+    
+    if ($client->fault) {
+	    $err_msg = '<h2>Fault</h2><pre>' . print_r($result, TRUE) . '</pre>';
+	    throw new Exception($err_msg);
+    } else {
+	    $err = $client->getError();
+	    if ($err) {
+		    $err_msg = '<h2>Error</h2><pre>' . $err . '</pre>';
+		    throw new Exception($err_msg);
+	    } else {
+		    drupal_set_message('<h2>Result</h2><pre>' . print_r($result, TRUE) . '</pre>');
+	    }
+    }
 
     $xml = Array2XML::createXML('soap', $result);
 
