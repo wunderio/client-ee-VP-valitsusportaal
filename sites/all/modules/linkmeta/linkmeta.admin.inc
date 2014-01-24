@@ -25,10 +25,22 @@ function linkmeta_admin_page() {
     '#default_value' => variable_get('linkmeta_file_extension', 0),
   );
 
+  // Allowed extensionsions.
+  $form['linkmeta_file_extensions'] = array(
+    '#title' => t('Allowed file extensions for appending'),
+    '#type' => 'textfield',
+    '#description' => t(
+      'Comma separated list of extensions. Default extensions: !extensions',
+      array('!extensions' => LINKMETA_DEFAULT_APPEND_EXTENSIONS)
+    ),
+    '#default_value' => variable_get('linkmeta_file_extensions', LINKMETA_DEFAULT_APPEND_EXTENSIONS),
+  );
+
   // Help text for icons.
   $form['help'] = array(
     '#type' => 'item',
-    '#markup' => t('Uploaded icons will be resized to 16x16px. Upload icon files in correct size for best visual result.'),
+    '#markup' => t('Uploaded icons will be resized to 16x16px. '.
+      'Upload icon files in correct size for best visual result.'),
   );
 
   // Icon for internal links.
@@ -115,7 +127,7 @@ function linkmeta_admin_page() {
  */
 function linkmeta_admin_form_validate($form, &$form_state) {
   foreach ($form_state['values'] as $key => $array) {
-    if (substr($key, 0, 9) === 'linkmeta_' && $key !== 'linkmeta_file_size' && $key !== 'linkmeta_file_extension') {
+    if (substr($key, 0, 9) === 'linkmeta_' && $key !== 'linkmeta_file_size' && $key !== 'linkmeta_file_extension' && $key !== 'linkmeta_file_extensions') {
       if ((int) $form_state['values'][$key] > 0 && $file = file_load($form_state['values'][$key])) {
         // Change status to permanent.
         $file->status = FILE_STATUS_PERMANENT;
