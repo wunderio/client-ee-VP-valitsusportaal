@@ -9,11 +9,10 @@
         <?php $block_item['links'][LANGUAGE_NONE] = array_reverse($block_item['links'][LANGUAGE_NONE]); ?>
         <?php foreach ($block_item['links'][LANGUAGE_NONE] as $row) : ?>
           <?php if(is_array($row) && !empty($row['url'])) : ?>
-            <li><?php echo l((empty($row['title'])?$row['url']:$row['title']), $row['url']); ?></li>
+            <li><?php echo l((empty($row['title']) ? $row['url'] : $row['title']), $row['url']); ?></li>
           <?php endif; ?>
         <?php endforeach; ?>
       <?php endif; ?>
     </ul>
   </div>
 <?php endforeach; ?>
-
