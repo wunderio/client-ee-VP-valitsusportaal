@@ -944,10 +944,12 @@ body {
 
 .view-contact-search .node {
   font-size: 12px; }
+  .view-contact-search .node > .content > div {
+    margin-left: 150px; }
+    .view-contact-search .node > .content > div .field-name-field-profile-photo {
+      margin-left: 0; }
 .view-contact-search .field-name-field-profile-photo {
   padding-left: 20px; }
-.view-contact-search .field-group-format {
-  margin-left: 150px; }
 .view-contact-search img {
   margin: 0; }
 .view-contact-search h3 {

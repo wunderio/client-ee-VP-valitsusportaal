@@ -2799,8 +2799,10 @@ td {
 .view-contact-search .field-name-field-profile-photo {
   float: left;
   padding-left: 0; }
-.view-contact-search .field-group-format {
+.view-contact-search .node > .content > div {
   margin-left: 120px; }
+  .view-contact-search .node > .content > div.field-name-field-profile-photo {
+    margin-left: 0; }
 @media all and (max-width: 360px) {
   .view-contact-search .field-name-field-profile-photo {
     float: none;
