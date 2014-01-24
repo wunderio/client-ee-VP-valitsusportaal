@@ -25,7 +25,7 @@
  */
 
 ?>
-<div class="col-inner"<?php $uri = $row->field_field_wallpaper[0]['raw']['uri']; echo isset($uri) ? ' style="background-image: url(' . image_style_url('important_topics_wallpaper', $uri) . ')"' : ''; ?>>
+<div class="col-inner"<?php $uri = (isset($row->field_field_wallpaper[0]) ? $row->field_field_wallpaper[0]['raw']['uri'] : ''); echo !empty($uri) ? ' style="background-image: url(' . image_style_url('important_topics_wallpaper', $uri) . ')"' : ''; ?>>
   <?php foreach ($fields as $id => $field): ?>
     <?php if (!empty($field->separator)): ?>
       <?php print $field->separator; ?>
