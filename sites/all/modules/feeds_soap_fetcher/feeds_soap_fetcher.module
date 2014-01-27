@@ -40,7 +40,7 @@ function feeds_soap_fetcher_feeds_plugins() {
       'parent' => 'FeedsFetcher',
       'class' => 'FeedsSOAPFetcher',
       'file' => 'FeedsSOAPFetcher.inc',
-      'path' => drupal_get_path('module', 'feeds_soap') . '/plugins',
+      'path' => drupal_get_path('module', 'feeds_soap_fetcher') . '/plugins',
     ),
   );
 
