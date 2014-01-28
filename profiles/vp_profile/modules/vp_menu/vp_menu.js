@@ -50,7 +50,7 @@
     // Set arrow for active menu item.
     var _vpMenuSetMenuPosition = function() {
       var $menuL1ItemActive = $l1menulinks.filter('.active-trail');
-      var l1menuLeft = $menuL1ItemActive.position().left + parseInt($menuL1ItemActive.css('padding-left')) /* If has-separator class is set, there's also padding-left bigger than 0. */ + $menuL1ItemActive.width()/2 - 15/* half of arrow */ + 10/* left menu side overflow relative to content */;
+      var l1menuLeft = $menuL1ItemActive.closest('.block').position().left + $menuL1ItemActive.position().left + parseInt($menuL1ItemActive.css('padding-left')) /* If has-separator class is set, there's also padding-left bigger than 0. */ + $menuL1ItemActive.width()/2 - 15/* half of arrow */ + 10/* left menu side overflow relative to content */;
       $activeMenuPopup.find('.arrow').css('left', l1menuLeft);
     }
 
@@ -190,7 +190,7 @@
         var $this = $(this);
         $this.find('div.container-12').eq(0).find(' > div').vpMenuEqualHeight();
         if ($menuL1Item !== false) {
-          var arrowLeft = $menuL1Item.position().left + parseInt($menuL1Item.css('padding-left')) /* If has-separator class is set, there's also padding-left bigger than 0. */ + $menuL1Item.width()/2 - 15/* half of arrow */ + 10/* left menu side overflow relative to content */;
+          var arrowLeft = $menuL1Item.closest('.block').position().left + $menuL1Item.position().left + parseInt($menuL1Item.css('padding-left')) /* If has-separator class is set, there's also padding-left bigger than 0. */ + $menuL1Item.width()/2 - 15/* half of arrow */ + 10/* left menu side overflow relative to content */;
           $menu.find('.arrow').css('left', arrowLeft).show();
         }
       });
