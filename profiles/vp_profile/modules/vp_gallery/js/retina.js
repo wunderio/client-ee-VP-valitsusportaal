@@ -31,7 +31,7 @@
     var existing_onload = context.onload || new Function;
 
     context.onload = function() {
-      var images = document.getElementsByTagName("img"), retinaImages = [], i, image;
+      var images = jQuery('div.view-display-id-galleries_page img, article.node-gallery img').get(), retinaImages = [], i, image;
       for (i = 0; i < images.length; i++) {
         image = images[i];
         if (image.src.match(/\/sites\/default\/files/)) {
