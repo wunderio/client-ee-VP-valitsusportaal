@@ -6,3 +6,48 @@
 function vp_contact_install() {
   drupal_mkdir('public://contacts/files', NULL, TRUE);
 }
+
+/**
+ * Enable nodequeue module and features support for nodequeue.
+ * Create nodequeue by reverting feature.
+ * Enable auto add.
+ * Add existing nodes.
+ */
+function vp_contact_update_7100() {
+  // Enable nodequeue module.
+  module_enable(array('nodequeue', 'fe_nodequeue', 'auto_nodequeue'));
+  // Create nodequeue by reverting feature.
+  features_revert(array('vp_contact' => array('fe_nodequeue')));
+  // Enable auto add.
+  $qids = db_select('nodequeue_queue', 'n')
+    ->condition('n.name', 'contacts')
+    ->fields('n', array('qid'))
+    ->execute()
+    ->fetchCol();
+  $qid = $qids[0];
+  db_merge('nodequeue_auto')
+    ->key(array('qid' => $qid))
+    ->fields(array(
+        'qid' => $qid,
+        'auto_add' => 1,
+    ))
+    ->execute();
+  // Add existing nodes.
+  $qids = db_select('nodequeue_queue', 'n')
+    ->condition('n.name', 'contacts')
+    ->fields('n', array('qid'))
+    ->execute()
+    ->fetchCol();
+  $qid = $qids[0];
+  $nodequeue = nodequeue_load($qid);
+  $subqueues = nodequeue_load_subqueues_by_queue($qid);
+  $query = db_select('node', 'n')
+    ->condition('n.type', 'contact')
+    ->fields('n', array('nid'))
+    ->execute();
+  if ($query->rowCount() > 0) {
+    while ($row = $query->fetchAssoc()) {
+      nodequeue_subqueue_add($nodequeue, &$subqueues[$qid], $row['nid']);
+    }
+  }
+}

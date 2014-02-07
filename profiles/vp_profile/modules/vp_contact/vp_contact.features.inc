@@ -5,6 +5,38 @@
  */
 
 /**
+ * Implements hook_fe_nodequeue_export_fields().
+ */
+function vp_contact_fe_nodequeue_export_fields() {
+  $nodequeues = array();
+
+  // Exported nodequeues: contacts
+  $nodequeues['contacts'] = array(
+    'name' => 'contacts',
+    'title' => 'Contacts',
+    'subqueue_title' => '',
+    'size' => 0,
+    'link' => '',
+    'link_remove' => '',
+    'owner' => 'nodequeue',
+    'show_in_ui' => 1,
+    'show_in_tab' => 1,
+    'show_in_links' => 0,
+    'reference' => 0,
+    'reverse' => 0,
+    'i18n' => 0,
+    'subqueues' => 1,
+    'types' => array(
+      0 => 'contact',
+    ),
+    'roles' => array(),
+    'count' => 0,
+  );
+
+  return $nodequeues;
+}
+
+/**
  * Implements hook_image_default_styles().
  */
 function vp_contact_image_default_styles() {
