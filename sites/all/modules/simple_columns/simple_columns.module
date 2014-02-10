@@ -146,28 +146,23 @@ function simple_columns_admin_save_fixes($form, &$form_state) {
 
   // Iterate through each column.
   foreach ($form_state['values']['simple_columns_columns'] as &$column) {
-    // Remove empty results.
-    foreach ($column['links'][LANGUAGE_NONE] as $key => $values) {
-      $all_empty = TRUE;
-      foreach ($values as $name => $value) {
-        if (!empty($value) && $name !== '_weight') {
-          $all_empty = FALSE;
-          break;
-        }
-      }
-      if ($all_empty === TRUE) {
-        unset($column['links'][LANGUAGE_NONE][$key]);
-      }
-    }
-    // Trim values.
-    foreach ($column['links'][LANGUAGE_NONE] as &$values) {
+    // Iterate through each link.
+    foreach ($column['links'][LANGUAGE_NONE] as $key => &$values) {
+      // Trim values.
       foreach ($values as &$value) {
         $value = trim($value);
       }
+      // Remove empty results.
+      if ((bool)drupal_strlen($values['title'].$values['url']) === FALSE) {
+        unset($column['links'][LANGUAGE_NONE][$key]);
+      }
     }
+
     // Keys by order.
     $column['links'][LANGUAGE_NONE] = array_values($column['links'][LANGUAGE_NONE]);
+
   }
+  $form_state['executed'] = TRUE;
 }
 
 function simple_columns_add_more_add_one($form, &$form_state) {
