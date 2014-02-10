@@ -204,7 +204,7 @@ function vp_news_views_default_views() {
         'format' => '',
         'identifier' => '',
         'source' => '',
-        'language' => '',
+        'language' => 'language',
         'relation' => '',
         'coverage' => '',
         'rights' => '',
@@ -237,15 +237,6 @@ function vp_news_views_default_views() {
     'news' => 'news',
   );
   $handler->display->display_options['filters']['type']['group'] = 1;
-  /* Filter criterion: Content: Language */
-  $handler->display->display_options['filters']['language']['id'] = 'language';
-  $handler->display->display_options['filters']['language']['table'] = 'node';
-  $handler->display->display_options['filters']['language']['field'] = 'language';
-  $handler->display->display_options['filters']['language']['value'] = array(
-    '***CURRENT_LANGUAGE***' => '***CURRENT_LANGUAGE***',
-    'und' => 'und',
-  );
-  $handler->display->display_options['filters']['language']['group'] = 1;
   /* Filter criterion: Content: Post date */
   $handler->display->display_options['filters']['created']['id'] = 'created';
   $handler->display->display_options['filters']['created']['table'] = 'node';
