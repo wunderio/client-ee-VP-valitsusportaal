@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Implements hook_install().
+ * Revert news feed feature.
  */
-function vp_news_install() {
-
+function vp_news_update_7100() {
+  features_revert(array('vp_news' => array('views_view')));
 }

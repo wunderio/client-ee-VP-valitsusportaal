@@ -3,5 +3,12 @@ core = 7.x
 package = VP
 version = 7.x-1.0
 project = vp_news
-dependencies[] = vp_core
-
+dependencies[] = feeds
+dependencies[] = views
+dependencies[] = views_rss
+features[ctools][] = feeds:feeds_importer_default:1
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[feeds_importer][] = news
+features[views_view][] = news_rss_feed
+features_exclude[dependencies][ctools] = ctools
