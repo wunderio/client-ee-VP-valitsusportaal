@@ -1,8 +1,16 @@
 <?php
 
 /**
- * Implements hook_install().
+ * Remove old gallery image file usages so they can be deleted by Drupal garbage collector.
  */
-function vp_gallery_install() {
+function vp_gallery_update_7100() {
+  $fids = db_select('field_data_field_picture', 'f')
+    ->fields('f', array('field_picture_fid'))
+    ->execute()
+    ->fetchCol();
 
+  db_delete('file_usage')
+    ->condition('module', 'imagefield_crop')
+    ->condition('id', $fids, 'IN')
+    ->execute();
 }
