@@ -50,11 +50,23 @@ function vp_theme_select_as_links($vars) {
     }
   }
 
+  // Clean incoming values to prevent XSS attacks
+  if (is_array($element['#value'])) {
+    foreach($element['#value'] as $index => $item) {
+      unset($element['#value'][$index]);
+      $element['#value'][filter_xss($index)] = filter_xss($item);
+    }
+  }
+  else if (is_string($element['#value'])) {
+    $element['#value'] = filter_xss($element['#value']);
+  }
+
   // Go through each filter option and build the appropriate link or plain text
   foreach ($element['#options'] as $option => $elem) {
     // Check for Taxonomy-based filters
     if (is_object($elem)) {
-      list($option, $elem) = each(array_slice($elem->option, 0, 1, TRUE));
+      $slice = array_slice($elem->option, 0, 1, TRUE);
+      list($option, $elem) = each($slice);
     }
 
     /*
@@ -75,39 +87,51 @@ function vp_theme_select_as_links($vars) {
     foreach ($element_set as $key => $value) {
       // Custom ID for each link based on the <select>'s original ID
       $id = drupal_html_id($element['#id'] . '-' . $key);
+      $elem = array(
+        '#id' => $id,
+        '#markup' => '',
+        '#type' => 'bef-link',
+        '#name' => $id,
+      );
       if (array_search($key, $selected_options) === FALSE) {
         if ($_GET['q'] === 'logo-file') {
-          $link = l($value, 'logo-file/taxonomy', array('query' => array($name => $key)));
+          $elem['#children'] = l($value, 'logo-file/taxonomy', array('query' => array($name => $key)));
         }
         elseif ($_GET['q'] === 'medium') {
-          $link = l($value, 'medium/taxonomy', array('query' => array($name => $key)));
+          $elem['#children'] = l($value, 'medium/taxonomy', array('query' => array($name => $key)));
         }
         else {
-          $link = l($value, bef_replace_query_string_arg($name, $key, $multiple));
+          $elem['#children'] = l($value, bef_replace_query_string_arg($name, $key, $multiple));
         }
-        $output .= theme('form_element', array('element' => array('#id' => $id, '#children' => $link)));
-      }
-      else {
-        // Selected value is output without a link
-        // TODO: add link to remove this option from the filter?
-        $elem = array(
-          '#id' => $id,
-          '#children' => $value,
-        );
-        _form_set_class($elem, array('bef-select-as-links-selected'));
         $output .= theme('form_element', array('element' => $elem));
+      } else {
+        $elem['#children'] = l($value, bef_replace_query_string_arg($name, $key, $multiple, true));
+        _form_set_class($elem, array('bef-select-as-links-selected'));
+        $output .= str_replace('form-item', 'form-item selected', theme('form_element', array('element' => $elem)));
       }
     }
   }
 
   $properties = array(
-    '#description' => isset($element['#description']) ? $element['#description'] : '',
+    '#description' => isset($element['#bef_description']) ? $element['#bef_description'] : '',
     '#children' => $output,
   );
 
-  return '<div class="bef-select-as-links">'
-    . theme('form_element', array('element' => $properties))
-    . '</div>';
+  $output = '<div class="bef-select-as-links">';
+  $output .= theme('form_element', array('element' => $properties));
+  if (!empty($element['#value'])) {
+    if (is_array($element['#value'])) {
+      foreach ($element['#value'] as $value) {
+        $output .= '<input type="hidden" name="' . $name . '[]" value="' . $value . '" />';
+      }
+    }
+    else {
+      $output .= '<input type="hidden" name="' . $name . '" value="' . $element['#value'] . '" />';
+    }
+  }
+  $output .= '</div>';
+
+  return $output;
 }
 
 /**
