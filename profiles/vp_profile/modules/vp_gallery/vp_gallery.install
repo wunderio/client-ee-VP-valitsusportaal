@@ -11,6 +11,6 @@ function vp_gallery_update_7100() {
 
   db_delete('file_usage')
     ->condition('module', 'imagefield_crop')
-    ->condition('id', $fids, 'IN')
+    ->condition('id', $fids, 'NOT IN')
     ->execute();
 }
