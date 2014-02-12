@@ -1,4 +1,10 @@
 <?php
+/**
+ * @file
+ * Code for the VP News feature.
+ */
+
+include_once 'vp_news.features.inc';
 
 /**
  * @file
