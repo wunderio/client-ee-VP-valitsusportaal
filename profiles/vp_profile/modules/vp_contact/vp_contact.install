@@ -17,7 +17,7 @@ function vp_contact_update_7100() {
   // Enable nodequeue module.
   module_enable(array('nodequeue', 'fe_nodequeue', 'auto_nodequeue'));
   // Create nodequeue by reverting feature.
-  features_revert(array('vp_contact' => array('fe_nodequeue')));
+  features_revert(array('vp_contact' => array('fe_nodequeue', 'views_view')));
   // Enable auto add.
   $qids = db_select('nodequeue_queue', 'n')
     ->condition('n.name', 'contacts')

@@ -5,6 +5,13 @@
  */
 
 /**
+ * Implements hook_views_api().
+ */
+function vp_contact_views_api($module = NULL, $api = NULL) {
+  return array("api" => "3.0");
+}
+
+/**
  * Implements hook_fe_nodequeue_export_fields().
  */
 function vp_contact_fe_nodequeue_export_fields() {
