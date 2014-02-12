@@ -5,6 +5,8 @@
  *
  */
 
+include_once 'vp_news.features.inc';
+
 /**
  * Implements hook_views_pre_render().
  */

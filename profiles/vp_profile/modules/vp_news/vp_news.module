@@ -1,15 +1,10 @@
 <?php
 /**
  * @file
- * Code for the VP News feature.
+ *
  */
 
 include_once 'vp_news.features.inc';
-
-/**
- * @file
- * 
- */
 
 /**
  * Implements hook_views_pre_render().
@@ -23,7 +18,7 @@ function vp_news_views_pre_render(&$view) {
         unset($view->result[$key]);
       }
     }
-    
+
     $all = (object) array(
       'taxonomy_term_data_name' => t('All'),
       'taxonomy_term_data_vid' => NULL,
