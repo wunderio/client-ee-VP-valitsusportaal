@@ -223,16 +223,19 @@ function imagefield_crop_widget_process($element, &$form_state, $form) {
       '#process' => array('imagefield_crop_widget_preview_process'),
       '#theme' => 'imagefield_crop_preview',
       '#markup' => theme('image', array(
-                           'path' => $element['#file']->uri,
-                           'getsize' => FALSE,
-                           'attributes' => array('class' => 'preview-existing'))),
+        'path' => $element['#file']->uri,
+        'getsize' => FALSE,
+        'attributes' => array('class' => 'preview-existing')
+      ))
     );
     $element['cropbox'] = array(
       '#markup' => theme('image', array(
         'path' => $file_to_crop->uri,
         'attributes' => array(
           'class' => 'cropbox',
-          'id' => $element['#id'] . '-cropbox'))),
+          'id' => $element['#id'] . '-cropbox',
+        )
+      ))
     );
     $element['cropinfo'] = _imagefield_add_cropinfo_fields($element['#file']->fid);
     list($res_w, $res_h) = explode('x', $widget_settings['resolution']);
@@ -413,17 +416,48 @@ function imagefield_crop_widget_value(&$element, &$input, $form_state) {
   }
 }
 
+function imagefield_crop_file_delete($file) {
+  // Try to find all versions and delete those as well.
+  $query = db_select('file_usage', 'fu')
+    ->fields('fu', array('fid'))
+    ->condition('module', 'imagefield_crop')
+    ->condition('id', $file->fid)
+    ->execute();
+  if ($query->rowCount() > 0) {
+    while ($row = $query->fetchAssoc()) {
+      $file_to_delete = file_load($row['fid']);
+      file_delete($file_to_delete, TRUE);
+    }
+  }
+}
+
 function imagefield_crop_widget_delete($form, &$form_state) {
   $parents = array_slice($form_state['triggering_element']['#array_parents'], 0, -1);
   $element = drupal_array_get_nested_value($form_state['values'], $parents);
   $orig = _imagefield_crop_file_to_crop($element['fid']);
 
   if ($orig->fid != $element['fid']) {
+    $fid = $orig->fid;
     file_usage_delete($orig, 'imagefield_crop');
     file_delete($orig);
     $crop_info = variable_get('imagefield_crop_info', array());
     unset($crop_info[$element['fid']]);
     variable_set('imagefield_crop_info', $crop_info);
+
+    // Try to find all versions and delete those as well.
+    $query = db_select('file_usage', 'fu')
+      ->fields('fu', array('fid'))
+      ->condition('module', 'imagefield_crop')
+      ->condition('id', $fid)
+      ->execute();
+    if ($query->rowCount() > 0) {
+      while ($row = $query->fetchAssoc()) {
+        $file_to_delete = file_load($row['fid']);
+        file_delete($file_to_delete, TRUE);
+      }
+    }
+
+    return file_load($fid);
   }
 }
 
