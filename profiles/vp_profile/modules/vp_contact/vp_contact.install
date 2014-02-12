@@ -15,7 +15,7 @@ function vp_contact_install() {
  */
 function vp_contact_update_7100() {
   // Enable nodequeue module.
-  module_enable(array('nodequeue', 'fe_nodequeue', 'auto_nodequeue'));
+  module_enable(array('nodequeue', 'fe_nodequeue', 'auto_nodequeue', 'views_distinct'));
   // Create nodequeue by reverting feature.
   features_revert(array('vp_contact' => array('fe_nodequeue', 'views_view', 'rules_config')));
   // Enable auto add.
