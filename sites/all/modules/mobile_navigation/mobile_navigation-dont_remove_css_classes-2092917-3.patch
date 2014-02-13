@@ -1,0 +1,13 @@
+diff --git a/js/mobile_menu.js b/js/mobile_menu.js
+index 2713f92..316ed7b 100644
+--- a/js/mobile_menu.js
++++ b/js/mobile_menu.js
+@@ -146,7 +146,7 @@ window.matchMedia || (window.matchMedia = function() {
+         $('#mobile-menu li, #mobile-menu ul, #mobile-menu a').attr({
+           id : "",
+           style : ""
+-        });
++        }).removeClass('active');
+         /*------ Adding item-with-ul to submenu items ------*/
+         $("#mobile-menu li").each(function() {
+           if ($(this).find("ul").length) {

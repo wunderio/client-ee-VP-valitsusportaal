@@ -1,0 +1,24 @@
+diff --git a/js/mobile_menu.js b/js/mobile_menu.js
+index d6d9e1b..0e7ad4c 100644
+--- a/js/mobile_menu.js
++++ b/js/mobile_menu.js
+@@ -198,6 +198,19 @@
+           $("#mobile-menu-inner").hide();
+ 
+           var _collapsedMenuButtonClickEvent = function(that, e) {
++
++            // Hide search if it's open.
++            if ($('#block-search-form .block-title').hasClass('active')) {
++              $('#block-search-form .content').slideUp();
++              $('#block-search-form .block-title').removeClass('active');
++            }
++
++            // Hide language popup if it's open.
++            if ($('#block-language-switcher-fallback-language-switcher-fallback .block-title').hasClass('active')) {
++              $('#block-language-switcher-fallback-language-switcher-fallback .content').slideUp();
++              $('#block-language-switcher-fallback-language-switcher-fallback .block-title').removeClass('active');
++            }
++
+             _this.menuToggle(that);
+             e.stopPropagation();
+             e.preventDefault();

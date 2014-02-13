@@ -1,0 +1,29 @@
+
+@if $layout == global {
+  .zone-portal-navigation-wrapper {
+    .block-visually-impaired-visually-impaired {
+      display: none;
+    }
+  }
+}
+
+@if $layout == desktop {
+  .zone-portal-navigation-wrapper {
+    .block-visually-impaired-visually-impaired {
+      $width: 150px;
+
+      display: block;
+      left: 50%;
+      margin-left: -($width/2);
+      padding: 0;
+      position: absolute;
+      text-align: center;
+      width: $width;
+      z-index: 1;
+
+      .content {
+
+      }
+    }
+  }
+}

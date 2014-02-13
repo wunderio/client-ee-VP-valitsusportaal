@@ -1,0 +1,23 @@
+diff --git a/js/mobile_menu.js b/js/mobile_menu.js
+index fab9cc9..2fda9dc 100644
+--- a/js/mobile_menu.js
++++ b/js/mobile_menu.js
+@@ -421,6 +421,18 @@ window.matchMedia || (window.matchMedia = function() {
+           $("#mobile-menu .item-with-ul a").unbind('click').click(function(e) {
+             e.stopPropagation();
+           });
++          if ('ontouchstart' in document.documentElement) {
++            $('#mobile-menu > ul > li > div > a, #mobile-menu > ul > li > a').not('.home').click(function(e) {
++              e.stopPropagation();
++              e.preventDefault();
++            });
++          } else {
++            $('#mobile-menu > ul > li > div > a, #mobile-menu > ul > li > a').not('.home').click(function(e) {
++              e.stopPropagation();
++              e.preventDefault();
++              $(this).closest('li').trigger('click');
++            });
++          }
+         }
+       },
+ 

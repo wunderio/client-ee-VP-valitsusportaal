@@ -1,0 +1,63 @@
+diff --git a/js/mobile_menu.js b/js/mobile_menu.js
+index 026795a..17a6af2 100644
+--- a/js/mobile_menu.js
++++ b/js/mobile_menu.js
+@@ -206,11 +206,21 @@
+ 
+           $("#mobile-menu-inner").hide();
+ 
+-          $("#collapsed-menu-button").unbind("click").click(function(e) {
+-            _this.menuToggle(this);
++          var _collapsedMenuButtonClickEvent = function(that, e) {
++            _this.menuToggle(that);
+             e.stopPropagation();
+             e.preventDefault();
+-          });
++          }
++
++          if ('ontouchstart' in document.documentElement) {
++            $('#collapsed-menu-button').unbind('click').on('touchstart', function(e) {
++              _collapsedMenuButtonClickEvent(this, e);
++            });
++          } else {
++            $("#collapsed-menu-button").unbind('click').click(function(e) {
++              _collapsedMenuButtonClickEvent(this, e);
++            });
++          }
+         }
+       },
+ 
+@@ -300,11 +310,11 @@
+           $("#mobile-menu").width(_this.width);
+           $("#mobile-menu .item-with-ul ul").hide();
+ 
+-          $("#mobile-menu .item-with-ul").unbind('click').click(function(e) {
++          var _itemWithUlClickEvent = function($this, e, _this) {
+             if (_this.settings.showItems == "active_trail") {
+-              $("#mobile-menu .item-with-ul ul").not($(this).find("ul")).not($(this).parents()).slideUp("fast");
++              $("#mobile-menu .item-with-ul ul").not($this.find("ul")).not($this.parents()).slideUp("fast");
+             }
+-            $(this).find("ul").first().slideToggle(function() {
++            $this.find("ul").first().slideToggle(function() {
+               $("#mobile-menu .item-with-ul").removeClass("active");
+               $("#mobile-menu .item-with-ul ul").each(function() {
+                 if ($(this).css("display") != "none") {
+@@ -324,7 +334,17 @@
+             });
+ 
+             e.stopPropagation();
+-          });
++          }
++
++          if ('ontouchstart' in document.documentElement) {
++            $("#mobile-menu .item-with-ul").unbind('click').on('touchstart', function(e) {
++              _itemWithUlClickEvent($(this), e, _this);
++            });
++          } else {
++            $("#mobile-menu .item-with-ul").unbind('click').click(function(e) {
++              _itemWithUlClickEvent($(this), e, _this);
++            });
++          }
+           $("#mobile-menu .item-with-ul a").unbind('click').click(function(e) {
+             e.stopPropagation();
+           });

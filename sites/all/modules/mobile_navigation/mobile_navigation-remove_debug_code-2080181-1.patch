@@ -1,0 +1,20 @@
+diff --git a/js/mobile_menu.js b/js/mobile_menu.js
+index 026795a..fa7eb26 100644
+--- a/js/mobile_menu.js
++++ b/js/mobile_menu.js
+@@ -44,15 +44,6 @@
+     useMask : true
+   };
+ 
+-  $(document).ready(function() {
+-    $("body").prepend("<div id='debugInfo'></div>");
+-    $("#debugInfo").css({
+-      position : "fixed",
+-      right : "50px",
+-      top : "50px"
+-    });
+-  });
+-
+   /** Main Class **/
+   var mobile_menu = function(elem, options) {
+     var settings, current = "", width, height;

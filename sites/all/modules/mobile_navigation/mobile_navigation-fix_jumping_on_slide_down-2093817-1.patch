@@ -1,0 +1,33 @@
+diff --git a/js/mobile_menu.js b/js/mobile_menu.js
+index 17a6af2..241fe17 100644
+--- a/js/mobile_menu.js
++++ b/js/mobile_menu.js
+@@ -314,7 +314,27 @@
+             if (_this.settings.showItems == "active_trail") {
+               $("#mobile-menu .item-with-ul ul").not($this.find("ul")).not($this.parents()).slideUp("fast");
+             }
+-            $this.find("ul").first().slideToggle(function() {
++            var ul = $this.find("ul").first();
++
++            // Fix slide jumping.
++            {
++              var fixSlideJumping = function(ul) {
++                if (typeof ul === 'undefined') {
++                  $('ul.jumpfix').css('width', $('#mobile-menu-inner').width());
++                } else {
++                  if (!ul.hasClass('jumpfix')) {
++                    ul.css('width', $('#mobile-menu-inner').width()).addClass('jumpfix');
++                  }
++                }
++
++              }
++              fixSlideJumping(ul);
++              $(window).resize(function() {
++                fixSlideJumping();
++              });
++            }
++
++            ul.slideToggle(function() {
+               $("#mobile-menu .item-with-ul").removeClass("active");
+               $("#mobile-menu .item-with-ul ul").each(function() {
+                 if ($(this).css("display") != "none") {
