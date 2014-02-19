@@ -33,7 +33,8 @@ class FeedsSOAPFetcher extends FeedsFetcher {
       '!tomorrow' => date('Y-m-d', strtotime('+1 day')),
     ));
 
-    $result = $client->send($envelope);
+    // Send envelop and set timeout to 60.
+    $result = $client->send($envelope, '', 0, 60);
     
     if ($client->fault) {
 	    $err_msg = '<h2>Fault</h2><pre>' . print_r($result, TRUE) . '</pre>';
