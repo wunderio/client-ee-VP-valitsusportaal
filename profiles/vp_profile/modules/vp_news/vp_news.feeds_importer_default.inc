@@ -98,6 +98,46 @@ function vp_news_feeds_importer_default() {
             'target' => 'field_source',
             'unique' => FALSE,
           ),
+          6 => array(
+            'source' => 'xpathparser:8',
+            'target' => 'field_news_type',
+            'unique' => FALSE,
+          ),
+          7 => array(
+            'source' => 'xpathparser:9',
+            'target' => 'field_news_subject',
+            'unique' => FALSE,
+          ),
+          8 => array(
+            'source' => 'xpathparser:10',
+            'target' => 'field_cover_image',
+            'unique' => FALSE,
+          ),
+          9 => array(
+            'source' => 'xpathparser:11',
+            'target' => 'field_name',
+            'unique' => FALSE,
+          ),
+          10 => array(
+            'source' => 'xpathparser:12',
+            'target' => 'field_division',
+            'unique' => FALSE,
+          ),
+          11 => array(
+            'source' => 'xpathparser:13',
+            'target' => 'field_e_mail',
+            'unique' => FALSE,
+          ),
+          12 => array(
+            'source' => 'xpathparser:14',
+            'target' => 'field_occupaction',
+            'unique' => FALSE,
+          ),
+          13 => array(
+            'source' => 'xpathparser:15',
+            'target' => 'field_phone',
+            'unique' => FALSE,
+          ),
         ),
         'update_existing' => '1',
         'input_format' => 'full_html',
