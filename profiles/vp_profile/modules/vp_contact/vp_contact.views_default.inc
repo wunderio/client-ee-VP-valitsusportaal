@@ -22,9 +22,8 @@ function vp_contact_views_default_views() {
 
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'Kontaktid';
+  $handler->display->display_options['title'] = 'Contacts';
   $handler->display->display_options['use_more_always'] = FALSE;
-  $handler->display->display_options['use_more_text'] = 'veel';
   $handler->display->display_options['access']['type'] = 'perm';
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
@@ -109,11 +108,11 @@ function vp_contact_views_default_views() {
       'empty_column' => 0,
     ),
   );
-  /* Suhte: Sisu: Department (field_department) */
+  /* Relationship: Content: Department (field_department) */
   $handler->display->display_options['relationships']['field_department_tid']['id'] = 'field_department_tid';
   $handler->display->display_options['relationships']['field_department_tid']['table'] = 'field_data_field_department';
   $handler->display->display_options['relationships']['field_department_tid']['field'] = 'field_department_tid';
-  /* Suhte: Nodequeue: Queue */
+  /* Relationship: Nodequeue: Queue */
   $handler->display->display_options['relationships']['nodequeue_rel']['id'] = 'nodequeue_rel';
   $handler->display->display_options['relationships']['nodequeue_rel']['table'] = 'node';
   $handler->display->display_options['relationships']['nodequeue_rel']['field'] = 'nodequeue_rel';
@@ -121,14 +120,14 @@ function vp_contact_views_default_views() {
   $handler->display->display_options['relationships']['nodequeue_rel']['names'] = array(
     'contacts' => 'contacts',
   );
-  /* Väli: Sisu: Nid */
+  /* Field: Content: Nid */
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
   $handler->display->display_options['fields']['nid']['table'] = 'node';
   $handler->display->display_options['fields']['nid']['field'] = 'nid';
   $handler->display->display_options['fields']['nid']['label'] = '';
   $handler->display->display_options['fields']['nid']['exclude'] = TRUE;
   $handler->display->display_options['fields']['nid']['element_label_colon'] = FALSE;
-  /* Väli: Taksonoomia termin: Term description (translated) */
+  /* Field: Taxonomy term: Term description (translated) */
   $handler->display->display_options['fields']['description_i18n']['id'] = 'description_i18n';
   $handler->display->display_options['fields']['description_i18n']['table'] = 'taxonomy_term_data';
   $handler->display->display_options['fields']['description_i18n']['field'] = 'description_i18n';
@@ -136,7 +135,7 @@ function vp_contact_views_default_views() {
   $handler->display->display_options['fields']['description_i18n']['label'] = '';
   $handler->display->display_options['fields']['description_i18n']['exclude'] = TRUE;
   $handler->display->display_options['fields']['description_i18n']['element_label_colon'] = FALSE;
-  /* Väli: Sisu: Department */
+  /* Field: Content: Department */
   $handler->display->display_options['fields']['field_department']['id'] = 'field_department';
   $handler->display->display_options['fields']['field_department']['table'] = 'field_data_field_department';
   $handler->display->display_options['fields']['field_department']['field'] = 'field_department';
@@ -149,7 +148,7 @@ function vp_contact_views_default_views() {
   $handler->display->display_options['fields']['field_department']['type'] = 'i18n_taxonomy_term_reference_plain';
   $handler->display->display_options['fields']['field_department']['group_rows'] = FALSE;
   $handler->display->display_options['fields']['field_department']['delta_offset'] = '0';
-  /* Väli: Sisu: Pealkiri */
+  /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
   $handler->display->display_options['fields']['title']['field'] = 'title';
@@ -160,56 +159,54 @@ function vp_contact_views_default_views() {
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
   $handler->display->display_options['fields']['title']['element_class'] = 'no-word-break';
   $handler->display->display_options['fields']['title']['link_to_node'] = FALSE;
-  /* Väli: Sisu: Position */
+  /* Field: Content: Position */
   $handler->display->display_options['fields']['field_position']['id'] = 'field_position';
   $handler->display->display_options['fields']['field_position']['table'] = 'field_data_field_position';
   $handler->display->display_options['fields']['field_position']['field'] = 'field_position';
-  $handler->display->display_options['fields']['field_position']['label'] = 'Ametinimetus';
-  /* Väli: Sisu: Position in English */
+  /* Field: Content: Position in English */
   $handler->display->display_options['fields']['field_position_in_english']['id'] = 'field_position_in_english';
   $handler->display->display_options['fields']['field_position_in_english']['table'] = 'field_data_field_position_in_english';
   $handler->display->display_options['fields']['field_position_in_english']['field'] = 'field_position_in_english';
   $handler->display->display_options['fields']['field_position_in_english']['label'] = 'Position';
-  /* Väli: Sisu: Position in Russian */
+  /* Field: Content: Position in Russian */
   $handler->display->display_options['fields']['field_position_in_russian']['id'] = 'field_position_in_russian';
   $handler->display->display_options['fields']['field_position_in_russian']['table'] = 'field_data_field_position_in_russian';
   $handler->display->display_options['fields']['field_position_in_russian']['field'] = 'field_position_in_russian';
   $handler->display->display_options['fields']['field_position_in_russian']['label'] = 'Position';
-  /* Väli: Sisu: Phone */
+  /* Field: Content: Phone */
   $handler->display->display_options['fields']['field_contact_phone_nr']['id'] = 'field_contact_phone_nr';
   $handler->display->display_options['fields']['field_contact_phone_nr']['table'] = 'field_data_field_contact_phone_nr';
   $handler->display->display_options['fields']['field_contact_phone_nr']['field'] = 'field_contact_phone_nr';
-  /* Väli: Sisu: E-mail */
+  /* Field: Content: E-mail */
   $handler->display->display_options['fields']['field_contact_e_mail']['id'] = 'field_contact_e_mail';
   $handler->display->display_options['fields']['field_contact_e_mail']['table'] = 'field_data_field_contact_e_mail';
   $handler->display->display_options['fields']['field_contact_e_mail']['field'] = 'field_contact_e_mail';
-  $handler->display->display_options['fields']['field_contact_e_mail']['label'] = 'E-post';
-  /* Lühike kriteerium: Nodequeue: Ametinimetus */
+  /* Sort criterion: Nodequeue: Position */
   $handler->display->display_options['sorts']['position']['id'] = 'position';
   $handler->display->display_options['sorts']['position']['table'] = 'nodequeue_nodes';
   $handler->display->display_options['sorts']['position']['field'] = 'position';
   $handler->display->display_options['sorts']['position']['relationship'] = 'nodequeue_rel';
-  /* Filtri kriteeriumid: Sisu: Avaldatud */
+  /* Filter criterion: Content: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';
   $handler->display->display_options['filters']['status']['value'] = 1;
   $handler->display->display_options['filters']['status']['group'] = 1;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
-  /* Filtri kriteeriumid: Sisu: Liik */
+  /* Filter criterion: Content: Type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'node';
   $handler->display->display_options['filters']['type']['field'] = 'type';
   $handler->display->display_options['filters']['type']['value'] = array(
     'contact' => 'contact',
   );
-  /* Filtri kriteeriumid: Sisu: Department (field_department) (translated) */
+  /* Filter criterion: Content: Department (field_department) (translated) */
   $handler->display->display_options['filters']['field_department_tid_i18n']['id'] = 'field_department_tid_i18n';
   $handler->display->display_options['filters']['field_department_tid_i18n']['table'] = 'field_data_field_department';
   $handler->display->display_options['filters']['field_department_tid_i18n']['field'] = 'field_department_tid_i18n';
   $handler->display->display_options['filters']['field_department_tid_i18n']['exposed'] = TRUE;
   $handler->display->display_options['filters']['field_department_tid_i18n']['expose']['operator_id'] = 'field_department_tid_i18n_op';
-  $handler->display->display_options['filters']['field_department_tid_i18n']['expose']['label'] = 'Osakond';
+  $handler->display->display_options['filters']['field_department_tid_i18n']['expose']['label'] = 'Department';
   $handler->display->display_options['filters']['field_department_tid_i18n']['expose']['operator'] = 'field_department_tid_i18n_op';
   $handler->display->display_options['filters']['field_department_tid_i18n']['expose']['identifier'] = 'department';
   $handler->display->display_options['filters']['field_department_tid_i18n']['expose']['multiple'] = TRUE;
@@ -369,11 +366,11 @@ function vp_contact_views_default_views() {
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['exposed_block'] = TRUE;
   $handler->display->display_options['defaults']['relationships'] = FALSE;
-  /* Suhte: Sisu: Department (field_department) */
+  /* Relationship: Content: Department (field_department) */
   $handler->display->display_options['relationships']['field_department_tid']['id'] = 'field_department_tid';
   $handler->display->display_options['relationships']['field_department_tid']['table'] = 'field_data_field_department';
   $handler->display->display_options['relationships']['field_department_tid']['field'] = 'field_department_tid';
-  /* Suhte: Nodequeue: Queue */
+  /* Relationship: Nodequeue: Queue */
   $handler->display->display_options['relationships']['nodequeue_rel']['id'] = 'nodequeue_rel';
   $handler->display->display_options['relationships']['nodequeue_rel']['table'] = 'node';
   $handler->display->display_options['relationships']['nodequeue_rel']['field'] = 'nodequeue_rel';
@@ -381,21 +378,21 @@ function vp_contact_views_default_views() {
   $handler->display->display_options['relationships']['nodequeue_rel']['names'] = array(
     'contacts' => 'contacts',
   );
-  /* Suhte: Taksonoomia termin: Vanemtermin */
+  /* Relationship: Taxonomy term: Parent term */
   $handler->display->display_options['relationships']['parent']['id'] = 'parent';
   $handler->display->display_options['relationships']['parent']['table'] = 'taxonomy_term_hierarchy';
   $handler->display->display_options['relationships']['parent']['field'] = 'parent';
   $handler->display->display_options['relationships']['parent']['relationship'] = 'field_department_tid';
   $handler->display->display_options['relationships']['parent']['label'] = 'Parent term';
   $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Väli: Sisu: Nid */
+  /* Field: Content: Nid */
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
   $handler->display->display_options['fields']['nid']['table'] = 'node';
   $handler->display->display_options['fields']['nid']['field'] = 'nid';
   $handler->display->display_options['fields']['nid']['label'] = '';
   $handler->display->display_options['fields']['nid']['exclude'] = TRUE;
   $handler->display->display_options['fields']['nid']['element_label_colon'] = FALSE;
-  /* Väli: Taksonoomia termin: Term description (translated) */
+  /* Field: Taxonomy term: Term description (translated) */
   $handler->display->display_options['fields']['description_i18n']['id'] = 'description_i18n';
   $handler->display->display_options['fields']['description_i18n']['table'] = 'taxonomy_term_data';
   $handler->display->display_options['fields']['description_i18n']['field'] = 'description_i18n';
@@ -405,20 +402,19 @@ function vp_contact_views_default_views() {
   $handler->display->display_options['fields']['description_i18n']['alter']['trim_whitespace'] = TRUE;
   $handler->display->display_options['fields']['description_i18n']['alter']['strip_tags'] = TRUE;
   $handler->display->display_options['fields']['description_i18n']['element_label_colon'] = FALSE;
-  /* Väli: Sisu: Department */
+  /* Field: Content: Department */
   $handler->display->display_options['fields']['field_department']['id'] = 'field_department';
   $handler->display->display_options['fields']['field_department']['table'] = 'field_data_field_department';
   $handler->display->display_options['fields']['field_department']['field'] = 'field_department';
   $handler->display->display_options['fields']['field_department']['label'] = '';
   $handler->display->display_options['fields']['field_department']['exclude'] = TRUE;
   $handler->display->display_options['fields']['field_department']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_department']['alter']['text'] = '<h2>[field_department]</h2>
-[description_i18n]';
+  $handler->display->display_options['fields']['field_department']['alter']['text'] = '<h3>[description_i18n]</h3>';
   $handler->display->display_options['fields']['field_department']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_department']['type'] = 'i18n_taxonomy_term_reference_plain';
   $handler->display->display_options['fields']['field_department']['group_rows'] = FALSE;
   $handler->display->display_options['fields']['field_department']['delta_offset'] = '0';
-  /* Väli: Sisu: Pealkiri */
+  /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
   $handler->display->display_options['fields']['title']['field'] = 'title';
@@ -429,31 +425,29 @@ function vp_contact_views_default_views() {
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
   $handler->display->display_options['fields']['title']['element_class'] = 'no-word-break';
   $handler->display->display_options['fields']['title']['link_to_node'] = FALSE;
-  /* Väli: Sisu: Position */
+  /* Field: Content: Position */
   $handler->display->display_options['fields']['field_position']['id'] = 'field_position';
   $handler->display->display_options['fields']['field_position']['table'] = 'field_data_field_position';
   $handler->display->display_options['fields']['field_position']['field'] = 'field_position';
-  $handler->display->display_options['fields']['field_position']['label'] = 'Ametinimetus';
-  /* Väli: Sisu: Position in English */
+  /* Field: Content: Position in English */
   $handler->display->display_options['fields']['field_position_in_english']['id'] = 'field_position_in_english';
   $handler->display->display_options['fields']['field_position_in_english']['table'] = 'field_data_field_position_in_english';
   $handler->display->display_options['fields']['field_position_in_english']['field'] = 'field_position_in_english';
   $handler->display->display_options['fields']['field_position_in_english']['label'] = 'Position';
-  /* Väli: Sisu: Position in Russian */
+  /* Field: Content: Position in Russian */
   $handler->display->display_options['fields']['field_position_in_russian']['id'] = 'field_position_in_russian';
   $handler->display->display_options['fields']['field_position_in_russian']['table'] = 'field_data_field_position_in_russian';
   $handler->display->display_options['fields']['field_position_in_russian']['field'] = 'field_position_in_russian';
   $handler->display->display_options['fields']['field_position_in_russian']['label'] = 'Position';
-  /* Väli: Sisu: Phone */
+  /* Field: Content: Phone */
   $handler->display->display_options['fields']['field_contact_phone_nr']['id'] = 'field_contact_phone_nr';
   $handler->display->display_options['fields']['field_contact_phone_nr']['table'] = 'field_data_field_contact_phone_nr';
   $handler->display->display_options['fields']['field_contact_phone_nr']['field'] = 'field_contact_phone_nr';
-  /* Väli: Sisu: E-mail */
+  /* Field: Content: E-mail */
   $handler->display->display_options['fields']['field_contact_e_mail']['id'] = 'field_contact_e_mail';
   $handler->display->display_options['fields']['field_contact_e_mail']['table'] = 'field_data_field_contact_e_mail';
   $handler->display->display_options['fields']['field_contact_e_mail']['field'] = 'field_contact_e_mail';
-  $handler->display->display_options['fields']['field_contact_e_mail']['label'] = 'E-post';
-  /* Väli: Taksonoomia termin: Name (translated) */
+  /* Field: Taxonomy term: Name (translated) */
   $handler->display->display_options['fields']['name_i18n']['id'] = 'name_i18n';
   $handler->display->display_options['fields']['name_i18n']['table'] = 'taxonomy_term_data';
   $handler->display->display_options['fields']['name_i18n']['field'] = 'name_i18n';
@@ -467,38 +461,38 @@ function vp_contact_views_default_views() {
   $handler->display->display_options['fields']['name_i18n']['hide_empty'] = TRUE;
   $handler->display->display_options['fields']['name_i18n']['empty_zero'] = TRUE;
   $handler->display->display_options['defaults']['sorts'] = FALSE;
-  /* Lühike kriteerium: Taksonoomia termin: Nimi */
+  /* Sort criterion: Taxonomy term: Name */
   $handler->display->display_options['sorts']['name']['id'] = 'name';
   $handler->display->display_options['sorts']['name']['table'] = 'taxonomy_term_data';
   $handler->display->display_options['sorts']['name']['field'] = 'name';
   $handler->display->display_options['sorts']['name']['relationship'] = 'parent';
-  /* Lühike kriteerium: Taksonoomia termin: Kaal */
+  /* Sort criterion: Taxonomy term: Weight */
   $handler->display->display_options['sorts']['weight']['id'] = 'weight';
   $handler->display->display_options['sorts']['weight']['table'] = 'taxonomy_term_data';
   $handler->display->display_options['sorts']['weight']['field'] = 'weight';
   $handler->display->display_options['sorts']['weight']['relationship'] = 'field_department_tid';
-  /* Lühike kriteerium: Nodequeue: Ametinimetus */
+  /* Sort criterion: Nodequeue: Position */
   $handler->display->display_options['sorts']['position']['id'] = 'position';
   $handler->display->display_options['sorts']['position']['table'] = 'nodequeue_nodes';
   $handler->display->display_options['sorts']['position']['field'] = 'position';
   $handler->display->display_options['sorts']['position']['relationship'] = 'nodequeue_rel';
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filtri kriteeriumid: Sisu: Avaldatud */
+  /* Filter criterion: Content: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';
   $handler->display->display_options['filters']['status']['value'] = 1;
   $handler->display->display_options['filters']['status']['group'] = 1;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
-  /* Filtri kriteeriumid: Sisu: Liik */
+  /* Filter criterion: Content: Type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'node';
   $handler->display->display_options['filters']['type']['field'] = 'type';
   $handler->display->display_options['filters']['type']['value'] = array(
     'contact' => 'contact',
   );
-  /* Filtri kriteeriumid: Sisu: Has taxonomy terms (with depth, translated) */
+  /* Filter criterion: Content: Has taxonomy terms (with depth, translated) */
   $handler->display->display_options['filters']['term_node_tid_depth_i18n']['id'] = 'term_node_tid_depth_i18n';
   $handler->display->display_options['filters']['term_node_tid_depth_i18n']['table'] = 'node';
   $handler->display->display_options['filters']['term_node_tid_depth_i18n']['field'] = 'term_node_tid_depth_i18n';
