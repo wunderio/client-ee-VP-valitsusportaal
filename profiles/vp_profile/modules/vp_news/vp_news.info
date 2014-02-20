@@ -3,6 +3,7 @@ core = 7.x
 package = VP
 version = 7.x-1.0
 project = vp_news
+dependencies[] = ctools
 dependencies[] = feeds
 dependencies[] = views
 dependencies[] = views_data_export
