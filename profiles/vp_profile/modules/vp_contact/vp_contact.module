@@ -19,15 +19,15 @@ function vp_contact_views_pre_render(&$view) {
         $link.click(function(e){
           e.preventDefault();
           $dialog = $(this).parent().parent().next().find("div.ui-dialog-content-contact")
-            .clone()
-            .dialog({
-              close: function(event, ui) {
-                $link.focus();
-              }
-            });
-        });
-      });
-    });})(jQuery);', 'inline');
+          .clone()
+          .dialog({
+            close: function(event, ui) {
+              $link.focus();
+            }
+          });
+  });
+  });
+  });})(jQuery);', 'inline');
   }
 }
 
@@ -62,12 +62,12 @@ function vp_contact_feeds_presave(FeedsSource $source, $entity, $item) {
 
     if (strtotime($item['xpathparser:1']) <= time() && strtotime($item['xpathparser:2']) >= time()) {
       $result = db_select('feeds_item', 'fi')
-        ->condition('fi.id', 'contacts')
-        ->condition('fi.guid', $item['xpathparser:0'])
-        ->fields('fi', array('entity_id'))
-        ->range(0, 1)
-        ->execute()
-        ->fetchCol();
+      ->condition('fi.id', 'contacts')
+      ->condition('fi.guid', $item['xpathparser:0'])
+      ->fields('fi', array('entity_id'))
+      ->range(0, 1)
+      ->execute()
+      ->fetchCol();
 
       if ($node = node_load($result[0])) {
         $node->field_status[LANGUAGE_NONE][0]['value'] = $item['xpathparser:3'];
@@ -80,12 +80,12 @@ function vp_contact_feeds_presave(FeedsSource $source, $entity, $item) {
 
   if ($entity->feeds_item->id == 'contacts_leavers') {
     $result = db_select('feeds_item', 'fi')
-      ->condition('fi.id', 'contacts')
-      ->condition('fi.guid', $item['xpathparser:0'])
-      ->fields('fi', array('entity_id'))
-      ->range(0, 1)
-      ->execute()
-      ->fetchCol();
+    ->condition('fi.id', 'contacts')
+    ->condition('fi.guid', $item['xpathparser:0'])
+    ->fields('fi', array('entity_id'))
+    ->range(0, 1)
+    ->execute()
+    ->fetchCol();
 
     if (!empty($result)) {
       node_delete($result[0]);
@@ -101,9 +101,9 @@ function vp_contact_feeds_presave(FeedsSource $source, $entity, $item) {
 function vp_contact_feeds_before_import(FeedsSource $source) {
   if ($source->importer()->id == 'contacts_absentees') {
     $query = db_select('field_data_field_status', 'f')
-      ->condition('f.bundle', 'contact')
-      ->fields('f', array('entity_id'))
-      ->execute();
+    ->condition('f.bundle', 'contact')
+    ->fields('f', array('entity_id'))
+    ->execute();
     if ($query->rowCount() > 0) {
       while ($row = $query->fetchAssoc()) {
         $node = node_load($row['entity_id']);
@@ -114,3 +114,18 @@ function vp_contact_feeds_before_import(FeedsSource $source) {
   }
 }
 
+/**
+ * Implements hook_form_views_exposed_form_alter()
+ */
+function vp_contact_form_views_exposed_form_alter(&$form, &$form_state, $form_id) {
+  if ($form['#id'] == 'views-exposed-form-contact-contact-page') {
+    foreach ($form['tid_with_depth']['#options'] as $term_key => $term) {
+      if($term_key !== 'All') {
+        $term_value = reset($term->option);
+        if($term_value[0] == '-') {
+          unset($form['tid_with_depth']['#options'][$term_key]);
+        }
+      }
+    }
+  }
+}
