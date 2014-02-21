@@ -115,6 +115,26 @@ function vp_contact_feeds_before_import(FeedsSource $source) {
 }
 
 /**
+ * Implements hook_feeds_after_import().
+ */
+function vp_contact_feeds_after_import(FeedsSource $source){
+  // Delete expired departments
+  $query = db_select('feeds_item', 'fi')
+  ->condition('fi.id', 'contacts_departments')
+  ->fields('fi', array('entity_id'));
+  $query->addExpression('fi.entity_id', 'entity_id');
+  $query->addExpression('fi.url', 'expiration');
+  $entities = $query->execute()->fetchAll();
+
+  foreach($entities as $key=>$entity){
+    if(strtotime($entity->expiration) <= time()){
+      // watchdog('vp_contact_departments', 'Found expired entity: ' . $entity->entity_id);
+      taxonomy_term_delete($entity->entity_id);
+    }
+  }
+}
+
+/**
  * Implements hook_form_views_exposed_form_alter()
  */
 function vp_contact_form_views_exposed_form_alter(&$form, &$form_state, $form_id) {
