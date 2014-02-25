@@ -31,25 +31,34 @@ function vp_contact_views_pre_render(&$view) {
     });})(jQuery);', 'inline');
   }
   // Group by category.
-  //dpm(nodequeue_get_queues('contact'));
+  $queue = reset(nodequeue_load_queues_by_type('contact'));
+  $queue_nids = db_select('nodequeue_nodes', 'n')
+    ->fields('n', array('nid'))
+    ->condition('n.qid', $queue->qid)
+    ->orderBy('n.position', 'ASC')
+    ->execute()
+    ->fetchCol();
+  $queue_nids = array_flip($queue_nids);
   $groups = array();
   $departments = array();
   foreach ($view->result as $row) {
     $department = 0;
     if (isset($row->field_field_department[0]['raw']['tid']) && !empty($row->field_field_department[0]['raw']['tid'])) {
-    $department = $row->field_field_department[0]['raw']['tid'];
+      $department = $row->field_field_department[0]['raw']['tid'];
     }
-    $groups[$department][] = $row;
+    $groups[$department][$queue_nids[$row->nid]] = $row;
 
     $departments[$department] = $row->field_field_department[0]['rendered']['#markup'];
   }
   asort($departments);
   $view->result = array();
   foreach ($departments as $department => $department_title) {
-    foreach($groups[$department] as $row) {
-      $view->result[] = $row;
+    ksort($groups[$department]);
+    foreach($groups[$department] as $id => $row) {
+      $view->result[$id] = $row;
     }
   }
+  $view->result = array_values($view->result);
 }
 
 /**
