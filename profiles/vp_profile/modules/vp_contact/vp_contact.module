@@ -12,6 +12,7 @@ include_once 'vp_contact.features.inc';
  */
 function vp_contact_views_pre_render(&$view) {
   if ($view->name == 'contact') {
+    // Modal windows for contacts.
     drupal_add_library('system', 'ui.dialog');
     drupal_add_js('(function($){$().ready(function(){
       $("div.view-contact td.views-field-title a").each(function() {
@@ -25,9 +26,29 @@ function vp_contact_views_pre_render(&$view) {
               $link.focus();
             }
           });
-  });
-  });
-  });})(jQuery);', 'inline');
+        });
+      });
+    });})(jQuery);', 'inline');
+  }
+  // Group by category.
+  //dpm(nodequeue_get_queues('contact'));
+  $groups = array();
+  $departments = array();
+  foreach ($view->result as $row) {
+    $department = 0;
+    if (isset($row->field_field_department[0]['raw']['tid']) && !empty($row->field_field_department[0]['raw']['tid'])) {
+    $department = $row->field_field_department[0]['raw']['tid'];
+    }
+    $groups[$department][] = $row;
+
+    $departments[$department] = $row->field_field_department[0]['rendered']['#markup'];
+  }
+  asort($departments);
+  $view->result = array();
+  foreach ($departments as $department => $department_title) {
+    foreach($groups[$department] as $row) {
+      $view->result[] = $row;
+    }
   }
 }
 
