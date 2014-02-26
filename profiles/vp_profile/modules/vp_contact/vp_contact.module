@@ -31,7 +31,8 @@ function vp_contact_views_pre_render(&$view) {
     });})(jQuery);', 'inline');
   }
   // Group by category.
-  $queue = reset(nodequeue_load_queues_by_type('contact'));
+  $queue_type = 'contact';
+  $queue = reset(nodequeue_load_queues_by_type($queue_type));
   $queue_nids = db_select('nodequeue_nodes', 'n')
     ->fields('n', array('nid'))
     ->condition('n.qid', $queue->qid)
@@ -169,11 +170,13 @@ function vp_contact_feeds_after_import(FeedsSource $source){
  */
 function vp_contact_form_views_exposed_form_alter(&$form, &$form_state, $form_id) {
   if ($form['#id'] == 'views-exposed-form-contact-contact-page') {
-    foreach ($form['tid_with_depth']['#options'] as $term_key => $term) {
-      if($term_key !== 'All') {
-        $term_value = reset($term->option);
-        if($term_value[0] == '-') {
-          unset($form['tid_with_depth']['#options'][$term_key]);
+    if (isset($form['tid_with_depth'])) {
+      foreach ($form['tid_with_depth']['#options'] as $term_key => $term) {
+        if($term_key !== 'All') {
+          $term_value = reset($term->option);
+          if($term_value[0] == '-') {
+            unset($form['tid_with_depth']['#options'][$term_key]);
+          }
         }
       }
     }
