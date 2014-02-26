@@ -48,7 +48,7 @@ function vp_contact_views_pre_render(&$view) {
     }
     $groups[$department][$queue_nids[$row->nid]] = $row;
 
-    $departments[$department] = $row->field_field_department[0]['rendered']['#markup'];
+    $departments[$department] = (isset($row->field_field_department[0) ? $row->field_field_department[0]['rendered']['#markup'] : '';
   }
   asort($departments);
   $view->result = array();
