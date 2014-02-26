@@ -32,7 +32,8 @@ function vp_contact_views_pre_render(&$view) {
   }
   // Group by category.
   $queue_type = 'contact';
-  $queue = reset(nodequeue_load_queues_by_type($queue_type));
+  $queues = nodequeue_load_queues_by_type($queue_type);
+  $queue = reset($queues);
   $queue_nids = db_select('nodequeue_nodes', 'n')
     ->fields('n', array('nid'))
     ->condition('n.qid', $queue->qid)
