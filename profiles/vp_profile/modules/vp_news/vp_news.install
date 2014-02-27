@@ -6,3 +6,15 @@
 function vp_news_update_7100() {
   features_revert(array('vp_news' => array('views_view')));
 }
+
+/**
+ * Enable descriptions for file field in content type news.
+ */
+function vp_news_update_7101() {
+  // Load field instance, the parameters in right order are: entity type, field name, bundle name.
+  $instance = field_read_instance('node', 'field_files', 'news');
+  // Change values
+  $instance['settings']['description_field'] = 1;
+  // Save or update field instance.
+  field_update_instance($instance);
+}

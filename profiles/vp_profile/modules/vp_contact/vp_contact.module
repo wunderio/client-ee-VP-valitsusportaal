@@ -12,6 +12,7 @@ include_once 'vp_contact.features.inc';
  */
 function vp_contact_views_pre_render(&$view) {
   if ($view->name == 'contact') {
+    // Modal windows for contacts.
     drupal_add_library('system', 'ui.dialog');
     drupal_add_js('(function($){$().ready(function(){
       $("div.view-contact td.views-field-title a").each(function() {
@@ -19,16 +20,47 @@ function vp_contact_views_pre_render(&$view) {
         $link.click(function(e){
           e.preventDefault();
           $dialog = $(this).parent().parent().next().find("div.ui-dialog-content-contact")
-            .clone()
-            .dialog({
-              close: function(event, ui) {
-                $link.focus();
-              }
-            });
+          .clone()
+          .dialog({
+            close: function(event, ui) {
+              $link.focus();
+            }
+          });
         });
       });
     });})(jQuery);', 'inline');
   }
+  // Group by category.
+  $queue_type = 'contact';
+  $queues = nodequeue_load_queues_by_type($queue_type);
+  $queue = reset($queues);
+  $queue_nids = db_select('nodequeue_nodes', 'n')
+    ->fields('n', array('nid'))
+    ->condition('n.qid', $queue->qid)
+    ->orderBy('n.position', 'ASC')
+    ->execute()
+    ->fetchCol();
+  $queue_nids = array_flip($queue_nids);
+  $groups = array();
+  $departments = array();
+  foreach ($view->result as $row) {
+    $department = 0;
+    if (isset($row->field_field_department[0]['raw']['tid']) && !empty($row->field_field_department[0]['raw']['tid'])) {
+      $department = $row->field_field_department[0]['raw']['tid'];
+    }
+    $groups[$department][$queue_nids[$row->nid]] = $row;
+
+    $departments[$department] = (isset($row->field_field_department[0]) ? $row->field_field_department[0]['rendered']['#markup'] : '');
+  }
+  asort($departments);
+  $view->result = array();
+  foreach ($departments as $department => $department_title) {
+    ksort($groups[$department]);
+    foreach($groups[$department] as $id => $row) {
+      $view->result[$id] = $row;
+    }
+  }
+  $view->result = array_values($view->result);
 }
 
 /**
@@ -62,12 +94,12 @@ function vp_contact_feeds_presave(FeedsSource $source, $entity, $item) {
 
     if (strtotime($item['xpathparser:1']) <= time() && strtotime($item['xpathparser:2']) >= time()) {
       $result = db_select('feeds_item', 'fi')
-        ->condition('fi.id', 'contacts')
-        ->condition('fi.guid', $item['xpathparser:0'])
-        ->fields('fi', array('entity_id'))
-        ->range(0, 1)
-        ->execute()
-        ->fetchCol();
+      ->condition('fi.id', 'contacts')
+      ->condition('fi.guid', $item['xpathparser:0'])
+      ->fields('fi', array('entity_id'))
+      ->range(0, 1)
+      ->execute()
+      ->fetchCol();
 
       if ($node = node_load($result[0])) {
         $node->field_status[LANGUAGE_NONE][0]['value'] = $item['xpathparser:3'];
@@ -80,12 +112,12 @@ function vp_contact_feeds_presave(FeedsSource $source, $entity, $item) {
 
   if ($entity->feeds_item->id == 'contacts_leavers') {
     $result = db_select('feeds_item', 'fi')
-      ->condition('fi.id', 'contacts')
-      ->condition('fi.guid', $item['xpathparser:0'])
-      ->fields('fi', array('entity_id'))
-      ->range(0, 1)
-      ->execute()
-      ->fetchCol();
+    ->condition('fi.id', 'contacts')
+    ->condition('fi.guid', $item['xpathparser:0'])
+    ->fields('fi', array('entity_id'))
+    ->range(0, 1)
+    ->execute()
+    ->fetchCol();
 
     if (!empty($result)) {
       node_delete($result[0]);
@@ -101,9 +133,9 @@ function vp_contact_feeds_presave(FeedsSource $source, $entity, $item) {
 function vp_contact_feeds_before_import(FeedsSource $source) {
   if ($source->importer()->id == 'contacts_absentees') {
     $query = db_select('field_data_field_status', 'f')
-      ->condition('f.bundle', 'contact')
-      ->fields('f', array('entity_id'))
-      ->execute();
+    ->condition('f.bundle', 'contact')
+    ->fields('f', array('entity_id'))
+    ->execute();
     if ($query->rowCount() > 0) {
       while ($row = $query->fetchAssoc()) {
         $node = node_load($row['entity_id']);
@@ -114,3 +146,40 @@ function vp_contact_feeds_before_import(FeedsSource $source) {
   }
 }
 
+/**
+ * Implements hook_feeds_after_import().
+ */
+function vp_contact_feeds_after_import(FeedsSource $source){
+  // Delete expired departments
+  $query = db_select('feeds_item', 'fi')
+  ->condition('fi.id', 'contacts_departments')
+  ->fields('fi', array('entity_id'));
+  $query->addExpression('fi.entity_id', 'entity_id');
+  $query->addExpression('fi.url', 'expiration');
+  $entities = $query->execute()->fetchAll();
+
+  foreach($entities as $key=>$entity){
+    if(strtotime($entity->expiration) <= time()){
+      // watchdog('vp_contact_departments', 'Found expired entity: ' . $entity->entity_id);
+      taxonomy_term_delete($entity->entity_id);
+    }
+  }
+}
+
+/**
+ * Implements hook_form_views_exposed_form_alter()
+ */
+function vp_contact_form_views_exposed_form_alter(&$form, &$form_state, $form_id) {
+  if ($form['#id'] == 'views-exposed-form-contact-contact-page') {
+    if (isset($form['tid_with_depth'])) {
+      foreach ($form['tid_with_depth']['#options'] as $term_key => $term) {
+        if($term_key !== 'All') {
+          $term_value = reset($term->option);
+          if($term_value[0] == '-') {
+            unset($form['tid_with_depth']['#options'][$term_key]);
+          }
+        }
+      }
+    }
+  }
+}

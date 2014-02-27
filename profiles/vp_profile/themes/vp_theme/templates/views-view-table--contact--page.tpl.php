@@ -54,25 +54,33 @@ foreach ($rows as &$row) {
         <?php endforeach; ?>
       </tr>
       <?php
-        $node = node_load($result[$row_count]->nid);
-        $node_view = node_view($node);
-        global $language;
-        if ($language->language !== 'et') {
-          unset($node_view['field_position']);
-          unset($node_view['field_status']);
-          unset($node_view['#groups']['group_the_functions']);
-          unset($node_view['#groups']['group_education']);
-          unset($node_view['#groups']['group_other']);
-          unset($node_view['#fieldgroups']['group_the_functions']);
-          unset($node_view['#fieldgroups']['group_education']);
-          unset($node_view['#fieldgroups']['group_other']);
+        $node = node_load((int)$result[$row_count]->nid);
+        $node_view = '';
+        if ($node !== FALSE) {
+          $node_view = node_view($node);
+          unset($node);
+          global $language;
+          if ($language->language !== 'et') {
+            unset($node_view['field_position']);
+            unset($node_view['field_status']);
+            unset($node_view['#groups']['group_the_functions']);
+            unset($node_view['#groups']['group_education']);
+            unset($node_view['#groups']['group_other']);
+            unset($node_view['#fieldgroups']['group_the_functions']);
+            unset($node_view['#fieldgroups']['group_education']);
+            unset($node_view['#fieldgroups']['group_other']);
+          }
+          $node_view = render($node_view);
         }
         echo '<tr class="modal-tr">'.
           '<td colspan="'.count($row).'">'.
-            '<div class="ui-dialog-content-contact">'.render($node_view).'</div>'.
+            '<div class="ui-dialog-content-contact">'.
+              check_markup($node_view).
+            '</div>'.
           '</td>'.
         '</tr>';
       ?>
     <?php endforeach; ?>
   </tbody>
 </table>
+

@@ -64,14 +64,30 @@ function vp_contact_views_default_views() {
     ),
   );
   $handler->display->display_options['style_options']['columns'] = array(
+    'nid' => 'nid',
+    'description_i18n' => 'description_i18n',
     'field_department' => 'field_department',
     'title' => 'title',
     'field_position' => 'field_position',
+    'field_position_in_english' => 'field_position_in_english',
+    'field_position_in_russian' => 'field_position_in_russian',
     'field_contact_phone_nr' => 'field_contact_phone_nr',
     'field_contact_e_mail' => 'field_contact_e_mail',
   );
-  $handler->display->display_options['style_options']['default'] = '-1';
+  $handler->display->display_options['style_options']['default'] = 'title';
   $handler->display->display_options['style_options']['info'] = array(
+    'nid' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'description_i18n' => array(
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
     'field_department' => array(
       'sortable' => 0,
       'default_sort_order' => 'asc',
@@ -87,6 +103,20 @@ function vp_contact_views_default_views() {
       'empty_column' => 0,
     ),
     'field_position' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_position_in_english' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_position_in_russian' => array(
       'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
@@ -112,14 +142,6 @@ function vp_contact_views_default_views() {
   $handler->display->display_options['relationships']['field_department_tid']['id'] = 'field_department_tid';
   $handler->display->display_options['relationships']['field_department_tid']['table'] = 'field_data_field_department';
   $handler->display->display_options['relationships']['field_department_tid']['field'] = 'field_department_tid';
-  /* Relationship: Nodequeue: Queue */
-  $handler->display->display_options['relationships']['nodequeue_rel']['id'] = 'nodequeue_rel';
-  $handler->display->display_options['relationships']['nodequeue_rel']['table'] = 'node';
-  $handler->display->display_options['relationships']['nodequeue_rel']['field'] = 'nodequeue_rel';
-  $handler->display->display_options['relationships']['nodequeue_rel']['limit'] = 1;
-  $handler->display->display_options['relationships']['nodequeue_rel']['names'] = array(
-    'contacts' => 'contacts',
-  );
   /* Field: Content: Nid */
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
   $handler->display->display_options['fields']['nid']['table'] = 'node';
@@ -181,11 +203,6 @@ function vp_contact_views_default_views() {
   $handler->display->display_options['fields']['field_contact_e_mail']['id'] = 'field_contact_e_mail';
   $handler->display->display_options['fields']['field_contact_e_mail']['table'] = 'field_data_field_contact_e_mail';
   $handler->display->display_options['fields']['field_contact_e_mail']['field'] = 'field_contact_e_mail';
-  /* Sort criterion: Nodequeue: Position */
-  $handler->display->display_options['sorts']['position']['id'] = 'position';
-  $handler->display->display_options['sorts']['position']['table'] = 'nodequeue_nodes';
-  $handler->display->display_options['sorts']['position']['field'] = 'position';
-  $handler->display->display_options['sorts']['position']['relationship'] = 'nodequeue_rel';
   /* Filter criterion: Content: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
