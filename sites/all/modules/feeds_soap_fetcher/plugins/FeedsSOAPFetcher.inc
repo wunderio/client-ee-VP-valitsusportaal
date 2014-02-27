@@ -26,6 +26,7 @@ class FeedsSOAPFetcher extends FeedsFetcher {
 	    throw new Exception($err_msg);
     }
     
+    // Convert replacement patterns.
     $envelope = $this->config['envelope'];
     $envelope = format_string($envelope, array(
       '!yesterday' => date('Y-m-d', strtotime('-1 day')),
@@ -34,6 +35,9 @@ class FeedsSOAPFetcher extends FeedsFetcher {
     ));
 
     // Send envelop and set timeout to 60.
+    $client->soap_defencoding = 'UTF-8';
+    $client->decode_utf8 = false;
+    //$xml_encoding
     $result = $client->send($envelope, '', 0, 60);
     
     if ($client->fault) {
@@ -48,12 +52,8 @@ class FeedsSOAPFetcher extends FeedsFetcher {
 		    drupal_set_message('<h2>Result</h2><pre>' . print_r($result, TRUE) . '</pre>');
 	    }
     }
-
     $xml = Array2XML::createXML('soap', $result);
-
     $xml = $xml->saveXML();
-
-    $xml = (mb_detect_encoding($xml, mb_detect_order(), true) === 'UTF-8' ? $xml : mb_convert_encoding($xml, 'UTF-8', 'ISO-8859-4'));
 
     return new FeedsFetcherResult($xml);
   }

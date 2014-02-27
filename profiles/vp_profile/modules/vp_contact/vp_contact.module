@@ -29,38 +29,38 @@ function vp_contact_views_pre_render(&$view) {
         });
       });
     });})(jQuery);', 'inline');
-  }
-  // Group by category.
-  $queue_type = 'contact';
-  $queues = nodequeue_load_queues_by_type($queue_type);
-  $queue = reset($queues);
-  $queue_nids = db_select('nodequeue_nodes', 'n')
-    ->fields('n', array('nid'))
-    ->condition('n.qid', $queue->qid)
-    ->orderBy('n.position', 'ASC')
-    ->execute()
-    ->fetchCol();
-  $queue_nids = array_flip($queue_nids);
-  $groups = array();
-  $departments = array();
-  foreach ($view->result as $row) {
-    $department = 0;
-    if (isset($row->field_field_department[0]['raw']['tid']) && !empty($row->field_field_department[0]['raw']['tid'])) {
-      $department = $row->field_field_department[0]['raw']['tid'];
-    }
-    $groups[$department][$queue_nids[$row->nid]] = $row;
+    // Group by category.
+    $queue_type = 'contact';
+    $queues = nodequeue_load_queues_by_type($queue_type);
+    $queue = reset($queues);
+    $queue_nids = db_select('nodequeue_nodes', 'n')
+      ->fields('n', array('nid'))
+      ->condition('n.qid', $queue->qid)
+      ->orderBy('n.position', 'ASC')
+      ->execute()
+      ->fetchCol();
+    $queue_nids = array_flip($queue_nids);
+    $groups = array();
+    $departments = array();
+    foreach ($view->result as $row) {
+      $department = 0;
+      if (isset($row->field_field_department[0]['raw']['tid']) && !empty($row->field_field_department[0]['raw']['tid'])) {
+        $department = $row->field_field_department[0]['raw']['tid'];
+      }
+      $groups[$department][$queue_nids[$row->nid]] = $row;
 
-    $departments[$department] = (isset($row->field_field_department[0]) ? $row->field_field_department[0]['rendered']['#markup'] : '');
-  }
-  asort($departments);
-  $view->result = array();
-  foreach ($departments as $department => $department_title) {
-    ksort($groups[$department]);
-    foreach($groups[$department] as $id => $row) {
-      $view->result[$id] = $row;
+      $departments[$department] = (isset($row->field_field_department[0]) ? $row->field_field_department[0]['rendered']['#markup'] : '');
     }
+    asort($departments);
+    $view->result = array();
+    foreach ($departments as $department => $department_title) {
+      ksort($groups[$department]);
+      foreach($groups[$department] as $row) {
+        $view->result[] = $row;
+      }
+    }
+    $view->result = array_values($view->result);
   }
-  $view->result = array_values($view->result);
 }
 
 /**
