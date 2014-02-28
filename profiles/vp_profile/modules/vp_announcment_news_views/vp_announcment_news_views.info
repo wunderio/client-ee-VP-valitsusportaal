@@ -1,0 +1,17 @@
+name = VP Announcment & News views
+core = 7.x
+package = VP
+version = 7.x-1.0
+project = vp_announcment_news_views
+dependencies[] = views
+dependencies[] = views_slideshow
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = announcements_block
+features[views_view][] = content_type_news_blocks
+features[views_view][] = important_topics_slideshow
+features[views_view][] = news_more_news_on_the_same_subject
+features[views_view][] = news_tabs_right_side
+features[views_view][] = top_news_tabs
+features_exclude[dependencies][ctools] = ctools
+project path = profiles/vp_profile/modules

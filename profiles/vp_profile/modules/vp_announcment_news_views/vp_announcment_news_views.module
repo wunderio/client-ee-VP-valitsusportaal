@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the VP Announcment & News views feature.
+ */
+
+include_once 'vp_announcment_news_views.features.inc';
