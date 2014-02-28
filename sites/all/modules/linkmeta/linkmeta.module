@@ -74,6 +74,7 @@ function linkmeta_filter_info() {
  */
 function _linkmeta_process($text, $filter, $format, $langcode, $cache, $cache_id) {
   global $base_url;
+  $allowed_extensions = &drupal_static(__FUNCTION__);
 
   $dom = new DOMDocument();
   $dom->loadHTML('<?xml encoding="UTF-8">' . $text);
@@ -127,9 +128,8 @@ function _linkmeta_process($text, $filter, $format, $langcode, $cache, $cache_id
     $current_url = pathinfo(strtok($url, '?'));
     $extension = '';
     if (isset($current_url['extension'])) {
-      $extension = preg_replace('/[^a-z]/i', '', drupal_strtolower($current_url['extension']));
-      $types = variable_get('linkmeta_types', array());
-      if (!in_array($extension, $types)) {
+      $extension = preg_replace('/[^A-Z]/i', '', drupal_strtoupper($current_url['extension']));
+      if (in_array($extension, $allowed_extensions)) {
         $types[] = $extension;
         variable_set('linkmeta_types', $types);
       }
@@ -137,6 +137,11 @@ function _linkmeta_process($text, $filter, $format, $langcode, $cache, $cache_id
       if (strpos($class, 'icon-' . $extension) === FALSE) {
         $class .= ' icon-' . $extension;
       }
+    }
+
+    // Does current extension exist, if not take next one.
+    if (empty($extension)) {
+      continue;
     }
 
     // Set class variable as class attribute for a tag.
@@ -155,15 +160,18 @@ function _linkmeta_process($text, $filter, $format, $langcode, $cache, $cache_id
     }
 
     // File extension.
-    $extensions = variable_get('linkmeta_file_extensions', LINKMETA_DEFAULT_APPEND_EXTENSIONS);
-    $extensions = str_replace(' ', '', $extensions);
-    $extensions = drupal_strtoupper($extensions);
-    $extensions = explode(',', $extensions);
+    if (!isset($allowed_extensions)) {
+      $allowed_extensions = variable_get('linkmeta_file_extensions', LINKMETA_DEFAULT_APPEND_EXTENSIONS);
+      $allowed_extensions = str_replace(' ', '', $allowed_extensions);
+      $allowed_extensions = drupal_strtoupper($allowed_extensions);
+      $allowed_extensions = explode(',', $allowed_extensions);
+    }
     $extension = drupal_strtoupper($extension);
     if (
+      // Is "Append file extension to link" selected from admin form.
       (bool) variable_get('linkmeta_file_extension', 0) &&
-      !empty($extension) &&
-      in_array($extension, $extensions, TRUE)
+      // Is current extension allowed.
+      in_array($extension, $allowed_extensions, TRUE)
     ) {
       $enrichments[] = $extension;
     }

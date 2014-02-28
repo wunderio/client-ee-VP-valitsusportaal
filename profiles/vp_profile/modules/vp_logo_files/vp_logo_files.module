@@ -256,12 +256,12 @@ function _vp_logo_files_get_files_from_cart() {
       $filename_in_session = parse_url(file_create_url($file->uri));
       $filename_in_session = trim($filename_in_session['path'], '/');
 
-      // Get image dimensions for thumbnail - no jumping in frontend.
-      $image_dimentions = getimagesize(image_style_path('vp_logo_files_download_bar_thumbnail', $file->uri));
-
       // Check if file is image.
       // If not, then show icons instead of logo thumbnail.
       if (image_get_info($file->uri)) {
+        // Get image dimensions for thumbnail - no jumping in frontend.
+        $image_dimentions = getimagesize(image_style_path('vp_logo_files_download_bar_thumbnail', $file->uri));
+
         $thumbnail = theme('image_style', array('style_name' => 'vp_logo_files_download_bar_thumbnail', 'path' => $file->uri, 'attributes' => array('width' => $image_dimentions[0], 'height' => $image_dimentions[1])));
       }
       else {

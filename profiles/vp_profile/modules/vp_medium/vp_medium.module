@@ -70,7 +70,7 @@ function vp_medium_form_views_exposed_form_alter(&$form, &$form_state, $form_id)
 
     $letters = '';
     foreach ($results as $result) {
-      $letters .= '<li'.($_GET['letter'] === $result ? ' class="active"' : '').'>' . l($result, 'medium/alphabet', array('query' => array('letter' => $result))) . '</li>';
+      $letters .= '<li'.((isset($_GET['letter']) && $_GET['letter'] === $result) ? ' class="active"' : '').'>' . l($result, 'medium/alphabet', array('query' => array('letter' => $result))) . '</li>';
     }
 
     $form['letters'] = array(
