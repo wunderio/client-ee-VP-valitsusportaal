@@ -648,8 +648,7 @@ table[border='0'] td {
       color: #00698c; }
 .static-fp-tab-block .tab-content {
   font-size: 13px;
-  line-height: 16px;
-  display: none; }
+  line-height: 16px; }
   .editor .static-fp-tab-block .tab-content {
     background: #f6f4ef;
     display: block;
@@ -2576,16 +2575,16 @@ h3.icon-wrap-2 .icon-cv {
     line-height: 15px;
     margin-left: 42px;
     margin-right: 15px; }
-    .static-join-in .box h2 {
+    .static-join-in .box h3 {
       font-size: 16px;
       margin-bottom: 2px; }
     .static-join-in .box.box-1 {
       width: 170px; }
-      .static-join-in .box.box-1 h2 {
+      .static-join-in .box.box-1 h3 {
         color: #006699; }
     .static-join-in .box.box-2 {
       width: 190px; }
-      .static-join-in .box.box-2 h2 {
+      .static-join-in .box.box-2 h3 {
         color: #009900; }
       .static-join-in .box.box-2 .spacer {
         float: right;
@@ -2596,7 +2595,7 @@ h3.icon-wrap-2 .icon-cv {
     .static-join-in .box.box-3 {
       margin-right: 0;
       width: 432px; }
-      .static-join-in .box.box-3 h2 {
+      .static-join-in .box.box-3 h3 {
         color: #0099cc;
         padding-bottom: 10px; }
       .static-join-in .box.box-3 .social-links li {

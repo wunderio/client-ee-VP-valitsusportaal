@@ -1037,8 +1037,6 @@ td {
     text-shadow: 0 0 1px rgba(0, 0, 0, 0.65);
     text-transform: uppercase;
     top: 3px; }
-  .block-search-form label {
-    display: none; }
 
 #vp-autocomplete {
   display: none; }
@@ -1239,7 +1237,8 @@ td {
     .block-views-32b717fa40c1fc37f8cb2ace7b065d6b .content a .views-field-title {
       color: #CC0000;
       font-family: "Roboto Condensed", sans-serif;
-      font-size: 18px; }
+      font-size: 18px;
+      text-shadow: none; }
     .block-views-32b717fa40c1fc37f8cb2ace7b065d6b .content a .views-field-body {
       color: #666;
       font-family: "Roboto Condensed", sans-serif;
@@ -1271,7 +1270,7 @@ td {
     font-size: 22px;
     line-height: 22px;
     margin-bottom: 8px; }
-.view-id-top_news_tabs .view-id-news_tabs_right_side .views-row h3 {
+.view-id-top_news_tabs .view-id-news_tabs_right_side .views-row h2 {
   background: url(../img/10-global/view-id-news_tabs_right_side--separator.png) repeat-x 0 100%;
   color: #006699;
   font-family: Tahoma, Verdana, Segoe, sans-serif;
@@ -1279,7 +1278,7 @@ td {
   line-height: 16px;
   margin-bottom: 3px;
   padding: 4px 0 12px 0; }
-  .view-id-top_news_tabs .view-id-news_tabs_right_side .views-row h3 a {
+  .view-id-top_news_tabs .view-id-news_tabs_right_side .views-row h2 a {
     display: block; }
 .view-id-top_news_tabs .views-slideshow-controls-bottom {
   display: none; }
@@ -1373,6 +1372,14 @@ td {
   font-family: "Roboto Condensed", sans-serif;
   font-size: 16px;
   padding-bottom: 3px; }
+.block-views-8b63b771a4e217953ac1d537c6ab26a7 .views-field-field-phone span {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px 1px 1px 1px);
+  /* IE6, IE7 */
+  clip: rect(1px, 1px, 1px, 1px); }
 
 .block-views-f09b2921de187cba152bbeb961c4a0e1 .content {
   font-size: 12px;
@@ -3267,8 +3274,7 @@ div.item-list ul.pager {
       color: #00698c; }
 .static-fp-tab-block .tab-content {
   font-size: 13px;
-  line-height: 16px;
-  display: none; }
+  line-height: 16px; }
   .editor .static-fp-tab-block .tab-content {
     background: #f6f4ef;
     display: block;
@@ -4469,6 +4475,9 @@ h3.icon-wrap-2 .icon-cv {
 
 #views_infinite_scroll-ajax-loader img {
   margin: 0 auto; }
+
+.view-display-id-news-page h3 {
+  color: #00668C; }
 
 .view-display-id-weekly_schedule_page {
   padding-bottom: 30px; }
