@@ -42,6 +42,7 @@
           color: #CC0000;
           font-family: $font_museo700;
           font-size: 18px;
+          text-shadow: none;
         }
 
         .views-field-body {
@@ -54,6 +55,7 @@
       &:hover {
       .views-field-title {
           color: $color-text-main-blue;
+      
         }
       }
     }
