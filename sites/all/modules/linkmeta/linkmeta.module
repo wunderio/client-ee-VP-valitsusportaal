@@ -75,6 +75,12 @@ function linkmeta_filter_info() {
 function _linkmeta_process($text, $filter, $format, $langcode, $cache, $cache_id) {
   global $base_url;
   $allowed_extensions = &drupal_static(__FUNCTION__);
+  if (!isset($allowed_extensions)) {
+    $allowed_extensions = variable_get('linkmeta_file_extensions', LINKMETA_DEFAULT_APPEND_EXTENSIONS);
+    $allowed_extensions = str_replace(' ', '', $allowed_extensions);
+    $allowed_extensions = drupal_strtoupper($allowed_extensions);
+    $allowed_extensions = explode(',', $allowed_extensions);
+  }
 
   $dom = new DOMDocument();
   $dom->loadHTML('<?xml encoding="UTF-8">' . $text);
@@ -160,12 +166,6 @@ function _linkmeta_process($text, $filter, $format, $langcode, $cache, $cache_id
     }
 
     // File extension.
-    if (!isset($allowed_extensions)) {
-      $allowed_extensions = variable_get('linkmeta_file_extensions', LINKMETA_DEFAULT_APPEND_EXTENSIONS);
-      $allowed_extensions = str_replace(' ', '', $allowed_extensions);
-      $allowed_extensions = drupal_strtoupper($allowed_extensions);
-      $allowed_extensions = explode(',', $allowed_extensions);
-    }
     $extension = drupal_strtoupper($extension);
     if (
       // Is "Append file extension to link" selected from admin form.
