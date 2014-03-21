@@ -75,7 +75,7 @@ foreach ($rows as &$row) {
         echo '<tr class="modal-tr">'.
           '<td colspan="'.count($row).'">'.
             '<div class="ui-dialog-content-contact">'.
-              check_markup($node_view).
+              $node_view.
             '</div>'.
           '</td>'.
         '</tr>';

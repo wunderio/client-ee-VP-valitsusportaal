@@ -30,7 +30,13 @@ $block_web_portal_navigation_menu_separator_strong_lte_ie8: 1px solid #aeaead;
       > .menu {
         border-left: $block_web_portal_navigation_menu_separator-light;
         padding-left: 4px;
-
+        
+        #menu-mlid-4383 {                   
+          a {
+            cursor: pointer;
+          }
+        }
+        
         > li {
           &.has-separator {
             border-left: $block_web_portal_navigation_menu_separator-light;

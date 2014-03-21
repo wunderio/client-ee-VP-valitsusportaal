@@ -41,15 +41,18 @@
       }
 
       .views-field-title {
-        font-family: $font_museo300;
-        font-size: 22px;
-        line-height: 22px;
-        padding-bottom: 12px;
+        h2 {
+          font-family: $font_museo300;
+          font-size: 22px;
+          line-height: 22px;
+          padding-bottom: 12px;
+          text-shadow: none;
 
-        &,
-        a {
-          color: #006699
-        }
+          &,
+          a {
+            color: #006699
+          }
+        }  
       }
     }
 

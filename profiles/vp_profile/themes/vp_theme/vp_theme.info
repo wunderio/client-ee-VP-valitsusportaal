@@ -94,7 +94,10 @@ libraries[vp_theme_embed_iframe_dynamic_size][js][0][file] = embed_iframe_dynami
 libraries[vp_theme_embed_iframe_dynamic_size][js][0][options][weight] = 24
 libraries[vp_theme_embed_iframe_dynamic_size][js][0][options][scope] = footer
 
-
+libraries[vp_theme_embed_iframe_dynamic_size][name] = Link without href
+libraries[vp_theme_embed_iframe_dynamic_size][js][0][file] = link_without_href.js
+libraries[vp_theme_embed_iframe_dynamic_size][js][0][options][weight] = 25
+libraries[vp_theme_embed_iframe_dynamic_size][js][0][options][scope] = footer
 
 ; THEME SETTINGS (DEFAULTS)
 settings[toggle_logo] = '0'

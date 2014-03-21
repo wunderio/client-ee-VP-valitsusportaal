@@ -9,13 +9,13 @@
       var $tabContents = $this.find('.tab-content');
       var $titles = $this.find('h2');
       $tabContents.each(function(i) {
-        $tabsWrap.find('ul').append('<li' + (i===0 ? ' class=active' : '') +  '><a href="#" class="item-' + i + '">' + $titles.eq(i).text() + '</a></li>');
+        $tabsWrap.find('ul').append('<li' + (i===0 ? ' class=active' : '') +  '><a href="#" class="item-' + i + '" aria-hidden="true">' + $titles.eq(i).text() + '</a></li>');
       });
       var tabs = $tabsWrap.find('li');
       $tabsWrap.find('a').click(function() {
         var i = this.className.replace('item-', '');
-        $tabContents.hide();
-        $tabContents.eq(i).show();
+        $tabContents.addClass( "element-invisible" );
+        $tabContents.eq(i).removeClass( "element-invisible" );
         tabs.removeClass('active');
         $(this).parent().addClass('active');
         return false;
