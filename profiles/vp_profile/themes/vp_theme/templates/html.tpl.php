@@ -6,7 +6,7 @@
   <title><?php print $head_title; ?></title>
   <?php print $styles; ?>
   <?php print $scripts; ?>
-  <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <!--[if lt IE 9]><script src="<?php global $base_url; print $base_url; ?>/profiles/vp_profile/themes/vp_theme/js/html5.js"></script><![endif]-->
 </head>
 <body<?php print $attributes;?>>
   <div id="skip-link">
