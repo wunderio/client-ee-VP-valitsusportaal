@@ -13,20 +13,49 @@
       padding: 0;
 
       li {
-        background: url(../img/10-global/link-arrow-on-light-bg2.png) no-repeat 3px 65%;
+        background: url(../img/10-global/link-arrow-on-light-bg2.png) no-repeat 3px 8px;
         margin: 0;
         padding: 2px 0 2px 16px;
       }
 
       a,
-      img,
       span {
-        display: inline-block;
+        display: inline;
         vertical-align: middle;
+      }
+
+      img {
+        float: left;
+        margin-right: 2px;
       }
 
       .file {
         display: block;
+
+        // Better solution for displaying multiline text with icons.
+        & {
+          // Add A tag styles for all the specific type of links.
+          a[type^="text/plain"] {
+            background-position: 0 1px;
+            background-repeat: no-repeat;
+            display: inline-block;
+            padding-left: 20px;
+          }
+
+          // Remove all the img tags from specific type of links.
+          .file-icon {
+            &[title="text/plain"] {
+              display: none;
+            }
+          }
+
+          // Add icon as background for plain text file.
+          a[type^="text/plain"] {
+            background-image: url(/modules/file/icons/text-plain.png);
+          }
+
+          // a[type^="text/pdf"] etc
+        }
       }
 
       a {
