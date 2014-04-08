@@ -52,7 +52,7 @@
           a {
             color: #006699
           }
-        }  
+        }
       }
     }
 
@@ -69,7 +69,7 @@
         margin: 0;
 
         a {
-          @include size(13);
+          @include size(13px);
           background: url(../img/10-global/cycle-important-topics-slideshow-nav.png);
           cursor: pointer;
           direction: ltr;

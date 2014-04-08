@@ -384,10 +384,9 @@ body {
       .block-web-portal-navigation-menu .menu-name-menu-web-portal > .menu > li > a:after {
         height: 0;
         width: 0;
-        border-color: transparent;
-        border-style: solid;
-        border-width: 4px;
-        border-right-color: #666666;
+        border-top: 4px solid transparent;
+        border-bottom: 4px solid transparent;
+        border-right: 4px solid #666666;
         content: "";
         left: 100%;
         margin-left: -4px;
@@ -411,8 +410,8 @@ body {
   width: 200px;
   z-index: 100; }
   .portal-navigation-menupopup:before {
-    width: 22px;
     height: 11px;
+    width: 22px;
     background-image: url(../img/10-global/portal-navigation-menupopup-top-arrow.png);
     content: "";
     left: 15px;
@@ -767,8 +766,8 @@ body {
       display: inline-block;
       margin: 0; }
       .view-display-id-important_topics_slideshow_block .flex-control-nav li a {
-        width: 13px;
         height: 13px;
+        width: 13px;
         background: url(../img/10-global/cycle-important-topics-slideshow-nav.png);
         cursor: pointer;
         direction: ltr;
@@ -1631,10 +1630,10 @@ div.item-list ul.pager li.pager-ellipsis, div.item-list ul.pager li.pager-curren
     position: relative;
     z-index: 2; }
   .static-join-in .title1 {
-    color: #00507a;
     position: absolute;
     top: 29px;
     left: 42px;
+    color: #00507a;
     font-family: "Roboto Condensed", sans-serif;
     font-size: 27px;
     font-weight: normal;
