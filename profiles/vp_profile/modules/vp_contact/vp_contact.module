@@ -53,9 +53,7 @@ function vp_contact_views_pre_render(&$view) {
 
       $departments[$department_term->weight] = (isset($row->field_field_department[0]) ? $row->field_field_department[0]['rendered']['#markup'] : '');
     }
-    //dpm($departments);
     ksort($departments, SORT_NUMERIC);
-    dpm($departments);
     $view->result = array();
     foreach ($departments as $department => $department_title) {
       ksort($groups[$department]);
