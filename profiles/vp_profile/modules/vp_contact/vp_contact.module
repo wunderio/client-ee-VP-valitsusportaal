@@ -44,14 +44,18 @@ function vp_contact_views_pre_render(&$view) {
     $departments = array();
     foreach ($view->result as $row) {
       $department = 0;
+      $department_term = array();
       if (isset($row->field_field_department[0]['raw']['tid']) && !empty($row->field_field_department[0]['raw']['tid'])) {
+        $department_term = taxonomy_term_load($row->field_field_department[0]['raw']['tid']);
         $department = $row->field_field_department[0]['raw']['tid'];
       }
-      $groups[$department][$queue_nids[$row->nid]] = $row;
+      $groups[$department_term->weight][$queue_nids[$row->nid]] = $row;
 
-      $departments[$department] = (isset($row->field_field_department[0]) ? $row->field_field_department[0]['rendered']['#markup'] : '');
+      $departments[$department_term->weight] = (isset($row->field_field_department[0]) ? $row->field_field_department[0]['rendered']['#markup'] : '');
     }
-    asort($departments);
+    //dpm($departments);
+    ksort($departments, SORT_NUMERIC);
+    dpm($departments);
     $view->result = array();
     foreach ($departments as $department => $department_title) {
       ksort($groups[$department]);
