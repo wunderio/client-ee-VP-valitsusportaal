@@ -13,6 +13,7 @@
     $lastActiveL1MenuItem,
     $breadCrumbLinks = $('#block-delta-blocks-breadcrumb a');
 
+
   jQuery.fn.vpMenuEqualHeight = function() {
     var $el = $(this);
 
@@ -99,6 +100,12 @@
   });
 
   var l1menulinksEvent = function(that, e) {
+
+    // Kui menu link on klassiga "otselink", siis mine otse sinna. mm.
+    if (that.className.indexOf('otselink') != -1) {
+      return;
+    }      
+
     if (e.type === 'keydown' && e.keyCode !== 13) {
       return true;
     }
