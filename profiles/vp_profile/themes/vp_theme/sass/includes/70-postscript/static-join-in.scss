@@ -38,8 +38,8 @@
 
     .title1 {
       //@include lineartextgradient(#00507a, #00b8be, left top, right bottom);
+      @include position(absolute, 29px null null 42px);
       color: #00507a;
-      @include position (absolute, 29px 0 0 42px);
       font-family: $font_museo700;
       font-size: 27px;
       font-weight: normal;
@@ -59,7 +59,7 @@
     }
 
     .title2 {
-      @include position (absolute, 42px 0 0 414px);
+      @include position(absolute, 42px null null 414px);
       color: #999;
       font-family: $font_museo300;
       font-size: 20px;

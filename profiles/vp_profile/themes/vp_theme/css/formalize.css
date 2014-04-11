@@ -38,7 +38,7 @@ input[type="button"] {
   /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #0085b1), color-stop(100%, #006a8e));
   /* Chrome,Safari4+ */
-  background: linear, to bottom, #0085b1 0%, #006a8e 100%;
+  background: linear-gradient(to bottom, #0085b1 0%, #006a8e 100%);
   /* W3C */
   display: inline-block;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0085b1', endColorstr='#006a8e',GradientType=0 );
@@ -72,7 +72,7 @@ input[type="button"]:focus {
   /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #0085b2), color-stop(26%, #0085b2), color-stop(100%, #007ca5));
   /* Chrome,Safari4+ */
-  background: linear, to bottom, #0085b2 0%, #0085b2 26%, #007ca5 100%;
+  background: linear-gradient(to bottom, #0085b2 0%, #0085b2 26%, #007ca5 100%);
   /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0085b2', endColorstr='#007ca5',GradientType=0 );
   /* IE6-9 */
@@ -88,7 +88,7 @@ input[type="button"]:active {
   /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #00698c), color-stop(100%, #004d67));
   /* Chrome,Safari4+ */
-  background: linear, to bottom, #00698c 0%, #004d67 100%;
+  background: linear-gradient(to bottom, #00698c 0%, #004d67 100%);
   /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00698c', endColorstr='#004d67',GradientType=0 );
   /* IE6-9 */
@@ -180,7 +180,6 @@ input[type="checkbox"]:active {
 @-moz-document url-prefix() {
   input[type="radio"]:focus {
     outline: 1px dotted; } }
-
 select[disabled],
 textarea[disabled],
 input[type="date"][disabled],

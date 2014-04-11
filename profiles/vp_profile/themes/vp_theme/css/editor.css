@@ -2286,15 +2286,15 @@ table[border='0'] td {
     font-weight: bold;
     line-height: 19px; }
   .node .static-read-more .icon {
-    width: 56px;
     height: 40px;
+    width: 56px;
     background-repeat: no-repeat;
     position: relative;
     width: 56px;
     z-index: 2; }
     .node .static-read-more .icon:before {
-      width: 40px;
       height: 6px;
+      width: 40px;
       background-image: url(../img/10-global/static-read-more-icon-shadow.png);
       position: absolute;
       z-index: 1; }
@@ -2544,10 +2544,10 @@ h3.icon-wrap-2 .icon-cv {
     position: relative;
     z-index: 2; }
   .static-join-in .title1 {
-    color: #00507a;
     position: absolute;
     top: 29px;
     left: 42px;
+    color: #00507a;
     font-family: "Roboto Condensed", sans-serif;
     font-size: 27px;
     font-weight: normal;

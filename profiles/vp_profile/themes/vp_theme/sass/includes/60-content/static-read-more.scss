@@ -75,14 +75,14 @@
       }
 
       .icon {
-        @include size(56 40);
+        @include size(56px 40px);
         background-repeat: no-repeat;
         position: relative;
         width: 56px;
         z-index: 2;
 
         &:before {
-          @include size(40 6);
+          @include size(40px 6px);
           background-image: url(../img/10-global/static-read-more-icon-shadow.png);
           position: absolute;
           z-index: 1;
