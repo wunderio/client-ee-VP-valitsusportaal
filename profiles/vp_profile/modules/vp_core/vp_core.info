@@ -3,6 +3,13 @@ core = 7.x
 package = VP
 version = 7.x-1.0
 project = vp_core
+dependencies[] = features
+dependencies[] = filter
+dependencies[] = linkmeta
+dependencies[] = wysiwyg
 scripts[] = js/rsseses.js
-dependencies[] = vp_core
-
+features[features_api][] = api:2
+features[filter][] = full_html
+features[filter][] = full_html_without_link_meta
+features[wysiwyg][] = full_html
+features[wysiwyg][] = full_html_without_link_meta
