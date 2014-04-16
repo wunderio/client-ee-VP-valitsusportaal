@@ -41,7 +41,6 @@
 
       h2 {
         color: $color-text-main-blue;
-        margin-bottom: 10px;
         text-shadow: none;
       }
 
@@ -50,6 +49,13 @@
         line-height: 18px;
         padding-bottom: 44px;
       }
+    }
+
+    h2,
+    h3,
+    h4,
+    h5 {
+      margin: 0 0 20px 0;
     }
 
     // Widths so multiple tables on same page align nicely.

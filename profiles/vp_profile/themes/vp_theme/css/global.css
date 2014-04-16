@@ -2863,12 +2863,16 @@ td {
   text-align: left; }
 .view-display-id-contact_page h2 {
   color: #00698c;
-  margin-bottom: 10px;
   text-shadow: none; }
 .view-display-id-contact_page p {
   font-size: 14px;
   line-height: 18px;
   padding-bottom: 44px; }
+.view-display-id-contact_page h2,
+.view-display-id-contact_page h3,
+.view-display-id-contact_page h4,
+.view-display-id-contact_page h5 {
+  margin: 0 0 20px 0; }
 .view-display-id-contact_page .views-field-title {
   width: 130px; }
 .view-display-id-contact_page .views-field-field-contact-phone-nr {
