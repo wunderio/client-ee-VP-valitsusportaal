@@ -73,6 +73,15 @@ foreach ($rows as &$row) {
             unset($node_view['#fieldgroups']['group_education']);
             unset($node_view['#fieldgroups']['group_other']);
           }
+          //dpm($node_view);
+          if (
+            !isset($node_view['field_profile_photo']) || (
+              isset($node_view['field_profile_photo']['#items'][0]['is_default']) &&
+              $node_view['field_profile_photo']['#items'][0]['is_default'] === TRUE
+            )
+          ) {
+            $node_view['field_profile_photo'] = array('#markup' => '<div class="field field-name-field-profile-photo field-type-image field-label-hidden"><img src="/profiles/vp_profile/modules/vp_contact/no-profile-image_w104.png" /></div>');
+          }
           $node_view = render($node_view);
         }
         echo '<tr class="modal-tr">'.
