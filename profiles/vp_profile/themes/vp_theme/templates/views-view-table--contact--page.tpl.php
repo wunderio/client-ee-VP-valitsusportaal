@@ -27,10 +27,13 @@ foreach ($rows as &$row) {
   }
 }
 ?>
+<?php if (!empty($title) || !empty($caption)) {
+  $first = reset($result);
+  $term = taxonomy_get_parents_all($first ->taxonomy_term_data_field_data_field_department_tid);
+  $count = count($term) + 1;
+  print '<h'.$count.'>'.$caption . $title.'</h'.$count.'>';
+} ?>
 <table <?php if ($classes) { print 'class="'. $classes . '" '; } ?>>
-<?php if (!empty($title) || !empty($caption)) : ?>
-  <caption><?php print $caption . $title; ?></caption>
-<?php endif; ?>
   <?php if (!empty($header)) : ?>
     <thead>
       <tr>
