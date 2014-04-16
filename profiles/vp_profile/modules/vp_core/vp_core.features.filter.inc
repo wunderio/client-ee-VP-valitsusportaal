@@ -58,11 +58,6 @@ function vp_core_filter_default_formats() {
         'status' => 1,
         'settings' => array(),
       ),
-      'linkmeta' => array(
-        'weight' => -43,
-        'status' => 1,
-        'settings' => array(),
-      ),
     ),
   );
 
