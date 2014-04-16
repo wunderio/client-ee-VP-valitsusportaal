@@ -404,6 +404,7 @@ function vp_contact_views_default_views() {
   $handler->display->display_options['fields']['field_contact_phone_nr']['id'] = 'field_contact_phone_nr';
   $handler->display->display_options['fields']['field_contact_phone_nr']['table'] = 'field_data_field_contact_phone_nr';
   $handler->display->display_options['fields']['field_contact_phone_nr']['field'] = 'field_contact_phone_nr';
+  $handler->display->display_options['fields']['field_contact_phone_nr']['label'] = 'Telephone';
   /* Field: Content: E-mail */
   $handler->display->display_options['fields']['field_contact_e_mail']['id'] = 'field_contact_e_mail';
   $handler->display->display_options['fields']['field_contact_e_mail']['table'] = 'field_data_field_contact_e_mail';
