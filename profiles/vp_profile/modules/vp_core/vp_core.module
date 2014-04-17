@@ -1,4 +1,10 @@
 <?php
+/**
+ * @file
+ * Code for the Valitsusportaal feature.
+ */
+
+include_once 'vp_core.features.inc';
 
 /**
  * @file

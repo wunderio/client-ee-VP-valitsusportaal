@@ -268,43 +268,31 @@ function vp_contact_views_default_views() {
   $handler->display->display_options['style_plugin'] = 'table';
   $handler->display->display_options['style_options']['grouping'] = array(
     0 => array(
-      'field' => 'name_i18n',
-      'rendered' => 1,
-      'rendered_strip' => 0,
-    ),
-    1 => array(
-      'field' => 'field_department',
+      'field' => 'name_i18n_1',
       'rendered' => 1,
       'rendered_strip' => 0,
     ),
   );
   $handler->display->display_options['style_options']['columns'] = array(
+    'name_i18n_1' => 'name_i18n_1',
     'nid' => 'nid',
-    'description_i18n' => 'description_i18n',
-    'field_department' => 'field_department',
     'title' => 'title',
     'field_position' => 'field_position',
     'field_position_in_english' => 'field_position_in_english',
     'field_position_in_russian' => 'field_position_in_russian',
     'field_contact_phone_nr' => 'field_contact_phone_nr',
     'field_contact_e_mail' => 'field_contact_e_mail',
-    'name_i18n' => 'name_i18n',
   );
   $handler->display->display_options['style_options']['default'] = '-1';
   $handler->display->display_options['style_options']['info'] = array(
-    'nid' => array(
+    'name_i18n_1' => array(
       'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
     ),
-    'description_i18n' => array(
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
-    'field_department' => array(
+    'nid' => array(
       'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
@@ -353,13 +341,6 @@ function vp_contact_views_default_views() {
       'separator' => '',
       'empty_column' => 0,
     ),
-    'name_i18n' => array(
-      'sortable' => 0,
-      'default_sort_order' => 'asc',
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
   );
   $handler->display->display_options['defaults']['style_options'] = FALSE;
   $handler->display->display_options['defaults']['row_plugin'] = FALSE;
@@ -378,13 +359,15 @@ function vp_contact_views_default_views() {
   $handler->display->display_options['relationships']['nodequeue_rel']['names'] = array(
     'contacts' => 'contacts',
   );
-  /* Relationship: Taxonomy term: Parent term */
-  $handler->display->display_options['relationships']['parent']['id'] = 'parent';
-  $handler->display->display_options['relationships']['parent']['table'] = 'taxonomy_term_hierarchy';
-  $handler->display->display_options['relationships']['parent']['field'] = 'parent';
-  $handler->display->display_options['relationships']['parent']['relationship'] = 'field_department_tid';
-  $handler->display->display_options['relationships']['parent']['label'] = 'Parent term';
   $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: Taxonomy term: Name (translated) */
+  $handler->display->display_options['fields']['name_i18n_1']['id'] = 'name_i18n_1';
+  $handler->display->display_options['fields']['name_i18n_1']['table'] = 'taxonomy_term_data';
+  $handler->display->display_options['fields']['name_i18n_1']['field'] = 'name_i18n';
+  $handler->display->display_options['fields']['name_i18n_1']['relationship'] = 'field_department_tid';
+  $handler->display->display_options['fields']['name_i18n_1']['label'] = '';
+  $handler->display->display_options['fields']['name_i18n_1']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['name_i18n_1']['element_label_colon'] = FALSE;
   /* Field: Content: Nid */
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
   $handler->display->display_options['fields']['nid']['table'] = 'node';
@@ -392,28 +375,6 @@ function vp_contact_views_default_views() {
   $handler->display->display_options['fields']['nid']['label'] = '';
   $handler->display->display_options['fields']['nid']['exclude'] = TRUE;
   $handler->display->display_options['fields']['nid']['element_label_colon'] = FALSE;
-  /* Field: Taxonomy term: Term description (translated) */
-  $handler->display->display_options['fields']['description_i18n']['id'] = 'description_i18n';
-  $handler->display->display_options['fields']['description_i18n']['table'] = 'taxonomy_term_data';
-  $handler->display->display_options['fields']['description_i18n']['field'] = 'description_i18n';
-  $handler->display->display_options['fields']['description_i18n']['relationship'] = 'field_department_tid';
-  $handler->display->display_options['fields']['description_i18n']['label'] = '';
-  $handler->display->display_options['fields']['description_i18n']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['description_i18n']['alter']['trim_whitespace'] = TRUE;
-  $handler->display->display_options['fields']['description_i18n']['alter']['strip_tags'] = TRUE;
-  $handler->display->display_options['fields']['description_i18n']['element_label_colon'] = FALSE;
-  /* Field: Content: Department */
-  $handler->display->display_options['fields']['field_department']['id'] = 'field_department';
-  $handler->display->display_options['fields']['field_department']['table'] = 'field_data_field_department';
-  $handler->display->display_options['fields']['field_department']['field'] = 'field_department';
-  $handler->display->display_options['fields']['field_department']['label'] = '';
-  $handler->display->display_options['fields']['field_department']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['field_department']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_department']['alter']['text'] = '<h3>[description_i18n]</h3>';
-  $handler->display->display_options['fields']['field_department']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_department']['type'] = 'i18n_taxonomy_term_reference_plain';
-  $handler->display->display_options['fields']['field_department']['group_rows'] = FALSE;
-  $handler->display->display_options['fields']['field_department']['delta_offset'] = '0';
   /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
@@ -443,34 +404,12 @@ function vp_contact_views_default_views() {
   $handler->display->display_options['fields']['field_contact_phone_nr']['id'] = 'field_contact_phone_nr';
   $handler->display->display_options['fields']['field_contact_phone_nr']['table'] = 'field_data_field_contact_phone_nr';
   $handler->display->display_options['fields']['field_contact_phone_nr']['field'] = 'field_contact_phone_nr';
+  $handler->display->display_options['fields']['field_contact_phone_nr']['label'] = 'Telephone';
   /* Field: Content: E-mail */
   $handler->display->display_options['fields']['field_contact_e_mail']['id'] = 'field_contact_e_mail';
   $handler->display->display_options['fields']['field_contact_e_mail']['table'] = 'field_data_field_contact_e_mail';
   $handler->display->display_options['fields']['field_contact_e_mail']['field'] = 'field_contact_e_mail';
-  /* Field: Taxonomy term: Name (translated) */
-  $handler->display->display_options['fields']['name_i18n']['id'] = 'name_i18n';
-  $handler->display->display_options['fields']['name_i18n']['table'] = 'taxonomy_term_data';
-  $handler->display->display_options['fields']['name_i18n']['field'] = 'name_i18n';
-  $handler->display->display_options['fields']['name_i18n']['relationship'] = 'parent';
-  $handler->display->display_options['fields']['name_i18n']['label'] = '';
-  $handler->display->display_options['fields']['name_i18n']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['name_i18n']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['name_i18n']['alter']['text'] = '<h2>[name_i18n]</h2>';
-  $handler->display->display_options['fields']['name_i18n']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['name_i18n']['empty'] = '<h2>[description_i18n]</h2>';
-  $handler->display->display_options['fields']['name_i18n']['hide_empty'] = TRUE;
-  $handler->display->display_options['fields']['name_i18n']['empty_zero'] = TRUE;
   $handler->display->display_options['defaults']['sorts'] = FALSE;
-  /* Sort criterion: Taxonomy term: Name */
-  $handler->display->display_options['sorts']['name']['id'] = 'name';
-  $handler->display->display_options['sorts']['name']['table'] = 'taxonomy_term_data';
-  $handler->display->display_options['sorts']['name']['field'] = 'name';
-  $handler->display->display_options['sorts']['name']['relationship'] = 'parent';
-  /* Sort criterion: Taxonomy term: Weight */
-  $handler->display->display_options['sorts']['weight']['id'] = 'weight';
-  $handler->display->display_options['sorts']['weight']['table'] = 'taxonomy_term_data';
-  $handler->display->display_options['sorts']['weight']['field'] = 'weight';
-  $handler->display->display_options['sorts']['weight']['relationship'] = 'field_department_tid';
   /* Sort criterion: Nodequeue: Position */
   $handler->display->display_options['sorts']['position']['id'] = 'position';
   $handler->display->display_options['sorts']['position']['table'] = 'nodequeue_nodes';

@@ -1,21 +1,15 @@
 #!/bin/bash
 
-[[ -z "$1" ]] && echo "Enter a VP domain (example.com)!" && exit 1
+DOMAIN='vp-ra.devel.mekaia.com'
+DOMAIN_PATH='/home/devel/vp-ra/static_views'
 
-rm -Rf $1
+cd $DOMAIN_PATH
 
-wget \
-  --force-html \
-  --force-directories \
-  --html-extension \
-  --page-requisites \
-  --adjust-extension \
-  --convert-links \
-  --domains $1 \
+rm -Rf *
+
+httrack $DOMAIN \
+  -O $DOMAIN_PATH '+*.'$DOMAIN'/*' '-*=*' '-*.doc' '-*.xls' '-*.odt' '-*.zip' '-*.ods' '-*.pdf' '-*.rtf' \
   --mirror \
-  -e robots=off \
-  $1
-
-cd $1
-
-echo '<html><head><meta HTTP-EQUIV="REFRESH" content="0; url=et.html"></head></body>' > index.html
+  --mirrorlinks \
+  -v \
+  -s0

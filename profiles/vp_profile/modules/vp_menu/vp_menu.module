@@ -2,7 +2,7 @@
 
 /**
  * @file
- * 
+ *
  */
 
 /**
@@ -55,7 +55,7 @@ function vp_menu_block_view($delta = '') {
       $block['content'] .= '</div>';
 
       // Use js output to avoid indexing.
-      if (strpos($_SERVER['HTTP_USER_AGENT'], 'Wget') === FALSE) {
+      if (strpos(drupal_strtolower($_SERVER['HTTP_USER_AGENT']), 'httrack') === FALSE) {
         drupal_add_js(array('vp_menu' => $block['content']), 'setting');
 
         $block['content'] = '<script type="text/javascript">document.write(Drupal.settings.vp_menu)</script>';
@@ -64,7 +64,7 @@ function vp_menu_block_view($delta = '') {
       else {
         $block['content'] = $block['content'];
       }
-      
+
       break;
   }
 
