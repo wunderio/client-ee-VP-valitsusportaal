@@ -22,7 +22,7 @@ function vp_news_update_7101() {
 /**
  * Enable image_url_formatter module.
  */
-function vp_contact_update_7102() {
+function vp_news_update_7102() {
   // Enable image_url_formatter module.
   module_enable(array('image_url_formatter'));
 }
