@@ -135,7 +135,7 @@ function vp_live_press_briefings_block_view($delta = '') {
 
         $block['content'] .= '<div class="import-video-stream-video-wrap clearfix">'.
             '<div id="import-video-stream-live"></div>'.
-            '<div class="aside">' . '<a href="'.variable_get('import_video_stream_stream_url').'" class="import-video-stream-live"><img src="'.$base_url.'/'.drupal_get_path('module', 'vp_live_press_briefings').'/video.png" /></a></div>' .
+            '<div class="aside">' . '<a href="'.variable_get('import_video_stream_stream_url').'" class="import-video-stream-live"><img alt="" src="'.$base_url.'/'.drupal_get_path('module', 'vp_live_press_briefings').'/video.png" /></a></div>' .
             '<div class="text">' . t('LIVE').'!<br />'.t('Watch the press conference as a live stream.') . '</div>' .
           '</div>'
         ;
@@ -164,7 +164,7 @@ function vp_live_press_briefings_block_view($delta = '') {
         });})(jQuery);</script>';
         $block['content'] .=
           '<div class="import-video-stream-video-wrap clearfix">'.
-            '<div class="aside"><a href="'.variable_get('import_video_stream_youtube_url').'" class="import-video-youtube-live"><img src="'.$base_url.'/'.drupal_get_path('module', 'vp_live_press_briefings').'/video.png" /></a></div>' .
+            '<div class="aside"><a href="'.variable_get('import_video_stream_youtube_url').'" class="import-video-youtube-live"><img alt="" src="'.$base_url.'/'.drupal_get_path('module', 'vp_live_press_briefings').'/video.png" /></a></div>' .
             '<div class="text">'.t('Watch the recording of the last press conference.').'</div>'.
           '</div>'
         ;
