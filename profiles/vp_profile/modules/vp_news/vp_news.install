@@ -18,3 +18,11 @@ function vp_news_update_7101() {
   // Save or update field instance.
   field_update_instance($instance);
 }
+
+/**
+ * Enable image_url_formatter module.
+ */
+function vp_contact_update_7102() {
+  // Enable image_url_formatter module.
+  module_enable(array('image_url_formatter'));
+}
