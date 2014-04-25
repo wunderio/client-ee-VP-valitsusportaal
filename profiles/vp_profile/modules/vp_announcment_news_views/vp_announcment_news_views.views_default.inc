@@ -38,7 +38,7 @@ function vp_announcment_news_views_views_default_views() {
   $handler->display->display_options['pager']['options']['items_per_page'] = '1';
   $handler->display->display_options['style_plugin'] = 'default';
   $handler->display->display_options['row_plugin'] = 'fields';
-  /* Väli: Sisu: Link */
+  /* Field: Content: Link */
   $handler->display->display_options['fields']['field_link']['id'] = 'field_link';
   $handler->display->display_options['fields']['field_link']['table'] = 'field_data_field_link';
   $handler->display->display_options['fields']['field_link']['field'] = 'field_link';
@@ -47,7 +47,7 @@ function vp_announcment_news_views_views_default_views() {
   $handler->display->display_options['fields']['field_link']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_link']['click_sort_column'] = 'url';
   $handler->display->display_options['fields']['field_link']['type'] = 'link_plain';
-  /* Väli: Sisu: Picture */
+  /* Field: Content: Picture */
   $handler->display->display_options['fields']['field_announcements_picture']['id'] = 'field_announcements_picture';
   $handler->display->display_options['fields']['field_announcements_picture']['table'] = 'field_data_field_announcements_picture';
   $handler->display->display_options['fields']['field_announcements_picture']['field'] = 'field_announcements_picture';
@@ -60,7 +60,7 @@ function vp_announcment_news_views_views_default_views() {
     'image_style' => '',
     'image_link' => '',
   );
-  /* Väli: Sisu: Pealkiri */
+  /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
   $handler->display->display_options['fields']['title']['field'] = 'title';
@@ -71,7 +71,7 @@ function vp_announcment_news_views_views_default_views() {
   $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['title']['element_wrapper_type'] = 'h2';
   $handler->display->display_options['fields']['title']['link_to_node'] = FALSE;
-  /* Väli: Sisu: Body */
+  /* Field: Content: Body */
   $handler->display->display_options['fields']['body']['id'] = 'body';
   $handler->display->display_options['fields']['body']['table'] = 'field_data_body';
   $handler->display->display_options['fields']['body']['field'] = 'body';
@@ -79,26 +79,26 @@ function vp_announcment_news_views_views_default_views() {
   $handler->display->display_options['fields']['body']['element_type'] = '0';
   $handler->display->display_options['fields']['body']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['body']['element_wrapper_type'] = 'span';
-  /* Lühike kriteerium: Sisu: Postituse kuupäev */
+  /* Sort criterion: Content: Post date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'node';
   $handler->display->display_options['sorts']['created']['field'] = 'created';
   $handler->display->display_options['sorts']['created']['order'] = 'DESC';
-  /* Filtri kriteeriumid: Sisu: Avaldatud */
+  /* Filter criterion: Content: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';
   $handler->display->display_options['filters']['status']['value'] = 1;
   $handler->display->display_options['filters']['status']['group'] = 1;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
-  /* Filtri kriteeriumid: Sisu: Liik */
+  /* Filter criterion: Content: Type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'node';
   $handler->display->display_options['filters']['type']['field'] = 'type';
   $handler->display->display_options['filters']['type']['value'] = array(
     'announcements' => 'announcements',
   );
-  /* Filtri kriteeriumid: Sisu: Keel */
+  /* Filter criterion: Content: Language */
   $handler->display->display_options['filters']['language']['id'] = 'language';
   $handler->display->display_options['filters']['language']['table'] = 'node';
   $handler->display->display_options['filters']['language']['field'] = 'language';
@@ -139,7 +139,7 @@ function vp_announcment_news_views_views_default_views() {
   $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['style_plugin'] = 'default';
   $handler->display->display_options['row_plugin'] = 'fields';
-  /* Väli: Sisu: Author picture */
+  /* Field: Content: Author picture */
   $handler->display->display_options['fields']['field_author_picture']['id'] = 'field_author_picture';
   $handler->display->display_options['fields']['field_author_picture']['table'] = 'field_data_field_author_picture';
   $handler->display->display_options['fields']['field_author_picture']['field'] = 'field_author_picture';
@@ -150,37 +150,37 @@ function vp_announcment_news_views_views_default_views() {
     'image_style' => 'thumbnail',
     'image_link' => '',
   );
-  /* Väli: Sisu: Name */
+  /* Field: Content: Name */
   $handler->display->display_options['fields']['field_name']['id'] = 'field_name';
   $handler->display->display_options['fields']['field_name']['table'] = 'field_data_field_name';
   $handler->display->display_options['fields']['field_name']['field'] = 'field_name';
   $handler->display->display_options['fields']['field_name']['label'] = '';
   $handler->display->display_options['fields']['field_name']['element_label_colon'] = FALSE;
-  /* Väli: Sisu: Division */
+  /* Field: Content: Division */
   $handler->display->display_options['fields']['field_division']['id'] = 'field_division';
   $handler->display->display_options['fields']['field_division']['table'] = 'field_data_field_division';
   $handler->display->display_options['fields']['field_division']['field'] = 'field_division';
   $handler->display->display_options['fields']['field_division']['label'] = '';
   $handler->display->display_options['fields']['field_division']['element_label_colon'] = FALSE;
-  /* Väli: Sisu: Occupaction */
+  /* Field: Content: Occupaction */
   $handler->display->display_options['fields']['field_occupaction']['id'] = 'field_occupaction';
   $handler->display->display_options['fields']['field_occupaction']['table'] = 'field_data_field_occupaction';
   $handler->display->display_options['fields']['field_occupaction']['field'] = 'field_occupaction';
   $handler->display->display_options['fields']['field_occupaction']['label'] = '';
   $handler->display->display_options['fields']['field_occupaction']['element_label_colon'] = FALSE;
-  /* Väli: Sisu: Phone */
+  /* Field: Content: Phone */
   $handler->display->display_options['fields']['field_phone']['id'] = 'field_phone';
   $handler->display->display_options['fields']['field_phone']['table'] = 'field_data_field_phone';
   $handler->display->display_options['fields']['field_phone']['field'] = 'field_phone';
   $handler->display->display_options['fields']['field_phone']['label'] = '';
   $handler->display->display_options['fields']['field_phone']['element_label_colon'] = FALSE;
-  /* Väli: Sisu: E-mail */
+  /* Field: Content: E-mail */
   $handler->display->display_options['fields']['field_e_mail']['id'] = 'field_e_mail';
   $handler->display->display_options['fields']['field_e_mail']['table'] = 'field_data_field_e_mail';
   $handler->display->display_options['fields']['field_e_mail']['field'] = 'field_e_mail';
   $handler->display->display_options['fields']['field_e_mail']['label'] = '';
   $handler->display->display_options['fields']['field_e_mail']['element_label_colon'] = FALSE;
-  /* Kontekstifilter: Sisu: Nid */
+  /* Contextual filter: Content: Nid */
   $handler->display->display_options['arguments']['nid']['id'] = 'nid';
   $handler->display->display_options['arguments']['nid']['table'] = 'node';
   $handler->display->display_options['arguments']['nid']['field'] = 'nid';
@@ -189,7 +189,7 @@ function vp_announcment_news_views_views_default_views() {
   $handler->display->display_options['arguments']['nid']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['nid']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['nid']['summary_options']['items_per_page'] = '25';
-  /* Filtri kriteeriumid: Sisu: Liik */
+  /* Filter criterion: Content: Type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'node';
   $handler->display->display_options['filters']['type']['field'] = 'type';
@@ -200,7 +200,7 @@ function vp_announcment_news_views_views_default_views() {
   /* Display: Author block */
   $handler = $view->new_display('block', 'Author block', 'content_type_news_blocks_author_block');
   $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Väli: Sisu: Author picture */
+  /* Field: Content: Author picture */
   $handler->display->display_options['fields']['field_author_picture']['id'] = 'field_author_picture';
   $handler->display->display_options['fields']['field_author_picture']['table'] = 'field_data_field_author_picture';
   $handler->display->display_options['fields']['field_author_picture']['field'] = 'field_author_picture';
@@ -212,30 +212,30 @@ function vp_announcment_news_views_views_default_views() {
     'image_style' => 'thumbnail',
     'image_link' => '',
   );
-  /* Väli: Sisu: Name */
+  /* Field: Content: Name */
   $handler->display->display_options['fields']['field_name']['id'] = 'field_name';
   $handler->display->display_options['fields']['field_name']['table'] = 'field_data_field_name';
   $handler->display->display_options['fields']['field_name']['field'] = 'field_name';
   $handler->display->display_options['fields']['field_name']['label'] = '';
   $handler->display->display_options['fields']['field_name']['element_label_colon'] = FALSE;
-  /* Väli: Sisu: Division */
+  /* Field: Content: Division */
   $handler->display->display_options['fields']['field_division']['id'] = 'field_division';
   $handler->display->display_options['fields']['field_division']['table'] = 'field_data_field_division';
   $handler->display->display_options['fields']['field_division']['field'] = 'field_division';
   $handler->display->display_options['fields']['field_division']['label'] = '';
   $handler->display->display_options['fields']['field_division']['element_label_colon'] = FALSE;
-  /* Väli: Sisu: Occupaction */
+  /* Field: Content: Occupaction */
   $handler->display->display_options['fields']['field_occupaction']['id'] = 'field_occupaction';
   $handler->display->display_options['fields']['field_occupaction']['table'] = 'field_data_field_occupaction';
   $handler->display->display_options['fields']['field_occupaction']['field'] = 'field_occupaction';
   $handler->display->display_options['fields']['field_occupaction']['label'] = '';
   $handler->display->display_options['fields']['field_occupaction']['element_label_colon'] = FALSE;
-  /* Väli: Sisu: Phone */
+  /* Field: Content: Phone */
   $handler->display->display_options['fields']['field_phone']['id'] = 'field_phone';
   $handler->display->display_options['fields']['field_phone']['table'] = 'field_data_field_phone';
   $handler->display->display_options['fields']['field_phone']['field'] = 'field_phone';
   $handler->display->display_options['fields']['field_phone']['element_label_colon'] = FALSE;
-  /* Väli: Sisu: E-mail */
+  /* Field: Content: E-mail */
   $handler->display->display_options['fields']['field_e_mail']['id'] = 'field_e_mail';
   $handler->display->display_options['fields']['field_e_mail']['table'] = 'field_data_field_e_mail';
   $handler->display->display_options['fields']['field_e_mail']['field'] = 'field_e_mail';
@@ -243,14 +243,14 @@ function vp_announcment_news_views_views_default_views() {
   $handler->display->display_options['fields']['field_e_mail']['element_label_colon'] = FALSE;
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filtri kriteeriumid: Sisu: Liik */
+  /* Filter criterion: Content: Type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'node';
   $handler->display->display_options['filters']['type']['field'] = 'type';
   $handler->display->display_options['filters']['type']['value'] = array(
     'news' => 'news',
   );
-  /* Filtri kriteeriumid: Sisu: Name (field_name) */
+  /* Filter criterion: Content: Name (field_name) */
   $handler->display->display_options['filters']['field_name_value']['id'] = 'field_name_value';
   $handler->display->display_options['filters']['field_name_value']['table'] = 'field_data_field_name';
   $handler->display->display_options['filters']['field_name_value']['field'] = 'field_name_value';
@@ -261,7 +261,7 @@ function vp_announcment_news_views_views_default_views() {
   $handler->display->display_options['defaults']['title'] = FALSE;
   $handler->display->display_options['title'] = 'Failid ja viited';
   $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Väli: Sisu: Related files */
+  /* Field: Content: Related files */
   $handler->display->display_options['fields']['field_files']['id'] = 'field_files';
   $handler->display->display_options['fields']['field_files']['table'] = 'field_data_field_files';
   $handler->display->display_options['fields']['field_files']['field'] = 'field_files';
@@ -270,7 +270,7 @@ function vp_announcment_news_views_views_default_views() {
   $handler->display->display_options['fields']['field_files']['click_sort_column'] = 'fid';
   $handler->display->display_options['fields']['field_files']['delta_offset'] = '0';
   $handler->display->display_options['fields']['field_files']['multi_type'] = 'ul';
-  /* Väli: Sisu: Related links */
+  /* Field: Content: Related links */
   $handler->display->display_options['fields']['field_links']['id'] = 'field_links';
   $handler->display->display_options['fields']['field_links']['table'] = 'field_data_field_links';
   $handler->display->display_options['fields']['field_links']['field'] = 'field_links';
@@ -285,7 +285,7 @@ function vp_announcment_news_views_views_default_views() {
     2 => 'OR',
   );
   $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filtri kriteeriumid: Sisu: Liik */
+  /* Filter criterion: Content: Type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'node';
   $handler->display->display_options['filters']['type']['field'] = 'type';
@@ -293,13 +293,13 @@ function vp_announcment_news_views_views_default_views() {
     'news' => 'news',
   );
   $handler->display->display_options['filters']['type']['group'] = 1;
-  /* Filtri kriteeriumid: Sisu: Related files (field_files:fid) */
+  /* Filter criterion: Content: Related files (field_files:fid) */
   $handler->display->display_options['filters']['field_files_fid']['id'] = 'field_files_fid';
   $handler->display->display_options['filters']['field_files_fid']['table'] = 'field_data_field_files';
   $handler->display->display_options['filters']['field_files_fid']['field'] = 'field_files_fid';
   $handler->display->display_options['filters']['field_files_fid']['operator'] = 'not empty';
   $handler->display->display_options['filters']['field_files_fid']['group'] = 2;
-  /* Filtri kriteeriumid: Sisu: Related links (field_links:url) */
+  /* Filter criterion: Content: Related links (field_links:url) */
   $handler->display->display_options['filters']['field_links_url']['id'] = 'field_links_url';
   $handler->display->display_options['filters']['field_links_url']['table'] = 'field_data_field_links';
   $handler->display->display_options['filters']['field_links_url']['field'] = 'field_links_url';
@@ -336,14 +336,14 @@ function vp_announcment_news_views_views_default_views() {
   $handler->display->display_options['style_plugin'] = 'grid';
   $handler->display->display_options['style_options']['columns'] = '2';
   $handler->display->display_options['row_plugin'] = 'fields';
-  /* Väli: Sisu: Nid */
+  /* Field: Content: Nid */
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
   $handler->display->display_options['fields']['nid']['table'] = 'node';
   $handler->display->display_options['fields']['nid']['field'] = 'nid';
   $handler->display->display_options['fields']['nid']['label'] = '';
   $handler->display->display_options['fields']['nid']['exclude'] = TRUE;
   $handler->display->display_options['fields']['nid']['element_label_colon'] = FALSE;
-  /* Väli: Sisu: Wallpaper */
+  /* Field: Content: Wallpaper */
   $handler->display->display_options['fields']['field_wallpaper']['id'] = 'field_wallpaper';
   $handler->display->display_options['fields']['field_wallpaper']['table'] = 'field_data_field_wallpaper';
   $handler->display->display_options['fields']['field_wallpaper']['field'] = 'field_wallpaper';
@@ -355,7 +355,7 @@ function vp_announcment_news_views_views_default_views() {
     'image_style' => 'important_topics_wallpaper',
     'image_link' => '',
   );
-  /* Väli: Sisu: Pealkiri */
+  /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
   $handler->display->display_options['fields']['title']['field'] = 'title';
@@ -366,7 +366,7 @@ function vp_announcment_news_views_views_default_views() {
   $handler->display->display_options['fields']['title']['element_type'] = 'h2';
   $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['title']['link_to_node'] = FALSE;
-  /* Väli: Sisu: Body */
+  /* Field: Content: Body */
   $handler->display->display_options['fields']['body']['id'] = 'body';
   $handler->display->display_options['fields']['body']['table'] = 'field_data_body';
   $handler->display->display_options['fields']['body']['field'] = 'body';
@@ -376,26 +376,26 @@ function vp_announcment_news_views_views_default_views() {
   $handler->display->display_options['fields']['body']['settings'] = array(
     'trim_length' => '250',
   );
-  /* Lühike kriteerium: Sisu: Postituse kuupäev */
+  /* Sort criterion: Content: Post date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'node';
   $handler->display->display_options['sorts']['created']['field'] = 'created';
   $handler->display->display_options['sorts']['created']['order'] = 'DESC';
-  /* Filtri kriteeriumid: Sisu: Avaldatud */
+  /* Filter criterion: Content: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';
   $handler->display->display_options['filters']['status']['value'] = 1;
   $handler->display->display_options['filters']['status']['group'] = 1;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
-  /* Filtri kriteeriumid: Sisu: Liik */
+  /* Filter criterion: Content: Type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'node';
   $handler->display->display_options['filters']['type']['field'] = 'type';
   $handler->display->display_options['filters']['type']['value'] = array(
     'important_announcements' => 'important_announcements',
   );
-  /* Filtri kriteeriumid: Sisu: Keel */
+  /* Filter criterion: Content: Language */
   $handler->display->display_options['filters']['language']['id'] = 'language';
   $handler->display->display_options['filters']['language']['table'] = 'node';
   $handler->display->display_options['filters']['language']['field'] = 'language';
@@ -436,7 +436,7 @@ function vp_announcment_news_views_views_default_views() {
   $handler->display->display_options['pager']['options']['items_per_page'] = '2';
   $handler->display->display_options['style_plugin'] = 'default';
   $handler->display->display_options['row_plugin'] = 'fields';
-  /* Väli: Sisu: Cover image */
+  /* Field: Content: Cover image */
   $handler->display->display_options['fields']['field_cover_image']['id'] = 'field_cover_image';
   $handler->display->display_options['fields']['field_cover_image']['table'] = 'field_data_field_cover_image';
   $handler->display->display_options['fields']['field_cover_image']['field'] = 'field_cover_image';
@@ -448,7 +448,7 @@ function vp_announcment_news_views_views_default_views() {
     'image_style' => 'news_list_thumbnail',
     'image_link' => 'content',
   );
-  /* Väli: Sisu: Postituse kuupäev */
+  /* Field: Content: Post date */
   $handler->display->display_options['fields']['created']['id'] = 'created';
   $handler->display->display_options['fields']['created']['table'] = 'node';
   $handler->display->display_options['fields']['created']['field'] = 'created';
@@ -457,7 +457,7 @@ function vp_announcment_news_views_views_default_views() {
   $handler->display->display_options['fields']['created']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['created']['date_format'] = 'custom';
   $handler->display->display_options['fields']['created']['custom_date_format'] = 'd.m.Y';
-  /* Väli: Sisu: Source */
+  /* Field: Content: Source */
   $handler->display->display_options['fields']['field_source']['id'] = 'field_source';
   $handler->display->display_options['fields']['field_source']['table'] = 'field_data_field_source';
   $handler->display->display_options['fields']['field_source']['field'] = 'field_source';
@@ -468,7 +468,7 @@ function vp_announcment_news_views_views_default_views() {
   $handler->display->display_options['fields']['field_source']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_source']['hide_empty'] = TRUE;
   $handler->display->display_options['fields']['field_source']['type'] = 'i18n_taxonomy_term_reference_plain';
-  /* Väli: Sisu: Pealkiri */
+  /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
   $handler->display->display_options['fields']['title']['field'] = 'title';
@@ -477,7 +477,7 @@ function vp_announcment_news_views_views_default_views() {
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
   $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
-  /* Väli: Sisu: Body */
+  /* Field: Content: Body */
   $handler->display->display_options['fields']['body']['id'] = 'body';
   $handler->display->display_options['fields']['body']['table'] = 'field_data_body';
   $handler->display->display_options['fields']['body']['field'] = 'body';
@@ -488,7 +488,7 @@ function vp_announcment_news_views_views_default_views() {
   $handler->display->display_options['fields']['body']['settings'] = array(
     'trim_length' => '400',
   );
-  /* Väli: Rewrite */
+  /* Field: Rewrite */
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
   $handler->display->display_options['fields']['nid']['table'] = 'node';
   $handler->display->display_options['fields']['nid']['field'] = 'nid';
@@ -505,7 +505,7 @@ function vp_announcment_news_views_views_default_views() {
   $handler->display->display_options['fields']['nid']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['nid']['element_wrapper_type'] = '0';
   $handler->display->display_options['fields']['nid']['element_default_classes'] = FALSE;
-  /* Kontekstifilter: Sisu: Has taxonomy term ID */
+  /* Contextual filter: Content: Has taxonomy term ID */
   $handler->display->display_options['arguments']['tid']['id'] = 'tid';
   $handler->display->display_options['arguments']['tid']['table'] = 'taxonomy_index';
   $handler->display->display_options['arguments']['tid']['field'] = 'tid';
@@ -528,7 +528,7 @@ return $tids;';
   );
   $handler->display->display_options['arguments']['tid']['validate_options']['type'] = 'tids';
   $handler->display->display_options['arguments']['tid']['break_phrase'] = TRUE;
-  /* Kontekstifilter: Sisu: Nid */
+  /* Contextual filter: Content: Nid */
   $handler->display->display_options['arguments']['nid']['id'] = 'nid';
   $handler->display->display_options['arguments']['nid']['table'] = 'node';
   $handler->display->display_options['arguments']['nid']['field'] = 'nid';
@@ -539,14 +539,14 @@ return $tids;';
   $handler->display->display_options['arguments']['nid']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['nid']['summary_options']['items_per_page'] = '25';
   $handler->display->display_options['arguments']['nid']['not'] = TRUE;
-  /* Filtri kriteeriumid: Sisu: Avaldatud */
+  /* Filter criterion: Content: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';
   $handler->display->display_options['filters']['status']['value'] = 1;
   $handler->display->display_options['filters']['status']['group'] = 1;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
-  /* Filtri kriteeriumid: Sisu: Liik */
+  /* Filter criterion: Content: Type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'node';
   $handler->display->display_options['filters']['type']['field'] = 'type';
@@ -554,7 +554,7 @@ return $tids;';
     'news' => 'news',
   );
   $handler->display->display_options['filters']['type']['group'] = 1;
-  /* Filtri kriteeriumid: Sisu: Keel */
+  /* Filter criterion: Content: Language */
   $handler->display->display_options['filters']['language']['id'] = 'language';
   $handler->display->display_options['filters']['language']['table'] = 'node';
   $handler->display->display_options['filters']['language']['field'] = 'language';
@@ -569,7 +569,7 @@ return $tids;';
   $handler->display->display_options['pager']['options']['items_per_page'] = '2';
   $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['defaults']['sorts'] = FALSE;
-  /* Lühike kriteerium: Sisu: Postituse kuupäev */
+  /* Sort criterion: Content: Post date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'node';
   $handler->display->display_options['sorts']['created']['field'] = 'created';
@@ -604,13 +604,13 @@ return $tids;';
   $handler->display->display_options['pager']['options']['offset'] = '1';
   $handler->display->display_options['style_plugin'] = 'default';
   $handler->display->display_options['row_plugin'] = 'fields';
-  /* Jalus: Globaalne: Tekstiala */
+  /* Footer: Global: Text area */
   $handler->display->display_options['footer']['area']['id'] = 'area';
   $handler->display->display_options['footer']['area']['table'] = 'views';
   $handler->display->display_options['footer']['area']['field'] = 'area';
   $handler->display->display_options['footer']['area']['content'] = '<?php print \'<h2>\' . l(t(\'More news\'), \'news\') . \'</h2>\'; ?>';
   $handler->display->display_options['footer']['area']['format'] = 'php_code';
-  /* Väli: Sisu: Pealkiri */
+  /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
   $handler->display->display_options['fields']['title']['field'] = 'title';
@@ -620,12 +620,12 @@ return $tids;';
   $handler->display->display_options['fields']['title']['element_type'] = '0';
   $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['title']['element_wrapper_type'] = 'h2';
-  /* Lühike kriteerium: Sisu: Postituse kuupäev */
+  /* Sort criterion: Content: Post date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'node';
   $handler->display->display_options['sorts']['created']['field'] = 'created';
   $handler->display->display_options['sorts']['created']['order'] = 'DESC';
-  /* Kontekstifilter: Sisu: News type (field_news_type) */
+  /* Contextual filter: Content: News type (field_news_type) */
   $handler->display->display_options['arguments']['field_news_type_tid']['id'] = 'field_news_type_tid';
   $handler->display->display_options['arguments']['field_news_type_tid']['table'] = 'field_data_field_news_type';
   $handler->display->display_options['arguments']['field_news_type_tid']['field'] = 'field_news_type_tid';
@@ -639,21 +639,21 @@ return $tids;';
     'news_types' => 'news_types',
   );
   $handler->display->display_options['arguments']['field_news_type_tid']['validate']['fail'] = 'ignore';
-  /* Filtri kriteeriumid: Sisu: Avaldatud */
+  /* Filter criterion: Content: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';
   $handler->display->display_options['filters']['status']['value'] = 1;
   $handler->display->display_options['filters']['status']['group'] = 1;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
-  /* Filtri kriteeriumid: Sisu: Liik */
+  /* Filter criterion: Content: Type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'node';
   $handler->display->display_options['filters']['type']['field'] = 'type';
   $handler->display->display_options['filters']['type']['value'] = array(
     'news' => 'news',
   );
-  /* Filtri kriteeriumid: Sisu: Keel */
+  /* Filter criterion: Content: Language */
   $handler->display->display_options['filters']['language']['id'] = 'language';
   $handler->display->display_options['filters']['language']['table'] = 'node';
   $handler->display->display_options['filters']['language']['field'] = 'language';
@@ -719,7 +719,7 @@ return $tids;';
   $handler->display->display_options['style_options']['widgets']['bottom']['views_slideshow_controls']['type'] = 'views_slideshow_controls_text';
   $handler->display->display_options['style_options']['widgets']['bottom']['views_slideshow_slide_counter']['weight'] = '1';
   $handler->display->display_options['row_plugin'] = 'fields';
-  /* Väli: Taksonoomia termin: Name (translated) */
+  /* Field: Taxonomy term: Name (translated) */
   $handler->display->display_options['fields']['name_i18n']['id'] = 'name_i18n';
   $handler->display->display_options['fields']['name_i18n']['table'] = 'taxonomy_term_data';
   $handler->display->display_options['fields']['name_i18n']['field'] = 'name_i18n';
@@ -728,7 +728,7 @@ return $tids;';
   $handler->display->display_options['fields']['name_i18n']['alter']['alter_text'] = TRUE;
   $handler->display->display_options['fields']['name_i18n']['alter']['text'] = '<span aria-hidden="true">[name_i18n]</span>';
   $handler->display->display_options['fields']['name_i18n']['element_label_colon'] = FALSE;
-  /* Väli: Taksonoomia termin: Termini ID */
+  /* Field: Taxonomy term: Term ID */
   $handler->display->display_options['fields']['tid']['id'] = 'tid';
   $handler->display->display_options['fields']['tid']['table'] = 'taxonomy_term_data';
   $handler->display->display_options['fields']['tid']['field'] = 'tid';
@@ -736,7 +736,7 @@ return $tids;';
   $handler->display->display_options['fields']['tid']['element_type'] = '0';
   $handler->display->display_options['fields']['tid']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['tid']['separator'] = '';
-  /* Filtri kriteeriumid: Taksonoomia sõnastik: Süsteemne nimetus */
+  /* Filter criterion: Taxonomy vocabulary: Machine name */
   $handler->display->display_options['filters']['machine_name']['id'] = 'machine_name';
   $handler->display->display_options['filters']['machine_name']['table'] = 'taxonomy_vocabulary';
   $handler->display->display_options['filters']['machine_name']['field'] = 'machine_name';

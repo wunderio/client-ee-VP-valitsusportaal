@@ -69,6 +69,11 @@ function theme_select_as_checkboxes($vars) {
     return theme('select_as_tree', array('element' => $element));
   }
 
+  // if the multiple attribute is set it must be removed because it's not a valid attribute for the checkbox input element
+  if (isset($element['#attributes']['multiple'])) {
+    unset($element['#attributes']['multiple']);
+  }
+
   // the selected keys from #options
   $selected_options = empty($element['#value']) ? $element['#default_value'] : $element['#value'];
 
@@ -129,6 +134,10 @@ function theme_select_as_checkboxes($vars) {
     $attributes['class'] = array_merge($element['#attributes']['class'], $attributes['class']);
   }
 
+  // Remove the name attribute because it is not valid for the div element
+  if (isset($element['#attributes']['name'])) {
+    unset($element['#attributes']['name']);
+  }
   return '<div' . drupal_attributes($attributes) . ">$description$output</div>";
 }
 

@@ -101,7 +101,9 @@ function vp_news_views_default_views() {
   $handler->display->display_options['fields']['field_cover_image']['label'] = 'news_exp_cover_image';
   $handler->display->display_options['fields']['field_cover_image']['alter']['text'] = '[field_cover_image]';
   $handler->display->display_options['fields']['field_cover_image']['click_sort_column'] = 'fid';
+  $handler->display->display_options['fields']['field_cover_image']['type'] = 'image_url';
   $handler->display->display_options['fields']['field_cover_image']['settings'] = array(
+    'url_type' => '0',
     'image_style' => '',
     'image_link' => '',
   );
@@ -132,7 +134,7 @@ function vp_news_views_default_views() {
   $handler->display->display_options['fields']['field_phone']['table'] = 'field_data_field_phone';
   $handler->display->display_options['fields']['field_phone']['field'] = 'field_phone';
   $handler->display->display_options['fields']['field_phone']['label'] = 'news_exp_author_phone';
-  /* Field: Content: Links */
+  /* Field: Content: Related links */
   $handler->display->display_options['fields']['field_links']['id'] = 'field_links';
   $handler->display->display_options['fields']['field_links']['table'] = 'field_data_field_links';
   $handler->display->display_options['fields']['field_links']['field'] = 'field_links';
