@@ -8,6 +8,19 @@
 include_once 'vp_contact.features.inc';
 
 /**
+ * Implements hook_views_query_alter().
+ */
+function vp_contact_views_query_alter(&$view, &$query) {
+  if ($view->name == 'contact') {
+    if (!isset($_GET['tid_with_depth']) && isset($query->where[0])) {
+      if (count($query->where[0]['conditions']) === 1) {
+        unset($query->where[0]);
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_views_pre_render().
  */
 function vp_contact_views_pre_render(&$view) {
