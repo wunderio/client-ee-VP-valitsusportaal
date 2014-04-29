@@ -6,6 +6,9 @@ sites/*/files
 sites/*/private
 /cache
 
+# Ignore rk_valitsused as it has separate git init.
+sites/all/modules/custom/rk_valitsused
+
 # OS generated files
 .DS_Store*
 ehthumbs.db
