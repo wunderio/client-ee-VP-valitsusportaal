@@ -2,7 +2,7 @@
 (function($) {
   var $tabBlocks = $('div.static-fp-tab-block');
 
-  // Hide all but first content-tab. mm volbriööl 2014.
+  // Hide all but first content-tab. mm volbril 2014.
   if ($tabBlocks.length) {
     $tabBlocks.each(function() {
       $('.tab-content').addClass( "element-invisible" );
