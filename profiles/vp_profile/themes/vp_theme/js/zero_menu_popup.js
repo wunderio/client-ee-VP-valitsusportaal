@@ -76,7 +76,6 @@
   });
 
   var mouseenterEvent = function(that, e) {
-    hideAllMenus();
     if (that.tagName == 'A') {
       var $this = $(that).parent();
     }
@@ -87,7 +86,10 @@
     var openDelay = 0;
 
     t = window.setTimeout(function() {
-      showMenu($('#' + $this.attr('id') + '-menu'), $this);
+      if (!popupOpened) {
+        hideAllMenus();
+        showMenu($('#' + $this.attr('id') + '-menu'), $this);
+      }
     }, openDelay);
 
     e.stopPropagation();
@@ -103,6 +105,7 @@
   }
 
   var hideAllMenus = function() {
+    popupOpened = false;
     $popups.hide();
   }
 
