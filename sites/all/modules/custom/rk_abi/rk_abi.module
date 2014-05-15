@@ -1,0 +1,38 @@
+<?php
+
+/**
+ * @file
+ * Riigikantselei abimoodul. css / js, mis ei ole vp pakettis.
+ * Märt Matsoo. mart@matsoo.com.
+ */
+
+
+/**
+ * Implementation of hook_init().
+ */
+function rk_abi_init() {
+
+  // Load css.
+  drupal_add_css(drupal_get_path('module', 'rk_abi') . '/css/rk_abi.css');
+
+  // Load js.
+  drupal_add_js(drupal_get_path('module', 'rk_abi') . '/js/rk_abi.js', array('scope' => 'footer', 'weight' => 10));
+
+  //drupal_add_js('jQuery(document).ready(function () { var S5 = "do this and do that";//alert(S5); });', array('type' => 'inline', 'scope' => 'header'));
+
+}
+
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function rk_abi_preprocess_html(&$variables) {
+
+  // Get domain name from http_host variable.
+  $arrDomain = explode('.', $_SERVER['HTTP_HOST']);
+  $index = sizeof($arrDomain) - 2;
+
+  // Add domain (ex. riigikantselei) to body classes. We can hook off it to apply styles to specific sites.
+  $variables['classes_array'][] = $arrDomain[$index];
+}
+

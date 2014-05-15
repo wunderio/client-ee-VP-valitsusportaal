@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Kontakt CSV Feeds Importer feature.
+ */
+
+include_once 'rk_kontakt_csv_feeds_importer.features.inc';

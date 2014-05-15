@@ -1,0 +1,7 @@
+/* English main menu items wider. */
+.i18n-en .block-main-menu .menu-block-wrapper ul li {width: 130px;}
+
+/* Väiksemaks teha 0. taseme menu accessibility negatiivne margin.*/
+.i18n-en .zone-portal-navigation-wrapper .block-vp-core-accessibility-help-link {margin-left: -20px}
+/* .i18n-et .zone-portal-navigation-wrapper .block-vp-core-accessibility-help-link {margin-left: -20px}
+.i18n-ru .zone-portal-navigation-wrapper .block-vp-core-accessibility-help-link {margin-left: -20px} */
