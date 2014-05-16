@@ -389,7 +389,6 @@ body {
         border-right: 4px solid #666666;
         content: "";
         left: 100%;
-        margin-left: -4px;
         position: absolute;
         top: 6px;
         z-index: 2; }
