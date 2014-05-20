@@ -44,6 +44,8 @@ function vp_news_feeds_importer_default() {
           'xpathparser:13' => 'news_exp_author_email/text()',
           'xpathparser:14' => 'news_exp_author_occupaction/text()',
           'xpathparser:15' => 'news_exp_author_phone/text()',
+          'xpathparser:16' => 'news_exp_realated_links_title/text()',
+          'xpathparser:17' => 'news_exp_realated_links_url/text()',
         ),
         'rawXML' => array(
           'xpathparser:0' => 0,
@@ -60,6 +62,8 @@ function vp_news_feeds_importer_default() {
           'xpathparser:13' => 0,
           'xpathparser:14' => 0,
           'xpathparser:15' => 0,
+          'xpathparser:16' => 0,
+          'xpathparser:17' => 0,
         ),
         'context' => '/nodes/node',
         'exp' => array(
@@ -80,6 +84,8 @@ function vp_news_feeds_importer_default() {
             'xpathparser:13' => 0,
             'xpathparser:14' => 0,
             'xpathparser:15' => 0,
+            'xpathparser:16' => 0,
+            'xpathparser:17' => 0,
           ),
         ),
         'allow_override' => 0,
@@ -160,6 +166,16 @@ function vp_news_feeds_importer_default() {
           13 => array(
             'source' => 'xpathparser:15',
             'target' => 'field_phone',
+            'unique' => FALSE,
+          ),
+          14 => array(
+            'source' => 'xpathparser:16',
+            'target' => 'field_links:title',
+            'unique' => FALSE,
+          ),
+          15 => array(
+            'source' => 'xpathparser:17',
+            'target' => 'field_links:url',
             'unique' => FALSE,
           ),
         ),
