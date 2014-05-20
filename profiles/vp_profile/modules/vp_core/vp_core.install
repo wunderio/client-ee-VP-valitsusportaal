@@ -6,3 +6,11 @@
 function vp_core_install() {
 
 }
+
+/**
+ * Enable boost crawler.
+ */
+function vp_core_update_7100() {
+  // Enable boost crawler with it's dependencies.
+  module_enable(array('httprl', 'boost_crawler'));
+}
