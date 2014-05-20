@@ -58,32 +58,3 @@ Disallow: /?q=user/password/
 Disallow: /?q=user/register/
 Disallow: /?q=user/login/
 Disallow: /?q=user/logout/
-
-Disallow: /en/news
-Disallow: /en/history
-Disallow: /en/galleries
-Disallow: /et/uudised
-Disallow: /et/ajalugu
-Disallow: /et/galeriid
-Disallow: /ru/novosti
-Disallow: /ru/istoriya
-Disallow: /ru/galereya
-Disallow: /*/taxonomy
-Allow: /en/news/
-Allow: /en/history/
-Allow: /en/galleries/
-Allow: /et/uudised/
-Allow: /et/ajalugu/
-Allow: /et/galeriid/
-Allow: /ru/novosti/
-Allow: /ru/istoriya/
-Allow: /ru/galereya/
-
-Disallow: /*?*
-Allow: /en/weekly-schedule?
-Allow: /et/eelinfo?
-# Allow: /ru/weekly-schedule?
-Allow: /en/videos?page
-Allow: /et/videod?page
-# Allow: /ru/videos?page
-
