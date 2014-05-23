@@ -1992,13 +1992,15 @@ function simplenews_newsletter_load_multiple($nids = array(), $conditions = arra
  * @ingroup issue
  */
 function simplenews_newsletter_save($newsletter) {
-  db_merge('simplenews_newsletter')
-    ->key(array('nid' => $newsletter->nid))
-    ->fields(array(
-      'tid' => $newsletter->tid,
-      'status' => $newsletter->status,
-    ))
-    ->execute();
+  if (!empty($newsletter->tid)) {
+    db_merge('simplenews_newsletter')
+      ->key(array('nid' => $newsletter->nid))
+      ->fields(array(
+        'tid' => $newsletter->tid,
+        'status' => $newsletter->status,
+      ))
+      ->execute();
+  }
 }
 
 /**
