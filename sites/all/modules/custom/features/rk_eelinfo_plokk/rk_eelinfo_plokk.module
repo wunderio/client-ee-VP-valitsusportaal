@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Eelinfo Plokk feature.
+ */
+
+include_once 'rk_eelinfo_plokk.features.inc';
