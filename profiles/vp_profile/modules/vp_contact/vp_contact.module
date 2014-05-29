@@ -80,6 +80,7 @@ function vp_contact_feeds_presave(FeedsSource $source, $entity, $item) {
         foreach ($entity->field_field_lock[LANGUAGE_NONE] as $row) {
           $entity->{$row['value']} = $node->{$row['value']};
         }
+        $entity->field_field_lock = $node->field_field_lock;
       }
 
     }

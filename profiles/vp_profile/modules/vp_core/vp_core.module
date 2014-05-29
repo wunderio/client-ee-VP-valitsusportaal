@@ -1,27 +1,26 @@
 <?php
 /**
  * @file
- * Code for the Valitsusportaal feature.
+ * Code for the Valitsusportaal.
  */
 
 include_once 'vp_core.features.inc';
 
 /**
- * @file
- *
+ * Implements hook_page_build().
  */
-
-/**
- * Implements hook_init().
- */
-function vp_core_init() {
+function vp_core_page_build(&$page) {
   global $base_url;
 
   if (drupal_is_front_page()) {
     drupal_add_js(drupal_get_path('module', 'vp_core') .'/js/static_fp_tab_block.js', array('scope' => 'footer'));
   }
 
-  drupal_add_js('var addthis_config = {"data_track_addressbar":false};',
+  // AddThis js.
+  drupal_add_js(
+    'var addthis_config = addthis_config||{};
+    addthis_config.data_track_addressbar = false;
+    addthis_config.data_track_clickback = false;',
     array('type' => 'inline', 'scope' => 'footer', 'weight' => 5)
   );
   drupal_add_js('//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-51f90a0115ca9e8f',
