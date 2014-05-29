@@ -20,6 +20,9 @@
       var $titles = $this.find('h2');
       $tabContents.each(function(i) {
         $tabsWrap.find('ul').append('<li' + (i===0 ? ' class=active' : '') +  '><a href="#" class="item-' + i + '" aria-hidden="true">' + $titles.eq(i).text() + '</a></li>');
+        if (i > 0) {
+          $tabContents.eq(i).addClass('element-invisible');
+        }
       });
       var tabs = $tabsWrap.find('li');
       $tabsWrap.find('a').click(function() {
