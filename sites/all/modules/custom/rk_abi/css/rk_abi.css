@@ -5,3 +5,13 @@
 .i18n-en .zone-portal-navigation-wrapper .block-vp-core-accessibility-help-link {margin-left: -20px}
 /* .i18n-et .zone-portal-navigation-wrapper .block-vp-core-accessibility-help-link {margin-left: -20px}
 .i18n-ru .zone-portal-navigation-wrapper .block-vp-core-accessibility-help-link {margin-left: -20px} */
+
+
+/* Avalehe eelinfo plokk */ 
+.view-eelinfo-plokk .views-row-last {
+  margin-top: 1em;
+}
+
+.view-eelinfo-plokk h3 {
+  color: #006699;
+}
