@@ -34,6 +34,7 @@
   });
 */
   $liExpanded.find('> a')
+    .removeAttr("href").attr({ tabindex: "0", role: "button"}) // Remove 'href', add 'role' and 'tabindex' for screenreaders.
     .bind('focus', function(e) {
       mouseenterEvent(this, e);
     });
