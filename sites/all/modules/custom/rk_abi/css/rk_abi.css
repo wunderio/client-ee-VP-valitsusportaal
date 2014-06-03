@@ -7,6 +7,19 @@
 .i18n-ru .zone-portal-navigation-wrapper .block-vp-core-accessibility-help-link {margin-left: -20px} */
 
 
+/* Avalehe uudised 4 paremat kätt siis kui kuupäev on mängus */
+.view-news-tabs-right-side .views-field-created {
+    color: #686868;
+    font-size: 10px;
+    line-height: 14px;
+    padding-bottom: 0;
+}
+
+/* .view-id-top_news_tabs .view-id-news_tabs_right_side .views-row h2 {
+  padding-top: 0;
+} */
+
+
 /* Avalehe eelinfo plokk */ 
 .view-eelinfo-plokk .views-row-last {
   margin-top: 1em;
