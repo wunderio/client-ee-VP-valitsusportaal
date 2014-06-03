@@ -3100,6 +3100,15 @@ div.item-list ul.pager {
     font-family: Tahoma, Verdana, Segoe, sans-serif;
     line-height: 15px; }
 
+#site-map .title {
+  display: none; }
+#site-map .site-map-box .content > .site-map-menu {
+  padding-left: 0; }
+  #site-map .site-map-box .content > .site-map-menu > li {
+    padding-bottom: 7px; }
+    #site-map .site-map-box .content > .site-map-menu > li > a {
+      font-weight: bold; }
+
 .static-25-75-2columns {
   margin: 0 0 20px 0; }
 
