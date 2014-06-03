@@ -2,16 +2,6 @@
 (function($) {
   var $tabBlocks = $('div.static-fp-tab-block');
 
-  // Hide all but first content-tab. mm volbril 2014.
-  if ($tabBlocks.length) {
-    $tabBlocks.each(function() {
-      $('.tab-content').addClass( "element-invisible" );
-      $('.tab-content').filter(':first-child').removeClass('element-invisible');
-      return false;
-    }); 
-  }
-
-
   if ($tabBlocks.length) {
     $tabBlocks.each(function() {
       var $this = $(this);
