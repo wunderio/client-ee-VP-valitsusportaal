@@ -33,15 +33,21 @@ foreach ($rows as &$row) {
   $count = count($term) + 1;
   print '<h'.$count.'>'.$caption . $title.'</h'.$count.'>';
 } ?>
+
+<?php 
+  // EN and RU only need to show name and phone.
+  $multilingual_fields = array('title', 'field_contact_phone_nr'); // field_position, field_contact_e_mail
+?>
+
 <table <?php if ($classes) { print 'class="'. $classes . '" '; } ?>>
   <?php if (!empty($header)) : ?>
     <thead>
       <tr>
         <?php foreach ($header as $field => $label): ?>
           <?php end($header); ?>
-          <th <?php if ($header_classes[$field]) { print 'class="'. $header_classes[$field] . ( $field === key($header) ?  ' last' : '' ) . '" '; } ?>>
-            <?php print t($label); ?>
-          </th>
+              <th <?php if ($header_classes[$field]) { print 'class="'. $header_classes[$field] . ( $field === key($header) ?  ' last' : '' ) . '" '; } ?>>
+                <?php print t($label); ?>
+              </th>
         <?php endforeach; ?>
       </tr>
     </thead>
@@ -51,9 +57,12 @@ foreach ($rows as &$row) {
       <tr <?php if ($row_classes[$row_count]) { print 'class="' . implode(' ', $row_classes[$row_count]) .'"';  } ?>>
         <?php foreach ($row as $field => $content): ?>
           <?php //end($row); ?>
-          <td <?php if ($field_classes[$field][$row_count]) { print 'class="'. $field_classes[$field][$row_count] . ( $field === key($header) ?  ' last' : '' ) . '" '; } ?><?php print drupal_attributes($field_attributes[$field][$row_count]); ?>>
-            <?php print $content; ?>
-          </td>
+              <td <?php if ($field_classes[$field][$row_count]) { print 'class="'. $field_classes[$field][$row_count] . ( $field === key($header) ?  ' last' : '' ) . '" '; } ?><?php print drupal_attributes($field_attributes[$field][$row_count]); ?>>                
+                <?php 
+                  $riigikood = ($language->language != 'et' && $field == 'field_contact_phone_nr') ? '(+372) ': '';
+                  print $riigikood . $content;
+                ?>
+              </td>
         <?php endforeach; ?>
       </tr>
       <?php
@@ -80,17 +89,21 @@ foreach ($rows as &$row) {
               $node_view['field_profile_photo']['#items'][0]['is_default'] === TRUE
             )
           ) {
-            $node_view['field_profile_photo'] = array('#markup' => '<div class="field field-name-field-profile-photo field-type-image field-label-hidden"><img src="/profiles/vp_profile/modules/vp_contact/no-profile-image_w104.png" /></div>');
+            // $node_view['field_profile_photo'] = array('#markup' => '<div class="field field-name-field-profile-photo field-type-image field-label-hidden"><img src="/profiles/vp_profile/modules/vp_contact/no-profile-image_w104.png" /></div>');
+
+            // Ära kasuta no-profile-image. mm 03.06.2014.
+            $node_view['field_profile_photo'] = '';
           }
           $node_view = render($node_view);
         }
-        echo '<tr class="modal-tr">'.
-          '<td colspan="'.count($row).'">'.
-            '<div class="ui-dialog-content-contact">'.
-              $node_view.
-            '</div>'.
-          '</td>'.
-        '</tr>';
+
+          echo '<tr class="modal-tr">'.
+            '<td colspan="'.count($row).'">'.
+              '<div class="ui-dialog-content-contact">'.
+                $node_view.
+              '</div>'.
+            '</td>'.
+          '</tr>';
       ?>
     <?php endforeach; ?>
   </tbody>

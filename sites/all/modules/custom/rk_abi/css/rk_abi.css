@@ -28,3 +28,20 @@
 .view-eelinfo-plokk h3 {
   color: #006699;
 }
+
+
+/* EN ja RU kontaktide telefonil on (+372) */
+.i18n-en .view-display-id-contact_page .views-field-field-contact-phone-nr, 
+.i18n-ru .view-display-id-contact_page .views-field-field-contact-phone-nr {   
+  width: 100px;
+}
+
+.avakuup {
+  font-size: 10px; color: #555;
+}
+
+/*
+.i18n-en .static-join-in, .i18n-en .static-join-in .static-inner,
+.i18n-ru .static-join-in, .i18n-ru .static-join-in .static-inner {
+  background-image: url(/profiles/vp_profile/themes/vp_theme/img/40-desktop/static-social-bg-osaleta.png);
+}*/
