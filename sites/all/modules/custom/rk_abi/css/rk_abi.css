@@ -40,8 +40,13 @@
   font-size: 10px; color: #555;
 }
 
-/*
-.i18n-en .static-join-in, .i18n-en .static-join-in .static-inner,
-.i18n-ru .static-join-in, .i18n-ru .static-join-in .static-inner {
-  background-image: url(/profiles/vp_profile/themes/vp_theme/img/40-desktop/static-social-bg-osaleta.png);
-}*/
+
+/* Media queries */
+@media screen and (min-device-width: 1024px) {
+
+  .i18n-en .static-join-in .static-inner,
+  .i18n-ru .static-join-in .static-inner {
+    background-image: url(/profiles/vp_profile/themes/vp_theme/img/40-desktop/static-social-bg-osaleta.png);
+  }
+
+}
