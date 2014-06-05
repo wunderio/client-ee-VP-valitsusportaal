@@ -251,9 +251,11 @@ div.item-list ul.pager .pager-last a {
       outline: yellow dotted 2px !important; }
 
 .node .field-name-body ul li {
-  background-image: url(../img/10-global/custom-bullet-romb-high-contrast.png) !important; }
+  background-image: url(../img/10-global/custom-bullet-romb-high-contrast.png) !important;
+  background-repeat: no-repeat;}
 .node .field-name-body ul ul li {
-  background-image: url(../img/10-global/kollane-bullet-small-high-contrast.png) !important; }
+  background-image: url(../img/10-global/kollane-bullet-small-high-contrast.png) !important;
+  background-repeat: no-repeat;  }
 
 .zone-preface-wrapper {
   background: url(../img/40-desktop/zone-preface-wrapper-high-contrast.png) 50% 0 repeat-y; }
