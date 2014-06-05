@@ -6,8 +6,7 @@ sites/*/files
 sites/*/private
 /cache
 
-# mm. Ignore rk_valitsused as it has separate git init.
-sites/all/modules/custom/rk_valitsused
+# mm. Ignore.
 robots_bkup_mai2014.txt
 htaccess_bkup_mai2014
 htaccess_orig_bkup
