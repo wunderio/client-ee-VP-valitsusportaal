@@ -29,21 +29,44 @@
   color: #006699;
 }
 
-
-/* EN ja RU kontaktide telefonil on (+372) */
-.i18n-en .view-display-id-contact_page .views-field-field-contact-phone-nr, 
-.i18n-ru .view-display-id-contact_page .views-field-field-contact-phone-nr {   
-  width: 100px;
-}
-
 .avakuup {
   font-size: 10px; color: #555;
+}
+
+/* Override global.css 11px font-size. */
+.front .static-fp-block-minister {
+  font-size: 12px;
+  line-height: 16px;
+}
+
+/* Override global.css 11px font-size. */
+.front .block-views-2d653631c9a61c122d3bb069094a54c4 .views-row .views-field-title a {
+    font-size: 12px;
+    line-height: 16px; 
+}
+
+/* Bullets */
+.front .static-fp-tab-block.static-fp-tab-block-2 .tab-content ul li {
+    background: url("/profiles/vp_profile/themes/vp_theme/img/10-global/link-arrow-on-light-bg.png") no-repeat scroll 0 6px transparent;
+    padding: 2px 0 2px 17px;
+}
+
+/* Sinised lingid */
+.front .static-fp-tab-block-2..static-fp-tab-block-2 .tab-content ul a {
+    color: #00698C;
 }
 
 
 /* Media queries */
 @media screen and (min-device-width: 1024px) {
 
+  /* EN ja RU kontaktide telefonil on +372 */
+  .i18n-en .view-display-id-contact_page .views-field-field-contact-phone-nr, 
+  .i18n-ru .view-display-id-contact_page .views-field-field-contact-phone-nr {   
+    width: 100px;
+  }
+
+  /* EN ja RU join in avalehe plokk bg image */
   .i18n-en .static-join-in .static-inner,
   .i18n-ru .static-join-in .static-inner {
     background-image: url(/profiles/vp_profile/themes/vp_theme/img/40-desktop/static-social-bg-osaleta.png);
