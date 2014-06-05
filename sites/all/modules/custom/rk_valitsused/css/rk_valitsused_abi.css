@@ -1,0 +1,445 @@
+.sinine {color: #00698c;}
+.must {color: #222222;}
+.punane {color: #bd4932;}
+.kuldne, 
+.static-mainmenu-popup a.kuldne {
+  color: #ffcc00;
+}
+.helehall {color: #efede3;}
+.valge {color: #ffffff;}
+.tumehall {color: #7e7e79;}
+.rasvane {font-weight: bold;}
+
+.vertical-top {vertical-align: top;}
+.right {text-align: right;}
+
+.riigikantselei-menu {}
+
+.about p.esimene {
+  font-size: 1.2em;
+}
+
+.static-mainmenu-popup p.blurb {
+  color: #efede3;
+  font-size: 0.75em;
+}
+
+.riigikantselei-menu.static-mainmenu-popup h3.valge {
+  font-size: 0.9375em; /* 15px; */
+  margin-top: 1.6em;
+}
+
+.riigikantselei-menu.static-mainmenu-popup ul.ilus-bullet,
+ul.ilus-bullet {
+  margin-left: 1em;
+}
+
+.static-mainmenu-popup ul.stenbock-lingid {
+  padding-top: 25px;
+}
+
+.riigikantselei-menu.static-mainmenu-popup ul li {
+  background: none;
+}
+
+.static-mainmenu-popup ul.ilus-bullet li,
+ul.ilus-bullet li,
+.about ul.ilus-bullet li.varasemad {
+  /* list-style-image: url(../img/li_ilus-bullet.png); */
+  list-style: none;
+  /* background: url(../img/li_ilus_bullet.png) no-repeat; */
+}
+
+.static-mainmenu-popup ul.ilus-bullet li,
+ul.ilus-bullet li,
+.about ul.ilus-bullet li.varasemad,
+ul.ilus-bullet.tutvustus li {
+  margin-bottom: 1.6em;
+  padding-left: 4em;
+}
+
+.about ul.ilus-bullet li.varasemad {
+  padding-left: 3em;
+}
+
+ul.ilus-bullet li.euroliit {
+  background: url(../img/li_bullet_euroliit.png) no-repeat;
+}
+ul.ilus-bullet li.nutitelefon {
+  background: url(../img/li_bullet_nutitelefon.png) no-repeat;
+}
+ul.ilus-bullet li.badge {
+  background: url(../img/li_bullet_badge.png) no-repeat;
+}
+ul.ilus-bullet li.pea {
+  background: url(../img/li_bullet_pea.png) no-repeat;
+}
+ul.ilus-bullet li.suurpea {
+  background: url(../img/li_bullet_pea_suur.png) no-repeat;
+}
+ul.ilus-bullet li.envelope {
+  background: url(../img/li_bullet_envelope.png) no-repeat;
+}
+ul.ilus-bullet li.section {
+  background: url(../img/li_bullet_section.png) no-repeat;
+}
+ul.ilus-bullet li.liivakell {
+  background: url(../img/li_bullet_liivakell.png) no-repeat;
+}
+
+.top-margin,
+ul.ilus-bullet.top-margin {
+  margin-top: 2em;
+}
+
+.static-mainmenu-popup ul.ilus-bullet li.suur-link,
+ul.ilus-bullet li.suur-link {
+  height: 3em; /* 2.5em */ 
+}
+
+.static-mainmenu-popup ul.ilus-bullet li ul li,
+ul.ilus-bullet li ul li {
+  list-style: none;
+  margin-bottom: 0;
+  padding: 0.2em 0;  
+  background: none;
+}
+
+.riigikantselei-menu.static-mainmenu-popup ul.widget-menu li {
+  padding-top: 3px;
+}
+
+.riigikantselei-menu.static-mainmenu-popup ul.widget-menu li a,
+.static-mainmenu-popup ul.widget-menu li a.rasvane {
+  color: #ffcc00;
+  background: none;
+  padding-left: 0;
+  font-size: 12px; /* 12px; */
+  font-weight: bold;
+}
+
+.riigikantselei-menu.static-mainmenu-popup ul.widget-menu li a:hover,
+.static-mainmenu-popup ul.widget-menu li a.rasvane:hover {
+  color: #00ccff;
+}
+
+.static-mainmenu-popup a.suurem {
+  font-size: 1.5em;
+  display: block;
+  padding-top: 7px;
+}
+
+.about ul.ilus-bullet li.varasemad a.suurem,
+a.suurem {
+  font-size: 1.2em;
+}
+
+.riigikantselei-menu.static-mainmenu-popup ul.widget-menu li a:after,
+.static-mainmenu-popup ul.widget-menu li a:after,
+.static-mainmenu-popup a.kuldne.suurem:after,
+a.punane.suurem:after {
+  content: " »";
+}
+
+.static-mainmenu-popup ul.ilus-bullet li ul li a {
+  font-weight: normal;
+}
+
+address {
+  line-height: 1.5em;
+}
+
+.table {display: table;}
+.table-row {display: table-row;}
+.table-cell {
+  display: table-cell;
+  vertical-align: top;
+  padding: 1em;
+}
+
+.about p.punane.subhead {
+  font-size: 18px;
+}
+
+.about h2 {
+  font-size: 20px;
+}
+
+.about h2.margin-bottom {
+  margin-bottom: 1em;
+}
+
+.about .table-cell img,
+.about.container-12 .vertical-top img {
+  margin: 0;
+}
+
+.about.container-12 .vertical-top.pilt {
+  text-align: right;
+  box-sizing: border-box;
+  -moz-box-sizing:border-box;
+  padding-left: 50px;
+}
+
+.about .grid-4.vertical-top {
+  box-sizing: border-box;
+  -moz-box-sizing:border-box;
+  padding-right: 1em;
+}
+
+.about .grid-4.vertical-top.last {
+  padding-right: 5.5em;
+}
+
+.about .table-cell.left-col {
+  padding-left: 0;
+}
+
+.about p.about {
+  margin-top: 1em;
+  padding-top: 1em;
+  border-top: dashed 1px #7e7e79;
+}
+
+.about .dashed-bottom {
+  padding-bottom: 1em;
+  border-bottom: dashed 1px #7e7e79;
+}
+
+.paw-separator {
+  background: url(../img/block-separator.png) no-repeat;
+  height: 23px;
+  margin: 3em 0;
+}
+
+.about ul.ilus-bullet {
+  padding-left: 0;
+}
+
+.about .ilus-bullet.kollane-lill li {
+  list-style-image: url(../img/li_bullet_kollane_lill.png);
+}
+
+.about.about-riigikantselei .grid-3.vertical-top {
+  padding-right: 70px;
+}
+
+/* Asutusestruktuur */
+
+.tree, .tree ul{
+  list-style-type: none;
+  margin-left: 0 0 0 3em;
+  padding: 0;
+  position: relative;   
+  overflow:hidden;    
+}
+ 
+.tree li{
+  margin: 0;
+  padding: 0 1em;  
+  position: relative;   
+}
+  
+.tree li::before, .tree li::after {
+  content: '';
+  position: absolute;
+  left: -6px; /* -6px */
+}
+
+.tree li.item-tase-3.item-tase-viimane::before, .tree li.item-tase-3.item-tase-viimane::after {
+  left: -12px; /* -6px */
+}
+ 
+/* horizontal line on inner list items */
+.tree li::before {
+  border-top: 1px solid #999;
+  top: 17px; /* 4px 17px */
+  width: 10px; /* 6px 10px */
+  height: 0;    
+}
+
+.tree li.item-tase-3.item-tase-viimane::before {
+  top: 17px;
+  width: 12px;
+}
+ 
+/* vertical line on list items */   
+.tree li:after{
+  border-left: 1px solid #999;
+  height: 9999px; /* 100%; */
+  width: 0; /* 0 */
+  top: -28px; /* -28px */
+}
+ 
+/* lower line on list items from the first level because they don't have parents */
+.tree > li::after{
+  top: 10px; /* 10px */
+}
+ 
+/* hide line from the last of the first level list items */
+.tree > li:last-child::after{
+  display: none;
+}	
+
+.tree li.item-tase-2.last::after,
+.tree li.item-tase-3.last::after {
+  border-left: 1px solid #ffffff;
+  height: 100%;
+  top: 18px; /* 18px */
+}
+
+.node .field-name-body .tree li.item-tase-1,
+.tree li.item-tase-1,
+.node .field-name-body .tase-2 li.item-tase-2 {
+  padding-left: 4px;
+}
+
+.node .field-name-body .tase-3 {
+  padding-left: 38px;
+}
+
+.node .field-name-body .tase-3.tase-viimane {
+  padding-left: 44px;
+}
+
+.tree li.item-tase-1::after {
+  border-left: 1px solid #999;
+  top: 17px;
+  width: 10px;
+  height: 63px;
+}
+
+ 
+.tree li.item-tase-4::after {
+/*   position: relative; */
+  content: none;
+}
+	
+.struktuur li {list-style: none;width: 95%;}
+.struktuur .tase-1 {width: 100%;}
+
+.struktuur .tase-1 .item-tase-1 a,
+.struktuur .tase-2 .item-tase-2 a,
+.struktuur .tase-3 .item-tase-3 a {
+  display: block;
+  width: 200px;
+  padding: 0.5em 1em;
+}
+
+.struktuur .tase-2 .item-tase-2 a {
+  width: 300px;
+}
+
+.struktuur .tase-3 .item-tase-3 a {
+  width: 160px;
+}
+
+.struktuur .tase-1 .item-tase-1 a {background: url(../img/struktuur-taust-sinine.png) repeat-x;}
+
+.struktuur .tase-2,
+.struktuur .tase-3 {
+  padding-left: 2em;
+}
+
+.struktuur .tase-2 .item-tase-2 a {background: url(../img/struktuur-taust-kollane.png) repeat-x;}
+
+.struktuur .tase-3 {padding-left: 2em;}
+.struktuur .tase-3 .item-tase-3 a {background: url(../img/struktuur-taust-punane.png) repeat-x;}
+
+.struktuur .item-tase-1,
+.struktuur .item-tase-2,
+.struktuur .item-tase-3
+.node .field-name-body .struktuur .item-tase-1,
+.node .field-name-body .struktuur .item-tase-2,
+.node .field-name-body .struktuur .item-tase-3 {
+  margin-top: 2em;
+  padding-left: 0.3em;
+}
+
+.struktuur .item-tase-3.item-tase-viimane, 
+.node .field-name-body .struktuur .item-tase-3.item-tase-viimane {
+  padding-left: 1em;  
+}
+
+.struktuur .item-tase-1 a,
+.struktuur .item-tase-1 a:visited,
+.struktuur .item-tase-2 a,
+.struktuur .item-tase-2 a:visited,
+.struktuur .item-tase-3 a,
+.struktuur .item-tase-3 a:visited {
+  color: #ffffff;
+}
+
+.struktuur .tase-4 {
+  display: none;
+  position: relative;
+  top: -50px;
+  left: 170px;
+  width: 580px;
+
+}
+
+.struktuur ul.tase-4 li.item-tase-4,
+.struktuur ul.tase-3 li.item-tase-viimane,
+.struktuur ul.tase-4 li.item-tase-viimane {
+  background: #eff1ec;
+  padding: 1em;
+  width: auto;
+  height: auto;
+}
+
+.tree li.item-tase-4::before {
+  border-top: 1px solid #cccccc;
+  top: 20px; /* 44px */
+  width: 12px; /* 22px */
+  left: -12px; /* -22px */
+}
+
+.struktuur .item-tase-4 ul.ilus-bullet li a,
+.struktuur .item-tase-viimane ul.ilus-bullet li a {
+  background: none;
+  color: #bd4932;
+  font-size: 1.4em;
+  width: auto;
+}
+
+.struktuur li a::after, 
+.struktuur .item-tase-4 ul.ilus-bullet li a::after {
+  content: ' »';
+}
+
+.struktuur .item-tase-4 ul.ilus-bullet li::before,
+.struktuur .item-tase-4 ul.ilus-bullet li::after,
+.struktuur .item-tase-viimane ul.ilus-bullet li::before,
+.struktuur .item-tase-viimane ul.ilus-bullet li::after {
+  content: none;
+}
+
+.struktuur .tase-4.tase-viimane {
+  display: none;
+  position: relative;
+  top: -50px; /* -59px */
+  left: 170px; /* 179px */
+  width: 580px;
+}
+
+.struktuur .tase-viimane {
+  left: 296px;
+  top: -48px; /* -60px */
+  width: 440px;
+}
+
+.struktuur .tase-3.tase-viimane {
+  top: -62px;
+}
+
+/* horizontal line on inner list items */
+.tree li.item-tase-3.tase-viimane::before {
+  width: 7px;
+}
+
+.tree .tase-viimane li:after{
+  border-left: none;
+}
+
+

@@ -1,0 +1,253 @@
+<?php 
+
+$view = new view();
+$view->name = 'minister_info';
+$view->description = 'Individual minister';
+$view->tag = 'default';
+$view->base_table = 'rk_minister';
+$view->human_name = 'minister_info';
+$view->core = 7;
+$view->api_version = '3.0';
+$view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+/* Display: Master */
+$handler = $view->new_display('default', 'Master', 'default');
+$handler->display->display_options['use_more_always'] = FALSE;
+$handler->display->display_options['use_more_text'] = 'veel';
+$handler->display->display_options['access']['type'] = 'none';
+$handler->display->display_options['cache']['type'] = 'none';
+$handler->display->display_options['query']['type'] = 'views_query';
+$handler->display->display_options['exposed_form']['type'] = 'basic';
+$handler->display->display_options['exposed_form']['options']['submit_button'] = 'Rakenda';
+$handler->display->display_options['exposed_form']['options']['reset_button_label'] = 'Lähtesta';
+$handler->display->display_options['exposed_form']['options']['exposed_sorts_label'] = 'Sorteerimise alus';
+$handler->display->display_options['exposed_form']['options']['sort_asc_label'] = 'Kasvav';
+$handler->display->display_options['exposed_form']['options']['sort_desc_label'] = 'Kahanev';
+$handler->display->display_options['pager']['type'] = 'some';
+$handler->display->display_options['pager']['options']['items_per_page'] = '0';
+$handler->display->display_options['pager']['options']['offset'] = '0';
+$handler->display->display_options['style_plugin'] = 'default';
+$handler->display->display_options['row_plugin'] = 'fields';
+/* Päis: Globaalne: Tekstiala */
+$handler->display->display_options['header']['area']['id'] = 'area';
+$handler->display->display_options['header']['area']['table'] = 'views';
+$handler->display->display_options['header']['area']['field'] = 'area';
+$handler->display->display_options['header']['area']['content'] = '<img src="/sites/all/modules/custom/rk_valitsused/images/minister/!1.jpg" width="220" alt="[last_name]" />';
+$handler->display->display_options['header']['area']['format'] = 'full_html';
+$handler->display->display_options['header']['area']['tokenize'] = TRUE;
+/* Väli: Riigikantselei: Eesnimi */
+$handler->display->display_options['fields']['first_name']['id'] = 'first_name';
+$handler->display->display_options['fields']['first_name']['table'] = 'rk_minister';
+$handler->display->display_options['fields']['first_name']['field'] = 'first_name';
+$handler->display->display_options['fields']['first_name']['exclude'] = TRUE;
+/* Väli: Riigikantselei: Perenimi */
+$handler->display->display_options['fields']['last_name']['id'] = 'last_name';
+$handler->display->display_options['fields']['last_name']['table'] = 'rk_minister';
+$handler->display->display_options['fields']['last_name']['field'] = 'last_name';
+$handler->display->display_options['fields']['last_name']['label'] = '';
+$handler->display->display_options['fields']['last_name']['exclude'] = TRUE;
+$handler->display->display_options['fields']['last_name']['alter']['text'] = '[first_name] [last_name]';
+$handler->display->display_options['fields']['last_name']['element_label_colon'] = FALSE;
+/* Väli: Riigikantselei: Pilt */
+$handler->display->display_options['fields']['image_file_name']['id'] = 'image_file_name';
+$handler->display->display_options['fields']['image_file_name']['table'] = 'rk_minister';
+$handler->display->display_options['fields']['image_file_name']['field'] = 'image_file_name';
+$handler->display->display_options['fields']['image_file_name']['label'] = '';
+$handler->display->display_options['fields']['image_file_name']['exclude'] = TRUE;
+$handler->display->display_options['fields']['image_file_name']['element_label_colon'] = FALSE;
+/* Väli: Riigikantselei: Ministri ID */
+$handler->display->display_options['fields']['id']['id'] = 'id';
+$handler->display->display_options['fields']['id']['table'] = 'rk_minister';
+$handler->display->display_options['fields']['id']['field'] = 'id';
+$handler->display->display_options['fields']['id']['label'] = '';
+$handler->display->display_options['fields']['id']['exclude'] = TRUE;
+$handler->display->display_options['fields']['id']['alter']['text'] = '<div class="varasemad-wrapper minister-wrapper">
+<div class="grid-6">
+<h2 class="varasemad-title minister-title">[first_name] [last_name]</h2>
+<p>[description]</p>
+</div>
+<div class="grid-4">
+<img src="/sites/all/modules/custom/rk_valitsused/images/minister/[image_file_name]" width="190" height="180" alt="[first_name] [last_name]" />
+</div>
+</div>
+';
+$handler->display->display_options['fields']['id']['element_label_colon'] = FALSE;
+$handler->display->display_options['fields']['id']['separator'] = '';
+/* Väli: Riigikantselei: Tekst */
+$handler->display->display_options['fields']['description']['id'] = 'description';
+$handler->display->display_options['fields']['description']['table'] = 'rk_minister';
+$handler->display->display_options['fields']['description']['field'] = 'description';
+$handler->display->display_options['fields']['description']['label'] = '';
+$handler->display->display_options['fields']['description']['alter']['text'] = '<div class="minister-wrapper container-12">
+<div class="grid-6">
+<h2 class="minister-title">[first_name] [last_name]</h2>
+<p>[description]</p>
+</div>
+<div class="grid-6">
+<img src="/sites/all/modules/custom/rk_valitsused/images/minister/[image_file_name]" width="190" height="180" alt="[first_name] [last_name]" />
+</div>
+</div>
+';
+$handler->display->display_options['fields']['description']['element_label_colon'] = FALSE;
+/* Kontekstifilter: Riigikantselei: Ministri ID */
+$handler->display->display_options['arguments']['id']['id'] = 'id';
+$handler->display->display_options['arguments']['id']['table'] = 'rk_minister';
+$handler->display->display_options['arguments']['id']['field'] = 'id';
+$handler->display->display_options['arguments']['id']['default_action'] = 'empty';
+$handler->display->display_options['arguments']['id']['exception']['title'] = 'Kõik';
+$handler->display->display_options['arguments']['id']['default_argument_type'] = 'fixed';
+$handler->display->display_options['arguments']['id']['summary']['number_of_records'] = '0';
+$handler->display->display_options['arguments']['id']['summary']['format'] = 'default_summary';
+$handler->display->display_options['arguments']['id']['summary_options']['items_per_page'] = '25';
+
+/* Display: Page */
+$handler = $view->new_display('page', 'Page', 'page');
+$handler->display->display_options['defaults']['title'] = FALSE;
+$handler->display->display_options['title'] = 'Minister';
+$handler->display->display_options['defaults']['header'] = FALSE;
+$handler->display->display_options['defaults']['fields'] = FALSE;
+/* Väli: Riigikantselei: FID of minister pic */
+$handler->display->display_options['fields']['minister_img_fid']['id'] = 'minister_img_fid';
+$handler->display->display_options['fields']['minister_img_fid']['table'] = 'rk_minister';
+$handler->display->display_options['fields']['minister_img_fid']['field'] = 'minister_img_fid';
+$handler->display->display_options['fields']['minister_img_fid']['label'] = '';
+$handler->display->display_options['fields']['minister_img_fid']['exclude'] = TRUE;
+$handler->display->display_options['fields']['minister_img_fid']['element_label_colon'] = FALSE;
+$handler->display->display_options['fields']['minister_img_fid']['separator'] = '';
+/* Väli: Riigikantselei: Eesnimi */
+$handler->display->display_options['fields']['first_name']['id'] = 'first_name';
+$handler->display->display_options['fields']['first_name']['table'] = 'rk_minister';
+$handler->display->display_options['fields']['first_name']['field'] = 'first_name';
+$handler->display->display_options['fields']['first_name']['exclude'] = TRUE;
+/* Väli: Riigikantselei: Perenimi */
+$handler->display->display_options['fields']['last_name']['id'] = 'last_name';
+$handler->display->display_options['fields']['last_name']['table'] = 'rk_minister';
+$handler->display->display_options['fields']['last_name']['field'] = 'last_name';
+$handler->display->display_options['fields']['last_name']['label'] = '';
+$handler->display->display_options['fields']['last_name']['exclude'] = TRUE;
+$handler->display->display_options['fields']['last_name']['alter']['text'] = '[first_name] [last_name]';
+$handler->display->display_options['fields']['last_name']['element_label_colon'] = FALSE;
+/* Väli: Riigikantselei: Pilt */
+$handler->display->display_options['fields']['image_file_name']['id'] = 'image_file_name';
+$handler->display->display_options['fields']['image_file_name']['table'] = 'rk_minister';
+$handler->display->display_options['fields']['image_file_name']['field'] = 'image_file_name';
+$handler->display->display_options['fields']['image_file_name']['label'] = '';
+$handler->display->display_options['fields']['image_file_name']['exclude'] = TRUE;
+$handler->display->display_options['fields']['image_file_name']['element_label_colon'] = FALSE;
+/* Väli: Riigikantselei: Ministri ID */
+$handler->display->display_options['fields']['id']['id'] = 'id';
+$handler->display->display_options['fields']['id']['table'] = 'rk_minister';
+$handler->display->display_options['fields']['id']['field'] = 'id';
+$handler->display->display_options['fields']['id']['label'] = '';
+$handler->display->display_options['fields']['id']['exclude'] = TRUE;
+$handler->display->display_options['fields']['id']['alter']['text'] = '<div class="varasemad-wrapper minister-wrapper">
+<div class="grid-6">
+<h2 class="varasemad-title minister-title">[first_name] [last_name]</h2>
+<p>[description]</p>
+</div>
+<div class="grid-4">
+<img src="/sites/all/modules/custom/rk_valitsused/images/minister/[image_file_name]" width="190" height="180" alt="[first_name] [last_name]" />
+</div>
+</div>
+';
+$handler->display->display_options['fields']['id']['element_label_colon'] = FALSE;
+$handler->display->display_options['fields']['id']['separator'] = '';
+/* Väli: Riigikantselei: Tekst */
+$handler->display->display_options['fields']['description']['id'] = 'description';
+$handler->display->display_options['fields']['description']['table'] = 'rk_minister';
+$handler->display->display_options['fields']['description']['field'] = 'description';
+$handler->display->display_options['fields']['description']['label'] = '';
+$handler->display->display_options['fields']['description']['alter']['text'] = '<div class="minister-wrapper container-12">
+<div class="grid-6">
+<h2 class="minister-title">[first_name] [last_name]</h2>
+<p>[description]</p>
+</div>
+<div class="grid-6">
+<img src="/sites/all/modules/custom/rk_valitsused/images/minister/[image_file_name]" width="190" height="180" alt="[first_name] [last_name]" />
+</div>
+</div>
+';
+$handler->display->display_options['fields']['description']['element_label_colon'] = FALSE;
+$handler->display->display_options['defaults']['arguments'] = FALSE;
+/* Kontekstifilter: Riigikantselei: Ministri ID */
+$handler->display->display_options['arguments']['id']['id'] = 'id';
+$handler->display->display_options['arguments']['id']['table'] = 'rk_minister';
+$handler->display->display_options['arguments']['id']['field'] = 'id';
+$handler->display->display_options['arguments']['id']['default_action'] = 'empty';
+$handler->display->display_options['arguments']['id']['exception']['title'] = 'Kõik';
+$handler->display->display_options['arguments']['id']['default_argument_type'] = 'fixed';
+$handler->display->display_options['arguments']['id']['summary']['number_of_records'] = '0';
+$handler->display->display_options['arguments']['id']['summary']['format'] = 'default_summary';
+$handler->display->display_options['arguments']['id']['summary_options']['items_per_page'] = '25';
+$handler->display->display_options['path'] = 'valitsus/varasemad-valitsused/ministrid/id/%';
+
+/* Display: Attachment */
+$handler = $view->new_display('attachment', 'Attachment', 'attachment_1');
+$handler->display->display_options['pager']['type'] = 'some';
+$handler->display->display_options['defaults']['style_plugin'] = FALSE;
+$handler->display->display_options['style_plugin'] = 'table';
+$handler->display->display_options['defaults']['style_options'] = FALSE;
+$handler->display->display_options['defaults']['row_plugin'] = FALSE;
+$handler->display->display_options['defaults']['row_options'] = FALSE;
+$handler->display->display_options['defaults']['header'] = FALSE;
+$handler->display->display_options['defaults']['footer'] = FALSE;
+$handler->display->display_options['defaults']['relationships'] = FALSE;
+/* Suhte: Riigikantselei: rk_minister ja rk_minister_government */
+$handler->display->display_options['relationships']['id']['id'] = 'id';
+$handler->display->display_options['relationships']['id']['table'] = 'rk_minister';
+$handler->display->display_options['relationships']['id']['field'] = 'id';
+$handler->display->display_options['defaults']['fields'] = FALSE;
+/* Väli: Riigikantselei: Ministri ID */
+$handler->display->display_options['fields']['id']['id'] = 'id';
+$handler->display->display_options['fields']['id']['table'] = 'rk_minister';
+$handler->display->display_options['fields']['id']['field'] = 'id';
+$handler->display->display_options['fields']['id']['exclude'] = TRUE;
+$handler->display->display_options['fields']['id']['separator'] = '';
+/* Väli: Riigikantselei: Minister's Display Title */
+$handler->display->display_options['fields']['display_title']['id'] = 'display_title';
+$handler->display->display_options['fields']['display_title']['table'] = 'rk_minister_government';
+$handler->display->display_options['fields']['display_title']['field'] = 'display_title';
+$handler->display->display_options['fields']['display_title']['relationship'] = 'id';
+$handler->display->display_options['fields']['display_title']['label'] = '';
+$handler->display->display_options['fields']['display_title']['exclude'] = TRUE;
+$handler->display->display_options['fields']['display_title']['element_label_colon'] = FALSE;
+/* Väli: Riigikantselei: Algusaeg */
+$handler->display->display_options['fields']['ruled_start_date']['id'] = 'ruled_start_date';
+$handler->display->display_options['fields']['ruled_start_date']['table'] = 'rk_minister_government';
+$handler->display->display_options['fields']['ruled_start_date']['field'] = 'ruled_start_date';
+$handler->display->display_options['fields']['ruled_start_date']['relationship'] = 'id';
+$handler->display->display_options['fields']['ruled_start_date']['exclude'] = TRUE;
+/* Väli: Riigikantselei: Ministri ülesanne */
+$handler->display->display_options['fields']['position_type_code']['id'] = 'position_type_code';
+$handler->display->display_options['fields']['position_type_code']['table'] = 'rk_minister_government';
+$handler->display->display_options['fields']['position_type_code']['field'] = 'position_type_code';
+$handler->display->display_options['fields']['position_type_code']['relationship'] = 'id';
+$handler->display->display_options['fields']['position_type_code']['element_label_colon'] = FALSE;
+/* Väli: Riigikantselei: Lõppaeg */
+$handler->display->display_options['fields']['ruled_end_date']['id'] = 'ruled_end_date';
+$handler->display->display_options['fields']['ruled_end_date']['table'] = 'rk_minister_government';
+$handler->display->display_options['fields']['ruled_end_date']['field'] = 'ruled_end_date';
+$handler->display->display_options['fields']['ruled_end_date']['relationship'] = 'id';
+$handler->display->display_options['fields']['ruled_end_date']['label'] = 'Time';
+$handler->display->display_options['fields']['ruled_end_date']['alter']['text'] = '[ruled_start_date] - [ruled_end_date]';
+$handler->display->display_options['defaults']['sorts'] = FALSE;
+/* Lühike kriteerium: Riigikantselei: Algusaeg */
+$handler->display->display_options['sorts']['ruled_start_date']['id'] = 'ruled_start_date';
+$handler->display->display_options['sorts']['ruled_start_date']['table'] = 'rk_minister_government';
+$handler->display->display_options['sorts']['ruled_start_date']['field'] = 'ruled_start_date';
+$handler->display->display_options['sorts']['ruled_start_date']['relationship'] = 'id';
+$handler->display->display_options['sorts']['ruled_start_date']['order'] = 'DESC';
+$handler->display->display_options['defaults']['filter_groups'] = FALSE;
+$handler->display->display_options['defaults']['filters'] = FALSE;
+/* Filtri kriteeriumid: Riigikantselei: Active Minister Service Period */
+$handler->display->display_options['filters']['is_active']['id'] = 'is_active';
+$handler->display->display_options['filters']['is_active']['table'] = 'rk_minister_government';
+$handler->display->display_options['filters']['is_active']['field'] = 'is_active';
+$handler->display->display_options['filters']['is_active']['relationship'] = 'id';
+$handler->display->display_options['filters']['is_active']['value']['value'] = '1';
+$handler->display->display_options['displays'] = array(
+  'page' => 'page',
+  'default' => 0,
+);
+$handler->display->display_options['attachment_position'] = 'after';
+

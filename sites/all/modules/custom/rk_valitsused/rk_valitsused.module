@@ -1,0 +1,3513 @@
+<?php
+
+/**
+ * @file
+ * Administration and listing of Republic of Estonia's past and present ruling governments.
+ * Märt Matsoo. mart@matsoo.com.
+ */
+
+global $base_path;
+global $language;
+define('VALITSUS_URL', $base_path . $language->language . '/valitsus/varasemad-valitsused/id');
+define('MINISTER_URL', $base_path . $language->language . '/valitsus/varasemad-valitsused/ministrid/id');
+define('TODAY_DOT_DOT_DOT', '...');
+define('MINISTER_IMG_FOLDER_NAME', 'minister');
+define('VALITSUS_IMG_FOLDER_NAME', 'valitsus');
+define('PIC_WIDTH_VALITSUS', '415');
+define('PIC_WIDTH_MINISTER', '190');
+define('PIC_HEIGHT_VALITSUS', '165');
+define('PIC_HEIGHT_MINISTER', '180');
+
+/**
+ * Implementation of hook_init
+ */
+function rk_valitsused_init() {
+
+  // Load css.
+  drupal_add_css(drupal_get_path('module', 'rk_valitsused') . '/css/rk_valitsused.css');
+  // Koht, kuhu lisade custom css reeglid teisteks otstarbeteks. (nt rk struktuuri lehekülg)
+  drupal_add_css(drupal_get_path('module', 'rk_valitsused') . '/css/rk_valitsused_abi.css');
+
+  // Load js.
+  drupal_add_js(drupal_get_path('module', 'rk_valitsused') . '/js/rk_valitsused.js', array('weight' => 10));
+
+  //drupal_add_js('jQuery(document).ready(function () { var S5 = "do this and do that";//alert(S5); });', array('type' => 'inline', 'scope' => 'header'));
+
+  // Only build breadcrumb for varasemad valitsused pages.
+  if (arg(0) === 'valitsus' && arg(1) === 'varasemad-valitsused') {
+    $breadcrumb = array();
+    $breadcrumb[] = l(t('Home'), '<front>');
+    // $breadcrumb[] = l(t('Ministeerium ja kontaktid'), 'node/220');
+    $breadcrumb[] = l(t('Former Governments'), 'valitsus/varasemad-valitsused');
+    //$breadcrumb[] = drupal_get_title();
+    drupal_set_breadcrumb($breadcrumb);
+  }
+  
+
+}
+
+
+/**
+ * Implementation of hook_permission().
+ */
+function rk_valitsused_permission() {
+
+  $perms = array(
+    'admin rk valitsus' => array(
+      'title' => t('Administer Varasemad Valitsused'),
+      'description' => t('Full administrator access for varasemad valitsused.'),
+      'restrict access' => FALSE,
+    ),
+  );
+
+  return $perms;
+
+}
+
+
+/**
+ * Implements hook_breadcrumb.
+ */
+function rk_valitsused_menu_breadcrumb_alter(&$active_trail, $item) {
+}
+
+
+/**
+ * Implementation of hook_menu().
+ */
+function rk_valitsused_menu() {
+
+  $items = array();
+
+  $items['admin/config/rk'] = array(
+    'title' => 'Varasemad valitsused',
+    'access arguments' => array('admin rk valitsus'),
+    'position' => 'right',
+    'weight' => 69,
+    'page callback' => 'system_admin_menu_block_page',
+    'file' => 'system.admin.inc',
+    'file path' => drupal_get_path('module', 'system'),
+  );
+
+  $items['admin/config/rk/settings'] = array(
+    'title' => 'Varasemad valitsused settings',
+    'description' => t('General settings form'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('rk_valitsused_settings'),
+    'access arguments' => array('admin rk valitsus'),
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 10,
+  );
+
+  $items['admin/config/rk/valitsused'] = array(
+    'title' => 'Valitsuste toimetamine',
+    'description' => t('Valitsuste ametiajad, kirjeldused jms.'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('rk_valitsused_valitsused_vali'),
+    'access arguments' => array('admin rk valitsus'),
+    'file' => 'rk_valitsused.edit.inc',
+    'file path' => drupal_get_path('module', 'rk_valitsused') . '/includes',
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 50,
+  );
+
+  $items['admin/config/rk/ministrid'] = array(
+    'title' => 'Ministrite toimetamine',
+    'description' => t('Ministrite ametiajad, kirjeldused jms.'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('rk_valitsused_ministrid_vali'),
+    'access arguments' => array('admin rk valitsus'),
+    'file' => 'rk_valitsused.edit.inc',
+    'file path' => drupal_get_path('module', 'rk_valitsused') . '/includes',
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 100,
+  );
+
+  $items['admin/config/rk/insert/minister'] = array(
+    'title' => 'Lisa uus minister',
+    'description' => t('Ministri nimi, kirjeldus jms.'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('rk_valitsused_insert'),
+    'access arguments' => array('admin rk valitsus'),
+    'file' => 'rk_valitsused.edit.inc',
+    'file path' => drupal_get_path('module', 'rk_valitsused') . '/includes',
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 110,
+  );
+
+  $items['admin/config/rk/insert/valitsus'] = array(
+    'title' => 'Lisa uus valitsus',
+    'description' => t('Valitsuse ametiaeg, kirjeldus jms.'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('rk_valitsused_insert'),
+    'access arguments' => array('admin rk valitsus'),
+    'file' => 'rk_valitsused.edit.inc',
+    'file path' => drupal_get_path('module', 'rk_valitsused') . '/includes',
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 120,
+  );
+
+  $items['admin/config/rk/insert/mg'] = array(
+    'title' => 'Lisa ministri ametiaeg',
+    'description' => t('Ministri konkreetne ametiaeg, start, lõpp jms.'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('rk_valitsused_insert'),
+    'access arguments' => array('admin rk valitsus'),
+    'file' => 'rk_valitsused.edit.inc',
+    'file path' => drupal_get_path('module', 'rk_valitsused') . '/includes',
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 120,
+  );
+
+  $items['admin/config/rk/valitsused/edit'] = array(
+    'title' => 'Valitsuse toimetamine',
+    'description' => '',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('rk_valitsused_valitsused_edit'),
+    'access arguments' => array('admin rk valitsus'),
+    'file' => 'rk_valitsused.edit.inc',
+    'file path' => drupal_get_path('module', 'rk_valitsused') . '/includes',
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['admin/config/rk/ministrid/edit'] = array(
+    'title' => 'Ministri toimetamine',
+    'description' => '',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('rk_valitsused_ministrid_edit'),
+    'access arguments' => array('admin rk valitsus'),
+    'file' => 'rk_valitsused.edit.inc',
+    'file path' => drupal_get_path('module', 'rk_valitsused') . '/includes',
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['valitsus/varasemad'] = array(
+    'title' => 'Former Governments',
+    'description' => t('List of Estonian Republic governments'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('rk_valitsused_valitsused'), // Ajax.
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['valitsus/varasemad-valitsused'] = array(
+    'title' => 'Former Governments',
+    'description' => t('List of Estonian Republic governments using GET'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('rk_valitsused_get'), // Get.
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['valitsus/varasemad-valitsused/huvitav-teada'] = array(
+    'title' => 'Good to Know',
+    'description' => t('Varasemad valitsused statistics'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('rk_valitsused_statistika'),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['valitsus/ministrid'] = array(
+    'title' => 'Ministers',
+    'description' => t('Searchable minister list'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('rk_valitsused_ministrid'), // Ajax.
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['valitsus/varasemad-valitsused/ministrid'] = array(
+    'title' => 'Ministers',
+    'description' => t('Search Estonian Ministers'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('rk_valitsused_ministrid_get'), // Get.
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+
+}
+
+
+/**
+ * Implements hook_block_info().
+ */
+function rk_valitsused_block_info() {
+  $blocks['rk_valitsused_menu'] = array(
+    'info' => t('Varasemad valitsused menu'),
+    'status' => TRUE, // Apparently setting region won't work unless status set to 1.
+    'region' => 'Top',
+    'visibility' => BLOCK_VISIBILITY_LISTED,
+    'pages' => "valitsus/varasemad-valitsused/ministrid/id/*\nvalitsus/varasemad-valitsused/id/*",
+  );
+
+  return $blocks;
+}
+
+
+/**
+ * Implements hook_block_view().
+ */
+function rk_valitsused_block_view($delta = '') {
+
+  $block = array();
+
+  switch ($delta) {
+    case 'rk_valitsused_menu':
+      $block['subject'] = '<none>';
+      $block['content'] = '<div class="block block-menu-block block-menu-l3 block-5 block-menu-block-5 even block-without-title" id="block-menu-block-5" style="width: 940px; height: 20px;">
+  <div class="block-inner clearfix">
+    <div class="content clearfix">
+      <div class="menu-block-wrapper menu-block-5 menu-name-main-menu parent-mlid-0 menu-level-3">
+        <ul class="menu" style="width: 316px; left: 0px;">
+          <li class="first leaf menu-mlid-6301" id="menu-mlid-6301"><a href="/et/valitsus/varasemad-valitsused">Varasemad valitsused</a></li>
+          <li class="leaf has-children menu-mlid-6299" id="menu-mlid-6299"><a href="/et/valitsus/varasemad-valitsused/ministrid">Ministrid</a></li>
+          <li class="last leaf menu-mlid-6300" id="menu-mlid-6300"><a href="/et/valitsus/varasemad-valitsused/huvitav-teada">Huvitav teada</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="prev" id="menu-level-3-prev" style="display: none;">&nbsp;</div>
+  <div class="next" id="menu-level-3-next" style="display: none;">&nbsp;</div>
+</div>';
+      break;
+  }
+
+  return $block;
+}
+
+
+/**
+ * Ministrite lehekülg kasutades GET.
+ */
+function rk_valitsused_ministrid_get($form, &$form_state) {
+
+  $form['#attributes'] = array('class' => array('varasemad-form', 'valitsus-get', 'ministrid-get'));
+
+  $form['#rebuild'] = TRUE;
+  $form['#attributes'] = array('class' => array('varasemad-form', 'ministrite-otsing'));
+
+  $form['h1-intro'] = array(
+    '#type' => 'markup',
+    '#markup' => '<p class="h1-intro">' . t(variable_get('rk_valitsused_varasemad_tekst', '')) . '</p>',
+  );
+
+  $form['vasak'] = array(
+    '#type' => 'fieldset',
+    '#title' => '',
+  );
+
+  $form['vasak']['markup'] = array(
+    '#markup' => '<div id="sissejuhatus" class="sissejuhatus"><h2 class="varasem">' . t('Search Ministers') . '</h2><p>' . t(variable_get('rk_valitsused_ministrid_sissejuhatav_tekst', '')) . '</p></div>',
+  );
+
+  $form['grupp'] = array(
+    '#type' => 'fieldset',
+    '#title' => '',
+  );
+
+  $value = (isset($_GET['NIMI'])) ? $_GET['NIMI'] : '';
+  $form['grupp']['nimi'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Search Minister by Name'), // Leia minister nime järgi:
+    '#default_value' => $value,
+    '#size' => 34,
+    '#description' => '',
+  );
+
+  $form['grupp']['periood'] = array(
+    '#type' => 'checkboxes',
+    '#title' => '',
+	'#options' => _rk_valitsused_periood_linnukesed(),
+    '#attributes' => array('class' => array('varasemad')), // 'checked' => TRUE
+    '#default_value' => array($_GET['FIRST_REPUBLIC'], $_GET['EXILE_GOVERNMENTS'], $_GET['SECOND_REPUBLIC']),
+    '#description' => '',
+  );
+
+  $value = (isset($_GET['AMETIKOHAD'])) ? $_GET['AMETIKOHAD'] : '';
+  $options = _rk_valitsused_ametikohad();
+  // Lisame algusesse "Kõik ametikohad".
+  $esimene = array('all' => t('All Ministers')); // Kõik ametikohad
+  $options = array_merge($esimene, $options);
+  $form['grupp']['ametikohad'] = array(
+    '#type' => 'select',
+    '#title' => '', //t('Minister'),
+	'#options' => $options,
+    '#default_value' => $value,
+    '#description' => '',
+  );
+
+  $value = (isset($_GET['SUGU'])) ? $_GET['SUGU'] : '';
+  $form['grupp']['sugu'] = array(
+    '#type' => 'select',
+    '#title' => '', //t('Gender'),
+	'#options' => array('all' => t('Both Genders'), 'SEX_TYPE_MALE' => t('Male'), 'SEX_TYPE_FEMALE' => t('Female')), // Kõik ministrid, mees, naine
+    '#default_value' => $value,
+    '#description' => '',
+  );
+
+  $sortby = (isset($_GET['SORTBY'])) ? $_GET['SORTBY'] : 'DEFAULT';
+  $form['SORTBY'] = array(
+    '#type' => 'hidden',
+    '#value' => $sortby,
+  );
+
+  $order = (isset($_GET['ORDER'])) ? $_GET['ORDER'] : 'ASC';
+  $form['ORDER'] = array(
+    '#type' => 'hidden',
+    '#value' => $order,
+  );
+
+  $form['grupp']['submit'] = array(
+    '#prefix' => '<div class="submit-wrapper">',
+    '#suffix' => '</div>',
+    '#type' => 'submit',
+    '#value' => t('Filter'),
+  );
+
+  $value = (!empty($form_state['values']['result_ministrid'])) ? $form_state['values']['result_ministrid'] : _rk_valitsused_ministrid_get(); // Vaikimisi ei kuva midagi.
+  $form['result_ministrid'] = array(
+    '#type' => 'markup',
+    '#prefix' => '<div id="query_result_ministrid" class="result">',
+    '#suffix' => '</div>',
+    '#markup' => $value,
+  );
+
+  return $form;
+
+}
+
+
+/**
+ * Submit funktsioon.
+ * Lihtsalt laeb leht uuesti GET muutujatega.
+ */
+function rk_valitsused_ministrid_get_submit($form, &$form_state) {
+  drupal_goto('valitsus/varasemad-valitsused/ministrid', $options = 
+    array('query' => 
+      array(
+        'FIRST_REPUBLIC' => $form_state['values']['periood']['FIRST_REPUBLIC'], 
+        'EXILE_GOVERNMENTS' => $form_state['values']['periood']['EXILE_GOVERNMENTS'], 
+        'SECOND_REPUBLIC' => $form_state['values']['periood']['SECOND_REPUBLIC'], 
+        'NIMI' => $form_state['values']['nimi'],
+        'AMETIKOHAD' => $form_state['values']['ametikohad'],
+        'SUGU' => $form_state['values']['sugu'],
+        'SORTBY' => $form_state['values']['SORTBY'], 
+        'ORDER' => $form_state['values']['ORDER'],
+      )
+    )
+  );
+}
+
+
+/**
+ * Ehita ministrite loetelu lähtudes GET muutujast.
+ * Võimaldab URL copy/paste.
+ */
+function _rk_valitsused_ministrid_get() {
+
+  // If $_GET only has standard drupal path parameter ("q"), then return nothing.
+  if (count($_GET) == 1 && isset($_GET['q'])) {
+    // return '<h2>' . t('Use filters to search for ministers.') . '</h2>';
+    return views_embed_view('ministrid', 'block_1'); // page block_1
+  }
+
+  // Täida array valitud perioodidega.
+  $millised_valitsused = _rk_valitsused_millised_valitsused();
+
+  $nimi = $_GET['NIMI'];
+  $ametikoht = $_GET['AMETIKOHAD'];
+  $sugu = $_GET['SUGU'];
+
+  $query = db_select('rk_government', 'g');
+  $query->join('rk_minister_government', 'mg', 'g.id = mg.government_id');
+  $query->join('rk_minister', 'm', 'mg.minister_id = m.id');
+
+  $query
+    ->fields('g', array('government_number'))
+    ->fields('m', array('first_name', 'last_name', 'person_sex_type_code'))
+    ->fields('mg', array('ruled_start_date', 'ruled_end_date', 'position_type_code', 'government_id', 'minister_id', 'display_title', 'display_indiv_name'));
+
+  $query->addExpression("CONCAT(m.first_name,  ' ', m.last_name)", 'name');
+  $query->addExpression('DATEDIFF(IF(mg.ruled_end_date IS NULL, CURDATE(), mg.ruled_end_date), mg.ruled_start_date) + 1', 'calculated_days'); // Lisasin +1 kuna "inimarusaamine" päevadest ei ole matemaatiliselt korrektne.
+
+  if ($ametikoht !== 'all'):
+    $arrOptions = _rk_valitsused_amet_options($ametikoht);
+    $query->condition('mg.position_type_code', $arrOptions, 'IN');
+  endif;
+
+  if ($sugu !== 'all'):
+    $query->condition('m.person_sex_type_code', $sugu, '=');
+  endif;
+
+  if (trim($nimi) !== ''):
+    $query->where("(first_name LIKE :first_name OR last_name LIKE :last_name OR CONCAT(first_name, ' ', last_name) LIKE :nimi)", array(':first_name' => '%' . trim($nimi) . '%', ':last_name' => '%' . trim($nimi) . '%', ':nimi'=> '%' . trim($nimi) . '%'));
+  endif;
+
+  // Kui kõik linnukesed tühjad, siis näita kõik.
+  if (count($millised_valitsused) !== 0) {
+    $query->condition('g.rule_time_type_code', $millised_valitsused, 'IN');
+  }
+
+  // Order by ja sort order.
+  $accepted_sortby_values = array('PERIOD' => 'mg.ruled_start_date', 'DURATION' => 'calculated_days', 'LNAME' => 'm.last_name', 'DEFAULT' => 'm.last_name'); // mg.ruled_start_date
+  $accepted_ordering_values = array('DESC' => 'DESC', 'ASC' => 'ASC');
+  if (isset($_GET['SORTBY']) 
+      && isset($_GET['ORDER'])
+      && array_key_exists($_GET['SORTBY'], $accepted_sortby_values) 
+      && array_key_exists($_GET['ORDER'], $accepted_ordering_values)) {
+
+    $query->orderBy($accepted_sortby_values[$_GET['SORTBY']], $_GET['ORDER']);
+    //$query->orderBy('calculated_days', 'DESC');
+  }
+  else {
+    // $query->orderBy('mg.ruled_start_date', 'DESC');
+    $query->orderBy('m.last_name');
+  }
+
+
+  $result = $query->execute();
+
+  if ($result->rowCount() > 0) {
+
+    // Ehita html.
+    $pealkiri = ($ametikoht !== 'all') ? _rk_valitsused_translate_amet($ametikoht) : t('Minister');
+    $strOutput = theme('table_search_minister', array('pealkiri' => $pealkiri));
+
+    $counter = 0;
+    foreach($result as $record) {
+      $even_odd = ($counter % 2) ? 'even' : 'odd';
+      $strOutput .= theme('table_row_search_minister_object', array('muutujad' => $record, 'even_odd' => $even_odd));
+      $counter++;
+    }
+
+    $strOutput .= theme('table_end_search_minister', array());
+
+  }
+  else {
+    $strOutput = theme('no_result', array());    
+  }
+
+  // Kui on tulemusi palju, lisa "back to top" link lõppu.
+  $back_to_top = _rk_valitsused_back_to_top($result->rowCount(), 'sissejuhatus');
+
+  return $strOutput . $back_to_top;
+
+}
+
+
+/**
+ * Kuva valitsused kasutades GET.
+ */
+function rk_valitsused_get($form, &$form_state) {
+
+  $form['#attributes'] = array('class' => array('varasemad-form', 'valitsus-get'));
+
+  $form['h1-intro'] = _rk_valitsused_general_intro();
+
+  $form['vasak'] = array(
+    '#type' => 'fieldset',
+    '#title' => '',
+  );
+
+  $form['vasak']['markup'] = array(
+    '#markup' => '<div id="sissejuhatus" class="sissejuhatus"><p>' . t(variable_get('rk_valitsused_sissejuhatav_tekst', '')) . '</p></div>',
+  );
+
+  $form['grupp'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Former Governments'),
+  );
+
+  /* $form['vasak']['sissejuhatus'] = array(
+    '#type' => 'markup',
+    '#prefix' => '<div id="sissejuhatus" class="sissejuhatus">',
+    '#suffix' => '</div>',
+    '#markup' => '<h2 class="varasem">' . t('Former Governments') . '</h2><p>' . t(variable_get('rk_valitsused_sissejuhatav_tekst', '')) . '</p>',
+  ); */
+
+  $form['grupp']['periood'] = array(
+    '#type' => 'checkboxes',
+    '#title' => '',
+	'#options' => _rk_valitsused_periood_linnukesed(),
+    '#attributes' => array('class' => array('varasemad')), 
+    '#default_value' => array($_GET['FIRST_REPUBLIC'], $_GET['EXILE_GOVERNMENTS'], $_GET['SECOND_REPUBLIC']),
+    '#description' => '',
+  );
+
+  $sortby = (isset($_GET['SORTBY'])) ? $_GET['SORTBY'] : 'DEFAULT';
+  $form['SORTBY'] = array(
+    '#type' => 'hidden',
+    '#value' => $sortby,
+  );
+
+  $order = (isset($_GET['ORDER'])) ? $_GET['ORDER'] : 'DESC';
+  $form['ORDER'] = array(
+    '#type' => 'hidden',
+    '#value' => $order,
+  );
+
+  $form['grupp']['submit'] = array(
+    '#prefix' => '<div class="submit-wrapper">',
+    '#suffix' => '</div>',
+    '#type' => 'submit',
+    '#value' => t('Filter'),
+  );
+
+  $value = (!empty($form_state['values']['result'])) ? $form_state['values']['result'] : _rk_valitsused_varasemad_valitsused_get();
+  $form['result'] = array(
+    '#type' => 'markup',
+    '#prefix' => '<div id="query_result" class="result">',
+    '#suffix' => '</div>',
+    '#markup' => $value,
+  );
+
+  return $form;
+}
+
+/**
+ * Submit funktsioon.
+ * Lihtsalt laeb leht uuesti GET muutujatega.
+ */
+function rk_valitsused_get_submit($form, &$form_state) {
+  drupal_goto('valitsus/varasemad-valitsused', $options = array('query' => array('FIRST_REPUBLIC' => $form_state['values']['periood']['FIRST_REPUBLIC'], 'EXILE_GOVERNMENTS' => $form_state['values']['periood']['EXILE_GOVERNMENTS'], 'SECOND_REPUBLIC' => $form_state['values']['periood']['SECOND_REPUBLIC'], 'SORTBY' => $form_state['values']['SORTBY'], 'ORDER' => $form_state['values']['ORDER'])));
+}
+
+
+/**
+ * Ehita valitsuste loetelu lähtudes GET muutujast.
+ * Võimeldab URL copy/paste.
+ */
+function _rk_valitsused_varasemad_valitsused_get() {
+
+  // Täida array valitud perioodidega.
+  $millised_valitsused = _rk_valitsused_millised_valitsused();
+
+  $query = db_select('rk_government', 'g');
+  $query->join('rk_minister_government', 'mg', 'g.id = mg.government_id');
+  $query->join('rk_minister', 'm', 'mg.minister_id = m.id');
+
+  $query
+    ->fields('g', array('government_number', 'ruled_start_date', 'ruled_end_date'))
+    ->fields('m', array('first_name', 'last_name', 'person_sex_type_code'))
+    ->fields('mg', array('position_type_code', 'government_id', 'minister_id', 'display_title', 'display_indiv_name'));
+
+  $query->addExpression("CONCAT(m.first_name,  ' ', m.last_name)", 'name');
+  $query->addExpression('DATEDIFF(IF(g.ruled_end_date IS NULL, CURDATE(), g.ruled_end_date), g.ruled_start_date) + 1', 'calculated_days'); // Lisasin +1 kuna "inimarusaamine" päevadest ei ole matemaatiliselt korrektne.
+
+  $query->condition('mg.is_head_of_government', 1, '=');
+  $query->condition('g.is_active', 1, '=');
+
+  // Kui kõik linnukesed tühjad, siis näita kõik.
+  if (count($millised_valitsused) !== 0) {
+    $query->condition('g.rule_time_type_code', $millised_valitsused, 'IN');
+  }
+
+  // orderBy ja sort order.
+  $accepted_sortby_values = array('PERIOD' => 'g.ruled_start_date', 'DURATION' => 'calculated_days', 'HEAD' => 'm.last_name', 'NUMBER' => 'g.government_number', 'DEFAULT' => 'g.government_number');
+  $accepted_ordering_values = array('DESC' => 'DESC', 'ASC' => 'ASC');
+  if (isset($_GET['SORTBY']) 
+      && isset($_GET['ORDER'])
+      && array_key_exists($_GET['SORTBY'], $accepted_sortby_values) 
+      && array_key_exists($_GET['ORDER'], $accepted_ordering_values)) {
+
+    $query->orderBy($accepted_sortby_values[$_GET['SORTBY']], $_GET['ORDER']);
+    //$query->orderBy('calculated_days', 'DESC');
+  }
+  else {
+    $query->orderBy('g.ruled_start_date', 'DESC');
+  } 
+
+  $result = $query->execute();
+
+  //$strOutput = theme('table_valitsus_start', array());
+  $strOutput = theme('ul_valitsus_start', array());
+
+  $counter = 0;
+  foreach($result as $record) {
+    $even_odd = ($counter % 2) ? 'even' : 'odd';
+    // $strOutput .= theme('table_valitsus_object', array('muutujad' => $record, 'even_odd' => $even_odd));
+    $strOutput .= theme('ul_valitsus_object', array('muutujad' => $record, 'even_odd' => $even_odd));
+    $counter++;
+  }
+
+  //$strOutput .= theme('table_valitsus_end', array());
+  $strOutput .= theme('ul_valitsus_end', array());
+
+  // Kui on tulemusi palju, lisa "back to top" link lõppu.
+  $back_to_top = _rk_valitsused_back_to_top($result->rowCount(), 'sissejuhatus');
+
+  return $strOutput . $back_to_top;
+}
+
+
+
+/**
+ * Kuva valitsused.
+ */
+function rk_valitsused_valitsused($form, &$form_state) {
+
+  $form['#attributes'] = array('class' => array('varasemad-form'));
+
+  // $form['#rebuild'] = TRUE;
+  // $form['#method'] = 'get';
+
+  $form['h1-intro'] = _rk_valitsused_general_intro();
+
+  $form['grupp'] = array(
+    '#type' => 'fieldset',
+    '#title' => '',
+  );
+
+  $form['grupp']['sissejuhatus'] = array(
+    '#type' => 'markup',
+    '#prefix' => '<div id="sissejuhatus" class="sissejuhatus">',
+    '#suffix' => '</div>',
+    '#markup' => '<h2 class="varasem">' . t('Former Governments') . '</h2><p>' . t('Text here, text here, text here.') . '</p>',
+  );
+
+  $form['grupp']['periood'] = array(
+    '#type' => 'checkboxes',
+    '#title' => '',
+	'#options' => _rk_valitsused_periood_linnukesed(),
+    '#attributes' => array('class' => array('varasemad')), // 'checked' => TRUE
+    '#description' => '',
+  );
+
+  $form['grupp']['submit'] = array(
+    '#type' => 'submit',
+    '#submit' => array('rk_valitsused_valitsused_submit'),
+    '#value' => t('Filter'),
+    /*'#ajax' => array(
+      'callback' => 'rk_valitsused_valitsused_callback',
+      'wrapper' => 'query_result',
+      'method' => 'replace',
+      'effect' => 'fade',
+    ),*/
+  );
+
+  $value = (!empty($form_state['values']['result'])) ? $form_state['values']['result'] : _rk_valitsused_varasemad_valitsused();
+  $form['result'] = array(
+    '#type' => 'markup',
+    '#prefix' => '<div id="query_result" class="result">',
+    '#suffix' => '</div>',
+    '#markup' => $value,
+  );
+
+  return $form;
+}
+
+
+/**
+ * Loetelu vabariigi valitsustest.
+ */
+function _rk_valitsused_varasemad_valitsused() {
+
+  $millised_valitsused = array('FIRST_REPUBLIC', 'EXILE_GOVERNMENTS', 'SECOND_REPUBLIC');
+
+  // rk_minister: person_sex_type_code, first_name, last_name
+  // rk_minister_government: position_type_code, ruled_start_date, ruled_end_date, minister_id, government_id, ruled_days
+  $query = db_select('rk_government', 'g');
+  $query->join('rk_minister_government', 'mg', 'g.id = mg.government_id');
+  $query->join('rk_minister', 'm', 'mg.minister_id = m.id');
+
+  $query
+    ->fields('g', array('government_number', 'ruled_start_date', 'ruled_end_date'))
+    ->fields('m', array('first_name', 'last_name', 'person_sex_type_code'))
+    ->fields('mg', array('position_type_code', 'government_id', 'minister_id'));
+
+  $query->condition('mg.is_head_of_government', 1, '=');
+
+  // Kui kõik linnukesed tühjad, siis näita kõik.
+  if (count($millised_valitsused) !== 0) {
+    $query->condition('g.rule_time_type_code', $millised_valitsused, 'IN');
+  }
+
+  $result = $query->execute();
+
+  // Kontrolli, et $resultis on andmed.
+  if ($result->rowCount() > 0) {
+    // Ehita array päringutulemustega. Arvutame ruled_days siis sorteerime array õigesse järjekorda.
+    $counter = 0;
+    $arrResult = array();
+    foreach ($result as $row) {
+      $ruled_days = _rk_valitsused_calculate_days($row->ruled_start_date, $row->ruled_end_date); //($row->ruled_end_date == '') ? (strtotime(date('Y-m-d')) - strtotime($row->ruled_start_date)) / (60 * 60 * 24) : (strtotime($row->ruled_end_date) - strtotime($row->ruled_start_date)) / (60 * 60 * 24);
+
+      $arrResult[$counter]['government_number'] = $row->government_number;
+      $arrResult[$counter]['government_id'] = $row->government_id;
+      $arrResult[$counter]['minister_id'] = $row->minister_id;
+      $arrResult[$counter]['ruled_start_date'] = _rk_valitsused_eesti_format_date($row->ruled_start_date);
+      $arrResult[$counter]['ruled_end_date'] = _rk_valitsused_eesti_format_date($row->ruled_end_date);
+      $arrResult[$counter]['ruled_days'] = (int) $ruled_days;
+      $arrResult[$counter]['first_name'] = $row->first_name;
+      $arrResult[$counter]['last_name'] = $row->last_name;
+      $arrResult[$counter]['name'] = $row->first_name . ' ' . $row->last_name;
+      $arrResult[$counter]['position_type_code'] = $row->position_type_code;
+	  $arrResult[$counter]['ametinimetus'] = _rk_valitsused_gov_num_head_of_gov_title($row->government_number);
+      $counter++;
+    }
+    
+
+    // Sorteeri
+    foreach($arrResult as $key => $value) {
+      $arrNimi[$key] = $value['last_name'];
+      $arrGovNum[$key] = $value['government_number'];
+    }
+    array_multisort($arrGovNum, SORT_DESC, $arrNimi, SORT_ASC, $arrResult);
+
+
+    // Nüüd õiges järjekorras. Ehita html.
+    $strOutput = theme('table_valitsus_start', array());
+
+    foreach($arrResult as $key => $value) {
+      $strOutput .= theme('table_valitsus', array($value));
+    }
+
+    $strOutput .= theme('table_valitsus_end', array());
+ 
+  }
+  else {
+    $strOutput = theme('no_result', array());
+  }
+
+  // Kui on tulemusi palju, lisa "back to top" link lõppu.
+  $back_to_top = _rk_valitsused_back_to_top($result->rowCount(), 'rk-valitsused-valitsused');
+
+  return $strOutput . $back_to_top;
+}
+
+
+/**
+ * Otsitav ministrite lehekülg.
+ */
+function rk_valitsused_ministrid($form, &$form_state) {
+
+  $form['#rebuild'] = TRUE;
+  $form['#attributes'] = array('class' => array('varasemad-form', 'ministrite-otsing'));
+
+  $form['h1-intro'] = array(
+    '#type' => 'markup',
+    '#markup' => '<p class="h1-intro">' . t(variable_get('rk_valitsused_varasemad_tekst', '')) . '</p>',
+  );
+
+  $form['grupp'] = array(
+    '#type' => 'fieldset',
+    '#title' => '',
+  );
+
+  $form['grupp']['nimi'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Search Minister by Name'), // Leia minister nime järgi:
+    '#default_value' => '',
+    '#size' => 34,
+    '#description' => '',
+    '#prefix' => '<div id="sissejuhatus" class="sissejuhatus"><h2 class="varasem">' . t('Search Ministers') . '</h2><p>' . t(variable_get('rk_valitsused_ministrid_sissejuhatav_tekst', '')) . '</p>',
+    '#suffix' => '</div>',
+  );
+
+  $form['grupp']['periood'] = array(
+    '#type' => 'checkboxes',
+    '#title' => '',
+	'#options' => _rk_valitsused_periood_linnukesed(),
+    '#attributes' => array('checked' => TRUE),
+    '#description' => '',
+  );
+
+  $options = _rk_valitsused_ametikohad();
+  // Lisame algusesse "Kõik ametikohad".
+  $esimene = array('all' => t('All Ministers')); // Kõik ametikohad
+  $options = array_merge($esimene, $options);
+  $form['grupp']['ametikohad'] = array(
+    '#type' => 'select',
+    '#title' => '', //t('Minister'),
+	  '#options' => $options,
+    '#default_value' => 'all',
+    '#description' => '',
+  );
+
+  $form['grupp']['sugu'] = array(
+    '#type' => 'select',
+    '#title' => '', //t('Gender'),
+	'#options' => array('all' => t('Both Genders'), 'SEX_TYPE_MALE' => t('Male'), 'SEX_TYPE_FEMALE' => t('Female')), // Kõik ministrid, mees, naine
+    '#default_value' => 'all',
+    '#description' => '',
+  );
+
+  $form['grupp']['submit'] = array(
+    '#type' => 'submit',
+    '#submit' => array('rk_valitsused_ministrid_submit'),
+    '#value' => t('Search'), // Leia
+    '#ajax' => array(
+      'callback' => 'rk_valitsused_ministrid_callback',
+      'wrapper' => 'query_result_ministrid',
+      'method' => 'replace',
+      'effect' => 'fade',
+    ),
+  );
+
+  $value = (!empty($form_state['values']['result_ministrid'])) ? $form_state['values']['result_ministrid'] : '';
+  $form['result_ministrid'] = array(
+    '#type' => 'markup',
+    '#prefix' => '<div id="query_result_ministrid" class="result">',
+    '#suffix' => '</div>',
+    '#markup' => $value,
+  );
+
+  return $form;
+}
+
+
+/**
+ * Statistika leht "huvitav teada".
+ */
+function rk_valitsused_statistika($form, &$form_state) {
+
+  $form['#rebuild'] = TRUE;
+  $form['#attributes'] = array('class' => array('varasemad-form'));
+
+  $current_gov_authority = t('Current government\'s time in authority'); // Praeguse valitsuse ametiaja pikkus.
+
+  // Mis kuupäeval...
+  $form['kuupaev'] = array(
+    '#type' => 'fieldset',
+    '#title' => $current_gov_authority, 
+    '#description' => '',
+    '#attributes' => array('class' => array('varasemad-wrapper')),
+  );
+	
+  $form['kuupaev']['val_min'] = array(
+    '#type' => 'radios',
+    '#title' => t('On what day has the current'), // Mis kuupäeval on praegune
+	  '#options' => array('valitsus' => t('Government'), 'minister' => t('Minister')),
+    '#default_value' => 'valitsus',
+    '#description' => '',
+  );
+
+  // Ei taha valitsus rippmenüüse lasta, aga lisame "Kõik ametikohad".
+  $options = _rk_valitsused_ametikohad();
+  //array_shift($options);
+  //$esimene = array('all' => t('Kõik ametikohad'));
+  //$options = array_merge($esimene, $options);
+  $form['kuupaev']['type'] = array(
+    '#type' => 'select',
+    '#title' => '', // Ametikoht
+	  '#options' => $options,
+    '#default_value' => 'all',
+    '#description' => '',
+    '#states' => array(
+      'visible' => array(':input[name="val_min"]' => array('value' => 'minister')),
+    ),
+  );
+
+  /* $form['kuupaev']['type'] = array(
+    '#type' => 'select',
+    '#title' => t('Mis kuupäeval on praegune'),
+	'#options' => _rk_valitsused_ametikohad(),
+    '#default_value' => 'valitsus',
+    '#description' => '',
+  ); */
+
+  $form['kuupaev']['days'] = array(
+    '#type' => 'textfield',
+    '#title' => t('been in authority for'), // olnud ametis
+    '#default_value' => '100',
+    '#size' => 5,
+    '#description' => '', // Enter number. Sisesta number
+    '#suffix' => '<div id="daysdiv">' . t('days') . '</div>',
+  );
+
+  $form['kuupaev']['submit_kuupaev'] = array(
+    '#type' => 'submit',
+    '#name' => 'submit_kuupaev',
+    '#submit' => array('rk_valitsused_statistika_kuupaev_submit'), // rk_valitsused_kuupaev 
+    '#value' => t('Calculate'),
+    '#ajax' => array(
+      'callback' => 'rk_valitsused_statistika_kuupaev_callback',
+      'wrapper' => 'query_result_kuupaev',
+      'method' => 'replace',
+      'effect' => 'fade',
+    ),
+  );
+
+  $value = (!empty($form_state['values']['result_kuupaev'])) ? $form_state['values']['result_kuupaev'] : '';
+  $form['kuupaev']['result_kuupaev'] = array(
+    '#type' => 'markup',
+    '#prefix' => '<div id="query_result_kuupaev" class="result">',
+    '#suffix' => '</div>',
+    '#markup' => $value,
+  );
+
+
+
+
+
+
+
+
+
+  // Mitu päeva...
+  $form['mitupaeva'] = array(
+    '#type' => 'fieldset',
+    '#title' => '', //$current_gov_authority,
+    '#description' => '',
+    '#attributes' => array('class' => array('varasemad-wrapper')),
+  );
+
+  $form['mitupaeva']['mitupaeva_val_min'] = array(
+    '#type' => 'radios',
+    '#title' => t('How many days has the current'), // Mitu päeva on praegune
+	'#options' => array('valitsus' => t('Government'), 'minister' => t('Minister')),
+    '#default_value' => 'valitsus',
+    '#description' => '',
+  );
+
+  // Ei taha valitsus rippmenüüse lasta, aga lisame "Kõik ametikohad".
+  $options = _rk_valitsused_ametikohad();
+  //array_shift($options);
+  //$esimene = array('all' => t('Kõik ametikohad'));
+  //$options = array_merge($esimene, $options);
+  $form['mitupaeva']['type_mitupaeva'] = array(
+    '#type' => 'select',
+    '#title' => '', // Ametikoht
+	'#options' => $options,
+    '#default_value' => 'all',
+    '#description' => '',
+    '#states' => array(
+      'visible' => array(':input[name="mitupaeva_val_min"]' => array('value' => 'minister')),
+    ),
+  );
+
+  /*$form['mitupaeva']['type_mitupaeva'] = array(
+    '#type' => 'select',
+    '#title' => t('Mitu päeva on praegune'),
+	'#options' => _rk_valitsused_ametikohad(),
+    '#default_value' => 'valitsus',
+    '#description' => '',
+  );*/
+
+  $form['mitupaeva']['day_mitupaeva'] = array(
+    // '#type' => 'date_select',
+    // '#date_year_range' => '-10:+5',
+    // '#date_format' => 'd m Y',
+    '#type' => 'date',
+    '#title' => t('been in authority on'), // olnud ametis kuupäeval
+    '#description' => '',
+  );
+
+  $form['mitupaeva']['submit_mitupaeva'] = array(
+    '#type' => 'submit',
+    '#name' => 'submit_mitupaeva',
+    '#submit' => array('rk_valitsused_statistika_mitupaeva_submit'), // rk_valitsused_mitupaeva 
+    '#value' => t('Calculate Days'),
+    '#ajax' => array(
+      'callback' => 'rk_valitsused_statistika_mitupaeva_callback',
+      'wrapper' => 'query_result_mitupaeva',
+      'method' => 'replace',
+      'effect' => 'fade',
+    ),
+  );
+
+  $value = (!empty($form_state['values']['result_mitupaeva'])) ? $form_state['values']['result_mitupaeva'] : '';
+  $form['mitupaeva']['result_mitupaev'] = array(
+    '#type' => 'markup',
+    '#prefix' => '<div id="query_result_mitupaeva" class="result">',
+    '#suffix' => '</div>',
+    '#markup' => $value,
+  );
+
+
+
+
+
+
+
+
+
+
+  // Kõige kauem ametis olnud valitsused ja ministrid...
+  $form['kauem'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Longest serving governments and ministers'), // Kõige kauem ametis olnud valitsused ja ministrid
+    '#description' => '',
+    '#attributes' => array('class' => array('varasemad-wrapper')),
+  );
+
+  $form['kauem']['type_kauem'] = array(
+    '#type' => 'radios',
+    '#title' => t('Which is the longest serving'), // Milline on kõige kauem ametis olnud?
+	'#options' => array('valitsus' => t('Government'), 'minister' => t('Minister')),
+    '#default_value' => 'valitsus',
+    '#description' => '',
+  );
+
+  // Ei taha valitsus rippmenüüse lasta, aga lisame "Kõik ametikohad".
+  $options = _rk_valitsused_ametikohad();
+  //array_shift($options);
+  $esimene = array('all' => t('All Ministers')); // Kõik ametikohad
+  $options = array_merge($esimene, $options);
+  $form['kauem']['ametikohad_kauem'] = array(
+    '#type' => 'select',
+    '#title' => '', // t('Minister') Ametikoht
+	  '#options' => $options,
+    '#default_value' => 'all',
+    '#description' => '',
+    '#states' => array(
+      'visible' => array(':input[name="type_kauem"]' => array('value' => 'minister')),
+    ),
+  );
+
+  $form['kauem']['sugu_kauem'] = array(
+    '#type' => 'select',
+    '#title' => '', // t('All, male, female') Kõik, mehed, naised
+	'#options' => array('all' => t('All Ministers'), 'SEX_TYPE_MALE' => t('Male'), 'SEX_TYPE_FEMALE' => t('Female')),
+    '#default_value' => 'all',
+    '#description' => '',
+    '#states' => array(
+      'visible' => array(':input[name="type_kauem"]' => array('value' => 'minister')),
+    ),
+  );
+
+  $form['kauem']['periood_kauem'] = array(
+    '#type' => 'checkboxes',
+    '#title' => '',
+	'#options' => _rk_valitsused_periood_linnukesed(),
+    '#attributes' => array('checked' => TRUE),
+    '#description' => '',
+  );
+
+  $form['kauem']['submit_kauem'] = array(
+    '#type' => 'submit',
+    '#submit' => array('rk_valitsused_statistika_kauem_submit'), // rk_valitsused_kauem
+    '#value' => t('Find'), // Leia
+    '#ajax' => array(
+      'callback' => 'rk_valitsused_statistika_kauem_callback',
+      'wrapper' => 'query_result_kauem',
+      'method' => 'replace',
+      'effect' => 'fade',
+    ),
+  );
+
+  $value = (!empty($form_state['values']['result_kauem'])) ? $form_state['values']['result_kauem'] : '';
+  $form['result_kauem'] = array(
+    '#type' => 'markup',
+    '#prefix' => '<div id="query_result_kauem" class="result">',
+    '#suffix' => '</div>',
+    '#markup' => $value,
+  );
+
+
+
+
+  $form['lingid'] = array(
+    '#type' => 'markup',
+    '#markup' => _rk_valitsused_varasemad_footer(),
+  );
+
+  return $form;
+}
+
+
+/**
+ * Statistika callback.
+ */
+function rk_valitsused_valitsused_callback($form, &$form_state) {
+  return $form['result'];
+}
+
+function rk_valitsused_statistika_kuupaev_callback($form, &$form_state) {
+  return $form['kuupaev']['result_kuupaev'];
+}
+
+function rk_valitsused_statistika_mitupaeva_callback($form, &$form_state) {
+  return $form['mitupaeva']['result_mitupaev'];
+}
+
+function rk_valitsused_statistika_kauem_callback($form, &$form_state) {
+  return $form['result_kauem'];
+}
+
+function rk_valitsused_ministrid_callback($form, &$form_state) {
+  return $form['result_ministrid'];
+}
+
+
+/**
+ * Statistika leht validate.
+ */
+function rk_valitsused_statistika_validate($form, &$form_state) {
+  if ($form_state['values']['days'] < 0 || $form_state['values']['days'] > 9999):
+	  form_set_error('days', t('Number of days must be between 1 and 9999'));
+  endif;
+}
+
+
+/**
+ * Valitsuste loetelu. Ajax saadab tagasi htmli tabelid.
+ */
+function rk_valitsused_valitsused_submit($form, &$form_state) {
+
+  $millised_valitsused = array();
+  foreach($form_state['values']['periood'] as $key => $value) {
+    if ($value !== 0):
+      $millised_valitsused[] = $value;
+    endif;
+  }
+
+  // rk_minister: person_sex_type_code, first_name, last_name
+  // rk_minister_government: position_type_code, ruled_start_date, ruled_end_date, minister_id, government_id, ruled_days
+  $query = db_select('rk_government', 'g');
+  $query->join('rk_minister_government', 'mg', 'g.id = mg.government_id');
+  $query->join('rk_minister', 'm', 'mg.minister_id = m.id');
+
+  $query
+    ->fields('g', array('government_number', 'ruled_start_date', 'ruled_end_date'))
+    ->fields('m', array('first_name', 'last_name', 'person_sex_type_code'))
+    ->fields('mg', array('position_type_code', 'government_id', 'minister_id'));
+
+  $query->condition('mg.is_head_of_government', 1, '=');
+
+  // Kui kõik linnukesed tühjad, siis näita kõik.
+  if (count($millised_valitsused) !== 0) {
+    $query->condition('g.rule_time_type_code', $millised_valitsused, 'IN');
+  }
+
+  $result = $query->execute();
+
+  // Kontrolli, et $resultis on andmed.
+  if ($result->rowCount() > 0) {
+    // Ehita array päringutulemustega. Arvutame ruled_days siis sorteerime array õigesse järjekorda.
+    $counter = 0;
+    $arrResult = array();
+    foreach ($result as $row) {
+      $ruled_days = _rk_valitsused_calculate_days($row->ruled_start_date, $row->ruled_end_date); //($row->ruled_end_date == '') ? (strtotime(date('Y-m-d')) - strtotime($row->ruled_start_date)) / (60 * 60 * 24) : (strtotime($row->ruled_end_date) - strtotime($row->ruled_start_date)) / (60 * 60 * 24);
+      $arrResult[$counter]['government_number'] = $row->government_number;
+      $arrResult[$counter]['government_id'] = $row->government_id;
+      $arrResult[$counter]['minister_id'] = $row->minister_id;
+      $arrResult[$counter]['ruled_start_date'] = _rk_valitsused_eesti_format_date($row->ruled_start_date);
+      $arrResult[$counter]['ruled_end_date'] = _rk_valitsused_eesti_format_date($row->ruled_end_date);
+      $arrResult[$counter]['ruled_days'] = (int) $ruled_days;
+      $arrResult[$counter]['first_name'] = $row->first_name;
+      $arrResult[$counter]['last_name'] = $row->last_name;
+      $arrResult[$counter]['name'] = $row->first_name . ' ' . $row->last_name;
+      $arrResult[$counter]['position_type_code'] = $row->position_type_code;
+	  $arrResult[$counter]['ametinimetus'] = _rk_valitsused_gov_num_head_of_gov_title($row->government_number);
+      $counter++;
+    }
+    
+
+    // Sorteeri
+    foreach($arrResult as $key => $value) {
+      $arrNimi[$key] = $value['last_name'];
+      $arrGovNum[$key] = $value['government_number'];
+    }
+    array_multisort($arrGovNum, SORT_DESC, $arrNimi, SORT_ASC, $arrResult);
+
+
+    // Nüüd õiges järjekorras. Ehita html.
+    $strOutput = theme('table_valitsus_start', array());
+
+    foreach($arrResult as $key => $value) {
+      $strOutput .= theme('table_valitsus', array($value));
+    }
+
+    $strOutput .= theme('table_valitsus_end', array());
+ 
+  }
+  else {
+    $strOutput = theme('no_result', array());
+  }
+
+  // Kui on tulemusi palju, lisa "back to top" link lõppu.
+  $back_to_top = _rk_valitsused_back_to_top($result->rowCount(), 'rk-valitsused-valitsused');
+
+  $form_state['values']['result'] = $strOutput . $back_to_top;
+  $form_state['rebuild'] = TRUE;
+}
+
+
+/**
+ * Ajax saadab tagasi htmli tabelid.
+ */
+function rk_valitsused_ministrid_submit($form, &$form_state) {
+
+  $millised_valitsused = array();
+  foreach($form_state['values']['periood'] as $key => $value) {
+    if ($value !== 0):
+      $millised_valitsused[] = $value;
+    endif;
+  }
+
+  $nimi = $form_state['values']['nimi'];
+  $ametikoht = $form_state['values']['ametikohad'];
+  $sugu = $form_state['values']['sugu'];
+  // rk_minister: person_sex_type_code, first_name, last_name
+  // rk_minister_government: position_type_code, ruled_start_date, ruled_end_date, minister_id, government_id, ruled_days
+  $query = db_select('rk_government', 'g');
+  $query->join('rk_minister_government', 'mg', 'g.id = mg.government_id');
+  $query->join('rk_minister', 'm', 'mg.minister_id = m.id');
+
+  $query
+    ->fields('g', array('government_number'))
+    ->fields('m', array('first_name', 'last_name', 'person_sex_type_code'))
+    ->fields('mg', array('ruled_start_date', 'ruled_end_date', 'position_type_code', 'government_id', 'minister_id'));
+
+    if ($ametikoht !== 'all'):
+      $arrOptions = _rk_valitsused_amet_options($ametikoht);
+      // $query->condition('mg.position_type_code', $ametikoht, '=');
+      $query->condition('mg.position_type_code', $arrOptions, 'IN');
+    endif;
+
+    if ($sugu !== 'all'):
+      $query->condition('m.person_sex_type_code', $sugu, '=');
+    endif;
+
+    if (trim($nimi) !== ''):
+      // Ei kasuta db_or() kuna ei saanud teha OR full_name like :nimi.
+      //$db_or = db_or();
+      //$db_or->condition('m.first_name', '%' . trim($nimi) . '%', 'LIKE');
+      //$db_or->condition('m.last_name', '%' . trim($nimi) . '%', 'LIKE');
+      //$query->condition($db_or);
+      $query->where("(first_name LIKE :first_name OR last_name LIKE :last_name OR CONCAT(first_name, ' ', last_name) LIKE :nimi)", array(':first_name' => '%' . trim($nimi) . '%', ':last_name' => '%' . trim($nimi) . '%', ':nimi'=> '%' . trim($nimi) . '%'));
+    endif;
+
+    // Kui kõik linnukesed tühjad, siis näita kõik.
+    if (count($millised_valitsused) !== 0) {
+      $query->condition('g.rule_time_type_code', $millised_valitsused, 'IN');
+    }
+
+    // @todo. Need to test when to order by last name.
+    // $query->orderBy('last_name', 'DESC');
+
+  $result = $query->execute();
+
+  // Kontrolli, et $resultis on andmed.
+  if ($result->rowCount() > 0) {
+    // Ehita array päringutulemustega. Arvutame ruled_days siis sorteerime array õigesse järjekorda.
+    $counter = 0;
+    $arrResult = array();
+    foreach ($result as $row) {
+      $ruled_days = _rk_valitsused_calculate_days($row->ruled_start_date, $row->ruled_end_date); //($row->ruled_end_date == '') ? (strtotime(date('Y-m-d')) - strtotime($row->ruled_start_date)) / (60 * 60 * 24) : (strtotime($row->ruled_end_date) - strtotime($row->ruled_start_date)) / (60 * 60 * 24);
+      $arrResult[$counter]['government_number'] = $row->government_number;
+      $arrResult[$counter]['government_id'] = $row->government_id;
+      $arrResult[$counter]['minister_id'] = $row->minister_id;
+      $arrResult[$counter]['ruled_start_date'] = _rk_valitsused_eesti_format_date($row->ruled_start_date);
+      $arrResult[$counter]['ruled_end_date'] = _rk_valitsused_eesti_format_date($row->ruled_end_date);
+      $arrResult[$counter]['ruled_combined'] = _rk_valitsused_eesti_format_date($row->ruled_start_date) . ' - ' . _rk_valitsused_eesti_format_date($row->ruled_end_date);
+      $arrResult[$counter]['ruled_days'] = (int) $ruled_days;
+      $arrResult[$counter]['first_name'] = $row->first_name;
+      $arrResult[$counter]['last_name'] = $row->last_name;
+      $arrResult[$counter]['name'] = $row->first_name . ' ' . $row->last_name;
+      $arrResult[$counter]['position_type_code'] = $row->position_type_code;
+      $counter++;
+    }
+    
+
+    // Sorteeri
+    foreach($arrResult as $key => $value) {
+      $arrNimi[$key] = $value['last_name'];
+      $arrGovNum[$key] = $value['government_number'];
+    }
+    array_multisort($arrNimi, SORT_ASC, $arrGovNum, SORT_DESC, $arrResult);
+
+
+    // Nüüd õiges järjekorras. Ehita html.
+    $pealkiri = ($ametikoht !== 'all') ? _rk_valitsused_translate_amet($ametikoht) : t('Minister');
+    $strOutput = theme('table_search_minister', array('pealkiri' => $pealkiri));
+
+    $counter = 0;
+    foreach($arrResult as $key => $value) {
+      $even_odd = ($counter % 2) ? 'even' : 'odd';
+      $strOutput .= theme('table_row_search_minister', array('muutujad' => $value, 'even_odd' => $even_odd));
+      $counter++;
+    }
+
+    $strOutput .= theme('table_end_search_minister', array());
+ 
+  }
+  else {
+    $strOutput = theme('no_result', array('ametikoht' => $ametikoht, 'sugu' => $sugu));
+  }
+
+
+
+  // Kui on tulemusi palju, lisa "back to top" link lõppu.
+  $back_to_top = _rk_valitsused_back_to_top($result->rowCount(), 'rk-valitsused-ministrid');
+
+  $form_state['values']['result_ministrid'] = $strOutput . $back_to_top;
+  $form_state['rebuild'] = TRUE;
+}
+
+
+/**
+ * Ajax saadab tagasi htmli tabelid.
+ */
+function rk_valitsused_statistika_kauem_submit($form, &$form_state) {
+
+  $type = $form_state['values']['type_kauem'];
+
+  $millised_valitsused = array();
+  foreach($form_state['values']['periood_kauem'] as $key => $value) {
+    if ($value !== 0):
+      $millised_valitsused[] = $value;
+    endif;
+  }
+
+  if ($type == 'valitsus') {
+    // Leia olemasoleva valitsuse kestvus.
+    $gov_id = _rk_valitsused_get_current_gov_id();
+    $query = db_select('rk_government', 'g');
+    $query->join('rk_minister_government', 'mg', 'g.id = mg.government_id');
+    $query->join('rk_minister', 'm', 'mg.minister_id = m.id');
+
+    $query
+      ->fields('g', array('ruled_start_date', 'ruled_end_date', 'ruled_days', 'government_number', 'id'))
+      ->fields('m', array('first_name', 'last_name'))
+      ->condition('mg.is_head_of_government', 1, '=')
+      ->orderBy('ruled_days', 'DESC');
+
+    // Add field alias for minister_id.
+    $query->addField('m', 'id', 'minister_id');
+
+    if (count($millised_valitsused) !== 0):
+      $query->condition('g.rule_time_type_code', $millised_valitsused, 'IN');
+    endif;
+
+    $result = $query->execute();
+
+    // Ehita array täidetud päringutulemustega. Siia lisame olemasoleva valitsuse ruled_days siis sorteerime array õigesse järjekorda.
+    $counter = 0;
+    $arrResult = array();
+    foreach ($result as $row) {
+      //$ruled_days = ($row->ruled_days == '') ? (strtotime(date('Y-m-d')) - strtotime($row->ruled_start_date)) / (60 * 60 * 24)  : $row->ruled_days;
+      $ruled_days = _rk_valitsused_calculate_days($row->ruled_start_date, $row->ruled_end_date);
+      $arrResult[$counter]['government_number'] = $row->government_number;
+      $arrResult[$counter]['government_id'] = $row->id;
+      $arrResult[$counter]['minister_id'] = $row->minister_id;
+      $arrResult[$counter]['ruled_start_date'] = _rk_valitsused_eesti_format_date($row->ruled_start_date);
+      $arrResult[$counter]['ruled_end_date'] = _rk_valitsused_eesti_format_date($row->ruled_end_date);
+      $arrResult[$counter]['ruled_days'] = (int) $ruled_days;
+      $arrResult[$counter]['name'] = $row->first_name . ' ' . $row->last_name;
+      $counter++;
+    }
+    
+
+    // Sorteeri.
+    foreach($arrResult as $key => $value) {
+      $arrRuledDays[$key] = $value['ruled_days'];
+      $arrGovNum[$key] = $value['government_number'];
+    }
+    array_multisort($arrRuledDays, SORT_DESC, $arrGovNum, SORT_ASC, $arrResult);
+
+
+    // Nüüd õiges järjekorras. Ehita html.
+    $strOutput = theme('table_kauem', array());
+
+    $counter = 0;
+    foreach($arrResult as $key => $value) {
+      $even_odd = ($counter % 2) ? 'even' : 'odd';
+      $strOutput .= theme('table_row_kauem', array('muutujad' => $value, 'even_odd' => $even_odd));
+      $counter++;
+    }
+
+    $strOutput .= theme('table_end_kauem', array());
+    
+  }
+  else { // Minister, ametikohad, sugu filtrid.
+
+    $ametikoht = $form_state['values']['ametikohad_kauem'];
+    $sugu = $form_state['values']['sugu_kauem'];
+    // rk_minister: person_sex_type_code, first_name, last_name
+    // rk_minister_government: position_type_code, ruled_start_date, ruled_end_date, minister_id, government_id, ruled_days
+    $query = db_select('rk_government', 'g');
+    $query->join('rk_minister_government', 'mg', 'g.id = mg.government_id');
+    $query->join('rk_minister', 'm', 'mg.minister_id = m.id');
+
+    $query
+      ->fields('g', array('government_number'))
+      ->fields('m', array('first_name', 'last_name', 'person_sex_type_code'))
+      //->fields('mg', array('ruled_start_date', 'ruled_end_date', 'position_type_code', 'government_id', 'minister_id'));  
+	  ->fields('mg', array('position_type_code', 'government_id', 'minister_id'));        
+
+      if ($ametikoht !== 'all'):
+        $query->condition('mg.position_type_code', _rk_valitsused_amet_options($ametikoht), 'IN');
+      endif;
+
+      if ($sugu !== 'all'):
+        $query->condition('m.person_sex_type_code', $sugu, '=');
+      endif;
+
+    // Kui kõik linnukesed tühjad, siis näita kõik.
+    if (count($millised_valitsused) !== 0):
+      $query->condition('g.rule_time_type_code', $millised_valitsused, 'IN');
+    endif;
+
+	// Group by minister id.
+	// $query->addExpression('sum(mg.ruled_days)', 'mg_ruled_days');
+  // @TODO. Fix double-counting for consecutive terms.
+	$query->addExpression('SUM(DATEDIFF(IF(mg.ruled_end_date IS NULL, CURDATE(), mg.ruled_end_date), mg.ruled_start_date) + 1)', 'calculated_days');
+	$query->groupBy('mg.minister_id');
+
+    $result = $query->execute();
+
+    // Kontrolli, et $resultis on andmed.
+    if ($result->rowCount() > 0) {
+      // Ehita array päringutulemustega. Arvutame ruled_days siis sorteerime array õigesse järjekorda.
+      $counter = 0;
+      $arrResult = array();
+      foreach ($result as $row) {
+        // $ruled_days = ($row->ruled_end_date == '') ? (strtotime(date('Y-m-d')) - strtotime($row->ruled_start_date)) / (60 * 60 * 24) : (strtotime($row->ruled_end_date) - strtotime($row->ruled_start_date)) / (60 * 60 * 24);
+        // $arrResult[$counter]['ruled_days'] = (int) $ruled_days;
+
+        $arrResult[$counter]['ruled_days'] = _rk_valitsused_kontrolli_sum_ametiaeg($row->calculated_days, $row->minister_id, $row->position_type_code);
+        $arrResult[$counter]['government_number'] = $row->government_number;
+        $arrResult[$counter]['government_id'] = $row->government_id;
+        $arrResult[$counter]['minister_id'] = $row->minister_id;
+        $arrResult[$counter]['name'] = $row->first_name . ' ' . $row->last_name;
+        $arrResult[$counter]['position_type_code'] = $row->position_type_code;
+        $counter++;
+      }
+    
+
+      // Sorteeri
+      foreach($arrResult as $key => $value) {
+        $arrRuledDays[$key] = $value['ruled_days'];
+        $arrGovNum[$key] = $value['government_number'];
+      }
+      array_multisort($arrRuledDays, SORT_DESC, $arrGovNum, SORT_ASC, $arrResult);
+
+
+      // Nüüd õiges järjekorras. Ehita html.
+      $pealkiri = ($ametikoht !== 'all') ? _rk_valitsused_translate_amet($ametikoht) : t('Minister');
+      $strOutput = theme('table_kauem_minister', array('pealkiri' => $pealkiri));
+
+      $counter = 0;
+      foreach($arrResult as $key => $value) {
+        $even_odd = ($counter % 2) ? 'even' : 'odd';
+        $strOutput .= theme('table_row_kauem_minister', array('muutujad' => $value, 'even_odd' => $even_odd));
+        $counter++;
+      }
+
+      $strOutput .= theme('table_end_kauem_minister', array());
+ 
+    }
+    else {
+      $strOutput = theme('no_result', array($ametikoht, $sugu));
+    }
+
+  }
+
+  // Kui on tulemusi palju, lisa "back to top" link lõppu.
+  $back_to_top = _rk_valitsused_back_to_top($result->rowCount(), 'edit-kauem');
+
+  $form_state['values']['result_kauem'] = $strOutput . $back_to_top;
+  $form_state['rebuild'] = TRUE;
+
+}
+
+
+/**
+ * Abifunktsioon. Kontrolli liidetud ametiaja summa.
+ * Kui minister on järjestikult olnud samas ametis
+ * siis tavaline summa arvestus loeb ülemineku päevi "topelt".
+ * @param $calculated_days
+ *   Integer. Result from SUM which might have double-counting.
+ * @param $minister_id
+ *   Integer.
+ * @param $position_type_code
+ *   String.
+ * @return
+ *   Integer. Adjusted calculated_days result.
+ */
+function _rk_valitsused_kontrolli_sum_ametiaeg($calculated_days, $minister_id, $position_type_code) {
+
+  // Teen old-school kuna dbo meetodile (komenteeritud allpool) pühendasin liiga palju tulutu aega.
+  $result = db_query("
+SELECT r1.government_id
+FROM {rk_minister_government} r1
+INNER JOIN {rk_minister_government} r2 ON r1.minister_id = r2.minister_id
+WHERE r1.minister_id = :minister_id
+AND r1.position_type_code LIKE :position
+AND r1.ruled_end_date = r2.ruled_start_date
+", array(':minister_id' => $minister_id, ':position' => $position_type_code));
+  
+  $adjustment = $result->rowCount();
+
+  // Näiteks. Ansip oli kolmes järjestikuses valitsuses peaminister.
+  // Sellega oli tal 2 "ülemineku" päeva vanast valitsusest uute.
+  // Talle peab järelikult olema (calculated_days - 2).
+  return $calculated_days - $adjustment;
+
+
+
+/**
+ * Ei saanud selle tööle. Vastas alati 0 tulemusega. 
+ * Katsetasin having clause, aga ei saanud tööle.
+ */
+/* 
+  $query = db_select('rk_minister_government', 'r1');  
+    $query->join('rk_minister_government', 'r2', 'r1.minister_id = r2.minister_id');    
+    $query    
+      ->condition(
+        db_and()
+        ->condition('r1.minister_id', $minister_id, '=')
+        ->condition('r1.position_type_code', $position_type_code, 'LIKE')
+        ->condition('r1.is_active', 1, '=')        
+        //->condition('r1.ruled_end_date', 'r2.ruled_start_date', '=')
+      );
+    $query->fields('r1', array('government_id'));
+    $query->addField('r1', 'ruled_end_date', 'r1end');
+    $query->addField('r2', 'ruled_start_date', 'r2start');
+    //$query->addExpression("COUNT(r1.government_id)", 'switchover');
+
+    $query->having('(:end = :start)', array(':end' => 'r1end', ':start' => 'r2start'));
+
+    $result = $query->execute();
+
+//print_r($query);exit;    
+//print_r($result);exit;
+// print 'tere ' . $result->rowCount();exit;
+    $adjustment = $result->rowCount();
+*/
+
+}
+
+
+/**
+ * Implements hook_theme.
+ */
+function rk_valitsused_theme() {
+  return array(
+    'table_kauem' => array(
+      'variables' => array(),
+    ),
+    'table_row_kauem' => array(
+      'variables' => array(
+        'even_odd' => NULL,
+      ),
+    ),
+    'table_end_kauem' => array(
+      'variables' => array(),
+    ),
+    'table_kauem_minister' => array(
+      'variables' => array(
+        'pealkiri' => NULL,
+      ),
+    ),
+    'table_row_kauem_minister' => array(
+      'variables' => array(
+        'even_odd' => NULL,
+      ),
+    ),
+    'table_end_kauem_minister' => array(
+      'variables' => array(),
+    ),
+    'no_result' => array(
+      'variables' => array(),
+    ),
+    'table_search_minister' => array(
+      'variables' => array(),
+    ),
+    'table_row_search_minister' => array(
+      'variables' => array(
+        'even_odd' => NULL,
+      ), 
+    ),
+    'table_row_search_minister_object' => array(
+      'variables' => array(
+        'even_odd' => NULL,
+      ), 
+    ),
+    'table_end_search_minister' => array(
+      'variables' => array(),
+    ),
+    'table_valitsus_start' => array(
+      'variables' => array(),
+    ),
+    'table_valitsus' => array(
+      'variables' => array(
+        'even_odd' => NULL,
+      ),      
+    ),
+    'table_valitsus_object' => array(
+      'variables' => array(
+        'even_odd' => NULL,
+      ),      
+    ),
+    'table_valitsus_end' => array(
+      'variables' => array(),
+    ),
+    'minister_field' => array(
+      'variables' => array(),
+    ),
+    'valitsus_description' => array(
+      'variables' => array(),
+    ),
+    'minister_description' => array(
+      'variables' => array(),
+    ),
+    'ul_valitsus_start' => array(
+      'variables' => array(),
+    ),
+    'ul_valitsus_object' => array(
+      'variables' => array(
+        'even_odd' => NULL,
+      ),      
+    ),
+    'ul_valitsus_end' => array(
+      'variables' => array(),
+    ),
+    'minister_glossary_row' => array(
+      'variables' => array(),
+    ),
+    'minister_image' => array(
+      'variables' => array(),
+    ),
+    'valitsus_image' => array(
+      'variables' => array(),
+    ),        
+  );  
+}
+
+
+/**
+ * Defined in rk_valitsused_theme.
+ */
+function theme_table_valitsus_start($variables) {
+  // $output = '<table><tr><th>' . t('Government Number') . '</th><th>' . t('Start Date') . '</th><th>' . t('End Date') . '</th><th>' . t('Duration (days)') . '</th><th>' . t('Head of Government') . '</th><th>' . t('Title') . '</th></tr>';
+
+  $output = '<table><tr>';
+  $output .= '<th class="gov-num"></th>';
+  $output .= '<th class="time-span">';
+  $output .=   _rk_valitsused_build_get_link_with_query_string('PERIOD', 'valitsus');
+  $output .= '</th>';
+  $output .= '<th class="duration">';
+  $output .=   _rk_valitsused_build_get_link_with_query_string('DURATION', 'valitsus');
+  $output .= '</th>';
+  $output .= '<th class="gov-head">';
+  $output .=   _rk_valitsused_build_get_link_with_query_string('HEAD', 'valitsus');
+  $output .= '</th>';
+  $output .= '<th class="head-title">' . t('Title') . '</th></tr>';
+
+  return $output;
+}
+
+
+/**
+ * Defined in rk_valitsused_theme.
+ */
+function theme_ul_valitsus_start($variables) {
+
+  $output = '<ul class="varasemad">';
+  $output .= '<li class="gov-num-narrow">' . t('Ordering') . '</li>';
+  $output .= '<li class="time-span">';
+  $output .=   _rk_valitsused_build_get_link_with_query_string('PERIOD', 'valitsus');
+  $output .= '</li>';
+  $output .= '<li class="duration">';
+  $output .=   _rk_valitsused_build_get_link_with_query_string('DURATION', 'valitsus');
+  $output .= '</li>';
+  $output .= '<li class="gov-head">';
+  $output .=   _rk_valitsused_build_get_link_with_query_string('HEAD', 'valitsus');
+  $output .= '</li>';
+  $output .= '<li class="head-title">' . t('Title') . '</li></ul>';
+
+  return $output;
+}
+
+
+/**
+ * Defined in rk_valitsused_theme.
+ */
+function theme_ul_valitsus_object($variables) {
+
+  $output = '<ul class="' . $variables['even_odd'] . ' varasemad">';
+  $output .= '<li class="gov-num-narrow"><span class="m-label">' . t('Government Number:') . '</span> <a href="' . VALITSUS_URL . '/' . $variables['muutujad']->government_number . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']->government_number . '">' . $variables['muutujad']->government_number . '</a></li>';
+  $output .= '<li class="time-span"><span class="m-label">' . t('Period:') . '</span> <span class="ametiaeg"><a href="' . VALITSUS_URL . '/' . $variables['muutujad']->government_number . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']->government_number . '">' . _rk_valitsused_eesti_format_date($variables['muutujad']->ruled_start_date) . ' - ' . _rk_valitsused_eesti_format_date($variables['muutujad']->ruled_end_date) . '</a></span></li>';
+  $output .= '<li class="duration"><span class="m-label">' . t('Duration:') . '</span> ' . $variables['muutujad']->calculated_days . '</li>';
+
+  // Prefer display_indiv_name over concatenation of first and last names.
+  if ($variables['muutujad']->display_indiv_name != '') {
+    $display_name = $variables['muutujad']->display_indiv_name;
+  }
+  else {
+    $display_name = $variables['muutujad']->name;
+  }
+  $output .= '<li class="gov-head juht"><span class="m-label">' . t('Name:') . '</span> <a href="' . MINISTER_URL . '/' . $variables['muutujad']->minister_id . '" title="' . $variables['muutujad']->name . '">' . $display_name . '</a></li>';
+
+  if ($variables['muutujad']->display_title != '') {
+    $display_title = $variables['muutujad']->display_title;
+  }
+  else {
+    $display_title = _rk_valitsused_gov_num_head_of_gov_title($variables['muutujad']->government_number);
+  }  
+  $output .= '<li class="head-title"><span class="m-label">' . t('Head of Government:') . '</span> ' . $display_title . '</li></ul>';
+
+  return $output;
+}
+
+
+/**
+ * Defined in rk_valitsused_theme.
+ */
+function theme_ul_valitsus_end($variables) {
+  global $language;
+
+  $output = $gallery . '<div class="varasemad-footer"><a href="/' . $language->language . '/valitsus/varasemad-valitsused/ministrid" class="varasemad" title="' . t('Estonian Ministers') . '">' . t('Estonian Ministers') . '</a><a href="/' . $language->language . '/valitsus/varasemad-valitsused/huvitav-teada" class="varasemad" title="' . t('Good to Know') . '">' . t('Good to Know') . '</a></div>';
+  return $output;
+}
+
+
+/**
+ * Defined in rk_valitsused_theme.
+ */
+function theme_table_valitsus($variables) {
+  // @todo. Is there a way to use drupal_render elegantly here?
+  $output = '<tr class="' . $variables['even_odd'] . '">';
+  $output .= '<td><a href="' . VALITSUS_URL . '/' . $variables['muutujad']['government_number'] . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']['government_number'] . '">' . $variables['muutujad']['government_number'] . '</a></td>';
+  $output .= '<td><span class="ametiaeg">' . _rk_valitsused_eesti_format_date($variables['muutujad']['ruled_start_date']) . ' - ' . _rk_valitsused_eesti_format_date($variables['muutujad']['ruled_end_date']) . '</span></td>';
+  $output .= '<td>' . $variables['muutujad']['ruled_days'] . '</td>';
+  $output .= '<td class="juht"><a href="' . MINISTER_URL . '/' . $variables['muutujad']['minister_id'] . '" title="' . $variables['muutujad']['name'] . '">' . $variables['muutujad']['name'] . '</td>';
+  $output .= '<td>' . $variables['muutujad']['ametinimetus'] . '</td></tr>';
+
+  return $output;
+}
+
+
+/**
+ * Defined in rk_valitsused_theme.
+ */
+function theme_table_valitsus_object($variables) {
+//print_r($variables);exit;
+  // @todo. Is there a way to use drupal_render elegantly here?
+  $output = '<tr class="' . $variables['even_odd'] . '">';
+  $output .= '<td><a href="' . VALITSUS_URL . '/' . $variables['muutujad']->government_number . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']->government_number . '">' . $variables['muutujad']->government_number . '</a></td>';
+  $output .= '<td><span class="ametiaeg"><a href="' . VALITSUS_URL . '/' . $variables['muutujad']->government_number . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']->government_number . '">' . $variables['muutujad']->ruled_start_date . ' - ' . $variables['muutujad']->ruled_end_date . '</a></span></td>';
+  $output .= '<td>' . $variables['muutujad']->calculated_days . '</td>';
+  $output .= '<td class="juht"><a href="' . MINISTER_URL . '/' . $variables['muutujad']->minister_id . '" title="' . $variables['muutujad']->name . '">' . $variables['muutujad']->name . '</td>';
+  $output .= '<td>' . _rk_valitsused_gov_num_head_of_gov_title($variables['muutujad']->government_number) . '</td></tr>';  
+
+  return $output;
+}
+
+
+/**
+ * Defined in rk_valitsused_theme.
+ */
+function theme_table_valitsus_end($variables) {
+  global $language;
+  $output = '</table>';
+  $output .= '<div class="varasemad-footer"><a href="/' . $language->language . '/valitsus/varasemad-valitsused/ministrid" class="varasemad" title="' . t('Estonian Ministers') . '">' . t('Estonian Ministers') . '</a><a href="/' . $language->language . '/valitsus/varasemad-valitsused/huvitav-teada" class="varasemad" title="' . t('Good to Know') . '">' . t('Good to Know') . '</a></div>';
+  return $output;
+}
+
+
+/**
+ * Defined in rk_valitsused_theme.
+ */
+function theme_table_kauem($variables) {
+  //$output = '<table><tr><th>' . t('Government Number') . '</th><th>' . t('Start Date') . '</th><th>' . t('End Date') . '</th><th>' . t('Duration (days)') . '</th><th>' . t('Head of Government') . '</th></tr>';
+
+/*
+  $output = '<table><tr>';
+  $output .= '<th class="gov-num">' . t('Government Number') . '</th>';
+  $output .= '<th class="time-span">' . t('Period') . '</th>';
+  $output .= '<th class="duration">' . t('Duration (days)') . '</th>';
+  $output .= '<th class="gov-head">' . t('Head of Government') . '</th></tr>';
+*/
+
+  $output = '<ul class="varasemad kauem">';
+  $output .= '<li class="gov-num">' . t('Government Number') . '</li>';
+  $output .= '<li class="time-span">' . t('Period') . '</li>';
+  $output .= '<li class="duration">' . t('Duration (days)') . '</li>';
+  $output .= '<li class="gov-head">' . t('Head of Government') . '</li></ul>';
+
+  return $output;
+}
+
+/**
+ * Defined in rk_valitsused_theme.
+ */
+function theme_table_row_kauem($variables) {
+  // @todo. Is there a way to use drupal_render elegantly here?
+  //$output = '<tr class="' . $variables['even_odd'] . '"><td><a href="' . VALITSUS_URL . '/' . $variables['muutujad']['government_number'] . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']['government_number'] . '">' . $variables['muutujad']['government_number'] . '</a></td><td>' . $variables['muutujad']['ruled_start_date'] . '</td><td>' . $variables['muutujad']['ruled_end_date'] . '</td><td>' . $variables['muutujad']['ruled_days'] . '</td><td><a href="' . MINISTER_URL . '/' . $variables['muutujad']['minister_id'] . '" title="' . $variables['muutujad']['name'] . '">' . $variables['muutujad']['name'] . '</td></tr>';
+
+/*
+  $output = '<tr class="' . $variables['even_odd'] . '"><td><a href="' . VALITSUS_URL . '/' . $variables['muutujad']['government_number'] . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']['government_number'] . '">' . $variables['muutujad']['government_number'] . '</a></td><td>' . $variables['muutujad']['ruled_start_date'] . ' - ' . $variables['muutujad']['ruled_end_date'] . '</td><td>' . $variables['muutujad']['ruled_days'] . '</td><td><a href="' . MINISTER_URL . '/' . $variables['muutujad']['minister_id'] . '" title="' . $variables['muutujad']['name'] . '">' . $variables['muutujad']['name'] . '</td></tr>';
+*/
+
+  $output = '<ul class="' . $variables['even_odd'] . ' varasemad">';
+  $output .= '<li class="gov-num"><a href="' . VALITSUS_URL . '/' . $variables['muutujad']['government_number'] . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']['government_number'] . '">' . $variables['muutujad']['government_number'] . '</a></li>';
+  $output .= '<li class="time-span">' . $variables['muutujad']['ruled_start_date'] . ' - ' . $variables['muutujad']['ruled_end_date'] . '</li>';
+  $output .= '<li class="duration">' . $variables['muutujad']['ruled_days'] . '</li>';
+  $output .= '<li class="gov-head"><a href="' . MINISTER_URL . '/' . $variables['muutujad']['minister_id'] . '" title="' . $variables['muutujad']['name'] . '">' . $variables['muutujad']['name'] . '</li>';
+  $output .= '</ul>';
+
+  return $output;
+}
+
+/**
+ * Defined in rk_valitsused_theme.
+ */
+function theme_table_end_kauem($variables) {
+  $output = '</table>';
+  return $output;
+}
+
+/**
+ * Defined in rk_valitsused_theme.
+ */
+function theme_table_kauem_minister($variables) {
+  //$output = '<table><tr><th>' . $variables[0] . '</th><th>' . t('Government Number') . '</th><th>' . t('Period') . '</th><!-- th>' . t('End Date') . '</th --><th>' . t('Duration (days)') . '</th><th>' . t('Role') . '</th></tr>';
+  $output = '<table><tr><th>' . $variables['pealkiri'] . '</th><th>' . t('Duration (days)') . '</th></tr>';
+  return $output;
+}
+
+
+/**
+ * Defined in rk_valitsused_theme.
+ */
+function theme_table_row_kauem_minister($variables) {
+  // @todo. Is there a way to use drupal_render elegantly here?
+  //$output = '<tr><td><a href="' . MINISTER_URL . '/' . $variables[0]['minister_id'] . '" title="' . $variables[0]['name'] . '">' . $variables[0]['name'] . '</a></td><td><a href="' . VALITSUS_URL . '/' . $variables[0]['government_number'] . '" title="' . t('Republic of Estonia government number') . ' ' . $variables[0]['government_number'] . '">' . $variables[0]['government_number'] . '</a></td><td><span class="ametiaeg">' . $variables[0]['ruled_combined'] . '</span></td><!-- td>' . $variables[0]['ruled_end_date'] . '</td --><td>' . $variables[0]['ruled_days'] . '</td><td>' . _rk_valitsused_translate_amet($variables[0]['position_type_code']) . '</td></tr>';
+  $output = '<tr class="' . $variables['even_odd'] . '"><td><a href="' . MINISTER_URL . '/' . $variables['muutujad']['minister_id'] . '" title="' . $variables['muutujad']['name'] . '">' . $variables['muutujad']['name'] . '</a></td><td>' . $variables['muutujad']['ruled_days'] . '</td></tr>';  
+  return $output;
+}
+
+/**
+ * Defined in rk_valitsused_theme.
+ */
+function theme_minister_glossary_row($variables) {
+/*
+
+Array
+(
+    [muutujad] => stdClass Object
+        (
+            [id] => 4222
+            [rk_minister_government_rk_minister_position_type_code] => SOTSIAALMINISTER
+            [rk_minister_first_name] => Jaak
+            [rk_minister_last_name] => Aab
+            [rk_minister_government_rk_minister_government_id] => 482
+            [rk_government_rk_minister_government_government_number] => 44
+            [rk_minister_government_rk_minister_ruled_start_date] => 2005-04-13
+            [rk_minister_government_rk_minister_ruled_end_date] => 2007-04-05
+            [rk_government_rk_minister_government_ruled_days] => 723
+        )
+
+)
+
+*/
+//print_r($variables);exit;
+  $output = '<ul class="varasemad">';
+  $output .= '<li class="head-title">';
+
+  if ($variables['muutujad']->rk_minister_government_rk_minister_display_indiv_name != '') {
+    //print_r($variables['muutujad']);exit;
+    $display_name = $variables['muutujad']->rk_minister_government_rk_minister_display_indiv_name;
+  }
+  else {
+    $display_name = $variables['muutujad']->rk_minister_first_name . ' ' . $variables['muutujad']->rk_minister_last_name;
+  }
+  $output .= ' <span class="m-label">' . t('Minister:') . '</span> <a href="' . MINISTER_URL . '/' . $variables['muutujad']->id . '" title="' . $display_name . '">' . $display_name . '</a>';
+  $output .= '</li>';
+  $output .= '<li class="gov-num">';
+  $output .= ' <span class="m-label">' . t('Government Number:') . '</span> <a href="' . VALITSUS_URL . '/' . $variables['muutujad']->rk_government_rk_minister_government_government_number . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']->rk_government_rk_minister_government_government_number . '">' . $variables['muutujad']->rk_government_rk_minister_government_government_number . '</a>';
+  $output .= '</li>';
+  $output .= '<li class="time-span">';
+  $output .= ' <span class="m-label">' . t('Period:') . '</span> <span class="ametiaeg"><a href="' . VALITSUS_URL . '/' . $variables['muutujad']->rk_government_rk_minister_government_government_number . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']->rk_government_rk_minister_government_government_number . '">' . _rk_valitsused_eesti_format_date($variables['muutujad']->rk_minister_government_rk_minister_ruled_start_date) . ' - ' . _rk_valitsused_eesti_format_date($variables['muutujad']->rk_minister_government_rk_minister_ruled_end_date) . '</a></span>';
+  $output .= '</li>';
+  $output .= '<li class="duration"> <span class="m-label">' . t('Duration (days):') . '</span> ' . _rk_valitsused_calculate_days($variables['muutujad']->rk_minister_government_rk_minister_ruled_start_date, $variables['muutujad']->rk_minister_government_rk_minister_ruled_end_date) . '</li>';
+
+  if ($variables['muutujad']->rk_minister_government_rk_minister_display_title != '') {
+    //print_r($variables['muutujad']);exit;
+    $display_title = $variables['muutujad']->rk_minister_government_rk_minister_display_title;
+  }
+  else {
+    $display_title = _rk_valitsused_translate_amet($variables['muutujad']->rk_minister_government_rk_minister_position_type_code);
+  }
+  $output .= '<li class="gov-head"> <span class="m-label">' . t('Role:') . '</span> ' . $display_title . '</li>';
+  $output .= '</ul>';
+
+  return $output;
+}
+
+
+/**
+ * Defined in rk_valitsused_theme.
+ */
+function theme_table_end_kauem_minister($variables) {
+  $output = '</table>';
+  return $output;
+}
+
+/**
+ * Defined in rk_valitsused_theme.
+ */
+function theme_table_search_minister($variables) {
+  // $output = '<table><tr><th>' . $variables['pealkiri'] . '</th><th>' . t('Government Number') . '</th><th>' . t('Period') . '</th><!-- th>' . t('End Date') . '</th --><th>' . t('Duration (days)') . '</th><th>' . t('Role') . '</th></tr>';
+
+/*
+  $output = '<table><tr>';
+  $output .= '<th>' . $variables['pealkiri'] . '</th>';
+  $output .= '<th class="gov-num">' . t('Government Number') . '</th>';
+  $output .= '<th class="time-span">';
+  $output .=   _rk_valitsused_build_get_link_with_query_string('PERIOD', 'minister');
+  $output .= '</th>';
+  $output .= '<th class="duration">';
+  $output .=   _rk_valitsused_build_get_link_with_query_string('DURATION', 'minister');
+  $output .= '</th>';
+  $output .= '<th class="gov-head">' . t('Role') . '</th>';
+*/
+
+  $output = '<ul class="varasemad">';
+  $output .= '<li class="head-title">';
+  $output .= _rk_valitsused_build_get_link_with_query_string('LNAME', 'minister');
+  // $output .=   $variables['pealkiri'];
+  $output .= '</li>';
+  $output .= '<li class="gov-num">' . t('Government Number') . '</li>';
+  $output .= '<li class="time-span">';
+  $output .=   _rk_valitsused_build_get_link_with_query_string('PERIOD', 'minister');
+  $output .= '</li>';
+  $output .= '<li class="duration">';
+  $output .=   _rk_valitsused_build_get_link_with_query_string('DURATION', 'minister');
+  $output .= '</li>';
+  $output .= '<li class="gov-head">';
+  $output .=   t('Role');
+  $output .= '</li></ul>';
+
+  return $output;
+}
+
+/*
+li.gov-num {width: 3%;}
+li.time-span {width: 20%;}
+li.duration {width: 15%;text-align: center;}
+li.gov-head {width: 20%;}
+li.head-title {width: 25%;}
+*/
+
+
+/**
+ * Defined in rk_valitsused_theme.
+ */
+function theme_table_row_search_minister($variables) {
+  // @todo. Is there a way to use drupal_render elegantly here?
+  $output = '<tr class="' . $variables['even_odd'] . '"><td><a href="' . MINISTER_URL . '/' . $variables['muutujad']['minister_id'] . '" title="' . $variables['muutujad']['name'] . '">' . $variables['muutujad']['name'] . '</a></td><td><a href="' . VALITSUS_URL . '/' . $variables['muutujad']['government_number'] . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']['government_number'] . '">' . $variables['muutujad']['government_number'] . '</a></td><td><span class="ametiaeg">' . $variables['muutujad']['ruled_combined'] . '</span></td><!-- td>' . $variables['muutujad']['ruled_end_date'] . '</td --><td class="duration">' . $variables['muutujad']['ruled_days'] . '</td><td>' . _rk_valitsused_translate_amet($variables['muutujad']['position_type_code']) . '</td></tr>';
+  return $output;
+}
+
+
+/**
+ * Defined in rk_valitsused_theme.
+ */
+function theme_table_row_search_minister_object($variables) {
+/*
+  $output = '<tr class="' . $variables['even_odd'] . '"><td><a href="' . MINISTER_URL . '/' . $variables['muutujad']->minister_id . '" title="' . $variables['muutujad']->name . '">' . $variables['muutujad']->name . '</a></td><td><a href="' . VALITSUS_URL . '/' . $variables['muutujad']->government_number . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']->government_number . '">' . $variables['muutujad']->government_number . '</a></td><td><span class="ametiaeg">' . _rk_valitsused_eesti_format_date($variables['muutujad']->ruled_start_date) . ' - ' . _rk_valitsused_eesti_format_date($variables['muutujad']->ruled_end_date) . '</span></td><td class="duration">' . $variables['muutujad']->calculated_days . '</td><td>' . _rk_valitsused_translate_amet($variables['muutujad']->position_type_code) . '</td></tr>';
+*/
+
+  $output = '<ul class="' . $variables['even_odd'] . ' varasemad">';
+  $output .= '<li class="head-title">';
+  $output .= '  <a href="' . MINISTER_URL . '/' . $variables['muutujad']->minister_id . '" title="' . $variables['muutujad']->name . '">' . $variables['muutujad']->name . '</a>';
+  $output .= '</li>';
+  $output .= '<li class="gov-num">';
+  $output .= '  <a href="' . VALITSUS_URL . '/' . $variables['muutujad']->government_number . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']->government_number . '">' . $variables['muutujad']->government_number . '</a>';
+  $output .= '</li>';
+  $output .= '<li class="time-span">';
+  $output .= '  <span class="ametiaeg"><a href="' . VALITSUS_URL . '/' . $variables['muutujad']->government_number . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']->government_number . '">' . _rk_valitsused_eesti_format_date($variables['muutujad']->ruled_start_date) . ' - ' . _rk_valitsused_eesti_format_date($variables['muutujad']->ruled_end_date) . '</a></span>';
+  $output .= '</li>';
+  $output .= '<li class="duration">' . $variables['muutujad']->calculated_days . '</li>';
+  $output .= '<li class="gov-head">' . _rk_valitsused_translate_amet($variables['muutujad']->position_type_code) . '</li>';
+  $output .= '</ul>';
+
+  return $output;
+}
+
+
+/**
+ * Defined in rk_valitsused_theme.
+ */
+function theme_table_end_search_minister($variables) {
+  global $language;
+  $output = '<!-- /table -->';
+  $output .= '<div class="varasemad-footer"><a href="/' . $language->language . '/valitsus/varasemad-valitsused" class="varasemad" title="' . t('Former Governments') . '">' . t('Former Governments') . '</a><a href="/' . $language->language . '/valitsus/varasemad-valitsused/huvitav-teada" class="varasemad" title="' . t('Good to Know') . '">' . t('Good to Know') . '</a></div>';
+  return $output;
+}
+
+
+/**
+ * Defined in rk_valitsused_theme.
+ */
+function theme_no_result($variables) {
+  //$output = '<h2>' . t('No results found for :amet and :sugu', array(':amet' => $variables[0], ':sugu' => $variables[1])) . '</h2>';
+  $output = '<h2>' . t('Sorry, no results found') . '</h2>'; // Vabandame, kuid teie otsing ei tagastanud ühtegi tulemust. 
+  return $output;
+}
+
+
+/**
+ * Defined in rk_valitsused_theme.
+ */
+function theme_valitsus_description($variables) {
+
+    $strOutput = '';
+
+    $strOutput .= '<div class="varasemad-wrapper gov-wrapper">';
+    $strOutput .= '<div class="grid-6">';
+
+    $formatted_date_output = _rk_valitsused_eesti_format_date($variables['muutujad']->rk_government_ruled_start_date) . ' - ' . _rk_valitsused_eesti_format_date($variables['muutujad']->rk_government_ruled_end_date);
+    $strOutput .= '<h2 class="varasemad-title gov-title">' . t('Government @num', array('@num' => $formatted_date_output)) . '</h2>';
+
+    $strOutput .= '<p><strong>' . t('Days ruled') . ':</strong> ' . _rk_valitsused_days_in_power($variables['muutujad']->rk_government_id, 'valitsus') . '</p>';
+
+    $desc = ($variables['muutujad']->rk_government_description == '') ? '' : t($variables['muutujad']->rk_government_description);
+    $strOutput .= '<p>' . $desc . '</p>';
+    $strOutput .= '</div>';
+    $strOutput .= '<div class="grid-4">';
+    $strOutput .= _rk_valitsused_manageeri_pilt($variables['muutujad']->rk_government_government_number, 'valitsus', $variables['muutujad']->rk_government_cabinet_img_fid);
+    $strOutput .= '</div>';
+    $strOutput .= '</div>';
+
+    return $strOutput;  
+}
+
+
+/**
+ * Defined in rk_valitsused_theme.
+ */
+function theme_minister_description($variables) {
+//print_r($variables);exit;
+    $strOutput = '';
+
+    $strOutput .= '<div class="varasemad-wrapper minister-wrapper">';
+    $strOutput .= '<div class="grid-6">';
+
+    $strOutput .= '<h2 class="varasemad-title minister-title">' . $variables['muutujad']->rk_minister_first_name . ' ' . $variables['muutujad']->rk_minister_last_name . '</h2>';
+
+    $desc = ($variables['muutujad']->rk_minister_description == '') ? '' : t($variables['muutujad']->rk_minister_description);
+    $strOutput .= '<p>' . $desc . '</p>';
+    $strOutput .= '</div>';
+    $strOutput .= '<div class="grid-4">';
+    $strOutput .= _rk_valitsused_manageeri_pilt($variables['muutujad']->id, 'minister', $variables['muutujad']->rk_minister_minister_img_fid);
+    $strOutput .= '</div>';
+    $strOutput .= '</div>';
+
+    return $strOutput;  
+}
+
+
+function theme_minister_image($variables) {
+  $attributes = $variables['attributes'];
+  $attributes['src'] = file_create_url($variables['path']);
+
+  foreach (array('width', 'height', 'alt', 'title') as $key) {
+
+    if (isset($variables[$key])) {
+      $attributes[$key] = $variables[$key];
+    }
+  }
+
+  return '<img' . drupal_attributes($attributes) . ' />';
+}
+
+
+function theme_valitsus_image($variables) {
+  $attributes = $variables['attributes'];
+  $attributes['src'] = file_create_url($variables['path']);
+
+  foreach (array('width', 'height', 'alt', 'title') as $key) {
+
+    if (isset($variables[$key])) {
+      $attributes[$key] = $variables[$key];
+    }
+  }
+
+  return '<img' . drupal_attributes($attributes) . ' />';
+}
+
+
+/**
+ * Statistika mitu päeva osa submit.
+ */
+function rk_valitsused_statistika_mitupaeva_submit($form, &$form_state) {
+
+  $gov_id = _rk_valitsused_get_current_gov_id();
+  $val_min = $form_state['values']['mitupaeva_val_min'];
+  $type = $form_state['values']['type_mitupaeva'];
+  // Zero-pad month and day.
+  $month = ($form_state['values']['day_mitupaeva']['month'] >= 10) ? $form_state['values']['day_mitupaeva']['month'] : '0' . $form_state['values']['day_mitupaeva']['month'];
+  $day = ($form_state['values']['day_mitupaeva']['day'] >= 10) ? $form_state['values']['day_mitupaeva']['day'] : '0' . $form_state['values']['day_mitupaeva']['day'];
+  $date_string = $form_state['values']['day_mitupaeva']['year'] . '-' . $month . '-' . $day;
+
+
+  if ($val_min == 'valitsus') {
+    $type = 'valitsus';
+    $query = db_select('rk_government', 'g');
+    $query
+      ->condition('g.id', $gov_id, '=')
+      ->fields('g', array('ruled_start_date'));
+  }
+  else {
+
+    if ($type == 'peaminister') {
+      $query = db_select('rk_minister_government', 'g');
+      $query
+        ->condition(
+          db_and()
+          ->condition('g.government_id', $gov_id, '=')
+          ->condition('g.is_head_of_government', '1', '=')
+        )
+        ->fields('g', array('ruled_start_date'));
+    }
+    else {
+//print $gov_id . ' ' . $val_min . ' ' . $type;exit;
+      $query = db_select('rk_minister_government', 'g');
+
+      $arrOptions = _rk_valitsused_amet_options(strtoupper($type));
+      $query
+        ->condition('g.government_id', $gov_id, '=')
+        ->condition('g.position_type_code', $arrOptions, 'IN')
+        ->condition('g.ruled_end_date', NULL, 'IS')
+        ->fields('g', array('ruled_start_date')
+      );
+    }
+
+  }
+
+  $result = $query->execute();
+  $start_date = $result->fetchField();
+
+  // $number_days = (strtotime($date_string) - strtotime($start_date)) / (60 * 60 * 24);
+  $number_days = _rk_valitsused_calculate_days($start_date, $date_string);
+
+  // Keeleliselt teist moodi inglise keeles kui tulevikus.
+  if (strtotime($date_string) > time()) {
+    $strOutput = t('Answer: The current @minister will have been in authority for @num_days on @date_string.', array('@minister' => _rk_valitsused_translate_amet($type), '@num_days' => format_plural($number_days, '1 day', '@count days'), '@date_string' => _rk_valitsused_eesti_format_date($date_string, FALSE)));
+  }
+  else {
+    $strOutput = t('Answer: The current @minister has been in authority for @num_days on @date_string.', array('@minister' => _rk_valitsused_translate_amet($type), '@num_days' => format_plural($number_days, '1 day', '@count days'), '@date_string' => _rk_valitsused_eesti_format_date($date_string, FALSE)));
+  }
+
+  $form_state['values']['result_mitupaeva'] = $strOutput;
+  $form_state['rebuild'] = TRUE;
+}
+
+
+/**
+ * Statistika kuupaev osa submit.
+ */
+function rk_valitsused_statistika_kuupaev_submit($form, &$form_state) {
+  $gov_id = _rk_valitsused_get_current_gov_id();
+  $type = $form_state['values']['type'];
+  $val_min = $form_state['values']['val_min'];
+  $num_days = $form_state['values']['days'];
+
+  if ($val_min == 'valitsus') {
+    $type = 'valitsus'; // Käsitsi annan väärtus muutujale.
+    $query = db_select('rk_government', 'g');
+    $query
+      ->condition('g.id', $gov_id, '=')
+      ->fields('g', array('ruled_start_date'));
+  }
+  else {
+    $query = db_select('rk_minister_government', 'g');
+
+    // Kasuta is_head_of_government peaministriks / riigivanem.
+    if ($type == 'peaminister') {
+      // @todo Kontrolli, kas ametis olnud üle mitme valitsuse.
+      // @todo $number_days = _rk_valitsused_minister_days_in_power($gov_id, 1); // peaminister duty id = 1.
+
+      $query
+        ->condition(
+          db_and()
+          ->condition('g.government_id', $gov_id, '=')
+          ->condition('g.is_head_of_government', '1', '=')
+        )
+        ->fields('g', array('ruled_start_date'));
+    }
+    else {
+      $query = db_select('rk_minister_government', 'g');
+      $arrOptions = _rk_valitsused_amet_options(strtoupper($type));
+      $query
+        ->condition('g.government_id', $gov_id, '=')
+        ->condition('g.position_type_code', $arrOptions, 'IN')
+        ->condition('g.ruled_end_date', NULL, 'IS')
+        ->fields('g', array('ruled_start_date')
+      );
+    }
+  }
+
+  $result = $query->execute();
+  $start_date = $result->fetchField();
+
+  // I am using ($num_days - 1) used here to satisfy "human" understanding of day count.
+  $date_at_days = date('Y-m-d', strtotime($start_date . ' +' . ($num_days - 1) . ' days'));
+
+  // Tulevik on keeleliselt teistmoodi inglise keeles.
+  if (strtotime($date_at_days) > time()) {
+    $strOutput = t('Answer: The current @minister will have been in authority for @num_days on @date_at_days.', array('@minister' => _rk_valitsused_translate_amet($type), '@num_days' => format_plural($num_days, '1 day', '@count days'), '@date_at_days' => _rk_valitsused_eesti_format_date($date_at_days, FALSE)));
+  }
+  else {
+    $strOutput = t('Answer: The current @minister has been in authority for @num_days on @date_at_days.', array('@minister' => _rk_valitsused_translate_amet($type), '@num_days' => format_plural($num_days, '1 day', '@count days'), '@date_at_days' => _rk_valitsused_eesti_format_date($date_at_days, FALSE)));
+  }
+
+  $form_state['values']['result_kuupaev'] = $strOutput;
+  $form_state['rebuild'] = TRUE;
+}
+
+
+/**
+ * Abifunktsioon.
+ * Kontrolli ning loe päevi üle kui antud minister
+ * on järjestikudes valitsustes ametis olnud. (nt Ansip, Paet jne)
+ * @param $gov_id
+ *   Integer. Government ID.
+ * @param $duty_id
+ *   Integer. Primary key from rk_duty table.
+ */
+function _rk_valitsused_minister_days_in_power($gov_id, $duty_id = 1) {
+  // @todo. matsoo get rid of this line.
+
+
+/* HERE FOR REFERENCE TAKEN FROM _rk_valitsused_kontrolli_sum_ametiaeg()*/
+
+  // Teen old-school kuna dbo meetodile (komenteeritud allpool) pühendasin liiga palju tulutu aega.
+  $result = db_query("
+SELECT r1.government_id
+FROM rk_minister_government r1
+INNER JOIN rk_minister_government r2 ON r1.minister_id = r2.minister_id
+WHERE r1.minister_id = :minister_id
+AND r1.position_type_code LIKE :position
+AND r1.ruled_end_date = r2.ruled_start_date
+", array(':minister_id' => $minister_id, ':position' => $position_type_code));
+  
+  $adjustment = $result->rowCount();
+
+  // Näiteks. Ansip oli kolmes järjestikuses valitsuses peaminister.
+  // Sellega oli tal 2 "ülemineku" päeva vanast valitsusest uute.
+  // Talle peab järelikult olema (calculated_days - 2).
+  return $calculated_days - $adjustment;
+/* END HERE FOR REFERENCE */
+}
+
+
+/**
+ * Let Views know to look for include file.
+ */
+function rk_valitsused_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'rk_valitsused') . '/includes/views',
+  );
+}
+
+
+/**
+ * Form builder for general settings form.
+ */
+function rk_valitsused_settings($form, &$form_state) {
+
+  $form = array();
+
+  $form['rk_valitsused_test_mode'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Test mode'),
+    '#default_value' => variable_get('rk_valitsused_test_mode', 0),
+    '#description' => t('Switch rk_valitsused module between live and test mode.'),
+  );
+
+  $form['rk_valitsused_active_govt'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Currently active government.'),
+    '#default_value' => variable_get('rk_valitsused_active_govt', 46),
+    '#size' => 3,
+    '#description' => t('Number ID for the currently active government. (ie. Government #46)'),
+  );
+
+  $form['rk_valitsused_varasemad_tekst'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Lead-in text for all former governments pages.'),
+    '#default_value' => variable_get('rk_valitsused_varasemad_tekst', 'Add text here: admin/config/rk/settings'),
+    '#description' => t('Text at very top of Varasemad valitsused pages, as per design drawings. HTML allowed.'),
+  );
+
+  $form['rk_valitsused_sissejuhatav_tekst'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Lead-in text for former governments page.'),
+    '#default_value' => variable_get('rk_valitsused_sissejuhatav_tekst', 'Add text here: admin/config/rk/settings'),
+    '#description' => t('Text which is displayed at the list of former governments. HTML allowed.'),
+  );
+
+  $form['rk_valitsused_ministrid_sissejuhatav_tekst'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Lead-in text for ministers page.'),
+    '#default_value' => variable_get('rk_valitsused_ministrid_sissejuhatav_tekst', 'Add text here: admin/config/rk/settings'),
+    '#description' => t('Text which is displayed on the searchable ministers page. HTML allowed.'),
+  );
+
+  return system_settings_form($form);
+}
+
+
+/**
+ * Implements hook_views_query_alter.
+ */
+function rk_valitsused_views_query_alter(&$view, &$query) {
+  switch ($view->name) {
+    case 'name_of_view_here':
+      // Do what needs to be done.
+      break;
+  }
+}
+
+
+/**
+ * Implements hook_form_alter.
+ */
+function rk_valitsused_form_views_exposed_form_alter(&$form, &$form_state, $form_id) {
+
+  // Better exposed filter checkbox ei toimi. Vaheta siin käsitsi.
+  if ($form['#id'] == 'views-exposed-form-governments-page'):
+
+    //dsm($form);  // pretty print array using Krumo to messages
+
+    /*$form['rule_time_type_code_all'] = array(
+		'#type' => 'checkboxes',
+        '#title' => t('Which governments'),
+        '#options' => array('FIRST_REPUBLIC', 'EXILE_GOVERNMENTS', 'SECOND_REPUBLIC'),
+	);*/
+
+    /* $form['rule_time_type_code'] = array(
+		'#type' => 'checkbox',
+        '#title' => t('1918-1940/1944'),
+        '#default_value' => 'FIRST_REPUBLIC',
+	);
+
+    $form['rule_time_type_code_1'] = array(
+		'#type' => 'checkbox',
+        '#title' => t('In Exile'),
+        '#default_value' => 'EXILE_GOVERNMENTS',
+	);
+
+    $form['rule_time_type_code_2'] = array(
+		'#type' => 'checkbox',
+        '#title' => t('Since 1990'),
+        '#default_value' => 'SECOND_REPUBLIC',
+	); */
+    
+  endif;
+}
+
+
+/**
+ * Implements hook_theme_registry_alter.
+ */
+function rk_valitsused_theme_registry_alter(&$theme_registry) {
+  if (!empty($theme_registry['views_view_field'])) {
+    $theme_registry['views_view_field']['function'] = 'rk_valitsused_edit_field_output';
+  }
+}
+
+
+/**
+ * Called from rk_valitsused_theme_registry_alter.
+ * Trikitan views output siin.
+ */
+function rk_valitsused_edit_field_output($vars) {
+//print_r($vars['row']);exit;
+//print $vars['field']->field_alias;
+
+/* if (strstr($vars['field']->field_alias, 'last')):
+  print $vars['field']->field_alias;exit;
+endif; */
+
+  // $view = $vars['view'];
+  // $field = $vars['field'];
+  // $row = $vars['row'];
+//print_r($vars['field']);exit;
+
+  // Otsi olemasolev valitsus ning arvuta valitsetud aega.
+  if ($vars['field']->field_alias == 'rk_government_ruled_days' 
+	    && (int) $vars['field']->original_value == 0 
+	    && (int) $vars['row']->rk_government_ruled_end_date == 0) {
+
+    $start = $vars['row']->rk_government_ruled_start_date;
+    //$days = (strtotime(date("Y-m-d")) - strtotime($vars['row']->rk_government_ruled_start_date)) / (60 * 60 * 24);
+    $current_gov_id = _rk_valitsused_get_current_gov_id();
+    $days = _rk_valitsused_days_in_power($current_gov_id, 'valitsus');
+    return $days;
+  }
+  elseif ($vars['field']->field_alias == 'rk_minister_government_rk_government_position_type_code') {
+    return _rk_valitsused_translate_amet($vars['row']->rk_minister_government_rk_government_position_type_code);
+  }
+  elseif ($vars['field']->field_alias == 'rk_minister_rk_minister_government_created_by') {
+    // Kasutan created_by järjehoidjana. Siit tuvastan ja teen kõike vajaliku, et ilusti näidata ministri nimi ning ametiaeg.
+    $gov_start = $vars['row']->rk_government_ruled_start_date;
+    $gov_end = $vars['row']->rk_government_ruled_end_date;
+    $min_start = $vars['row']->rk_minister_government_rk_government_ruled_start_date;
+    $min_end = $vars['row']->rk_minister_government_rk_government_ruled_end_date;
+    $min_first = $vars['row']->rk_minister_rk_minister_government_first_name;
+    $min_last = $vars['row']->rk_minister_rk_minister_government_last_name;
+    $min_id = $vars['row']->rk_minister_rk_minister_government_id;
+
+    // Kui minister lahkus enne valitsuse lõpp, siis kuva tema ametiaega.
+    $ruled = '';
+    if (($min_start != '' && $min_start != $gov_start) || ($min_end != '' && $min_end != $gov_end)) {
+      $min_end = ($vars['row']->rk_minister_government_rk_government_ruled_end_date != '') ? _rk_valitsused_eesti_format_date($vars['row']->rk_minister_government_rk_government_ruled_end_date) : '...';
+      $ruled = ' <span class="smaller">(' . _rk_valitsused_eesti_format_date($min_start) . '-' . $min_end . ')</span>';
+    }
+
+    // Giving option to have different Minister name displayed. (ex. unmarried vs married name)
+    if ($vars['row']->rk_minister_government_rk_government_display_indiv_name != '') {
+      $display_name = $vars['row']->rk_minister_government_rk_government_display_indiv_name;
+    }
+    else {
+      $display_name = $min_first . ' ' . $min_last;
+    }  
+
+  
+    return '<a href="' . MINISTER_URL . '/' . $min_id .'" title="' . $display_name . '">' . $display_name . '</a>' . $ruled;
+
+  }
+  elseif ($vars['field']->field_alias == 'rk_minister_government_rk_minister_position_type_code') {
+    // Ministrite info leht.
+    //return _rk_valitsused_translate_amet($vars['row']->rk_minister_government_rk_minister_position_type_code) . ' (' . $vars['row']->rk_minister_government_rk_minister_ruled_start_date . ' ' . t('to') . ' ' . $vars['row']->rk_minister_government_rk_minister_ruled_end_date . ')';
+	return '<span class="ametikoht">' . _rk_valitsused_translate_amet($vars['row']->rk_minister_government_rk_minister_position_type_code) . '</span>';
+  }
+  elseif ($vars['field']->field_alias == 'rk_minister_government_rk_minister_ruled_end_date') {
+    $min_start = _rk_valitsused_eesti_format_date($vars['row']->rk_minister_government_rk_minister_ruled_start_date);
+    $min_end = ($vars['row']->rk_minister_government_rk_minister_ruled_end_date != '') ? _rk_valitsused_eesti_format_date($vars['row']->rk_minister_government_rk_minister_ruled_end_date) : '...';
+
+    $ruled = $min_start . ' - ' . $min_end;
+
+    return $ruled;
+
+  }
+  elseif ($vars['field']->field_alias == 'rk_government_description') {
+    
+    return theme('valitsus_description', array('muutujad' => $vars['row']));
+
+  }
+  elseif ($vars['field']->field_alias == 'rk_minister_description') {
+    
+    return theme('minister_description', array('muutujad' => $vars['row']));
+
+  }
+  elseif ($vars['field']->field_alias == 'unknown') {
+    // print_r($vars['field']);exit;
+    // print_r($vars['row']);exit;
+    return theme('minister_glossary_row', array('muutujad' => $vars['row']));
+
+  }
+  elseif ($vars['field']->field_alias == 'rk_minister_government_rk_government_display_title') {
+    
+    if ($vars['row']->rk_minister_government_rk_government_display_title != '') {
+      return $vars['row']->rk_minister_government_rk_government_display_title;
+    }
+    else {
+      return _rk_valitsused_translate_amet($vars['row']->rk_minister_government_rk_government_position_type_code);
+    }    
+  }
+
+  // Default return.
+  return $vars['output'];
+
+}
+
+
+
+/**
+ * Käsitsi kokku pandud.
+ * @todo. Andmebaasi päring, et see tekst tuleks dünaamiliselt? Kas see on üldse allpoolses formaadis andmebaasis olemas?
+ * @param $gov_number
+ *   integer
+ * @return
+ *   string
+ */
+function _rk_valitsused_gov_num_head_of_gov_title($gov_number) {
+
+  // More recent govs have peaminister.
+  if ($gov_number >= 36) {
+    return 'peaminister';
+  }
+  else {
+    $arr = array(
+    '35' => 'üleminekuvalitsuse peaminister',
+    '34' => 'üleminekuvalitsuse peaminister',
+    '33' => 'peaministri asetäitja eksiilis',
+    '32' => 'peaministri asetäitja eksiilis',
+    '31' => 'peaministri asetäitja eksiilis, põllutööminister eksiilis, sõjaministri kohusetäitja eksiilis 1.03.1',
+    '30' => 'peaministri kohusetäitja eksiilis, välisminister eksiilis kuni 29.03.1963',
+    '29' => 'peaministri asetäitja eksiilis, siseminister eksiilis',
+    '28' => 'peaministri asetäitja, siseminister',
+    '27' => 'peaminister',
+    '26' => 'peaminister',
+    '25' => 'riigivanem kuni 24.01.1934, peaminister riigivanema ülesannetes 24.01.1934-03.09.1937, riigihoidja',
+    '24' => 'riigivanem',
+    '23' => 'riigivanem',
+    '22' => 'riigivanem',
+    '21' => 'riigivanem',
+    '20' => 'riigivanem',
+    '19' => 'riigivanem',
+    '18' => 'riigivanem',
+    '17' => 'riigivanem',
+    '16' => 'riigivanem',
+    '15' => 'riigivanem',
+    '14' => 'riigivanem',
+    '13' => 'riigivanem',
+    '12' => 'riigivanem',
+    '11' => 'riigivanem',
+    '10' => 'riigivanem',
+    '9' => 'riigivanem',
+    '8' => 'peaminister 26.10.1920-20.12.1920, riigivanem alates 20.12.1920, sõjaminister, välisministri kohusetäitja',
+    '7' => 'peaminister',
+    '6' => 'peaminister',
+    '5' => 'peaminister',
+    '4' => 'peaminister, sõjaminister',
+    '3' => 'ajutise valitsuse peaminister, sõjaminister',
+    '2' => 'ajutise valitsuse peaminister, siseminister',
+    '1' => 'ajutise valitsuse ministrite nõukoguesimees, siseminister, kaubandus- ja tööstusminister',
+    );
+
+    return $arr[$gov_number];
+
+  }
+
+}
+
+
+/**
+ * Ametikohad rippmenüü valikud.
+ */
+function _rk_valitsused_ametikohad() {
+
+  $ametikohad = array(
+    "PEAMINISTER" => t('Prime Minister'), // peaminister
+    "VALISMINISTER" => t('Minister of Foreign Affairs'), // välisminister MINISTER_OF_FOREIGN_AFFAIRS
+    "MAJANDUSMINISTER" => t('Minister of Economic Affairs and Communications'), // majandus- ja kommunikatsiooniminister MINISTER_OF_ECONOMIC_AFFAIRS
+    "KULTUURIMINISTER" => t('Minister of Culture'), // kultuuriminister MINISTER_OF_CULTURE
+    "HARIDUSMINISTER" => t('Minister of Education and Research'), // haridus- ja teadusminister
+    "JUSTIITSMINISTER" => t('Minister of Justice'), // justiitsminister
+    "KAITSEMINISTER" => t('Minister of Defence'), // kaitseminister
+    "KESKKONNAMINISTER" => t('Minister of the Environment'), // keskkonnaminister
+    "POLLUMAJANDUSMINISTER" => t('Minister of Agriculture'), // põllumajandusminister
+    "RAHANDUSMINISTER" => t('Minister of Finance'), // rahandusminister
+    "REGIONAALMINISTER" => t('Minister of Regional Affairs'), // regionaalminister
+    "SISEMINISTER" => t('Minister of the Interior'), // siseminister
+    "SOTSIAALMINISTER" => t('Minister of Social Affairs'), // sotsiaalminister
+    "MINISTER" => t('Minister'), // minister
+  );
+
+  return $ametikohad;
+}
+
+
+/**
+ * position_type_code inimsõbralikuks.
+ */
+function _rk_valitsused_translate_amet($amet) {
+
+  $ametid = array(
+	'AJUTISE_VALITSUSE' => t('ajutise valitsuse peaminister, sõjaminister'),
+	'AJUTISE_VALITSUSE_1' => t('ajutise valitsuse peaminister, siseminister'),
+	'AJUTISE_VALITSUSE_10' => t('ajutise valitsuse ja tööstus- ja kaubandusminister'),
+	'AJUTISE_VALITSUSE_11' => t('ajutise valitsuse kaubandus- ja tööstusministri kohusetäitja (köstneri välismaal viibimise ajal)'),
+	'AJUTISE_VALITSUSE_12' => t('ajutise valitsuse kaubandusministri kohusetäitja'),
+	'AJUTISE_VALITSUSE_13' => t('ajutise valitsuse põllutööminister'),
+	'AJUTISE_VALITSUSE_14' => t('ajutise valitsuse põllutöö- ja toitlusminister'),
+	'AJUTISE_VALITSUSE_15' => t('ajutise valitsuse toitlusminister'),
+	'AJUTISE_VALITSUSE_16' => t('ajutise valitsuse rahaminister'),
+	'AJUTISE_VALITSUSE_17' => t('ajutise valitsuse rahaminister, siseministri asetäitja'),
+	'AJUTISE_VALITSUSE_18' => t('ajutise valitsuse raha- ja riigivaranduste minister'),
+	'AJUTISE_VALITSUSE_19' => t('ajutise valitsuse siseminister'),
+	'AJUTISE_VALITSUSE_2' => t('ajutise valitsuse ministrite nõukogu esimees, siseminister, kaubandus- ja tööstusminister (koht ilmselt täitmata)'),
+	'AJUTISE_VALITSUSE_20' => t('ajutise valitsuse töö- ja hoolekandeministri kohusetäitja'),
+	'AJUTISE_VALITSUSE_21' => t('ajutise valitsuse töö- ja hoolekandeminister, peaministri asetäitja'),
+	'AJUTISE_VALITSUSE_22' => t('ajutise valitsuse välisminister'),
+	'AJUTISE_VALITSUSE_23' => t('ajutise valitsuse saksa rahvusminister'),
+	'AJUTISE_VALITSUSE_24' => t('ajutise valitsuse rootsi rahvusminister'),
+	'AJUTISE_VALITSUSE_25' => t('ajutise valitsuse vene rahvusminister'),
+	'AJUTISE_VALITSUSE_26' => t('ajutise valitsuse täievoliline minister välismaal'),
+	'AJUTISE_VALITSUSE_27' => t('ajutise valitsuse teedeminister'),
+	'AJUTISE_VALITSUSE_3' => t('ajutise valitsuse haridusminister'),
+	'AJUTISE_VALITSUSE_4' => t('ajutise valitsuse haridusminister (venemaal vangis olles)'),
+	'AJUTISE_VALITSUSE_5' => t('ajutise valitsuse kohtuminister'),
+	'AJUTISE_VALITSUSE_6' => t('ajutise valitsuse kohtuminister, peaministri asetäitja'),
+	'AJUTISE_VALITSUSE_7' => t('ajutise valitsuse kohtuminister, ministrite nõukogu abiesimees'),
+	'AJUTISE_VALITSUSE_8' => t('ajutise valitsuse sõjaminister'),
+	'AJUTISE_VALITSUSE_9' => t('ajutise valitsuse tööstus- ja kaubandusminister'),
+	'ENERGEETIKAMINISTER' => t('Minister of Energy'),
+	'FINANTSMINISTER_EKSIILIS' => t('Minister of Finance In Exile'),
+	'HARIDUS_JA' => t('Minister of Education'),
+	'HARIDUS_JA_1' => t('haridus- ja teadusminister (haridusminister)'),
+	'HARIDUS_JA_2' => t('Minister of Education'),
+	'HARIDUSMINISTER' => t('Minister of Education'),
+	'HARIDUSMINISTER_' => t('Minister of Education'),
+	'HARIDUSMINISTER_EKSIILIS' => t('Minister of Education In Exile'),
+	'HARIDUSMINISTER_EKSIILIS_1' => t('Minister of Education In Exile'),
+	'JUSTIITSMINISTER' => t('Minister of Justice'),
+	'KAITSEMINISTER' => t('Minister of Defence'),
+	'KAUBANDUS_JA' => t('Minister of Trade'),
+	'KAUBANDUS_JA_1' => t('Minister of Trade'),
+	'KAUBANDUS_TOOSTUS' => t('Minister of Trade and Works'),
+	'KAUBANDUSTOOSTUSMINISTER' => t('Minister of Trade and Works'),
+	'KESKKONNAMINISTER' => t('Minister of the Environment'),
+	'KOHTU_JA' => t('Minister of Justice'),
+	'KOHTU_JA_1' => t('Minister of Justice'),
+	'KOHTUMINISTER' => t('Minister of Justice'),
+	'KOHTUMINISTER_EKSIILIS' => t('Minister of Justice In Exile'),
+	'KULTUURI_JA' => t('kultuuri- ja haridusminister 6.11.1995-1.01.1996, haridusminister 1.01.1996-30.11.1996'),
+	'KULTUURI_JA_1' => t('kultuuri- ja haridusminister'),
+	'KULTUURIMINISTER' => t('Minister of Culture'),
+	'MAJANDUS_JA' => t('Minister of Economic Affairs and Communications'),
+	'MAJANDUS_JA_1' => t('majandus- ja kommunikatsiooniminister (majandusminister ning teede- ja sideminister)'),
+	'MAJANDUSMINISTER' => t('Minister of Economic Affairs'),
+	'MAJANDUSMINISTER_EKSIILIS' => t('Minister of Economic Affairs in Exile'),
+	'MAJANDUSMINISTER_EKSIILIS_1' => t('Minister of Economic Affairs in Exile'),
+	'MAJANDUSMINISTER_EKSIILIS_2' => t('Minister of Economic Affairs in Exile'),
+	'MINISTER' => t('Minister'),
+	'MINISTER_' => t('minister 8.10.1993-27.06.1994, kultuuri- ja haridusminister 27.06.1994-8.11.1994'),
+	'MINISTER__1' => t('minister 1.12.1992-6.10.1993, kaitseminister 23.08.1993-7.01.1994, välisminister 7.01.1994-8.11.1994'),
+	'MINISTER__2' => t('minister 6.11.1995-1.01.1996, kultuuriminister 1.01.1996-17.03.1997'),
+	'MINISTER__3' => t('minister 6.08.1996-1.12.1996, siseminister 1.12.1996-17.03.1997'),
+	'minister eksiilis 3.04.1973-24.08.1977, majandusminister eksiilis 24.08.1977-12.06.1983' => t('Minister In Exile'),
+  'MINISTER_EKSIILIS' => t('Minister In Exile'),
+	'MINISTER_EKSIILIS_1' => t('Minister In Exile'),
+	'MINISTER_EKSIILIS_2' => t('Minister In Exile'),
+	'MINISTER_EKSIILIS_3' => t('Minister In Exile'),
+	'MINISTER_ILMA' => t('Minister without Portfolio'),
+	'PEAMINISTER' => t('Prime Minister'),
+	'PEAMINISTER_' => t('Prime Minister'),
+	'PEAMINISTER_SOJAMINISTER' => t('Prime and Defence Minister'),
+	'PEAMINISTRI_ASETAITJA' => t('peaministri asetäitja eksiilis'),
+	'PEAMINISTRI_ASETAITJA_1' => t('peaministri asetäitja eksiilis 8.05.1971-1.03.1990, sõjaminister eksiilis 1.03.1990-20.06.1990'),
+	'PEAMINISTRI_ASETAITJA_2' => t('Acting Prime Minister'),
+	'PEAMINISTRI_ASETAITJA_3' => t('Acting Prime Minister'),
+	'PEAMINISTRI_ASETAITJA_4' => t('Acting Prime Minister'),
+	'PEAMINISTRI_KOHUSETAITJA' => t('Acting Prime Minister'),
+	'POLLUMAJANDUSMINISTER' => t('Minister of Agriculture'),
+	'POLLUTOO_JA' => t('Minister of Agriculture'),
+	'POLLUTOOMINISTER' => t('Minister of Agriculture'),
+	'POLLUTOOMINISTER_EKSIILIS' => t('Minister of Agriculture In Exile'),
+	'POLLUTOOMINISTER_EKSIILIS_1' => t('Minister of Agriculture In Exile'),
+	'POLLUTOOMINISTER_EKSIILIS_2' => t('Minister of Agriculture In Exile'),
+	'POLLUTOOMINISTER_TOITLUSMIN' => t('Minister of Agriculture toitlusministri'),
+	'PORTFELLITA_MINISTER' => t('Minister without Portfolio'),
+	'PROPAGANDAMINISTER' => t('Minister of Propaganda'),
+	'RAHA_JA' => t('Minister of Finance'),
+	'RAHAMINISTER' => t('Minister of Finance'),
+	'RAHAMINISTER_KOHTUMINISTRI' => t('Finance Minister in role of Justice Minister'),
+	'RAHAMINISTER_RIIGIVANEMA' => t('Finance Minister in role of Prime Minister'),
+	'RAHANDUSMINISTER' => t('Minister of Finance'),
+	'REFORMIMINISTER' => t('reformiminister'),
+	'REGIONAALMINISTER' => t('Minister of Regional Affairs'),
+	'RIIGIVANEM' => t('Prime Minister'), // riigivanem
+	'RIIGIVANEM_KUNI' => t('Prime Minister'), // riigivanem
+	'SISE_JA' => t('Minister of the Interior'),
+	'SISEMINISTER' => t('Minister of the Interior'),
+	'SISEMINISTER_EKSIILIS' => t('Minister of the Interior in Exile'),
+	'SISEMINISTER_PEAMINISTRI' => t('siseminister peaministri'),
+	'SISEMINISTER_TOO' => t('Minister of the Interior'),
+	'SISEMINISTER_TOO_1' => t('Minister of the Interior'),
+	'SOJAMINISTER' => t('Minister of War'),
+	'SOJAMINISTER_EKSIILIS' => t('Minister of War in Exile'),
+	'SOJAMINISTER_SISEMINISTRI' => t('Defence Minister Actings as Interior Minister'),
+	'SOTSIAALMINISTER' => t('Minister of Social Affairs'),
+	'SOTSIAALMINISTER_EKSIILIS' => t('sotsiaalminister eksiilis, haridusministri kohusetäitja eksiilis 23.02.1992-7.10.1992'),
+	'SOTSIAALMINISTER_EKSIILIS_1' => t('Minister of Social Affairs in Exile'),
+	'TEEDE_JA' => t('teede- ja sideminister'),
+	'TEEDEMINISTER' => t('Minister of Road Infrastructure'),
+	'TEEDEMINISTER_EKSIILIS' => t('Minister of Roads In Exile'), // teedeminister eksiilis
+	'TEEDEMINISTER_EKSIILIS_1' => t('Minister of Roads In Exile'),
+	'TEEDEMINISTER_KAUBANDUS' => t('Road Minister in role of Trade Minister'),
+	'TEEDEMINISTER_RIIGIVANEMA' => t('Road Minister in role of Prime Minister'),
+	'TOITLUSMINISTER' => t('Minister of Food Provisioning'),
+	'TOITLUSTUSMINISTER' => t('Minister of Food Provisioning'),
+	'TOO_JA' => t('Minister of Work'),
+	'TOO_JA_1' => t('Minister of Work'),
+	'TOO_JA_2' => t('töö ja hoolekandmise minister'),
+	'ULEMINEKUVALITSUSE_EHITUSMI' => t('Minister of Reconstruction in Transitional Government'),
+	'ULEMINEKUVALITSUSE_EHITUSMI_1' => t('üleminekuvalitsuse ehitusminister 30.01.1992-15.06.1992, üleminekuvalitsuse majandusminister 15.06.1992-21.10.1992'),
+	'ULEMINEKUVALITSUSE_HARIDUSM' => t('Minister of Education in Transitional Government'),
+	'ULEMINEKUVALITSUSE_JUSTIITS' => t('Minister of Justice in Transitional Government'),
+	'ULEMINEKUVALITSUSE_KAITSEMI' => t('Minister of Defence in Transitional Government'),
+	'ULEMINEKUVALITSUSE_KAUBANDU' => t('Minister of Trade in Transitional Government'),
+	'ULEMINEKUVALITSUSE_KESKKONN' => t('Minister of the Environment in Transitional Government'),
+	'ULEMINEKUVALITSUSE_KULTUURI' => t('Minister of Cultural Affairs in Transitional Government'),
+	'ULEMINEKUVALITSUSE_MAJANDUS' => t('Minister of Economic Affairs in Transitional Government'),
+	'ULEMINEKUVALITSUSE_MATERIAA' => t('üleminekuvalitsuse materiaalsete ressursside minister'),
+	'ULEMINEKUVALITSUSE_MINISTER' => t('Minister in Transitional Government'),
+	'ULEMINEKUVALITSUSE_PEAMINIS' => t('Prime Minister of Transitional Government'),
+	'ULEMINEKUVALITSUSE_POLLUMAJ' => t('Minister of Agriculture in Transitional Government'),
+	'ULEMINEKUVALITSUSE_RAHANDUS' => t('Minister of Finance in Transitional Government'),
+	'ULEMINEKUVALITSUSE_RIIGIMIN' => t('Transitional Government Minister'),
+	'ULEMINEKUVALITSUSE_SIDEMINI' => t('Minister of Communications in Transitional Government'),
+	'ULEMINEKUVALITSUSE_SISEMINI' => t('Minister of Interior Affairs in Transitional Government'),
+	'ULEMINEKUVALITSUSE_SOTSIAAL' => t('Minister of Social Affairs in Transitional Government'),
+	'ULEMINEKUVALITSUSE_SOTSIAAL_1' => t('üleminekuvalitsuse sotsiaalminister (hiljem tööminister)'),
+	'ULEMINEKUVALITSUSE_TERVISHO' => t('Minister of Health in Transitional Government'),
+	'ULEMINEKUVALITSUSE_TOOMINIS' => t('Minister of Employment in Transitional Government'),
+	'ULEMINEKUVALITSUSE_TOOSTUS' => t('üleminekuvalitsuse tööstus- ja energeetikaminister'),
+	'ULEMINEKUVALITSUSE_TRANSPOR' => t('Minister of Transport in Transitional Government'),
+	'ULEMINEKUVALITSUSE_TRANSPOR_1' => t('üleminekuvalitsuse transporidminister (hiljem trandspordi- ja sideminister)'),
+	'ULEMINEKUVALITSUSE_VALISMIN' => t('Minister of Foreign Affairs in Transitional Government'),
+	'VALISMINISTER' => t('Minister of Foreign Affairs'),
+	'VALISMINISTER_EKSIILIS' => t('Minister of Foreign Affairs in Exile'),
+	'VALISMINISTER_EKSIILIS_1' => t('Minister of Foreign Affairs in Exile'),
+	'VALISMINISTER_JUSTIITSMINIS' => t('Minister of Foreign Affairs actings as Justice Minister'),
+	'VALISMINISTER_KUNI' => t('Minister of Foreign Affairs'),
+	'VALISMINISTER_KUNI_1' => t('Minister of Foreign Affairs'),
+	'valitsus' => t('Government'), // lisasin see valik 23.10.2013.
+  );
+
+  return $ametid[$amet];
+}
+
+
+/**
+ * position_type_code ForteCMS klassifikaatoritest võetud 27.03.2014.
+ */
+function _rk_valitsused_klassifikaatorid() {
+  $arrAmetid = array(
+    'PEAMINISTER' => 'peaminister',
+    'PRIME_MINISTER' => 'peaminister',
+    'ULEMINEKUVALITSUSE_PEAMINIS' => 'üleminekuvalitsuse peaminister',
+    'MINISTER_OF_EDUCATION' => 'haridusminister',
+    'PEAMINISTRI_ASETAITJA' => 'peaministri asetäitja eksiilis',
+    'MINISTER_OF_FOREIGN_AFFAIRS' => 'välisminister',
+    'PEAMINISTRI_ASETAITJA_1' => 'peaministri asetäitja eksiilis 8.05.1971-1.03.1990, sõjaminister eksiilis 1.03.1990-20.06.1990',
+    'MINISTER_OF_ECONOMIC_AFFAIRS' => 'majandus- ja kommunikatsiooniminister',
+    'PEAMINISTRI_ASETAITJA_2' => 'peaministri asetäitja eksiilis, põllutööminister eksiilis, sõjaministri kohusetäitja eksiilis 1.03.1964-23.12.1970',
+    'MINISTER_OF_CULTURE' => 'kultuuriminister',
+    'PEAMINISTRI_KOHUSETAITJA' => 'peaministri kohusetäitja eksiilis, välisminister eksiilis kuni 29. 03.1963',
+    'PEAMINISTRI_ASETAITJA_3' => 'peaministri asetäitja eksiilis, siseminister eksiilis',
+    'PEAMINISTRI_ASETAITJA_4' => 'peaministri asetäitja, siseminister',
+    'RIIGIVANEM_KUNI' => 'riigivanem kuni 24.01.1934, peaminister riigivanema ülesannetes 24.01.1934-03.09.1937, riigihoidja 03.09.1937-24.04.1938',
+    'RIIGIVANEM' => 'riigivanem',
+    'PEAMINISTER_' => 'peaminister 26.10.1920 -20.12.1920, riigivanem alates 20.12.1920, sõjaminister, välisministri kohusetäitja alates 14.01.1921',
+    'PEAMINISTER_SOJAMINISTER' => 'peaminister, sõjaminister',
+    'AJUTISE_VALITSUSE' => 'ajutise valitsuse peaminister, sõjaminister',
+    'AJUTISE_VALITSUSE_1' => 'ajutise valitsuse peaminister, siseminister',
+    'AJUTISE_VALITSUSE_2' => 'ajutise valitsuse ministrite nõukogu esimees, siseminister, kaubandus- ja tööstusminister (koht ilmselt täitmata)',
+    'HARIDUS_JA' => 'haridus- ja teadusminister',
+    'JUSTIITSMINISTER' => 'justiitsminister',
+    'KAITSEMINISTER' => 'kaitseminister',
+    'KESKKONNAMINISTER' => 'keskkonnaminister',
+    'KULTUURIMINISTER' => 'kultuuriminister',
+    'MAJANDUS_JA' => 'majandus- ja kommunikatsiooniminister',
+    'POLLUMAJANDUSMINISTER' => 'põllumajandusminister',
+    'RAHANDUSMINISTER' => 'rahandusminister',
+    'REGIONAALMINISTER' => 'regionaalminister',
+    'SISEMINISTER' => 'siseminister',
+    'SOTSIAALMINISTER' => 'sotsiaalminister',
+    'VALISMINISTER' => 'välisminister',
+    'HARIDUS_JA_1' => 'haridus- ja teadusminister (haridusminister)',
+    'HARIDUSMINISTER' => 'haridusminister',
+    'KULTUURI_JA' => 'kultuuri- ja haridusminister 6.11.1995-1.01.1996, haridusminister 1.01.1996-30.11.1996',
+    'KULTUURI_JA_1' => 'kultuuri- ja haridusminister',
+    'MINISTER_' => 'minister 8.10.1993-27.06.1994, kultuuri- ja haridusminister 27.06.1994-8.11.1994',
+    'ULEMINEKUVALITSUSE_HARIDUSM' => 'üleminekuvalitsuse haridusminister',
+    'HARIDUSMINISTER_EKSIILIS' => 'haridusminister eksiilis',
+    'HARIDUSMINISTER_EKSIILIS_1' => 'haridusminister eksiilis (ei astunud ametisse), sotsiaalministri kohusetäitja eksiilis (ei astunud ametisse)',
+    'HARIDUSMINISTER_' => 'haridusminister 11.05.1936, sotsiaalminister kuni 16.03.1936',
+    'HARIDUS_JA_2' => 'haridus- ja sotsiaalminister',
+    'TOO_JA' => 'töö- ja hoolekande- ja haridusminister',
+    'AJUTISE_VALITSUSE_3' => 'ajutise valitsuse haridusminister',
+    'AJUTISE_VALITSUSE_4' => 'ajutise valitsuse haridusminister (venemaal vangis olles)',
+    'ULEMINEKUVALITSUSE_JUSTIITS' => 'üleminekuvalitsuse justiitsminister',
+    'KOHTUMINISTER_EKSIILIS' => 'kohtuminister eksiilis',
+    'MAJANDUSMINISTER_EKSIILIS' => 'majandusminister eksiilis',
+    'KOHTUMINISTER' => 'kohtuminister',
+    'KOHTU_JA' => 'kohtu- ja siseminister 21.10.1933-25.08.1934, kohtuminister 25.08.1934-9.05.1938',
+    'KOHTU_JA_1' => 'kohtu- ja siseminister',
+    'SISE_JA' => 'sise- ja kohtuminister',
+    'VALISMINISTER_JUSTIITSMINIS' => 'välisminister, justiitsminister',
+    'AJUTISE_VALITSUSE_5' => 'ajutise valitsuse kohtuminister',
+    'AJUTISE_VALITSUSE_6' => 'ajutise valitsuse kohtuminister, peaministri asetäitja',
+    'AJUTISE_VALITSUSE_7' => 'ajutise valitsuse kohtuminister, ministrite nõukogu abiesimees',
+    'MINISTER__1' => 'minister 1.12.1992-6.10.1993, kaitseminister 23.08.1993-7.01.1994, välisminister 7.01.1994-8.11.1994',
+    'ULEMINEKUVALITSUSE_KAITSEMI' => 'üleminekuvalitsuse kaitseminister',
+    'SOJAMINISTER_EKSIILIS' => 'sõjaminister eksiilis',
+    'POLLUTOOMINISTER_EKSIILIS' => 'põllutööminister eksiilis, sõjaministri kohusetäitja eksiilis, alates 2. aprillist 1963 peaministri kohusetäitja',
+    'SOJAMINISTER' => 'sõjaminister',
+    'SOJAMINISTER_SISEMINISTRI' => 'sõjaminister, siseministri kohusetäitja alates 13.11.1926',
+    'AJUTISE_VALITSUSE_8' => 'ajutise valitsuse sõjaminister',
+    'ULEMINEKUVALITSUSE_KESKKONN' => 'üleminekuvalitsuse keskkonnaminister',
+    'MINISTER__2' => 'minister 6.11.1995-1.01.1996, kultuuriminister 1.01.1996-17.03.1997',
+    'ULEMINEKUVALITSUSE_KULTUURI' => 'üleminekuvalitsuse kultuuriminister',
+    'MAJANDUS_JA_1' => 'majandus- ja kommunikatsiooniminister (majandusminister ning teede- ja sideminister)',
+    'MAJANDUSMINISTER' => 'majandusminister',
+    'ULEMINEKUVALITSUSE_MAJANDUS' => 'üleminekuvalitsuse majandusminister',
+    'MINISTER_EKSIILIS' => 'minister eksiilis 3.04.1973-24.08.1977, majandusminister eksiilis 24.08.1977-12.06.1983',
+    'MAJANDUSMINISTER_EKSIILIS_1' => 'majandusminister eksiilis 8.05.1971-24.06.1977, minister eksiilis 24.08.1977-20.06.1990',
+    'MAJANDUSMINISTER_EKSIILIS_2' => 'majandusminister eksiilis, teedeministri kohusetäitja eksiilis',
+    'KAUBANDUS_JA' => 'kaubandus- ja tööstusminister',
+    'RAHA_JA' => 'raha- ja kaubandus-tööstusminister',
+    'KAUBANDUSTOOSTUSMINISTER' => 'kaubandus-tööstusminister',
+    'KAUBANDUS_JA_1' => 'kaubandus- ja tööstusminister, tööministri kohusetäitja 27.04.1921-16.12.1921',
+    'KAUBANDUS_TOOSTUS' => 'kaubandus-, tööstus- ja teedeminister',
+    'AJUTISE_VALITSUSE_9' => 'ajutise valitsuse tööstus- ja kaubandusminister',
+    'AJUTISE_VALITSUSE_10' => 'ajutise valitsuse ja tööstus- ja kaubandusminister',
+    'AJUTISE_VALITSUSE_11' => 'ajutise valitsuse kaubandus- ja tööstusministri kohusetäitja (köstneri välismaal viibimise ajal)',
+    'AJUTISE_VALITSUSE_12' => 'ajutise valitsuse kaubandusministri kohusetäitja',
+    'ULEMINEKUVALITSUSE_KAUBANDU' => 'üleminekuvalitsuse kaubandusminister',
+    'ULEMINEKUVALITSUSE_MATERIAA' => 'üleminekuvalitsuse materiaalsete ressursside minister',
+    'ULEMINEKUVALITSUSE_POLLUMAJ' => 'üleminekuvalitsuse põllumajandusminister',
+    'POLLUTOOMINISTER_EKSIILIS_1' => 'põllutööminister eksiilis',
+    'POLLUTOOMINISTER_EKSIILIS_2' => 'põllutööminister eksiilis, sõjaministri kohusetäitja eksiilis, peaministri asetäitja eksiilis 22. 08.1960',
+    'POLLUTOOMINISTER' => 'põllutööminister',
+    'POLLUTOOMINISTER_TOITLUSMIN' => 'põllutööminister, toitlusministri kohusetäitja alates 26.01.1921, teedeministri kohusetäitja 23.11.1921-16.12.1921',
+    'POLLUTOO_JA' => 'põllutöö- ja toitlusminister',
+    'AJUTISE_VALITSUSE_13' => 'ajutise valitsuse põllutööminister',
+    'AJUTISE_VALITSUSE_14' => 'ajutise valitsuse põllutöö- ja toitlusminister',
+    'TOITLUSMINISTER' => 'toitlusminister',
+    'TOITLUSTUSMINISTER' => 'toitlustusminister',
+    'AJUTISE_VALITSUSE_15' => 'ajutise valitsuse toitlusminister',
+    'ULEMINEKUVALITSUSE_RAHANDUS' => 'üleminekuvalitsuse rahandusminister',
+    'FINANTSMINISTER_EKSIILIS' => 'finantsminister eksiilis',
+    'RAHAMINISTER' => 'rahaminister',
+    'RAHAMINISTER_RIIGIVANEMA' => 'rahaminister, riigivanema asetäitja alates 23.11.1921',
+    'RAHAMINISTER_KOHTUMINISTRI' => 'rahaminister, kohtuministri kohusetäitja 14.01.1921-25.01.1921',
+    'AJUTISE_VALITSUSE_16' => 'ajutise valitsuse rahaminister',
+    'AJUTISE_VALITSUSE_17' => 'ajutise valitsuse rahaminister, siseministri asetäitja',
+    'AJUTISE_VALITSUSE_18' => 'ajutise valitsuse raha- ja riigivaranduste minister',
+    'MINISTER__3' => 'minister 6.08.1996-1.12.1996, siseminister 1.12.1996-17.03.1997',
+    'ULEMINEKUVALITSUSE_SISEMINI' => 'üleminekuvalitsuse siseminister',
+    'SISEMINISTER_EKSIILIS' => 'siseminister eksiilis',
+    'MINISTER_EKSIILIS_1' => 'minister eksiilis',
+    'SISEMINISTER_PEAMINISTRI' => 'siseminister, peaministri asetäitja alates 27.08.1934',
+    'SISEMINISTER_TOO' => 'siseminister, töö- ja hoolekandeministri kohusetäitja 26.01.1921-27.04.1921, hoolekandeministri kohusetäitja 27.04.1921-16.12.1921',
+    'SISEMINISTER_TOO_1' => 'siseminister, töö- ja hoolekandeminister',
+    'AJUTISE_VALITSUSE_19' => 'ajutise valitsuse siseminister',
+    'ULEMINEKUVALITSUSE_SOTSIAAL' => 'üleminekuvalitsuse sotsiaalhooldusminister',
+    'SOTSIAALMINISTER_EKSIILIS' => 'sotsiaalminister eksiilis, haridusministri kohusetäitja eksiilis 23.02.1992-7.10.1992',
+    'SOTSIAALMINISTER_EKSIILIS_1' => 'sotsiaalminister eksiilis',
+    'TOO_JA_1' => 'töö- ja hoolekandeminister',
+    'AJUTISE_VALITSUSE_20' => 'ajutise valitsuse töö- ja hoolekandeministri kohusetäitja',
+    'AJUTISE_VALITSUSE_21' => 'ajutise valitsuse töö- ja hoolekandeminister, peaministri asetäitja',
+    'TOO_JA_2' => 'töö ja hoolekandmise minister',
+    'ULEMINEKUVALITSUSE_TERVISHO' => 'üleminekuvalitsuse tervishoiuminister',
+    'ULEMINEKUVALITSUSE_TOOMINIS' => 'üleminekuvalitsuse tööminister',
+    'ULEMINEKUVALITSUSE_SOTSIAAL_1' => 'üleminekuvalitsuse sotsiaalminister (hiljem tööminister)',
+    'ULEMINEKUVALITSUSE_VALISMIN' => 'üleminekuvalitsuse välisminister',
+    'VALISMINISTER_EKSIILIS' => 'välisminister eksiilis',
+    'VALISMINISTER_EKSIILIS_1' => 'välisminister eksiilis, kohtuministri kohusetäitja eksiilis',
+    'VALISMINISTER_KUNI' => 'välisminister kuni 14.05.1924, rahaminister alates 14.05.1924',
+    'VALISMINISTER_KUNI_1' => 'välisminister kuni 20.10.1922, teedeministri kohusetäitja 26.01.1921-16.12.1921, kaubandus-, tööstus- ja tööministri kousetäitja 23.11.1921-16.12.1921',
+    'AJUTISE_VALITSUSE_22' => 'ajutise valitsuse välisminister',
+    'AJUTISE_VALITSUSE_23' => 'ajutise valitsuse saksa rahvusminister',
+    'AJUTISE_VALITSUSE_24' => 'ajutise valitsuse rootsi rahvusminister',
+    'AJUTISE_VALITSUSE_25' => 'ajutise valitsuse vene rahvusminister',
+    'AJUTISE_VALITSUSE_26' => 'ajutise valitsuse täievoliline minister välismaal',
+    'MINISTER' => 'minister',
+    'ULEMINEKUVALITSUSE_MINISTER' => 'üleminekuvalitsuse minister',
+    'MINISTER_EKSIILIS_2' => 'minister eksiilis, majandusministri kohusetäitja eksiilis, välisministri kohusetäitja eksiilis 2.04.1963',
+    'MINISTER_EKSIILIS_3' => 'minister eksiilis, sotsiaalministri kohusetäitja eksiilis',
+    'PORTFELLITA_MINISTER' => 'portfellita minister',
+    'MINISTER_ILMA' => 'minister ilma portfelita',
+    'TEEDE_JA' => 'teede- ja sideminister',
+    'ULEMINEKUVALITSUSE_TRANSPOR' => 'üleminekuvalitsuse transpordi- ja sideminister',
+    'ULEMINEKUVALITSUSE_TRANSPOR_1' => 'üleminekuvalitsuse transporidminister (hiljem trandspordi- ja sideminister)',
+    'ULEMINEKUVALITSUSE_SIDEMINI' => 'üleminekuvalitsuse sideminister',
+    'TEEDEMINISTER_EKSIILIS' => 'teedeminister eksiilis',
+    'TEEDEMINISTER_EKSIILIS_1' => 'teedeminister eksiilis, haridusministri kohusetäitja eksiilis',
+    'TEEDEMINISTER' => 'teedeminister',
+    'TEEDEMINISTER_RIIGIVANEMA' => 'teedeminister, riigivanema asetäitja alates 14.12.1927',
+    'TEEDEMINISTER_KAUBANDUS' => 'teedeminister, kaubandus- ja tööstusministri kohusetäitja alates 16.12.1921',
+    'AJUTISE_VALITSUSE_27' => 'ajutise valitsuse teedeminister',
+    'ENERGEETIKAMINISTER' => 'energeetikaminister',
+    'ULEMINEKUVALITSUSE_TOOSTUS' => 'üleminekuvalitsuse tööstus- ja energeetikaminister',
+    'REFORMIMINISTER' => 'reformiminister',
+    'ULEMINEKUVALITSUSE_EHITUSMI' => 'üleminekuvalitsuse ehitusminister',
+    'ULEMINEKUVALITSUSE_EHITUSMI_1' => 'üleminekuvalitsuse ehitusminister 30.01.1992-15.06.1992, üleminekuvalitsuse majandusminister 15.06.1992-21.10.1992',
+    'ULEMINEKUVALITSUSE_RIIGIMIN' => 'üleminekuvalitsuse riigiminister',
+    'PROPAGANDAMINISTER' => 'propagandaminister',
+    'SOCIAL_AFFAIRS_THEN_JUSTICE' => 'sotsiaalminister (06.04.2011 – 10.12.2012), justiitsminister (10.12.2012 – ...)',
+    'JUSTICE_AGRICULTURE' => 'justiitsminister ja põllumajandusminister',
+    'INTERIOR_REGIONAL' => 'siseminister ja regionaalminister',
+  );
+
+  return $arrAmetid;
+}
+
+
+/**
+ * Make sense of possible ametikohad.
+ */
+function _rk_valitsused_amet_options($ametikoht) {
+
+  $arrOptions = array();
+
+  switch ($ametikoht) {
+
+    case 'PEAMINISTER':
+      return array($ametikoht, 'PEAMINISTER_', 'PEAMINISTER_SOJAMINISTER', 'PEAMINISTRI_ASETAITJA', 'PEAMINISTRI_ASETAITJA_1', 'PEAMINISTRI_ASETAITJA_2', 'PEAMINISTRI_ASETAITJA_3', 'PEAMINISTRI_ASETAITJA_4', 'PEAMINISTRI_KOHUSETAITJA', 'RIIGIVANEM', 'RIIGIVANEM_KUNI', 'TEEDEMINISTER_RIIGIVANEMA', 'RAHAMINISTER_RIIGIVANEMA');
+      break;
+
+    case 'VALISMINISTER':
+      return array($ametikoht, 'VALISMINISTER_EKSIILIS', 'VALISMINISTER_EKSIILIS_1', 'VALISMINISTER_JUSTIITSMINIS', 'VALISMINISTER_KUNI', 'VALISMINISTER_KUNI_1', 'ULEMINEKUVALITSUSE_VALISMIN');
+      break;
+
+    case 'MAJANDUSMINISTER':
+      return array($ametikoht, 'ENERGEETIKAMINISTER', 'KAUBANDUSTOOSTUSMINISTER', 'KAUBANDUS_TOOSTUS', 'KAUBANDUS_JA_1', 'KAUBANDUS_JA', 'MAJANDUSMINISTER_EKSIILIS_2', 'MAJANDUSMINISTER_EKSIILIS_1', 'MAJANDUSMINISTER_EKSIILIS', 'MAJANDUS_JA_1', 'MAJANDUS_JA', 'PROPAGANDAMINISTER', 'TEEDEMINISTER_RIIGIVANEMA', 'TEEDEMINISTER_KAUBANDUS', 'TEEDEMINISTER_EKSIILIS_1', 'TEEDEMINISTER_EKSIILIS', 'TEEDEMINISTER', 'TEEDE_JA', 'ULEMINEKUVALITSUSE_EHITUSMI_1', 'ULEMINEKUVALITSUSE_EHITUSMI', 'TOO_JA_2', 'TOO_JA_1', 'TOO_JA', 'ULEMINEKUVALITSUSE_TRANSPOR_1', 'ULEMINEKUVALITSUSE_TRANSPOR', 'ULEMINEKUVALITSUSE_TOOSTUS', 'ULEMINEKUVALITSUSE_MATERIAA', 'ULEMINEKUVALITSUSE_MAJANDUS', 'ULEMINEKUVALITSUSE_SIDEMINI');
+      break;
+
+    case 'HARIDUSMINISTER':
+      return array($ametikoht, 'ULEMINEKUVALITSUSE_HARIDUSM', 'HARIDUSMINISTER_EKSIILIS_1', 'HARIDUSMINISTER_EKSIILIS', 'HARIDUSMINISTER_', 'HARIDUS_JA_2', 'HARIDUS_JA_1', 'HARIDUS_JA');
+      break;
+
+    case 'KULTUURIMINISTER':
+      return array($ametikoht, 'KULTUURI_JA', 'KULTUURI_JA_1', 'ULEMINEKUVALITSUSE_KULTUURI');
+      break;
+
+    case 'JUSTIITSMINISTER':
+      return array($ametikoht, 'KOHTU_JA', 'KOHTU_JA_1', 'KOHTUMINISTER', 'KOHTUMINISTER_EKSIILIS', 'ULEMINEKUVALITSUSE_JUSTIITS', 'VALISMINISTER_JUSTIITSMINIS', 'RAHAMINISTER_KOHTUMINISTRI');
+      break;
+
+    case 'KAITSEMINISTER':
+      return array($ametikoht, 'SOJAMINISTER', 'SOJAMINISTER_EKSIILIS', 'SOJAMINISTER_SISEMINISTRI', 'ULEMINEKUVALITSUSE_KAITSEMI');
+      break;
+
+    case 'KESKKONNAMINISTER':
+      return array($ametikoht, 'ULEMINEKUVALITSUSE_KESKKONN');
+      break;
+
+    case 'POLLUMAJANDUSMINISTER':
+      return array($ametikoht, 'TOITLUSMINISTER', 'TOITLUSTUSMINISTER', 'POLLUTOO_JA', 'POLLUTOOMINISTER', 'POLLUTOOMINISTER_EKSIILIS', 'POLLUTOOMINISTER_EKSIILIS_1', 'POLLUTOOMINISTER_EKSIILIS_2', 'POLLUTOOMINISTER_TOITLUSMIN', 'ULEMINEKUVALITSUSE_POLLUMAJ');
+      break;
+
+    case 'RAHANDUSMINISTER':
+      return array($ametikoht, 'FINANTSMINISTER_EKSIILIS', 'RAHAMINISTER_RIIGIVANEMA', 'RAHAMINISTER_KOHTUMINISTRI', 'RAHAMINISTER', 'RAHA_JA', 'ULEMINEKUVALITSUSE_RAHANDUS');
+      break;
+
+    case 'REGIONAALMINISTER':
+      return array($ametikoht);
+      break;
+
+    case 'SISEMINISTER':
+      return array($ametikoht, 'SISE_JA', 'ULEMINEKUVALITSUSE_SISEMINI', 'SISEMINISTER_EKSIILIS', 'SISEMINISTER_PEAMINISTRI', 'SISEMINISTER_TOO', 'SISEMINISTER_TOO_1', 'REFORMIMINISTER', 'SOJAMINISTER_SISEMINISTRI');
+      break;
+
+    case 'SOTSIAALMINISTER':
+      return array($ametikoht, 'SOTSIAALMINISTER_EKSIILIS_1', 'SOTSIAALMINISTER_EKSIILIS', 'ULEMINEKUVALITSUSE_TERVISHO', 'ULEMINEKUVALITSUSE_SOTSIAAL_1', 'ULEMINEKUVALITSUSE_SOTSIAAL');
+      break;
+
+    case 'MINISTER':
+      return array($ametikoht, 'MINISTER_ILMA', 'MINISTER_EKSIILIS_3', 'MINISTER_EKSIILIS_2', 'MINISTER_EKSIILIS_1', 'MINISTER_EKSIILIS', 'MINISTER__3', 'MINISTER__2', 'MINISTER__1', 'MINISTER_', 'ULEMINEKUVALITSUSE_MINISTER', 'PORTFELLITA_MINISTER');
+      break;
+
+    default:
+      return array($ametikoht);
+      break;
+  }
+
+  return $arrOptions;
+}
+
+
+/**
+ * Abifunktsioon.
+ */
+function _rk_valitsused_back_to_top($row_count, $id) {
+  // Kui on tulemusi palju, lisa "back to top" link lõppu.
+  $back_to_top = '';
+  if ($row_count > 14):
+    $back_to_top = '<p><a href="#' . $id . '">' . t('^ Back to top ^') . '</a></p>';
+  endif;
+
+  return $back_to_top;
+}
+
+
+/**
+ * Arvuta päevad ametis.
+ * @param
+ *   id - primary key for either valitsus or minister
+ * @param
+ *   type - valitsus or minister
+ * @return
+ *   integer - number of days in power
+ */
+function _rk_valitsused_days_in_power($id = 913, $type = 'valitsus') {
+
+  if ($type == 'minister') {
+    $table = 'rk_minister_government';
+  }
+  else {
+    $table = 'rk_government';
+  }
+
+  $query = db_select($table, 't');
+  $query
+    ->condition('t.id', $id, '=')
+    ->fields('t', array('ruled_start_date', 'ruled_end_date'));
+
+  $result = $query->execute();
+
+  foreach ($result as $row) {
+    $start = $row->ruled_start_date;
+    $end = $row->ruled_end_date;
+  }
+
+  if ($end == '') {
+    $end = date('Y-m-d');
+  }
+
+  // $num_days = (strtotime($end) - strtotime($start)) / (60 * 60 * 24);
+  $num_days = _rk_valitsused_calculate_days($start, $end);
+
+  // Lisasin +1 kuna "inimarusaamine" päevadest ei ole matemaatiliselt korrektne.
+  return $num_days;
+}
+
+
+/**
+ * Calculate ruled days.
+ * If $end_date is empty, then use today's date.
+ * Forcing the issue by making sure the end date 
+ * time is later than start date time. (end 7 a.m. vs start 6 a.m.)
+ * @param date $start_date
+ *   Date YYYY-mm-dd
+ * @param date $end_date
+ *   Date YYYY-mm-dd
+ * @return integer
+ *   Number of days between the two dates.
+ */
+function _rk_valitsused_calculate_days($start_date, $end_date) {
+  $days = ($end_date == '') ? (strtotime(date('Y-m-d 07:00')) - strtotime($start_date . ' 06:00')) / (60 * 60 * 24) : (strtotime($end_date . ' 07:00') - strtotime($start_date . ' 06:00')) / (60 * 60 * 24);
+  // Lisasin +1 kuna "inimarusaamine" päevadest ei ole matemaatiliselt korrektne.
+  return floor($days) + 1;
+}
+
+
+/**
+ * Leia olemasoleva valitsuse süsteemis olev id.
+ */
+function _rk_valitsused_get_current_gov_id() {
+
+  $query = db_select('rk_government', 'g');
+  $query
+    ->condition('g.ruled_end_date', NULL, 'is')
+    ->condition('g.is_active', 1, '=')
+    ->fields('g', array('id'));
+
+  $result = $query->execute();
+
+  $gov_id = $result->fetchField();
+
+  return $gov_id; // 462
+}
+
+
+function _rk_valitsused_periood_linnukesed() {
+  return array(
+    'FIRST_REPUBLIC' => t('Republic of Estonia Governments 1918-1940/1944'), 
+    'EXILE_GOVERNMENTS' => t('Republic of Estonia Governments In Exile'), 
+    'SECOND_REPUBLIC' => t('Republic of Estonia Governments Beginning 1990'),
+  );
+}
+
+
+function _rk_valitsused_general_intro() {
+  return array(
+    '#type' => 'markup',
+    '#markup' => '<p class="h1-intro">' . t(variable_get('rk_valitsused_varasemad_tekst', '')) . '</p>',
+  );
+}
+
+
+/**
+ * Bring links into footer.
+ */
+function _rk_valitsused_varasemad_footer() {
+  global $language;
+
+  $output = '<div class="varasemad-footer"><a href="/' . $language->language . '/valitsus/varasemad-valitsused" class="varasemad">' . t('Former Governments') . '</a> <a href="/' . $language->language . '/valitsus/varasemad-valitsused/ministrid" class="varasemad">' . t('Ministers') . '</a><a href="/' . $language->language . '/valitsus/varasemad-valitsused/huvitav-teada" class="varasemad">' . t('Good to Know') . '</a></div>';
+
+  return $output;
+}
+
+/**
+ * Abifunktsioon.
+ */
+function _rk_valitsused_eesti_format_date($date, $show_dot_dot_dot = TRUE) {
+  $date = new DateTime($date);
+  // Kui olemasolevas ametis siis ära kuva kuupäeva.
+  if ($date->format('d.m.Y') == date('d.m.Y') && $show_dot_dot_dot === TRUE) {
+    return TODAY_DOT_DOT_DOT;
+  }
+  else {
+    return $date->format('d.m.Y');
+  }
+  
+}
+
+
+/**
+ * Abifunktsioon. Millised valitsuse perioodid valitud.
+ * @return array
+ */
+function _rk_valitsused_millised_valitsused() {
+  // Täida array vajalikude perioodidega.
+  $millised_valitsused = array();
+
+  if (isset($_GET['FIRST_REPUBLIC']) && $_GET['FIRST_REPUBLIC'] === 'FIRST_REPUBLIC') {
+    $millised_valitsused[] = 'FIRST_REPUBLIC';
+  }
+
+  if (isset($_GET['EXILE_GOVERNMENTS']) && $_GET['EXILE_GOVERNMENTS'] === 'EXILE_GOVERNMENTS') {
+    $millised_valitsused[] = 'EXILE_GOVERNMENTS';
+  }
+
+  if (isset($_GET['SECOND_REPUBLIC']) && $_GET['SECOND_REPUBLIC'] === 'SECOND_REPUBLIC') {
+    $millised_valitsused[] = 'SECOND_REPUBLIC';
+  }
+
+  return $millised_valitsused;
+}
+
+
+/**
+ * Implements hook_preprocess_views_view.
+ */
+function rk_valitsused_preprocess_views_view(&$vars) {
+
+  // @todo. What is with $vars['view']->old_view[1]->is_attachment? undefined index error, Trying to get property of non-object.
+  if ($vars['view']->name == 'minister_info' && $vars['view']->old_view[1]->is_attachment == 1) {
+    
+    // Attach gallery.
+    $gallery = _rk_valitsused_build_gallery($vars['view']->args[0], 'minister');
+    $vars['footer'] = $gallery . _rk_valitsused_varasemad_footer();
+  }
+
+  if ($vars['view']->name == 'government' && $vars['view']->is_attachment != 1) { 
+    $gallery = _rk_valitsused_build_gallery($vars['view']->args[0], 'valitsus');
+    $vars['footer'] = $gallery . _rk_valitsused_varasemad_footer();
+  }
+
+  // Glossary attachment.
+  // if ($vars['view']->name == 'ministrid' && $vars['view']->is_attachment == 1) { 
+    // $vars['footer'] = 'test';
+  // }
+
+}
+
+
+/**
+ * Build gallery html for footer.
+ * @param integer $id
+ *   ID of minister or valitsus. (ex. 6194 is Rõivas)
+ * @param string $valitsus_or_minister
+ *   Tells whether dealing with gov or minister.
+ * @return
+ *   Gallery markup.
+ */
+function _rk_valitsused_build_gallery($id = 0, $valitsus_or_minister = 'minister') {
+
+  // @todo. Check this. What happens when no id passed?
+  if (!$id) {
+    return '';
+  }
+  else {
+    $gallery_id = _rk_valitsused_get_gallery_id($id, $valitsus_or_minister);
+
+    if (node_load($gallery_id)) {
+      $node = node_load($gallery_id);  
+      $gallery = drupal_render(node_view(($node)));
+
+      return $gallery;
+    }
+    else {
+      return '';
+    }
+    
+    
+  }
+}
+
+
+/**
+ * Build gallery mark-up.
+ * @param integer $id
+ *   Primary key for minister or valitsus.
+ * @param string $valitsus_or_minister
+ *   Which table to search from.
+ * @return
+ *   gallery_id field from either rk_minister or rk_government.
+ */
+function _rk_valitsused_get_gallery_id($id, $valitsus_or_minister) {
+
+  $tabel = ($valitsus_or_minister == 'valitsus') ? 'rk_government' : 'rk_minister';
+  
+  $query = db_select($tabel, 't');
+  $query->fields('t', array('gallery_id'));
+
+  // Arg for valitsused is actually government_number, not just id.
+  if ($valitsus_or_minister == 'valitsus') {
+    $query->condition('t.government_number', $id, '=');
+  }
+  else {
+    $query->condition('t.id', $id, '=');  
+  }
+  
+
+  $result = $query->execute();
+
+  return $result->fetchField();
+
+}
+
+
+/**
+ * Abifunktsioon. Kontrolli, et pilt eksisteerib enne kui püüad kuvada.
+ * @param integer $gov_num
+ *   Government number (#1 was first-ever Estonian government).
+ * @param string $valitsus_or_minister
+ *   Image subfolder to use.
+ * @param string or integer $image_file
+ *   Image name or file id for uploaded image.
+ * @return
+ *   Image markup that has been run through theme function.
+ */
+function _rk_valitsused_manageeri_pilt($id_for_pic, $valitsus_or_minister = 'valitsus', $image_file = NULL) {
+
+  $pic_width = ($valitsus_or_minister == 'valitsus') ? PIC_WIDTH_VALITSUS : PIC_WIDTH_MINISTER;
+  $pic_height = ($valitsus_or_minister == 'valitsus') ? PIC_HEIGHT_VALITSUS : PIC_HEIGHT_MINISTER;
+  $alt_text = ($valitsus_or_minister == 'valitsus') ? t('Republic of Estonia government number') . ' ' . $id_for_pic : _rk_valitsused_get_minister_name($id_for_pic);
+  $alt_text_no_pic = ($valitsus_or_minister == 'valitsus') ? t('Stenbock House') : t('Picture missing');
+
+
+  // If fid is passed in $image_file, then use it and return it right away.
+  if ($preferred_img = file_load($image_file)) {
+  
+    $image_properties = array(
+      'style_name' => 'rk_valitsused_' . $valitsus_or_minister,
+      'path' => $preferred_img->uri,
+      'alt'  => $alt_text,
+      'title' => $alt_text,
+      'width' => NULL,
+      'height' => NULL,
+      'attributes' => array('longdesc' => $alt_text, 'class' => array('varasemad-valitsused', $valitsus_or_minister)),
+    ); 
+
+    //return theme($valitsus_or_minister . '_image', $image_properties);
+
+    return l(theme_image_style($image_properties), 
+             file_create_url(file_default_scheme() . '://rk_valitsused/' . $valitsus_or_minister . '/' . $preferred_img->filename), 
+             $options = array('html' => TRUE, 'attributes' => array('class' => array('colorbox')))
+           );
+
+  }
+
+  // Assume that file name would be minister or valitsus id . 'jpg'.
+  $filename = $id_for_pic . '.jpg';
+
+  // Getting full path to check with file_exists. Using drupal_realpath discouraged, but works since files are local.
+  $path = drupal_realpath(file_default_scheme() . '://rk_valitsused/' . $valitsus_or_minister . '/' . $filename);
+
+  $strOutput = '';
+
+  if (file_exists($path)) {
+   
+    $img_path =  file_create_url(file_default_scheme() . '://rk_valitsused/' . $valitsus_or_minister . '/' . $filename);
+
+    $link_start = '<a href="' . $img_path . '" class="colorbox">';
+    $link_end = '</a>';
+
+    $image_properties = array(
+      'style_name' => 'rk_valitsused_' . $valitsus_or_minister,
+      'path' => file_default_scheme() . '://rk_valitsused/' . $valitsus_or_minister . '/' . $filename,
+      'alt'  => $alt_text,
+      'title' => $alt_text,
+      'width' => NULL,
+      'height' => NULL,
+      'attributes' => array('longdesc' => $alt_text, 'class' => array('varasemad-valitsused', $valitsus_or_minister)),
+    );        
+       
+    return l(theme_image_style($image_properties), 
+             file_create_url(file_default_scheme() . '://rk_valitsused/' . $valitsus_or_minister . '/' . $filename), 
+             $options = array('html' => TRUE, 'attributes' => array('class' => array('colorbox')))
+           );
+
+  }
+  else { // No picture file, use _pilt_puudub.jpg.
+
+    $image_properties = array(
+      'style_name' => 'rk_valitsused_' . $valitsus_or_minister,
+      'path' => file_default_scheme() . '://rk_valitsused/' . $valitsus_or_minister . '/' . $valitsus_or_minister . '_pilt_puudub.jpg',
+      'alt'  => $alt_text_no_pic,
+      'title' => $alt_text_no_pic,
+      'width' => NULL,
+      'height' => NULL,
+      'attributes' => array('class' => array('varasemad-valitsused', $valitsus_or_minister)),
+    );
+
+
+    // @todo. Old theme call, before I made custom image styles.
+    // $strOutput = theme($valitsus_or_minister . '_image', $image_properties);
+
+    // @todo. Vaikimisi pilt või tühjus? Hetkel tühjus.
+    $strOutput = ''; //theme_image_style($image_properties);
+    
+  }
+
+  return $strOutput;
+
+}
+
+
+function _rk_valitsused_get_minister_name($minister_id) {
+
+  $query = db_select('rk_minister', 'm');
+
+  $query->condition('m.id', $minister_id, '=');
+
+  $query->addExpression("CONCAT(m.first_name,  ' ', m.last_name)", 'name');
+
+  $result = $query->execute();
+
+  return $result->fetchField();
+  
+}
+
+
+/**
+ * Abifunktsioon teeb tabelite sorteerimiseks lingid.
+ */
+function _rk_valitsused_build_get_link_with_query_string($sortby = 'DEFAULT', $gov_or_minister = 'valitsus') {
+
+  global $language;
+  $class = 'no-sort';
+
+  // FIRST_REPUBLIC=0&EXILE_GOVERNMENTS=0&SECOND_REPUBLIC=SECOND_REPUBLIC&SORTBY=DEFAULT&ORDER=DESC
+  $qs = array();
+  $qs['FIRST_REPUBLIC'] = (isset($_GET['FIRST_REPUBLIC'])) ? $_GET['FIRST_REPUBLIC'] : 'FIRST_REPUBLIC';
+  $qs['EXILE_GOVERNMENTS'] = (isset($_GET['EXILE_GOVERNMENTS'])) ? $_GET['EXILE_GOVERNMENTS'] : 'EXILE_GOVERNMENTS';
+  $qs['SECOND_REPUBLIC'] = (isset($_GET['SECOND_REPUBLIC'])) ? $_GET['SECOND_REPUBLIC'] : 'SECOND_REPUBLIC';
+
+  if ($gov_or_minister == 'minister') {
+    $qs['AMETIKOHAD'] = (isset($_GET['AMETIKOHAD'])) ? $_GET['AMETIKOHAD'] : 'all';
+    $qs['SUGU'] = (isset($_GET['SUGU'])) ? $_GET['SUGU'] : 'all';
+    $qs['NIMI'] = (isset($_GET['NIMI'])) ? $_GET['NIMI'] : '';
+  }
+
+  if ($_GET['SORTBY'] === $sortby && $_GET['ORDER'] === 'DESC') {
+    $order = 'ASC';
+    $class = 'desc';
+  }
+  elseif ($_GET['SORTBY'] === $sortby && $_GET['ORDER'] === 'ASC') {
+    $order = 'DESC';
+    $class = 'asc';
+  }
+  else {
+    $default_ordering = array('PERIOD' => 'DESC', 'DURATION' => 'DESC', 'HEAD' => 'ASC', 'LNAME' => 'ASC', 'DEFAULT' => 'DESC');
+    $order = $default_ordering[$sortby];
+    $class = 'dormant';
+  }
+
+  $qs['SORTBY'] = $sortby; //(isset($_GET['SORTBY'])) ? $_GET['SORTBY'] : 'DEFAULT';
+  $qs['ORDER'] = $order; //(isset($_GET['ORDER'])) ? $_GET['ORDER'] : 'ASC'; 
+
+  $query_string = '';
+  foreach ($qs as $key => $value) {
+    $query_string .= $key . '=' . $value . '&';
+  }
+
+  // URL lähtub tüübist.
+  if ($gov_or_minister == 'minister') {
+    $url = 'varasemad-valitsused/ministrid';
+  }
+  else {
+    $url = 'varasemad-valitsused';
+  }
+
+  $arr_sortable_link = array('PERIOD' => t('Period'), 'DURATION' => t('Duration (days)'), 'HEAD' => t('Head of Government'), 'LNAME' => t('Last Name'));
+
+  //return '<a class="' . $class . '" href="/' . $language->language . '/valitsus/' . $url . '?' . substr($query_string, 0, -1) . '">';
+  return l($arr_sortable_link[$sortby], 'valitsus/' . $url, $options = array('query' => $qs, 'attributes' => array('title' => t('Order by' . ' ' .  strtolower($arr_sortable_link[$sortby])), 'class' => array($class, 'sortable'))));
+}
+
+
+/**
+ * Implements hook_stream_wrappers().
+ */
+function rk_valitsused_stream_wrappers() {
+  return array(
+    'rkvalitsused' => array(
+      'name' => t('RK valitsused image files'),
+      'class' => 'RKValitsusedStreamWrapper',
+      'description' => t('Files saved to rk_valitsused module.'),
+      'type' => STREAM_WRAPPERS_LOCAL_NORMAL,
+    ));
+}
+
+
+/**
+ * Based on Drupal public (public://) stream wrapper class.
+ */
+class RKValitsusedStreamWrapper extends DrupalLocalStreamWrapper {
+
+  /**
+   * Implements abstract public function getDirectoryPath()
+   */
+  public function getDirectoryPath() {
+    //return variable_get('file_public_path', conf_path() . '/files');
+    return drupal_get_path('module', 'rk_valitsused') . '/images';
+  }
+
+  /**
+   * Overrides getExternalUrl().
+   *
+   * Return the HTML URI of a public file.
+   */
+  function getExternalUrl() {
+    $path = str_replace('\\', '/', $this->getTarget());
+    return $GLOBALS['base_url'] . '/' . self::getDirectoryPath() . '/' . drupal_encode_path($path);
+  }
+}
+
+
+/**
+ * Implements hook_image_default_styles().
+ */
+function rk_valitsused_image_default_styles() {
+
+  $styles = array();
+
+  $styles['rk_valitsused_valitsus'] = array(
+    'label' => 'valitsus rk_valitsused moodulist',
+    'effects' => array(     
+      array(
+        'name' => 'image_scale_and_crop',
+        'data' => array(
+          'width' => PIC_WIDTH_VALITSUS,
+          'height' => PIC_HEIGHT_VALITSUS,
+          //'upscale' => 1,
+        ),
+        'weight' => 0,
+      ),
+    ),
+    'name' => 'rk_valitsused_valitsus', // Avoid PHP notices.
+    'storage' => IMAGE_STORAGE_NORMAL, // Avoid PHP notices.
+  );
+
+  $styles['rk_valitsused_minister'] = array(
+    'label' => 'minister rk_valitsused moodulist',
+    'effects' => array(
+      array(
+        'name' => 'image_scale_and_crop',
+        'data' => array(
+          'width' => PIC_WIDTH_MINISTER,
+          'height' => PIC_HEIGHT_MINISTER,
+          //'upscale' => 1,
+        ),
+        'weight' => 0,
+      ),
+    ),
+    'name' => 'rk_valitsused_minister', // Avoid PHP notices.
+    'storage' => IMAGE_STORAGE_NORMAL, // Avoid PHP notices.
+  );  
+
+  return $styles;
+
+}

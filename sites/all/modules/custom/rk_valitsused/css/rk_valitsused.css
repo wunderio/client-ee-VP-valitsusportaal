@@ -1,0 +1,410 @@
+tbody {
+  border-top: none;
+}
+
+.page-valitsus table.views-table {
+  margin-top: 2em;
+}
+
+.page-valitsused table tr.odd,
+.page-valitsus table tr.odd {
+  background: #ffffff;
+}
+
+.page-valitsused table tr.even,
+.page-valitsus table tr.even {
+  background: #faf9f5;  
+}
+
+.page-valitsused table tr td,
+.page-valitsus table tr td {
+  padding: 1em 0;
+}
+
+.page-valitsused table tr td a,
+.page-valitsus table tr td a {
+  color: #00698c;
+}
+
+.page-valitsused table tr td a:hover,
+.page-valitsus table tr td a:hover {
+  color: #bd4932; /* #ffcc00 */
+}
+
+.h1-intro {
+  margin-bottom: 2em;
+}
+
+.varasemad-form select {
+  height: 28px;
+}
+
+.varasemad-form .form-item {
+  margin: 0.4em 1em;
+  display: inline;
+}
+
+.varasemad-form .form-item.form-item-ametikohad {
+  margin-right: 1em;
+}
+
+.varasemad-form .form-item.form-item-sugu {
+  margin-top: 0.8em;
+}
+
+#edit-vasak, 
+#edit-grupp, 
+#rk-valitsused-get fieldset, 
+.view-minister-info .minister-wrapper.container-12,
+.varasemad-wrapper.container-12,
+.varasemad-wrapper.gov-wrapper,
+.varasemad-wrapper {
+  background: #faf9f5;
+}
+
+.varasemad-wrapper.minister-wrapper, 
+.varasemad-wrapper.gov-wrapper,
+.varasemad-wrapper {
+  min-height: 160px;
+  padding: 20px;
+}
+
+.varasemad-wrapper.minister-wrapper {
+  min-height: 180px;
+}
+
+#edit-grupp, 
+#rk-valitsused-get fieldset, 
+.view-minister-info .minister-wrapper.container-12,
+.varasemad-wrapper.container-12, {
+  margin-top: 3em;
+  padding: 20px;
+  width: inherit;
+}
+
+#rk-valitsused-get fieldset .submit-wrapper {
+  margin-top: 1em;
+  text-align: center;
+  /* padding-left: 50%; */
+}
+
+.view-minister-info .minister-wrapper.container-12 .grid-4,
+.varasemad-wrapper.container-12 .grid-4,
+.varasemad-wrapper.minister-wrapper .grid-4, 
+.varasemad-wrapper.gov-wrapper .grid-4,
+.varasemad-wrapper .grid-4 {
+  /* box-sizing: border-box; */
+  text-align: right;
+}
+
+.view-minister-info .minister-wrapper.container-12 .grid-4 img,
+.varasemad-wrapper.container-12 .grid-4 img,
+.varasemad-wrapper.minister-wrapper .grid-4 img, 
+.varasemad-wrapper.gov-wrapper .grid-4 img,
+.varasemad-wrapper .grid-4 img {
+  display: inline;
+}
+
+#rk-valitsused-get fieldset {
+}
+
+#rk-valitsused-get legend {
+  display: none;
+}
+
+.view-minister-info h2.minister-title,
+h2.varasem,
+h2.varasemad-title,
+fieldset.varasemad-wrapper legend {
+  color: #bd4932;
+}
+
+fieldset.varasemad-wrapper legend {
+  font-size: 20px;
+  padding-top: 2em;
+}
+
+fieldset.varasemad-wrapper label {
+  font-weight: normal;
+}
+
+
+fieldset.varasemad-wrapper label, 
+fieldset.varasemad-wrapper div {
+  display: inline-block;
+  padding-top: 0.5em;
+  /* 'padding-right: 0.35em; */
+}
+
+#daysdiv {
+  padding-right: 0.35em;
+}
+
+/* fieldset.varasemad-wrapper div.result */ 
+#query_result_kuupaev.result,
+#query_result_mitupaeva.result {
+  display: block;
+  clear: both;
+  font-size: 16px;
+  color: #00698c;
+}
+
+fieldset.varasemad-wrapper #edit-periood-kauem {
+  display: block;
+  clear: both; 
+}
+
+#edit-vasak, 
+#edit-grupp {
+  min-height: 126px;
+  padding-bottom: 1em;
+}
+
+#edit-vasak {
+  float: left;
+  width: 50%;
+  max-width: 50%;
+}
+
+#rk-valitsused-ministrid-get #edit-vasak {
+  min-height: 165px;
+}
+
+#rk-valitsused-ministrid-get #edit-periood .form-type-checkbox {
+  width: 140px;
+  float: left;
+}
+
+#edit-sugu {
+  margin-top: 4px;
+}
+
+#sissejuhatus {
+  /*width: 50%;
+  float: left;
+  min-height: 165px;*/
+  padding-right: 20px;
+}
+
+.ministrite-otsing #sissejuhatus {
+  /* width: 50%; */
+}
+
+#sissejuhatus p {
+  /* min-height: 75px; */
+}
+
+#rk-valitsused-statistika table,
+#query_result_ministrid table,
+#rk-valitsused-valitsused table,
+#rk-valitsused-get table,
+.view-minister-info table,
+.view-government table,
+.view-governments table {
+  width: 100%;
+}
+
+#rk-valitsused-statistika th,
+#query_result_ministrid th,
+.view-government th,
+#rk-valitsused-get th, 
+.view-minister-info th {
+  color: #00698c;
+}	
+
+.view-minister-info table td span.ametikoht:after,
+.view-government table td.views-field-created-by a:after,  
+table td span.ametikoht:after,
+table td span.ametiaeg:after,
+table td.juht a:after,
+.view-minister-info ul li span.ametikoht:after,
+.view-government ul li.views-field-created-by a:after,  
+ul li span.ametikoht:after,
+ul li span.ametiaeg:after,
+ul li.juht a:after {
+  content: " »";
+}
+
+.view-minister-info .view-footer,
+.varasemad-footer {
+  padding-top: 2em;
+  text-align: right;
+}
+
+.view-minister-info .view-footer a.varasemad,
+.varasemad-footer a.varasemad {
+  margin-left: 2em;
+}
+
+.view-minister-info .view-footer a.varasemad:before,
+.varasemad-footer a.varasemad:before {
+  content: "« "; /* « » */
+}
+
+#query_result,
+#query_result_ministrid {
+  min-height: 100px;
+  margin-top: 2em;
+}
+
+#query_result_kauem,
+#query_result_kuupaev,
+#query_result_mitupaeva {
+  min-height: 20px;
+  margin-top: 0;
+}
+
+#edit-grupp .submit-wrapper {
+  margin-top: 0.8em;
+}
+
+#rk-valitsused-ministrid #edit-submit {
+  /*position: relative;
+  top: -63px;
+  left: 280px;*/
+  margin-left: -120px;
+  display: inline-block;
+}
+
+#edit-submit-kuupaev, 
+#edit-submit-mitupaeva {
+  /* display: inline-block;*/
+}
+
+th.gov-num {width: 13%;}
+th.time-span {width: 23%;}
+th.duration {width: 16%;}
+th.gov-head {width: 25%;}
+th.head-title {}
+
+li.gov-num-narrow {width: 3%;}
+li.gov-num {width: 10%;}
+li.time-span {width: 20%;}
+li.duration {width: 15%;text-align: center;}
+li.gov-head {width: 25%;}
+li.head-title {width: 20%;}
+
+#query_result ul.varasemad li.head-title {width: 30%;}
+
+ul.varasemad {
+  clear: both;
+  border-bottom: solid 2px #cccccc;
+  /* margin-bottom: 1em; */
+}
+
+ul.even.varasemad {
+  background: #ffffff;
+  border-bottom: solid 1px #cccccc;
+}
+
+ul.odd.varasemad {
+  background: #faf9f5;
+  border-bottom: solid 1px #cccccc;
+}
+
+ul.varasemad li {
+  display: inline-block;
+  padding: 0.4em;
+}
+
+ul.varasemad li a:hover {
+  color: #bd4932;
+}
+
+td.duration {text-align: center;}
+
+fieldset.even .fieldset-content {background: #f9e4e6;} /* pink=f9e4e6 blue=7cc1f6 */
+fieldset.odd .fieldset-content {background: #b8c6d1;}
+
+div.form-item-ametikohad {
+  float: left;
+}
+
+ul.varasemad li a,
+a.dormant:link, 
+a.asc:link, 
+a.desc:link,
+a.dormant:visited, 
+a.asc:visited, 
+a.desc:visited,
+a.dormant:active, 
+a.asc:active, 
+a.desc:active {
+  color: #00698c;
+}
+
+a.dormant:after {
+  content: ' ▲▼';
+}
+
+a.asc:after {
+  content: ' ▲';
+}
+
+a.desc:after {
+  content: ' ▼';
+} 
+
+/* Hide gallery title from node_load. */
+.view-minister-info .view-footer .node-gallery header h2.node-title,
+.view-government .view-footer .node-gallery header h2.node-title {
+  display: none;
+}
+
+.view-minister-info .view-footer .node-gallery .content .field-name-body {
+  text-align: left;
+}
+
+.view-government .view-content {
+  margin-bottom: 2em;
+}
+
+span.upload {padding-right: 1em;}
+span.m-label {display: none;}
+
+/* Media queries */
+@media (max-width: 740px) {
+
+  div.form-item {
+    float: none;
+	clear: both;
+  }
+
+  #rk-valitsused-ministrid #edit-submit {
+    margin-left: 0;
+  }
+
+  #rk-valitsused-get fieldset .submit-wrapper {
+    padding-left: 0;
+  }
+
+  ul.varasemad li {
+    float: none;
+    display: block;
+    clear: both;
+  }
+
+  li.gov-num-narrow {width: 100%;}
+  li.gov-num {width: 100%;}
+  li.time-span {width: 100%;}
+  li.duration {width: 100%;text-align: left;}
+  li.gov-head {width: 100%;}
+  li.head-title {width: 100%;}
+
+  span.m-label {display: inline;font-weight: bold;}
+
+  #edit-vasak, 
+  #edit-grupp {
+    width: 100%;
+  }
+
+  #edit-vasak {
+    min-height: 0;
+  }
+
+  #rk-valitsused-get fieldset .submit-wrapper {
+    clear: both;
+  }
+
+}
+

@@ -1,0 +1,578 @@
+<?php
+
+/**
+ * @file
+ * Installation routines for the rk_valitsused module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function rk_valitsused_install() {
+  // This is fired after hook_schema creates database table(s).
+  drupal_mkdir('public://rk_valitsused');
+  drupal_mkdir('public://rk_valitsused/valitsus');
+  drupal_mkdir('public://rk_valitsused/minister');
+
+  // @todo. Populate rk_government, rk_minister, rk_minister_government, rk_duty, rk_duty_minister.
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function rk_valitsused_uninstall() {
+  drupal_rmdir('public://rk_valitsused', NULL);
+}
+
+/**
+ * Implements hook_schema().
+ */
+function rk_valitsused_schema() {
+
+  $schema = array();  
+
+  $schema['rk_government'] = array(
+    'description' => 'Government info from original valitsus.ee web app.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Primary key for rk_government.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'language' => array(
+        'description' => 'Language rk_government',
+        'type' => 'varchar',
+        'length' => '5',
+        'not null' => TRUE,
+      ),
+      'name' => array(
+        'description' => 'Name of government',
+        'type' => 'varchar',
+        'length' => '200',
+        'not null' => TRUE,
+      ),
+      'government_number' => array(
+        'description' => 'Sequential number. Was this 1st or 25th government?',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'rule_time_type_code' => array(
+        'description' => 'First or second republic or exile government.',
+        'type' => 'varchar',
+        'length' => '100',
+        'not null' => FALSE,
+      ),
+      'ruled_start_date' => array(
+        'description' => 'Start date rk_government',
+        'mysql_type' => 'DATE',
+        'not null' => TRUE,
+      ),
+      'ruled_end_date' => array(
+        'description' => 'End date rk_government',
+        'mysql_type' => 'DATE',
+        'not null' => FALSE,
+      ),
+      'ruled_days' => array(
+        'description' => 'Number of days ruled rk_government',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'description' => array(
+        'description' => 'Blurb rk_government',
+        'type' => 'text',
+        'not null' => FALSE,
+      ),
+      'gallery_id' => array(
+        'description' => 'Related photo gallery rk_government',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'cabinet_img_fid' => array(
+        'description' => 'Government picture file FID which is file_managed table primary key.',
+        'type' => 'int',
+        'not null' => FALSE,
+        'default' => NULL,
+      ),
+      'is_active' => array(
+        'description' => 'Active flag rk_government',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 1,
+      ),
+      'created' => array(
+        'description' => 'When was this record added.',
+        'mysql_type' => 'DATE',
+        'not null' => FALSE,
+      ),
+      'created_by' => array(
+        'description' => 'Which admin created this record.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'updated' => array(
+        'description' => 'Last updated.',
+        'mysql_type' => 'DATE',
+        'not null' => FALSE,
+      ),
+      'updated_by' => array(
+        'description' => 'Last updated by',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+    ),
+    'primary key' => array('id'),
+    'indexes' => array(
+      'gallery_id' => array('gallery_id'),
+    ),
+  );
+
+
+  $schema['rk_minister'] = array(
+    'description' => 'Personal info about ministers.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Primary key for rk_minister',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'language' => array(
+        'description' => 'Language rk_minister',
+        'type' => 'varchar',
+        'length' => '5',
+        'not null' => TRUE,
+      ),
+      'first_name' => array(
+        'description' => 'First Name',
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => TRUE,
+      ),
+      'last_name' => array(
+        'description' => 'Last Name',
+        'type' => 'varchar',
+        'length' => '75',
+        'not null' => TRUE,
+      ),
+      'person_sex_type_code' => array(
+        'description' => 'Male or female',
+        'type' => 'varchar',
+        'length' => '100',
+        'not null' => TRUE,
+      ),
+      'party_name' => array(
+        'description' => 'Political party rk_minister',
+        'type' => 'varchar',
+        'length' => '120',
+        'not null' => FALSE,
+      ),
+      'description' => array(
+        'description' => 'Blurb rk_minister',
+        'type' => 'text',
+        'not null' => FALSE,
+      ),
+      'minister_img_fid' => array(
+        'description' => 'Minister picture file FID which is file_managed table primary key.',
+        'type' => 'int',
+        'not null' => FALSE,
+        'default' => NULL,
+      ),
+      'gallery_id' => array(
+        'description' => 'Related photo gallery id rk_minister',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'image_file_name' => array(
+        'description' => 'Photo rk_minister',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => FALSE,
+      ),
+      'is_active' => array(
+        'description' => 'Active flag rk_minister',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 1,
+      ),
+      'created' => array(
+        'description' => 'Record creation date.',
+        'mysql_type' => 'DATE',
+        'not null' => FALSE,
+      ),
+      'created_by' => array(
+        'description' => 'Created by.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'updated' => array(
+        'description' => 'Last updated date.',
+        'mysql_type' => 'DATE',
+        'not null' => FALSE,
+      ),
+      'updated_by' => array(
+        'description' => 'Updated by.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+    ),
+    'primary key' => array('id'),
+    'indexes' => array(
+      'gallery_id' => array('gallery_id'),
+    ),
+  );
+
+
+  $schema['rk_minister_government'] = array(
+    'description' => 'Table joining ministers and governments.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Primary key for rk_minister_government',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'minister_id' => array(
+        'description' => 'Minister ID in rk_minister_government',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'government_id' => array(
+        'description' => 'Government ID in rk_minister_government',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'position_type_code' => array(
+        'description' => 'Minister title. rk_minister_government',
+        'type' => 'varchar',
+        'length' => '100',
+        'not null' => FALSE,
+      ),
+      'display_title' => array(
+        'description' => 'Ministerial title display override. rk_minister_government',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => FALSE,
+      ),
+      'display_indiv_name' => array(
+        'description' => 'Individual\'s name display override. rk_minister_government',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => FALSE,
+      ),      
+      'ruled_start_date' => array(
+        'description' => 'Start date. rk_minister_government',
+        'mysql_type' => 'DATE',
+        'not null' => FALSE,
+      ),
+      'ruled_end_date' => array(
+        'description' => 'End date. rk_minister_government',
+        'mysql_type' => 'DATE',
+        'not null' => FALSE,
+      ),
+      'ruled_days' => array(
+        'description' => 'Ruled days. rk_minister_government',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'party_name' => array(
+        'description' => 'Political party. rk_minister_government',
+        'type' => 'varchar',
+        'length' => '120',
+        'not null' => FALSE,
+      ),
+      'is_head_of_government' => array(
+        'description' => 'Head of Government flag. rk_minister_government',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'created' => array(
+        'description' => 'Created dat.e rk_minister_government',
+        'mysql_type' => 'DATE',
+        'not null' => FALSE,
+      ),
+      'created_by' => array(
+        'description' => 'Created by. rk_minister_government',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'updated' => array(
+        'description' => 'Updated date. rk_minister_government',
+        'mysql_type' => 'DATE',
+        'not null' => FALSE,
+      ),
+      'updated_by' => array(
+        'description' => 'Updated by. rk_minister_government',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'is_active' => array(
+        'description' => 'Active flag rk_minister_government',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 1,
+      ),
+      'weight' => array(
+        'description' => 'Ordering sequence. Higher number is heavier.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+        'unsigned' => FALSE,
+      ),          
+    ),
+    'primary key' => array('id'),
+    'foreign keys' => array(                
+  		'minister_id' => array(                
+  		  'table' => 'rk_minister',                
+  		  'columns' => array('minister_id' => 'id'),
+  		),
+  		'government_id' => array(                
+  		  'table' => 'rk_government',                
+  		  'columns' => array('government_id' => 'id'),
+  		),
+    ),
+    'indexes' => array(
+      'government_id' => array('government_id'),
+      'minister_id' => array('minister_id'),
+    ),
+  );
+
+  $schema['rk_duty'] = array(
+    'description' => 'Helper table to house core ministerial duties. As in foreign minister, defence minister etc.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Primary key for rk_duty',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'duty' => array(
+        'description' => 'Minister duty',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => FALSE,
+      ),    
+    ),
+    'primary key' => array('id'),
+    'indexes' => array(
+      'duty' => array('duty'),
+    ),
+  );
+
+
+  $schema['rk_duty_minister'] = array(
+    'description' => 'Join table to classify minister to multiple duties. Crucial for search by type of minister filters.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Primary key for rk_duty_minister',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'minister_id' => array(
+        'description' => 'Minister ID in rk_duty_minister',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'government_id' => array(
+        'description' => 'Government ID in rk_duty_minister',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'duty_id' => array(
+        'description' => 'Duty ID in rk_duty_minister',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),      
+    ),
+    'primary key' => array('id'),
+  );
+
+  return $schema;
+}
+
+
+/**
+ * Implements hook_update().
+ */
+function rk_valitsused_update_7100(&$sandbox) {
+  db_add_field('rk_government', 'cabinet_img', array('type' => 'varchar', 'length' => '255', 'not null' => FALSE, 'description' => 'Government cabinet picture file.'));
+  db_add_field('rk_minister', 'minister_img', array('type' => 'varchar', 'length' => '255', 'not null' => FALSE, 'description' => 'Minister picture file.'));
+}
+
+/**
+ * Implements hook_update().
+ */
+function rk_valitsused_update_7200(&$sandbox) {
+  db_add_field('rk_minister_government', 'display_title', array('type' => 'varchar', 'length' => '255', 'not null' => FALSE, 'description' => 'Title to be displayed. Can be empty in which case we find the title elsewhere.')); 
+
+  $schema = array();
+
+  $schema['rk_duty'] = array(
+    'description' => 'Helper table to house core ministerial duties. As in foreign minister, defence minister etc.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Primary key for rk_duty',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'duty' => array(
+        'description' => 'Minister duty',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => FALSE,
+      ),    
+    ),
+    'primary key' => array('id'),
+    'indexes' => array(
+      'duty' => array('duty'),
+    ),
+  );
+
+
+  $schema['rk_duty_minister'] = array(
+    'description' => 'Join table to classify minister to multiple duties. Crucial for search by type of minister filters.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Primary key for rk_duty_minister',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'minister_id' => array(
+        'description' => 'Minister ID in rk_duty_minister',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'government_id' => array(
+        'description' => 'Government ID in rk_duty_minister',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'duty_id' => array(
+        'description' => 'Duty ID in rk_duty_minister',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),      
+    ),
+    'primary key' => array('id'),
+  );
+
+  db_create_table('rk_duty', $schema['rk_duty']);
+  db_create_table('rk_duty_minister', $schema['rk_duty_minister']);
+}
+
+
+/**
+ * Implements hook_update().
+ */
+function rk_valitsused_update_7300(&$sandbox) {
+  db_add_field('rk_minister_government', 'is_active', array('type' => 'int', 'size' => 'tiny', 'not null' => FALSE, 'default' => 1, 'description' => 'Active flag rk_minister_government.'));
+}
+
+
+/**
+ * Implements hook_update().
+ */
+function rk_valitsused_update_7310(&$sandbox) {
+  db_add_field('rk_minister_government', 'weight', array('type' => 'int', 'not null' => FALSE, 'description' => 'Ordering in list views.', 'unsigned' => FALSE));
+}
+
+
+/**
+ * Implements hook_update().
+ */
+function rk_valitsused_update_7320(&$sandbox) {
+  db_add_field('rk_minister_government', 'display_indiv_name', array('type' => 'varchar', 'length' => '255', 'not null' => FALSE, 'description' => 'Individual name display override.'));
+}
+
+
+/**
+ * Implements hook_update().
+ */
+function rk_valitsused_update_7330(&$sandbox) {
+
+  db_change_field('rk_minister', 'minister_img', 'minister_img_fid', array('type' => 'int', 'not null' => FALSE, 'default' => NULL, 'description' => 'Minister picture file FID which is file_managed table primary key.'));
+
+  db_change_field('rk_government', 'cabinet_img', 'cabinet_img_fid', array('type' => 'int', 'not null' => FALSE, 'default' => NULL, 'description' => 'Government picture file FID which is file_managed table primary key.'));
+}
+
+
+/**
+ * Implements hook_update().
+ * Adds image subfolders into public files folder.
+ */
+function rk_valitsused_update_7340(&$sandbox) {
+  drupal_mkdir('public://rk_valitsused');
+  drupal_mkdir('public://rk_valitsused/valitsus');
+  drupal_mkdir('public://rk_valitsused/minister');
+}  
+
+/*
+--
+-- Table structure for table `rk_duty`
+--
+
+CREATE TABLE IF NOT EXISTS `rk_duty` (
+  `id` int(10) unsigned NOT NULL,
+  `duty` varchar(255) COLLATE utf8_estonian_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_estonian_ci;
+
+--
+-- Dumping data for table `rk_duty`
+--
+
+INSERT INTO `rk_duty` (`id`, `duty`) VALUES
+(1, 'peaminister'),
+(2, 'kaitseminister'),
+(3, 'rahandusminister'),
+(4, 'siseminister'),
+(5, 'välisminister'),
+(6, 'majandus- ja kommunikatsiooniminister'),
+(7, 'põllumajandusminister'),
+(8, 'keskkonnaminister'),
+(9, 'sotsiaalminister'),
+(10, 'kultuuriminister'),
+(11, 'haridus- ja teadusminister'),
+(12, 'justiitsminister');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `rk_duty_minister`
+--
+
+CREATE TABLE IF NOT EXISTS `rk_duty_minister` (
+  `id` int(10) unsigned NOT NULL,
+  `minister_id` int(10) unsigned NOT NULL COMMENT 'Minister id',
+  `government_id` int(10) unsigned NOT NULL COMMENT 'Government id',
+  `duty_id` int(10) unsigned NOT NULL COMMENT 'Duty id which is what this position actually counts as.',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+*/

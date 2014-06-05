@@ -1,0 +1,891 @@
+# $Id$
+#
+# EST translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  rk_valitsused.edit.inc: n/a
+#  rk_valitsused.module: n/a
+#  includes/views/rk_valitsused.views.inc: n/a
+#  rk_valitsused.info: n/a
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2013-11-08 15:25+0200\n"
+"PO-Revision-Date: 2013-11-08 15:25+0200\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: EST <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#: rk_valitsused.edit.inc:14
+msgid "Choose government"
+msgstr "Vali valitsus"
+
+#: rk_valitsused.edit.inc:18
+msgid "Choose government that you would like to edit."
+msgstr "Vali valitsus, mille andmeid soovid muuta"
+
+#: rk_valitsused.edit.inc:23;272
+msgid "Edit"
+msgstr "Muuda"
+
+#: rk_valitsused.edit.inc:112
+msgid "Minister's Public Service History"
+msgstr "Ministri detailvaade"
+
+#: rk_valitsused.edit.inc:131 rk_valitsused.module:1658
+msgid "Role"
+msgstr "Ametinimetus"
+
+#: rk_valitsused.edit.inc:164
+msgid "Save"
+msgstr "Salvesta"
+
+#: rk_valitsused.edit.inc:195
+msgid "Government details saved."
+msgstr "Valitsuse detailvaade on salvestatud"
+
+#: rk_valitsused.edit.inc:231
+msgid "Minister role details saved. rk_minister_government id = @id"
+msgstr "Ministri roll on salvestatud"
+
+#: rk_valitsused.edit.inc:255
+msgid "Minister details saved. rk_minister id = @id"
+msgstr "Ministri detailvaade on salvestatud"
+
+#: rk_valitsused.edit.inc:263
+msgid "Choose minister"
+msgstr "Vali minister"
+
+#: rk_valitsused.edit.inc:267
+msgid "Choose minister that you would like to edit."
+msgstr "Vali minister, kelle andmeid soovid toimetada"
+
+#: rk_valitsused.edit.inc:430
+msgid "Estonian"
+msgstr "Eesti keel"
+
+#: rk_valitsused.edit.inc:430
+msgid "English"
+msgstr "Inglise keel"
+
+#: rk_valitsused.edit.inc:430
+msgid "Russian"
+msgstr "Vene keel"
+
+#: rk_valitsused.edit.inc:434
+msgid "First Republic"
+msgstr "1918-1940/1944"
+
+#: rk_valitsused.edit.inc:434
+msgid "Exile Government"
+msgstr "Eksiil"
+
+#: rk_valitsused.edit.inc:434
+msgid "Second Republic"
+msgstr "Alates 1990"
+
+#: rk_valitsused.edit.inc:438 rk_valitsused.module:244;716;947
+msgid "Male"
+msgstr "Mees"
+
+#: rk_valitsused.edit.inc:438 rk_valitsused.module:244;716;947
+msgid "Female"
+msgstr "Naine"
+
+#: rk_valitsused.edit.inc:442;446;454
+msgid "Yes"
+msgstr "Jah"
+
+#: rk_valitsused.edit.inc:442;446;454
+msgid "No"
+msgstr "Ei"
+
+#: rk_valitsused.module:36
+msgid "Admin Varasemad Valitsused"
+msgstr "Muuda varasemate valitsuste moodulit"
+
+#: rk_valitsused.module:37
+msgid "Full administrator access for varasemad valitsused."
+msgstr "Kõik õigused"
+
+#: rk_valitsused.module:74
+msgid "General settings form"
+msgstr "Üldised seaded"
+
+#: rk_valitsused.module:130
+msgid "List of Estonian Republic governments"
+msgstr "Valitsuste loetelu"
+
+#: rk_valitsused.module:139
+msgid "List of Estonian Republic governments using GET"
+msgstr "Valitsuste loetelu "
+
+#: rk_valitsused.module:148
+msgid "Varasemad valitsused statistics"
+msgstr "Statistika"
+
+#: rk_valitsused.module:157
+msgid "Searchable minister list"
+msgstr "Ministrite nimekiri"
+
+#: rk_valitsused.module:166
+msgid "Search Estonian Ministers"
+msgstr "Otsi ministreid"
+
+#: rk_valitsused.module:175
+msgid "Just a URL for stuff"
+msgstr ""
+
+#: rk_valitsused.module:210;685
+msgid "Search Minister by Name"
+msgstr "Otsi nime järgi"
+
+#: rk_valitsused.module:214;689
+msgid "Search Ministers"
+msgstr "Otsi ministreid"
+
+#: rk_valitsused.module:230;703;931;947
+msgid "All Ministers"
+msgstr "Kõik ministrid"
+
+#: rk_valitsused.module:244;716
+msgid "Both Genders"
+msgstr "Kõik"
+
+#: rk_valitsused.module:265;443;565
+msgid "Filter"
+msgstr "Leia"
+
+#: rk_valitsused.module:311
+msgid "Use filters to search for ministers."
+msgstr "Kasuta otsingufiltreid"
+
+#: rk_valitsused.module:372;766;844;923;1196;1361;2161;2174;2175;2176;2177;2178;2179;2180;2181;2182;2183;2184;2185;2186;2187;2188;2189;2190;2191;2192;2193;2194;2195;2196;2197;2198;2199;2200;2201;2231;2232;2233;2234;2235 includes/views/rk_valitsused.views.inc:149
+msgid "Minister"
+msgstr "Minister"
+
+#: rk_valitsused.module:408;415;551;1689;1689;2497;129;138
+msgid "Former Governments"
+msgstr "Varasemad valitsused"
+
+#: rk_valitsused.module:551
+msgid "Text here, text here, text here."
+msgstr ""
+
+#: rk_valitsused.module:724
+msgid "Search"
+msgstr "Otsi"
+
+#: rk_valitsused.module:753
+msgid "Current government's time in authority"
+msgstr "Praeguse valitsuse ametiaja pikkus"
+
+#: rk_valitsused.module:765
+msgid "On what day has the current"
+msgstr "Mis kuupäeval on praegune"
+
+#: rk_valitsused.module:766;844;923;2322
+msgid "Government"
+msgstr "Valitsus"
+
+#: rk_valitsused.module:797
+msgid "been in authority for"
+msgstr "olnud ametis"
+
+#: rk_valitsused.module:801
+msgid "days"
+msgstr "päeva?"
+
+#: rk_valitsused.module:808
+msgid "Calculate"
+msgstr "Leia"
+
+#: rk_valitsused.module:843
+msgid "How many days has the current"
+msgstr "Mitu päeva on praegune"
+
+#: rk_valitsused.module:878
+msgid "been in authority on"
+msgstr "olnud ametis kuupäeval"
+
+#: rk_valitsused.module:886
+msgid "Calculate Days"
+msgstr "Leia"
+
+#: rk_valitsused.module:915
+msgid "Longest serving governments and ministers"
+msgstr "Kõige kauem ametis olnud valitsused ja ministrid"
+
+#: rk_valitsused.module:922
+msgid "Which is the longest serving"
+msgstr "Milline on kõige kauem ametis olnud"
+
+#: rk_valitsused.module:966
+msgid "Find"
+msgstr "Leia"
+
+#: rk_valitsused.module:1024
+msgid "Number of days must be between 1 and 9999"
+msgstr "Numbrid peavad olema vahemikus 1 – 9999 "
+
+#: rk_valitsused.module:1483
+msgid "Title"
+msgstr "Ametinimetus"
+
+#: rk_valitsused.module:1539
+msgid "Period"
+msgstr "Ametiaeg"
+
+#: rk_valitsused.module:1539;1594;1620
+msgid "Duration (days)"
+msgstr "Ametiaeg päevades"
+
+#: rk_valitsused.module:1539;1594
+msgid "Head of Government"
+msgstr "Valitsusjuht"
+
+#: rk_valitsused.module:1552;1569;1570;1603;1669;1678;2583
+msgid "Republic of Estonia government number"
+msgstr "Valitsuse number"
+
+#: rk_valitsused.module:1585;1585
+msgid "Estonian Ministers"
+msgstr "Ministrid"
+
+#: rk_valitsused.module:1585;1585;1689;1689;2497;147
+msgid "Good to Know"
+msgstr "Huvitav teada"
+
+#: rk_valitsused.module:1594;1651 includes/views/rk_valitsused.views.inc:46
+msgid "Government Number"
+msgstr "Valitsuse number"
+
+#: rk_valitsused.module:1594
+msgid "Start Date"
+msgstr "Alguskuupäev"
+
+#: rk_valitsused.module:1594
+msgid "End Date"
+msgstr "Lõpukuupäev"
+
+#: rk_valitsused.module:1699
+msgid "Sorry, no results found"
+msgstr "Vabandage!"
+
+#: rk_valitsused.module:1715
+msgid "Government @num"
+msgstr "Valitsus @num"
+
+#: rk_valitsused.module:1717
+msgid "Days ruled"
+msgstr ""
+
+#: rk_valitsused.module:1810
+msgid "Answer: The current @minister will have been in authority for @num_days on @date_string."
+msgstr "Praegune @minister on ametis olnud @num_days kuupäeval @date_string"
+
+#: rk_valitsused.module:1813
+msgid "Answer: The current @minister has been in authority for @num_days on @date_string."
+msgstr "Praegune @minister on ametis olnud @num_days kuupäeval @date_string"
+
+#: rk_valitsused.module:1869
+msgid "Answer: The current @minister will have been in authority for @num_days on @date_at_days."
+msgstr "Praegune @minister on kuupäeval @num_days ametis olnud @date_at_days"
+
+#: rk_valitsused.module:1872
+msgid "Answer: The current @minister has been in authority for @num_days on @date_at_days."
+msgstr "Praegune @minister on kuupäeval @num_days ametis olnud @date_at_days"
+
+#: rk_valitsused.module:1901
+msgid "Test mode"
+msgstr "Test"
+
+#: rk_valitsused.module:1903
+msgid "Switch rk_valitsused module between live and test mode."
+msgstr "rk_valitsuse module live ja testkeskonna vahetused"
+
+#: rk_valitsused.module:1908
+msgid "Currently active government."
+msgstr "Praegu aktiivne valitsus"
+
+#: rk_valitsused.module:1911
+msgid "Number ID for the currently active government. (ie. Government #46)"
+msgstr "Praegu aktiivse valitsuse ID number"
+
+#: rk_valitsused.module:1916
+msgid "Lead-in text for all former governments pages."
+msgstr ""
+
+#: rk_valitsused.module:1918
+msgid "Text at very top of Varasemad valitsused pages, as per design drawings. HTML allowed."
+msgstr "Varasemate valitsuste mooduli sissejuhatav tekst"
+
+#: rk_valitsused.module:1923
+msgid "Lead-in text for former governments page."
+msgstr "Varasemate valitsuste lehe sissejuhatus"
+
+#: rk_valitsused.module:1925
+msgid "Text which is displayed at the list of former governments. HTML allowed."
+msgstr "Varasemate valitsuste loetelu ees olev tekst"
+
+#: rk_valitsused.module:1930
+msgid "Lead-in text for ministers page."
+msgstr "Ministrite loetelu ees olev tekst"
+
+#: rk_valitsused.module:1932
+msgid "Text which is displayed on the searchable ministers page. HTML allowed."
+msgstr "Ministrite otsingulehe sissejuhatus"
+
+#: rk_valitsused.module:2148;2241;2242;2266;2267
+msgid "Prime Minister"
+msgstr "Peaminister"
+
+#: rk_valitsused.module:2149;2316;2320;2321
+msgid "Minister of Foreign Affairs"
+msgstr "Välisminister"
+
+#: rk_valitsused.module:2150;2225;2226
+msgid "Minister of Economic Affairs and Communications"
+msgstr "Majandus- ja kommunikatsiooniminister"
+
+#: rk_valitsused.module:2151;2222;2223;2224
+msgid "Minister of Culture"
+msgstr "Kultuuriminister"
+
+#: rk_valitsused.module:2152
+msgid "Minister of Education and Research"
+msgstr "Haridus- ja teadusminister"
+
+#: rk_valitsused.module:2153;2211;2218;2219;2220
+msgid "Minister of Justice"
+msgstr "Justiitsminister"
+
+#: rk_valitsused.module:2154;2212
+msgid "Minister of Defence"
+msgstr "Kaitseminister"
+
+#: rk_valitsused.module:2155;2217
+msgid "Minister of the Environment"
+msgstr "Keskkonnaminister"
+
+#: rk_valitsused.module:2156;2250;2251;2252
+msgid "Minister of Agriculture"
+msgstr "Põllumajandusminister"
+
+#: rk_valitsused.module:2157;2259;2260;2263
+msgid "Minister of Finance"
+msgstr "Rahandusminister"
+
+#: rk_valitsused.module:2158;2265
+msgid "Minister of Regional Affairs"
+msgstr "Regionaalminister"
+
+#: rk_valitsused.module:2159;2268;2269;2272;2273
+msgid "Minister of the Interior"
+msgstr "Siseminister"
+
+#: rk_valitsused.module:2160;2277
+msgid "Minister of Social Affairs"
+msgstr "Sotsiaalminister"
+
+#: rk_valitsused.module:2202
+msgid "Minister of Energy"
+msgstr "Energeetikaminister"
+
+#: rk_valitsused.module:2203
+msgid "Minister of Finance In Exile"
+msgstr "Rahandusminsiter eksiilis"
+
+#: rk_valitsused.module:2204;2205;2206;2207;2208
+msgid "Minister of Education"
+msgstr "Haridusminister"
+
+#: rk_valitsused.module:2209;2210
+msgid "Minister of Education In Exile"
+msgstr "Haridusminister eksiilis"
+
+#: rk_valitsused.module:2213;2214
+msgid "Minister of Trade"
+msgstr "Kaubandusminister"
+
+#: rk_valitsused.module:2215;2216
+msgid "Minister of Trade and Works"
+msgstr "Kaubandus- ja tööstusminister"
+
+#: rk_valitsused.module:2221
+msgid "Minister of Justice In Exile"
+msgstr "Justiitsminister eksiilis"
+
+#: rk_valitsused.module:2227
+msgid "Minister of Economic Affairs"
+msgstr "Majandusminister"
+
+#: rk_valitsused.module:2228;2229;2230
+msgid "Minister of Economic Affairs in Exile"
+msgstr "Majandusminister eksiilis"
+
+#: rk_valitsused.module:2236;2237;2238;2239
+msgid "Minister In Exile"
+msgstr "Minister eksiilis"
+
+#: rk_valitsused.module:2240;2257
+msgid "Minister without Portfolio"
+msgstr "Portfellita minister"
+
+#: rk_valitsused.module:2243
+msgid "Prime and Defence Minister"
+msgstr "Pea- ja kaitseminister"
+
+#: rk_valitsused.module:2244;2245;2246;2247;2248;2249
+msgid "Acting Prime Minister"
+msgstr "Peaminister"
+
+#: rk_valitsused.module:2253;2254;2255
+msgid "Minister of Agriculture In Exile"
+msgstr "Põllumajandusminister eksiilis"
+
+#: rk_valitsused.module:2256
+msgid "Minister of Agriculture toitlusministri"
+msgstr "Põllutööminister"
+
+#: rk_valitsused.module:2258
+msgid "Minister of Propaganda"
+msgstr "Propagandaminister"
+
+#: rk_valitsused.module:2261
+msgid "Finance Minister in role of Justice Minister"
+msgstr "Justiitsministri kohusetäitja"
+
+#: rk_valitsused.module:2262
+msgid "Finance Minister in role of Prime Minister"
+msgstr "Peaministri kohusetäitja"
+
+#: rk_valitsused.module:2264
+msgid "reformiminister"
+msgstr "Reformiminister"
+
+#: rk_valitsused.module:2270
+msgid "Minister of the Interior in Exile"
+msgstr "Siseminister eksiilis"
+
+#: rk_valitsused.module:2271
+msgid "siseminister peaministri"
+msgstr "Peaministri kohusetäitja"
+
+#: rk_valitsused.module:2274
+msgid "Minister of War"
+msgstr "Sõjaminister"
+
+#: rk_valitsused.module:2275
+msgid "Minister of War in Exile"
+msgstr "Sõjaminister eksiilis"
+
+#: rk_valitsused.module:2276
+msgid "Defence Minister Actings as Interior Minister"
+msgstr "Kaitseminister siseministri ülesannetes"
+
+#: rk_valitsused.module:2278;2279
+msgid "Minister of Social Affairs in Exile"
+msgstr "Sotsiaalminister eksiilis"
+
+#: rk_valitsused.module:2280;2281
+msgid "Minister of Road Infrastructure"
+msgstr "Teedeminister"
+
+#: rk_valitsused.module:2282;2283
+msgid "Minister of Roads In Exile"
+msgstr "Teedeminister eksiilis"
+
+#: rk_valitsused.module:2284
+msgid "Road Minister in role of Trade Minister"
+msgstr "Teedeminister kaubandsuministri ülesannetes"
+
+#: rk_valitsused.module:2285
+msgid "Road Minister in role of Prime Minister"
+msgstr "Teedeminister peaministri ülesannetes"
+
+#: rk_valitsused.module:2286;2287
+msgid "Minister of Food Provisioning"
+msgstr "Toitlustusminister"
+
+#: rk_valitsused.module:2288;2289;2290
+msgid "Minister of Work"
+msgstr "Tööminister"
+
+#: rk_valitsused.module:2291;2292
+msgid "Minister of Reconstruction in Transitional Government"
+msgstr "Üleminekuvalitsuse ehitusminister"
+
+#: rk_valitsused.module:2293
+msgid "Minister of Education in Transitional Government"
+msgstr "Üleminekuvalitsuse haridusminister"
+
+#: rk_valitsused.module:2294
+msgid "Minister of Justice in Transitional Government"
+msgstr "Üleminekuvalitsuse justiitsminister"
+
+#: rk_valitsused.module:2295
+msgid "Minister of Defence in Transitional Government"
+msgstr "Üleminekuvalitsuse kaitseminister"
+
+#: rk_valitsused.module:2296
+msgid "Minister of Trade in Transitional Government"
+msgstr "Üleminekuvalitsuse kaubandusminister"
+
+#: rk_valitsused.module:2297
+msgid "Minister of the Environment in Transitional Government"
+msgstr "Üleminekuvalitsuse keskkonnaminister"
+
+#: rk_valitsused.module:2298
+msgid "Minister of Cultural Affairs in Transitional Government"
+msgstr "Üleminekuvalitsuse kultuuriminister"
+
+#: rk_valitsused.module:2299
+msgid "Minister of Economic Affairs in Transitional Government"
+msgstr "Üleminekuvalitsuse majandusminister"
+
+#: rk_valitsused.module:2300
+msgid "Minister of Materials in Transitional Government"
+msgstr "Üleminekuvalitsuse materiaalsete ressurssite minister"
+
+#: rk_valitsused.module:2301
+msgid "Minister in Transitional Government"
+msgstr "Üleminekuvalitsuse minister"
+
+#: rk_valitsused.module:2302
+msgid "Prime Minister of Transitional Government"
+msgstr "Üleminekuvalitsuse peaminister"
+
+#: rk_valitsused.module:2303
+msgid "Minister of Agriculture in Transitional Government"
+msgstr "Üleminekuvalitsuse põllumajandusminister"
+
+#: rk_valitsused.module:2304
+msgid "Minister of Finance in Transitional Government"
+msgstr "Üleminekuvalitsuse rahandusminister"
+
+#: rk_valitsused.module:2305
+msgid "Transitional Government Minister"
+msgstr "Üleminekuvalitsuse minister"
+
+#: rk_valitsused.module:2306
+msgid "Minister of Communications in Transitional Government"
+msgstr "Üleminekuvalitsuse kommunikatsiooniminister"
+
+#: rk_valitsused.module:2307
+msgid "Minister of Interior Affairs in Transitional Government"
+msgstr "Üleminekuvalitsuse siseminister"
+
+#: rk_valitsused.module:2308;2309
+msgid "Minister of Social Affairs in Transitional Government"
+msgstr "Üleminekuvalitsuse sotsiaalminister"
+
+#: rk_valitsused.module:2310
+msgid "Minister of Health in Transitional Government"
+msgstr "Üleminekuvalitsuse tervishoiuminister"
+
+#: rk_valitsused.module:2311
+msgid "Minister of Employment in Transitional Government"
+msgstr "Üleminekuvalitsuse tööminister"
+
+#: rk_valitsused.module:2312
+msgid "Minister of Production in Transitional Government"
+msgstr "Üleminekuvalitsuse tööstusminister"
+
+#: rk_valitsused.module:2313;2314
+msgid "Minister of Transport in Transitional Government"
+msgstr "Üleminekuvalitsuse transpordiminister"
+
+#: rk_valitsused.module:2315
+msgid "Minister of Foreign Affairs in Transitional Government"
+msgstr "Üleminekuvalitsuse välisminister"
+
+#: rk_valitsused.module:2317;2318
+msgid "Minister of Foreign Affairs in Exile"
+msgstr "Välisminister eksiilis"
+
+#: rk_valitsused.module:2319
+msgid "Minister of Foreign Affairs actings as Justice Minister"
+msgstr "Välisminister justiitsministri ülesannetes"
+
+#: rk_valitsused.module:2410
+msgid "^ Back to top ^"
+msgstr "Tagasi üles"
+
+#: rk_valitsused.module:2477
+msgid "Republic of Estonia Governments 1918-1940/1944"
+msgstr "1918-1940/1944"
+
+#: rk_valitsused.module:2478
+msgid "Republic of Estonia Governments In Exile"
+msgstr "Eksiilis"
+
+#: rk_valitsused.module:2479
+msgid "Republic of Estonia Governments Beginning 1990"
+msgstr "Alates 1990. aastast"
+
+#: rk_valitsused.module:2497;156;165
+msgid "Ministers"
+msgstr "Ministrid"
+
+#: rk_valitsused.module:2584
+msgid "Stenbock House"
+msgstr "Stenbocki maja"
+
+#: rk_valitsused.module:2584
+msgid "Picture missing"
+msgstr ""
+
+#: rk_valitsused.module:1810;1813;1869;1872
+msgid "1 day"
+msgid_plural "@count days"
+msgstr[0] "1 päev"
+msgstr[1] "@count päeva"
+
+#: rk_valitsused.module:63
+msgid "Varasemad valitsused"
+msgstr "Varasemad valitsused"
+
+#: rk_valitsused.module:73
+msgid "Varasemad valitsused settings"
+msgstr "Varasemate valitsuste mooduli seaded"
+
+#: rk_valitsused.module:83
+msgid "Valitsuste toimetamine"
+msgstr "Valitsuste toimetamine"
+
+#: rk_valitsused.module:95
+msgid "Ministrite toimetamine"
+msgstr "Ministrite toimetamine"
+
+#: rk_valitsused.module:107
+msgid "Valitsuse toimetamine"
+msgstr "Valitsuse toimetamine"
+
+#: rk_valitsused.module:118
+msgid "Ministri toimetamine"
+msgstr "Ministri toimetamine"
+
+#: rk_valitsused.module:174
+msgid "Play time"
+msgstr ""
+
+#: rk_valitsused.info:0
+msgid "Varasemad Valitsused"
+msgstr "Varasemad valitsused"
+
+#: rk_valitsused.info:0
+msgid "Varasemate valitsuste loetelu rakendus (valitsus.ee) Drupalisse"
+msgstr "Varasemate valitsuste loetelu rakendus Drupalisse"
+
+#: rk_valitsused.info:0 includes/views/rk_valitsused.views.inc:12;148;280
+msgid "Riigikantselei"
+msgstr "Riigikantselei"
+
+#: includes/views/rk_valitsused.views.inc:14
+msgid "Government Info"
+msgstr "Valitsuse info"
+
+#: includes/views/rk_valitsused.views.inc:14
+msgid "Republic of Estonia governments"
+msgstr "Eesti Vabariigi valitsused"
+
+#: includes/views/rk_valitsused.views.inc:23;291
+msgid "Valitsus ID"
+msgstr "Valitsuse ID"
+
+#: includes/views/rk_valitsused.views.inc:24
+msgid "Government's primary key from rk_government"
+msgstr "Valitsuse tunnus rk_government"
+
+#: includes/views/rk_valitsused.views.inc:30;298
+msgid "Join tables rk_government and rk_minister_government"
+msgstr "Join tables rk_government and rk_minister_government"
+
+#: includes/views/rk_valitsused.views.inc:31;299
+msgid "rk_government and rk_minister_government"
+msgstr "rk_government and rk_minister_government"
+
+#: includes/views/rk_valitsused.views.inc:32;300
+msgid "Relationship for tables rk_government and rk_minister_government."
+msgstr "Relationship for tables rk_government and rk_minister_government."
+
+#: includes/views/rk_valitsused.views.inc:47
+msgid "Government # 1, 2, 3... Found in rk_government."
+msgstr ""
+
+#: includes/views/rk_valitsused.views.inc:63
+msgid "Rule Time Type Code"
+msgstr "Ametiaeg"
+
+#: includes/views/rk_valitsused.views.inc:64
+msgid "1st republic, exile, 2nd republic. Found in rk_government."
+msgstr ""
+
+#: includes/views/rk_valitsused.views.inc:80
+msgid "Government Start"
+msgstr "Ametiaja algus"
+
+#: includes/views/rk_valitsused.views.inc:81;98
+msgid "Format in db is 2013-12-31. Found in rk_government."
+msgstr "Format in db is 2013-12-31. Found in rk_government."
+
+#: includes/views/rk_valitsused.views.inc:97
+msgid "Government End"
+msgstr "Ametiaja lõpp"
+
+#: includes/views/rk_valitsused.views.inc:114
+msgid "Government Number Days in Power"
+msgstr "Ametiaeg päevades"
+
+#: includes/views/rk_valitsused.views.inc:115
+msgid "Numeric field, non-calculated. From rk_government"
+msgstr "Numbriväli"
+
+#: includes/views/rk_valitsused.views.inc:128
+msgid "Description"
+msgstr "Kirjeldus"
+
+#: includes/views/rk_valitsused.views.inc:129
+msgid "Free text. Generally used to list which political parties formed government. Found in rk_government."
+msgstr "Tutvustus"
+
+#: includes/views/rk_valitsused.views.inc:149
+msgid "The individual that filled roll of minister."
+msgstr "Ministri ülesandeid täitnud isik"
+
+#: includes/views/rk_valitsused.views.inc:152;314
+msgid "Minister ID"
+msgstr "Ministri ID"
+
+#: includes/views/rk_valitsused.views.inc:153
+msgid "Primary key. rk_minister"
+msgstr "Primary key. rk_minister"
+
+#: includes/views/rk_valitsused.views.inc:159;321
+msgid "Join tables rk_minister and rk_minister_government"
+msgstr "Join tables rk_minister ja rk_minister_government"
+
+#: includes/views/rk_valitsused.views.inc:160;322
+msgid "rk_minister and rk_minister_government"
+msgstr "rk_minister ja rk_minister_government"
+
+#: includes/views/rk_valitsused.views.inc:178
+msgid "First Name"
+msgstr "Eesnimi"
+
+#: includes/views/rk_valitsused.views.inc:179
+msgid "Politician's first name. rk_minister"
+msgstr "Eesnimi"
+
+#: includes/views/rk_valitsused.views.inc:195
+msgid "Last Name"
+msgstr "Perenimi"
+
+#: includes/views/rk_valitsused.views.inc:196
+msgid "Politician's last name. rk_minister"
+msgstr "Perenimi"
+
+#: includes/views/rk_valitsused.views.inc:212
+msgid "Gender"
+msgstr "Sugu"
+
+#: includes/views/rk_valitsused.views.inc:213
+msgid "Male or Female. rk_minister"
+msgstr "Mees või naine. rk_minister"
+
+#: includes/views/rk_valitsused.views.inc:229
+msgid "Blurb"
+msgstr "Tekst"
+
+#: includes/views/rk_valitsused.views.inc:230
+msgid "Blurb about the politician. rk_minister"
+msgstr "Tekst ministri kohta"
+
+#: includes/views/rk_valitsused.views.inc:246
+msgid "Picture"
+msgstr "Pilt"
+
+#: includes/views/rk_valitsused.views.inc:247
+msgid "Name of picture file. rk_minister"
+msgstr "Pildiallkiri"
+
+#: includes/views/rk_valitsused.views.inc:263
+msgid "Created By Admin"
+msgstr "Loodud"
+
+#: includes/views/rk_valitsused.views.inc:264
+msgid "Numeric field, non-calculated. From rk_minister"
+msgstr "Numbriväli"
+
+#: includes/views/rk_valitsused.views.inc:282
+msgid "rk_minister_government"
+msgstr "rk_minister_government"
+
+#: includes/views/rk_valitsused.views.inc:282
+msgid "Join table rk_minister and rk_government"
+msgstr "Join table rk_minister and rk_government"
+
+#: includes/views/rk_valitsused.views.inc:292
+msgid "Government's primary key used as foreign key in rk_minister_government."
+msgstr ""
+"Government's primary key used as foreign key in "
+"rk_minister_government."
+
+#: includes/views/rk_valitsused.views.inc:315
+msgid "Minister's primary key used as foreign key in rk_minister_government."
+msgstr "Minister's primary key used as foreign key in rk_minister_government."
+
+#: includes/views/rk_valitsused.views.inc:323
+msgid "Relationship for tables rk_minister and rk_minister_government."
+msgstr "Relationship for tables rk_minister and rk_minister_government."
+
+#: includes/views/rk_valitsused.views.inc:337
+msgid "Ministerial Role"
+msgstr "Ministri ülesanne"
+
+#: includes/views/rk_valitsused.views.inc:338
+msgid "Which minister was it? rk_minister_government"
+msgstr "Milline minister? rk_minister_government"
+
+#: includes/views/rk_valitsused.views.inc:354
+msgid "Individual Start"
+msgstr "Algusaeg"
+
+#: includes/views/rk_valitsused.views.inc:355;372
+msgid "Format in db is 2013-12-31. Found in rk_minister_government."
+msgstr "Format in db is 2013-12-31. Found in rk_minister_government."
+
+#: includes/views/rk_valitsused.views.inc:371
+msgid "Individual End"
+msgstr "Lõppaeg"
+
+#: includes/views/rk_valitsused.views.inc:388
+msgid "Individual Number Days in Power"
+msgstr "Ametiaeg päevades"
+
+#: includes/views/rk_valitsused.views.inc:389
+msgid "Numeric field, non-calculated. From rk_minister_government"
+msgstr "Numbriväli"
+
+#: includes/views/rk_valitsused.views.inc:402
+msgid "Party Name"
+msgstr "Erakond"
+
+#: includes/views/rk_valitsused.views.inc:403
+msgid "Which political party this minister belonged to. rk_minister_government"
+msgstr "Erakondlik kuuluvus"
+
+#: includes/views/rk_valitsused.views.inc:419
+msgid "Is Head of Government"
+msgstr "Valitsusjuht"
+
+#: includes/views/rk_valitsused.views.inc:420
+msgid "Whether or not the head of government. rk_minister_government"
+msgstr "Whether or not the head of government. rk_minister_government"
+

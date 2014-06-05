@@ -1,0 +1,7 @@
+name = Varasemad Valitsused
+description = "Varasemate valitsuste loetelu rakendus (valitsus.ee) Drupalisse"
+package = Riigikantselei
+core = 7.x
+
+dependencies[] = ctools
+dependencies[] = views
