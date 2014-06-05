@@ -5,7 +5,7 @@
   <div class="field-items"<?php print $content_attributes; ?>>
     <?php foreach ($items as $delta => $item): ?>
       <div class="field-item <?php print $delta % 2 ? 'odd' : 'even'; ?>"<?php print $item_attributes[$delta]; ?>>
-        <a href="<?php print '/'.variable_get('file_public_path', conf_path().'/files').'/contacts/files/'.$item['#markup']; ?>"><?php print t('File'); ?></a>
+        <a href="<?php print '/'.variable_get('file_public_path', conf_path().'/files').'/contacts/files/'.$item['#markup']; ?>"><?php print t('Job Responsibilities'); ?></a>
       </div>
     <?php endforeach; ?>
   </div>
