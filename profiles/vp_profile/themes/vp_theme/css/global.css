@@ -1325,10 +1325,12 @@ td {
     background: url(../img/10-global/front-content-block-title.png) no-repeat 50% 100%;
     color: #006699;
     font-family: "Roboto Condensed", sans-serif;
-    font-size: 12px;
+    font-size: 10px;
+    font-weight: bold;
     margin: -20px -20px 12px;
-    padding: 14px 20px 12px 20px;
-    text-shadow: none; }
+    padding: 17px 20px 11px 20px;
+    text-shadow: none;
+    text-transform: uppercase; }
 .front .zone-content .block-delta-blocks-messages {
   background: transparent !important;
   clear: both;
