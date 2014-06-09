@@ -42,7 +42,14 @@ function vp_contact_views_pre_render(&$view) {
         });
       });
     });})(jQuery);', 'inline');
-    $tree = taxonomy_get_tree($view->result[0]->taxonomy_term_data_field_data_field_department_vid);
+    $department_vid = '';
+    foreach ($view->result as $row) {
+      if (!empty($row->taxonomy_term_data_field_data_field_department_vid)) {
+        $department_vid = $row->taxonomy_term_data_field_data_field_department_vid;
+        break;
+      }
+    }
+    $tree = taxonomy_get_tree($department_vid);
     $new_result = array();
     foreach ($tree as $term) {
       foreach ($view->result as $row) {
@@ -73,6 +80,7 @@ function vp_contact_feeds_presave(FeedsSource $source, $entity, $item) {
         foreach ($entity->field_field_lock[LANGUAGE_NONE] as $row) {
           $entity->{$row['value']} = $node->{$row['value']};
         }
+        $entity->field_field_lock = $node->field_field_lock;
       }
 
     }

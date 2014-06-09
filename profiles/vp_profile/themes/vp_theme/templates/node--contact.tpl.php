@@ -19,7 +19,14 @@ global $language;
       <?php if ($language->language !== 'et') print render($content['field_position']); ?>
       <?php print render($content['field_status']); ?>
     </div>
-    <?php print render($content); ?>
+    <?php
+      foreach($content as &$item) {
+        if (isset($item['#prefix'])) {
+          $item['#prefix'] = preg_replace ('/id=".*"/U', '', $item['#prefix']);
+        }
+      }
+      print render($content);
+    ?>
   </div>
 
 </div>

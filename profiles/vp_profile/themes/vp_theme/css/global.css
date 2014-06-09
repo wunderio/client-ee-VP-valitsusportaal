@@ -1325,10 +1325,12 @@ td {
     background: url(../img/10-global/front-content-block-title.png) no-repeat 50% 100%;
     color: #006699;
     font-family: "Roboto Condensed", sans-serif;
-    font-size: 12px;
+    font-size: 10px;
+    font-weight: bold;
     margin: -20px -20px 12px;
-    padding: 14px 20px 12px 20px;
-    text-shadow: none; }
+    padding: 17px 20px 11px 20px;
+    text-shadow: none;
+    text-transform: uppercase; }
 .front .zone-content .block-delta-blocks-messages {
   background: transparent !important;
   clear: both;
@@ -1537,7 +1539,7 @@ td {
   .page-comment-reply .block-system-main .comment,
   .page-comment-edit .block-system-main .comment,
   .comment-wrapper .comment {
-    background: url(http://vp-ra.devel.mekaia.com/profiles/vp_profile/themes/vp_theme/img/10-global/comment-spacer.png) repeat-x 0 100%;
+    background: url(../img/10-global/comment-spacer.png) repeat-x 0 100%;
     margin-bottom: 15px;
     padding-bottom: 18px; }
   .page-comment-reply .block-system-main h2,
@@ -3100,6 +3102,15 @@ div.item-list ul.pager {
     font-family: Tahoma, Verdana, Segoe, sans-serif;
     line-height: 15px; }
 
+#site-map .title {
+  display: none; }
+#site-map .site-map-box .content > .site-map-menu {
+  padding-left: 0; }
+  #site-map .site-map-box .content > .site-map-menu > li {
+    padding-bottom: 7px; }
+    #site-map .site-map-box .content > .site-map-menu > li > a {
+      font-weight: bold; }
+
 .static-25-75-2columns {
   margin: 0 0 20px 0; }
 
@@ -4605,6 +4616,14 @@ h3.icon-wrap-2 .icon-cv {
           background-image: url(../img/10-global/static-footer-icon-video.png); }
         .static-footer ul li a.newsletter {
           background-image: url(../img/10-global/static-footer-icon-newsletter.png); }
+        .static-footer ul li a.slideshare {
+          background-image: url(../img/10-global/static-footer-icon-slideshare.png); }
+        .static-footer ul li a.blog {
+          background-image: url(../img/10-global/static-footer-icon-blog.png); }
+        .static-footer ul li a.flickr {
+          background-image: url(../img/10-global/static-footer-icon-flickr.png); }
+        .static-footer ul li a.youtube {
+          background-image: url(../img/10-global/static-footer-icon-youtube.png); }
     .static-footer ul ul {
       padding-left: 40px;
       padding-right: 40px; }

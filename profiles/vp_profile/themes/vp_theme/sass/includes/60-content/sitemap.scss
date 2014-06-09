@@ -1,0 +1,22 @@
+
+
+
+@if $layout == global {
+  #site-map {
+    .title {
+      display: none;
+    }
+
+    .site-map-box .content > .site-map-menu {
+      padding-left: 0;
+
+      > li {
+        padding-bottom: 7px;
+
+        > a {
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-@import url("http://fonts.googleapis.com/css?family=Roboto+Condensed:400,300,700&subset=latin,cyrillic");
+@import url("//fonts.googleapis.com/css?family=Roboto+Condensed:400,300,700&subset=latin,cyrillic");
 .editor .static-fp-block-minister .tabs .tabs-inner:after, .clearfix:after, .static-contact-header .location-wrap:after, .static-contact-header .contact:after, .static-mainmenu-popup .widget-menu:after, .static-mainmenu-popup .widget-bigmenu:after, .static-module-2 .static-inner:after, .static-module-3-2:after, .static-module-3-3:after, #static-module-5:after, .node .static-textblock-gray-background .container-12:after, .static-join-in:after, .static-footer:after {
   content: "";
   display: table;
@@ -2653,6 +2653,14 @@ h3.icon-wrap-2 .icon-cv {
           background-image: url(../img/10-global/static-footer-icon-video.png); }
         .static-footer ul li a.newsletter {
           background-image: url(../img/10-global/static-footer-icon-newsletter.png); }
+        .static-footer ul li a.slideshare {
+          background-image: url(../img/10-global/static-footer-icon-slideshare.png); }
+        .static-footer ul li a.blog {
+          background-image: url(../img/10-global/static-footer-icon-blog.png); }
+        .static-footer ul li a.flickr {
+          background-image: url(../img/10-global/static-footer-icon-flickr.png); }
+        .static-footer ul li a.youtube {
+          background-image: url(../img/10-global/static-footer-icon-youtube.png); }
     .static-footer ul ul {
       padding-left: 40px;
       padding-right: 40px; }
