@@ -22,9 +22,72 @@ function rk_abi_init() {
 
 }
 
+
 /**
- * @todo. General settings form. (nt "Use email obfuscation on contact page.")
+ * Implementation of hook_permission().
  */
+function rk_abi_permission() {
+
+  $perms = array(
+    'admin riigikantselei abimoodul' => array(
+      'title' => t('Administer Riigikantselei Helper Module'),
+      'description' => t('Full administrator access for Riigikantselei Helper Module.'),
+      'restrict access' => FALSE,
+    ),
+  );
+
+  return $perms;
+
+}
+
+
+/**
+ * Implementation of hook_menu().
+ */
+function rk_abi_menu() {
+
+  $items = array();
+
+  $items['admin/config/rkabi'] = array(
+    'title' => 'Riigikantselei Abimoodul',
+    'access arguments' => array('admin riigikantselei abimoodul'),
+    'position' => 'right',
+    'weight' => 49,
+    'page callback' => 'system_admin_menu_block_page',
+    'file' => 'system.admin.inc',
+    'file path' => drupal_get_path('module', 'system'),
+  );
+
+  $items['admin/config/rkabi/settings'] = array(
+    'title' => 'Riigikantselei Abimoodul Settings',
+    'description' => t('General settings form'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('rk_abi_settings'),
+    'access arguments' => array('admin riigikantselei abimoodul'),
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 10,
+  );
+
+  return $items;
+}
+
+
+/**
+ * Form builder for general settings form.
+ */
+function rk_abi_settings($form, &$form_state) {
+
+  $form = array();
+
+  $form['rk_abi_contact_email_obfuscate'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Obfuscate emails on Contact pages'),
+    '#default_value' => variable_get('rk_abi_contact_email_obfuscate', 0),
+    '#description' => t('The contact views output needs to be plain text, not email link for this to work.'),
+  );
+
+  return system_settings_form($form);
+}
 
 
 /**
