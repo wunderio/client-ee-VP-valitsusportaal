@@ -61,7 +61,7 @@ foreach ($rows as &$row) {
                 <?php 
 
                   // E-posti php obfuscation.
-                  if ($field == 'field_contact_e_mail' && function_exists('_rk_peida_email')):                  
+                  if ($field == 'field_contact_e_mail' && function_exists('_rk_peida_email') && variable_get('rk_abi_contact_email_obfuscate', 0)):                  
                     $content = _rk_peida_email(trim($content));
                   endif;
 
