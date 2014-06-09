@@ -29,7 +29,7 @@ function digidoc_admin_form($form, &$form_state) {
   $form['digidoc_service_name'] = array(
     '#type' => 'textfield',
     '#title' => t('Service name'),
-    '#description' => t('Name of your Mobiil-ID service. With the OpenXAdES test server you can use the service name "Testimine", but do not use it for a production site! To register your own service visit the web site of !name at !url.', array('!name' => 'AS Sertifitseerimiskeskus', '!url' => l('http://www.sk.ee', 'http://www.sk.ee'))),
+    '#description' => t('Name of your Mobiil-ID service. With the OpenXAdES test server you can use the service name "Testimine", but do not use it for a production site! To register your own service visit the web site of !name at !url.', array('!name' => 'AS Sertifitseerimiskeskus', '!url' => l('www.sk.ee', 'http://www.sk.ee'))),
     '#default_value' => variable_get('digidoc_service_name', 'Testimine'),
   );
 
@@ -102,10 +102,14 @@ function digidoc_user_form(&$form, &$form_state, $user_info) {
     '#default_value' => $authname,
   );
 
-  $form['submit'] = array(
+  $form['actions']['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Save'),
   );
+  
+  if (!in_array('digidoc_user_form_submit', $form['#submit'], TRUE)) {
+    $form['#submit'][] = 'digidoc_user_form_submit';
+  }
 
   $form['uid'] = array(
     '#type' => 'value',
@@ -124,10 +128,10 @@ function digidoc_user_form(&$form, &$form_state, $user_info) {
  */
 function digidoc_user_form_submit($form, &$form_state) {
   $values = &$form_state['values'];
-  $user_info = user_load($values['uid']);
+  $user = user_load($values['uid']);
 
   // Save user authmap.
-  user_set_authmaps($user_info, array(
+  user_set_authmaps($user, array(
     'authname_digidoc_idcode' => $values['digidoc_user_id_code'],
   ));
 }
