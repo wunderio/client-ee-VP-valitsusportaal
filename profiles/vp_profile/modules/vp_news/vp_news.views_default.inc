@@ -58,6 +58,7 @@ function vp_news_views_default_views() {
   $handler->display->display_options['fields']['language']['field'] = 'language';
   $handler->display->display_options['fields']['language']['label'] = 'news_exp_lang';
   $handler->display->display_options['fields']['language']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['language']['native_language'] = TRUE;
   /* Field: Content: Path */
   $handler->display->display_options['fields']['path']['id'] = 'path';
   $handler->display->display_options['fields']['path']['table'] = 'node';
@@ -117,7 +118,7 @@ function vp_news_views_default_views() {
   $handler->display->display_options['fields']['field_division']['table'] = 'field_data_field_division';
   $handler->display->display_options['fields']['field_division']['field'] = 'field_division';
   $handler->display->display_options['fields']['field_division']['label'] = 'news_exp_author_division';
-  /* Field: Content: E-mail */
+  /* Field: Field: E-mail */
   $handler->display->display_options['fields']['field_e_mail']['id'] = 'field_e_mail';
   $handler->display->display_options['fields']['field_e_mail']['table'] = 'field_data_field_e_mail';
   $handler->display->display_options['fields']['field_e_mail']['field'] = 'field_e_mail';
@@ -137,20 +138,10 @@ function vp_news_views_default_views() {
   $handler->display->display_options['fields']['field_links']['id'] = 'field_links';
   $handler->display->display_options['fields']['field_links']['table'] = 'field_data_field_links';
   $handler->display->display_options['fields']['field_links']['field'] = 'field_links';
-  $handler->display->display_options['fields']['field_links']['label'] = 'news_exp_realated_links_title';
+  $handler->display->display_options['fields']['field_links']['label'] = 'news_exp_realated_links';
   $handler->display->display_options['fields']['field_links']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_links']['click_sort_column'] = 'url';
-  $handler->display->display_options['fields']['field_links']['type'] = 'link_title_plain';
   $handler->display->display_options['fields']['field_links']['delta_offset'] = '0';
-  /* Field: Content: Related links */
-  $handler->display->display_options['fields']['field_links_1']['id'] = 'field_links_1';
-  $handler->display->display_options['fields']['field_links_1']['table'] = 'field_data_field_links';
-  $handler->display->display_options['fields']['field_links_1']['field'] = 'field_links';
-  $handler->display->display_options['fields']['field_links_1']['label'] = 'news_exp_realated_links_url';
-  $handler->display->display_options['fields']['field_links_1']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_links_1']['click_sort_column'] = 'url';
-  $handler->display->display_options['fields']['field_links_1']['type'] = 'link_plain';
-  $handler->display->display_options['fields']['field_links_1']['delta_offset'] = '0';
   /* Sort criterion: Content: Post date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'node';
