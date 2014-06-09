@@ -59,6 +59,12 @@ foreach ($rows as &$row) {
           <?php //end($row); ?>
               <td <?php if ($field_classes[$field][$row_count]) { print 'class="'. $field_classes[$field][$row_count] . ( $field === key($header) ?  ' last' : '' ) . '" '; } ?><?php print drupal_attributes($field_attributes[$field][$row_count]); ?>>                
                 <?php 
+
+                  // E-posti php obfuscation.
+                  if ($field == 'field_contact_e_mail' && function_exists('_rk_peida_email')):                  
+                    $content = _rk_peida_email(trim($content));
+                  endif;
+
                   $riigikood = ($language->language != 'et' && $field == 'field_contact_phone_nr') ? '(+372) ': '';
                   print $riigikood . $content;
                 ?>
