@@ -1539,7 +1539,7 @@ td {
   .page-comment-reply .block-system-main .comment,
   .page-comment-edit .block-system-main .comment,
   .comment-wrapper .comment {
-    background: url(http://vp-ra.devel.mekaia.com/profiles/vp_profile/themes/vp_theme/img/10-global/comment-spacer.png) repeat-x 0 100%;
+    background: url(../img/10-global/comment-spacer.png) repeat-x 0 100%;
     margin-bottom: 15px;
     padding-bottom: 18px; }
   .page-comment-reply .block-system-main h2,
