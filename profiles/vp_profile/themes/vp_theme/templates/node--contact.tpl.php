@@ -1,7 +1,7 @@
 <?php
 global $language;
 ?>
-<div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix">
+<div class="<?php print $classes; ?> clearfix">
 
   <div class="content">
     <?php
