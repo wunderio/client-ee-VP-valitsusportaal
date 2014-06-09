@@ -113,6 +113,13 @@ function vp_news_form_views_exposed_form_alter(&$form, &$form_state, $form_id) {
   	$form['body']['#attributes']['class'][] = 'element-hidden';
     $form['body_value_op']['#attributes']['class'][] = 'element-hidden';
   	$form['#validate'] = array_merge(array('vp_news_form_views_exposed_body'), $form['#validate']);
+    
+    if ($language->language !== 'en') {
+      $form['#info']['filter-tid_i18n']['label'] = t($form['#info']['filter-tid_i18n']['label']);
+      $form['#info']['filter-field_news_subject_tid_i18n']['label'] = t($form['#info']['filter-field_news_subject_tid_i18n']['label']);
+      $form['#info']['filter-date']['label'] = t($form['#info']['filter-date']['label']);
+      $form['#info']['filter-title']['label'] = t($form['#info']['filter-title']['label']);
+    }
   }
 }
 
