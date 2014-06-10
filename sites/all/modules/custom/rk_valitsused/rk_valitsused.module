@@ -2493,7 +2493,7 @@ endif; */
     return theme('minister_description', array('muutujad' => $vars['row']));
 
   }
-  elseif ($vars['field']->field_alias == 'unknown') {
+  elseif ($vars['field']->field_alias == 'unknown' && strpos(current_path(), 'varasemad')) {
     // print_r($vars['field']);exit;
     // print_r($vars['row']);exit;
     return theme('minister_glossary_row', array('muutujad' => $vars['row']));
