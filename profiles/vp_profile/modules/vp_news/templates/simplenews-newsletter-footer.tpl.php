@@ -32,7 +32,6 @@
     <td style="border: 0; border: 0 !important; padding: 15px 0 40px 0; text-align: center; font-family: Tahoma, Verdana, Segoe, sans-serif; font-size 10px">
       <?php if (!$opt_out_hidden): ?>
         <?php if ($format == 'html'): ?>
-          <p style="margin: 0 0 10px 0; font-family: Tahoma, Verdana, Segoe, sans-serif;"><a href="mailto:press@riik.ee" style="color: #00698C">press@riik.ee</a>&nbsp;&nbsp;Faks: 693 5707&nbsp;&nbsp;Telefon: 693 5710</p>
           <p class="newsletter-footer" style="font-size: 11px; font-family: Tahoma, Verdana, Segoe, sans-serif;"><a href="[simplenews-subscriber:unsubscribe-url]" style="color: #686868; text-decoration: underline;"><?php print $unsubscribe_text ?></a></p>
         <?php else: ?>
           <p style="font-size: 11px; font-family: Tahoma, Verdana, Segoe, sans-serif;">-- <?php print $unsubscribe_text ?>: [simplenews-subscriber:unsubscribe-url]</p>
