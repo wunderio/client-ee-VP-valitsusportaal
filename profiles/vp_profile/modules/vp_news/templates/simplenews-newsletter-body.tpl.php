@@ -56,7 +56,7 @@ if (isset($build['#node']->field_phone['und'][0]['value'])) {
   $autor_output .= '<br />' . $build['#node']->field_phone['und'][0]['value'];
 }
 if (isset($build['#node']->field_e_mail['und'][0]['value'])) {
-  $autor_output .= '<br />' . $build['#node']->field_e_mail['und'][0]['value'];
+  $autor_output .= '<br />' . $build['#node']->field_e_mail['und'][0]['email'];
 }
 
 // Close <p> tag if author info exists.
