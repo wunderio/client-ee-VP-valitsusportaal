@@ -95,6 +95,7 @@ foreach ($rows as &$row) {
               $node_view['field_profile_photo']['#items'][0]['is_default'] === TRUE
             )
           ) {
+
             // $node_view['field_profile_photo'] = array('#markup' => '<div class="field field-name-field-profile-photo field-type-image field-label-hidden"><img alt="" src="/profiles/vp_profile/modules/vp_contact/no-profile-image_w104.png" /></div>');
 
             // Ära kasuta no-profile-image. mm 03.06.2014.
