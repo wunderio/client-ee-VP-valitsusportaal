@@ -1,5 +1,25 @@
 
 
+
+// This is a duplication of the public css to make the footer behave in editor.
+@if $layout == editor {
+  .static-footer {
+    ul {
+      li {
+        background: none !important;
+        margin: 0 !important;
+        padding: 0 0 0 23 !important;
+      }
+
+      a:hover {
+        color: #fff !important;
+      }
+    }
+  }
+}
+
+
+
 @if $layout == editor or
     $layout == global {
   .static-footer {
@@ -56,18 +76,19 @@
           &.newsletter {
             background-image: url(../img/10-global/static-footer-icon-newsletter.png);
           }
+
 					&.slideshare {
             background-image: url(../img/10-global/static-footer-icon-slideshare.png);
           }
-					
+
 					&.blog {
             background-image: url(../img/10-global/static-footer-icon-blog.png);
           }
-					
+
 					&.flickr {
             background-image: url(../img/10-global/static-footer-icon-flickr.png);
           }
-					
+
 					&.youtube {
             background-image: url(../img/10-global/static-footer-icon-youtube.png);
           }
@@ -99,6 +120,7 @@
 }
 
 
+
 @if $layout == default {
   .static-footer {
     ul {
@@ -111,6 +133,7 @@
     }
   }
 }
+
 
 
 @if $layout == tablet {
