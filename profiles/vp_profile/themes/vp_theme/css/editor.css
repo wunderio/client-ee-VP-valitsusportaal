@@ -2620,6 +2620,13 @@ h3.icon-wrap-2 .icon-cv {
         .static-join-in .box.box-3 .social-links a:hover, .static-join-in .box.box-3 .social-links a:focus {
           color: #00698c; }
 
+.static-footer ul li {
+  background: none !important;
+  margin: 0 !important;
+  padding: 0 0 0 23 !important; }
+.static-footer ul a:hover {
+  color: #fff !important; }
+
 .static-footer {
   background: url(../img/10-global/static-footer.png) repeat-x;
   font-size: 11px;
