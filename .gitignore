@@ -10,6 +10,17 @@ sites/*/private
 robots_bkup_mai2014.txt
 htaccess_bkup_mai2014
 htaccess_orig_bkup
+CHANGELOG.txt
+COPYRIGHT.txt
+INSTALL.mysql.txt
+INSTALL.pgsql.txt
+INSTALL.sqlite.txt
+INSTALL.txt
+LICENSE.txt
+MAINTAINERS.txt
+README.txt
+UPGRADE.txt
+
 
 # OS generated files
 .DS_Store*
