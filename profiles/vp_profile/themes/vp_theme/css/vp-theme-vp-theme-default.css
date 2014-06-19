@@ -1602,6 +1602,11 @@ div.item-list ul.pager li.pager-ellipsis, div.item-list ul.pager li.pager-curren
   padding-top: 0;
   visibility: hidden; }
 
+.view-display-id-weekly_schedule_page .views-table-wrapper {
+  padding: 32px 40px 18px 40px; }
+  .view-display-id-weekly_schedule_page .views-table-wrapper .views-field-field-weekly-schedule-date {
+    width: 135px; }
+
 .zone-postscript-wrapper {
   display: block; }
 

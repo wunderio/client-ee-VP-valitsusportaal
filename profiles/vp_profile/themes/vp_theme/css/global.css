@@ -378,7 +378,7 @@
     .block--exp-contact-contact-page .form-item.selected a:before {
       background-position: 0 -46px; }
 
-td.no-word-break {
+td.no-word-break, .view-display-id-weekly_schedule_page .views-table-wrapper .views-field-field-weekly-schedule-date {
   -ms-word-break: normal;
   word-break: normal;
   -webkit-hyphens: manual;
@@ -4545,7 +4545,7 @@ h3.icon-wrap-2 .icon-cv {
   .view-display-id-weekly_schedule_page .views-table-wrapper {
     border: 1px solid #edebe7;
     margin-top: 11px;
-    padding: 32px 40px 18px 40px; }
+    padding: 15px; }
     .view-display-id-weekly_schedule_page .views-table-wrapper caption {
       color: #00698c;
       font-family: "Roboto Condensed", sans-serif;
@@ -4568,7 +4568,7 @@ h3.icon-wrap-2 .icon-cv {
       font-size: 12px;
       line-height: 14px;
       padding-left: 0;
-      width: 135px; }
+      width: 85px; }
     .view-display-id-weekly_schedule_page .views-table-wrapper .views-field-body {
       font-size: 14px;
       line-height: 18px;
