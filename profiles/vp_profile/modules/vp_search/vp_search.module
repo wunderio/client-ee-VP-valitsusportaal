@@ -161,7 +161,7 @@ function vp_search_form_alter(&$form, &$form_state, $form_id) {
     global $base_url;
     
     $_GET['time-between-start'] = filter_xss($_GET['time-between-start']);
-    $_GET['time-between-start'] = filter_xss($_GET['time-between-end']);
+    $_GET['time-between-end'] = filter_xss($_GET['time-between-end']);
 
     drupal_add_library('system', 'ui.datepicker');
     drupal_add_js('(function($){$().ready(function(){
