@@ -778,25 +778,15 @@ table[border='0'] td {
 
 .node .layout-3 {
   margin-bottom: 45px; }
-  .node .layout-3 .aside {
-    width: 265px;
-    float: left;
-    padding-right: 60px; }
-  .node .layout-3 .main {
-    overflow: hidden;
-    margin-right: 0px; }
   .node .layout-3 h2 {
     padding-bottom: 25px; }
   .node .layout-3 h3 {
-    font-size: 16px;
-    margin-bottom: 30px;
     color: #000;
-    line-height: 20px; }
+    font-size: 16px;
+    line-height: 20px;
+    margin-bottom: 0; }
   .node .layout-3 ul {
-    float: left;
-    width: 262px;
-    list-style-type: none;
-    margin-right: 40px; }
+    list-style-type: none; }
     .node .layout-3 ul li {
       padding: 20px 15px 15px 0px;
       background: none;
@@ -821,29 +811,38 @@ table[border='0'] td {
   .node .layout-3:after {
     background-image: none; }
 
-.node .layout-3 .main {
-  margin-right: 20px; }
-
 .node .layout-3 {
   margin-bottom: 45px;
-  padding-bottom: 0px;
+  padding-bottom: 0;
   padding-top: 10px;
   position: relative; }
+  .node .layout-3 h3 {
+    margin-bottom: 30px; }
   .node .layout-3 .main {
-    margin-right: 0px; }
-  .node .layout-3 .aside:before, .node .layout-3 .aside:after {
-    bottom: 0;
-    content: "";
-    left: 29.3%;
-    position: absolute;
-    top: 0;
-    width: 22px; }
-  .node .layout-3 .aside:before {
-    background: url(../img/10-global/subject-related-news-column-separator-top.png) 0 0 no-repeat;
-    z-index: 1; }
-  .node .layout-3 .aside:after {
-    background: url(../img/10-global/view-id-top_news_tabs--separator-overlay-bottom.png) 0 100% no-repeat;
-    z-index: 2; }
+    margin-right: 0;
+    overflow: hidden; }
+  .node .layout-3 .aside {
+    float: left;
+    overflow: hidden;
+    padding-right: 60px;
+    width: 265px; }
+    .node .layout-3 .aside:before, .node .layout-3 .aside:after {
+      bottom: 0;
+      content: "";
+      left: 29.3%;
+      position: absolute;
+      top: 0;
+      width: 22px; }
+    .node .layout-3 .aside:before {
+      background: url(../img/10-global/subject-related-news-column-separator-top.png) 0 0 no-repeat;
+      z-index: 1; }
+    .node .layout-3 .aside:after {
+      background: url(../img/10-global/view-id-top_news_tabs--separator-overlay-bottom.png) 0 100% no-repeat;
+      z-index: 2; }
+  .node .layout-3 ul {
+    float: left;
+    margin-right: 40px;
+    width: 262px; }
 
 .node .layout-4-clean .aside {
   padding-bottom: 15px; }
