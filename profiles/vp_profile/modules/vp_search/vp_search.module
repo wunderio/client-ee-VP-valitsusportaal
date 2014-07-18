@@ -32,10 +32,10 @@ function vp_search_block_view($delta = '') {
 
       $keyword = '';
       if (arg(0) == 'contact-search') {
-        $keyword = $_GET['filter'];
+        $keyword = check_plain($_GET['filter']);
       }
       if (arg(0) == 'search' && arg(1) == 'gss') {
-        $keyword = arg(2);
+        $keyword = check_plain(arg(2));
       }
 
       // Count contact.
@@ -102,7 +102,7 @@ function vp_search_views_query_alter(&$view, &$query) {
     else {
       foreach ($get_filter_relations as $field => $condition) {
         if ((int)$field === (int)$_GET['radios']) {
-          $query->where[1]['conditions'][$condition]['value'] = '%' . $_GET['filter'] . '%';
+          $query->where[1]['conditions'][$condition]['value'] = '%' . check_plain($_GET['filter']) . '%';
         }
         else {
           unset($query->where[1]['conditions'][$condition]);
@@ -131,7 +131,7 @@ function vp_search_form_alter(&$form, &$form_state, $form_id) {
       <label for="edit-filter">'.t('Contact search').' </label>
 
       <div class="form-item form-type-textfield form-item-name">
-        <input type="text" id="edit-filter" name="filter" size="30" maxlength="128" class="form-text" value="'.$_GET['filter'].'" />
+        <input type="text" id="edit-filter" name="filter" size="30" maxlength="128" class="form-text" value="' . check_plain($_GET['filter']) . '" />
       </div>
 
       <div class="form-item form-type-radio form-item-radios">
@@ -268,7 +268,7 @@ function vp_search_form_alter(&$form, &$form_state, $form_id) {
       '12-months' => t('Last 12 months'),
       'between' => '<div class="form-item form-type-textfield form-item-date-custom-min"><input class="bef-datepicker" type="text" name="time-between-start" value="' . (isset($_GET['time-between-start']) && !empty($_GET['time-between-start']) ? $_GET['time-between-start'] : '') . '" /></div><div class="form-item form-type-textfield form-item-date-custom-max"><input class="bef-datepicker" type="text" name="time-between-end" value="' . (isset($_GET['time-between-end']) && !empty($_GET['time-between-end']) ? $_GET['time-between-end'] : '') .'" /></div>',
     );
-    $time = (isset($_GET['time']) ? $_GET['time'] : 0);
+    $time = (isset($_GET['time']) ? check_plain($_GET['time']) : 0);
     $interval_radios = '';
     foreach ($intervals as $value => $name) {
       $interval_radios .= '<div class="form-item form-type-radio form-item-date">';
@@ -299,7 +299,7 @@ function vp_search_form_alter(&$form, &$form_state, $form_id) {
       '#prefix' => '<div class="views-exposed-widget"><label>' . t('Content type') . '</label>',
       '#suffix' => '</div>',
       '#type' => 'checkboxes',
-      '#default_value' => $_GET['type'],
+      '#default_value' => check_plain($_GET['type']),
       '#options' => $content_type_radios,
     );
 
@@ -317,7 +317,7 @@ function vp_search_form_alter(&$form, &$form_state, $form_id) {
       '#prefix' => '<div class="views-exposed-widget"><label>' . t('Subject') . '</label>',
       '#suffix' => '</div>',
       '#type' => 'checkboxes',
-      '#default_value' => $_GET['subject'],
+      '#default_value' => check_plain($_GET['subject']),
       '#options' => $subject_ratios,
     );
   }
@@ -331,11 +331,11 @@ function vp_search_gss_search_key_alter(&$query) {
   }
 
   if (isset($_GET['type']) && !empty($_GET['type']) && !in_array('all', $_GET['type'])) {
-    $query .= ' ' . implode(' OR ', $_GET['type']);
+    $query .= ' ' . implode(' OR ', check_plain($_GET['type']));
   }
 
   if (isset($_GET['subject']) && !empty($_GET['subject']) && !in_array('all', $_GET['subject'])) {
-    $query .= ' ' . implode(' OR ', $_GET['subject']);
+    $query .= ' ' . implode(' OR ', check_plain($_GET['subject']));
   }
 }
 
