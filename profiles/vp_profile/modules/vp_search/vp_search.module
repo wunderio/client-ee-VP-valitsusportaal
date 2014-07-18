@@ -131,7 +131,7 @@ function vp_search_form_alter(&$form, &$form_state, $form_id) {
       <label for="edit-filter">'.t('Contact search').' </label>
 
       <div class="form-item form-type-textfield form-item-name">
-        <input type="text" id="edit-filter" name="filter" size="30" maxlength="128" class="form-text" value="'.$_GET['filter'].'" />
+        <input type="text" id="edit-filter" name="filter" size="30" maxlength="128" class="form-text" value="'.filter_xss($GET_['filter'], array()).'" />
       </div>
 
       <div class="form-item form-type-radio form-item-radios">
