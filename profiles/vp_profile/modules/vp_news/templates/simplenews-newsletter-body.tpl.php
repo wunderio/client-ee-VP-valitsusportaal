@@ -44,7 +44,7 @@ $created_custom = format_date($build['#node']->created, 'medium');
 $autor_output = '';
 
 if (isset($build['#node']->field_name['und'][0]['value'])) {
-  $autor_output = '<p><strong>' . t('Author') . '</strong>' . '<br />' . $build['#node']->field_name['und'][0]['value'];
+  $autor_output = '<p><strong>' . t('Additional Information') . '</strong>' . '<br />' . $build['#node']->field_name['und'][0]['value'];
 }
 if (isset($build['#node']->field_occupaction['und'][0]['value'])) {
   $autor_output .= '<br />' . $build['#node']->field_occupaction['und'][0]['value'];
@@ -55,8 +55,8 @@ if (isset($build['#node']->field_division['und'][0]['value'])) {
 if (isset($build['#node']->field_phone['und'][0]['value'])) {
   $autor_output .= '<br />' . $build['#node']->field_phone['und'][0]['value'];
 }
-if (isset($build['#node']->field_e_mail['und'][0]['value'])) {
-  $autor_output .= '<br />' . $build['#node']->field_e_mail['und'][0]['value'];
+if (isset($build['#node']->field_e_mail['und'][0]['email'])) {
+  $autor_output .= '<br />' . $build['#node']->field_e_mail['und'][0]['email'];
 }
 
 // Close <p> tag if author info exists.
@@ -79,6 +79,14 @@ endif;
           <?php print render($build); ?>
           <!-- Autor -->
           <div align="left" style="background: #fff;"><?php print $autor_output; ?></div>
+          <!-- Social Media -->
+          <?php if (variable_get('rk_abi_newsletter_use_social_media_insert_block') == 1): ?>
+            <?php                             
+              $block = block_block_view(variable_get('rk_abi_newsletter_social_media_insert'));             
+              // @todo. Figure out how to display correct language. Do we use a preprocess hook first?
+            ?>
+            <div align="left" style="background: #fff;"><?php print $block['content']; ?></div>
+          <?php endif; ?>
         </div>
       </td><!--Content-->
     </tr>

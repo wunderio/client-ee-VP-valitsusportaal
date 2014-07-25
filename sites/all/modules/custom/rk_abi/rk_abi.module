@@ -86,6 +86,20 @@ function rk_abi_settings($form, &$form_state) {
     '#description' => t('The contact views output needs to be plain text, not email link for this to work.'),
   );
 
+  $form['rk_abi_newsletter_use_social_media_insert_block'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use social media footer block in newsletters'),
+    '#default_value' => variable_get('rk_abi_newsletter_use_social_media_insert_block', 0),
+    '#description' => t('Turn on/off the insertion of this block at the bottom of newsletters.'),
+  );
+
+  $form['rk_abi_newsletter_social_media_insert'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Block ID of social media footer block'),
+    '#default_value' => variable_get('rk_abi_newsletter_social_media_insert', 0),
+    '#description' => t('This block can be created and used in the footer of press releases and other newsletters. You can use it to include links to Facebook, Twitter etc. You have to create this block by hand. Blocks are found at Structure -> Blocks. The Block ID is the 2nd last (often integer) value in the URL when you hover over the block\'s "configure" link. Ex. The number "14" in admin/structure/block/manage/block/<strong><u>14</u></strong>/configure'),
+  );  
+
   return system_settings_form($form);
 }
 
@@ -122,3 +136,29 @@ function _rk_peida_email($email) {
 
 }  
 
+
+/**
+ * Implements hook_filter_info_alter().
+ *
+ * Perform alterations on filter definitions.
+ *
+ * @param $info
+ *   Array of information on filters exposed by hook_filter_info()
+ *   implementations.
+ */
+function rk_abi_filter_info_alter(&$info) {
+  // Check for evidence of simplenews and turn off regular email obfuscation. Ex. node/3745/simplenews
+  if (arg(0) == 'node' && arg(2) == 'simplenews') {
+    $info['geo_filter_filter']['process callback'] = 'rk_abi_plain_text_email';
+  }
+}
+
+
+/**
+ * Do not want geo_filter obfuscated emails in newsletters.
+ * Called from rk_abi_filter_info_alter when simplenews has been detected.
+ * Just returning text without any filtering.
+ */
+function rk_abi_plain_text_email($text, $filter, $format, $langcode, $cache, $cache_id) {
+  return $text;
+}
