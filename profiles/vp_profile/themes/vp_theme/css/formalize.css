@@ -130,10 +130,11 @@ input[type="week"] {
   border: 1px solid;
   border-color: #cccccc;
   color: #000;
-  padding: 5px 10px;
-  font-size: 14px;
   font-family: Tahoma, Verdana, Segoe, sans-serif;
-  height: 3.3em; }
+  font-size: 14px;
+  height: 3.3em;
+  max-width: 100%;
+  padding: 5px 10px; }
 
 /* Separate rule for Firefox. Cannot stack with WebKit's. */
 input.placeholder,
@@ -246,3 +247,22 @@ optgroup {
 
 .ie6-input-disabled {
   background: #eee; }
+
+/* Mobile input fix. */
+@media screen and (max-device-width: 767px) {
+  textarea,
+  select,
+  input[type="date"],
+  input[type="datetime"],
+  input[type="datetime-local"],
+  input[type="email"],
+  input[type="month"],
+  input[type="number"],
+  input[type="password"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="text"],
+  input[type="time"],
+  input[type="url"],
+  input[type="week"] {
+    width: 100%; } }

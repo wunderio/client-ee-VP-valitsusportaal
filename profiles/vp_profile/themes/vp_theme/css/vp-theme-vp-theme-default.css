@@ -1057,9 +1057,6 @@ div.item-list ul.pager li.pager-ellipsis, div.item-list ul.pager li.pager-curren
 .static-contact-header .contact ul {
   margin-left: 129px; }
 
-.node .layout-3 .main {
-  margin-right: 20px; }
-
 .node .layout-4-clean .aside {
   float: left;
   width: 230px;
@@ -1601,6 +1598,11 @@ div.item-list ul.pager li.pager-ellipsis, div.item-list ul.pager li.pager-curren
   padding-bottom: 0;
   padding-top: 0;
   visibility: hidden; }
+
+.view-display-id-weekly_schedule_page .views-table-wrapper {
+  padding: 32px 40px 18px 40px; }
+  .view-display-id-weekly_schedule_page .views-table-wrapper .views-field-field-weekly-schedule-date {
+    width: 135px; }
 
 .zone-postscript-wrapper {
   display: block; }
