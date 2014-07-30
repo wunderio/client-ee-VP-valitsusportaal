@@ -44,7 +44,7 @@ $created_custom = format_date($build['#node']->created, 'medium');
 $autor_output = '';
 
 if (isset($build['#node']->field_name['und'][0]['value'])) {
-  $autor_output = '<p><strong>' . t('Additional Information') . '</strong>' . '<br />' . $build['#node']->field_name['und'][0]['value'];
+  $autor_output = '<p><br /><strong>' . t('Additional Information') . '</strong>' . '<br />' . $build['#node']->field_name['und'][0]['value'];
 }
 if (isset($build['#node']->field_occupaction['und'][0]['value'])) {
   $autor_output .= '<br />' . $build['#node']->field_occupaction['und'][0]['value'];
