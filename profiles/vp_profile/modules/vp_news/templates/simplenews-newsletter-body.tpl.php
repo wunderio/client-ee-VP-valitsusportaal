@@ -27,12 +27,15 @@ hide($build['field_news_subject']);
 // Subjects.
 if (isset($build['field_news_subject'])) {
   $subjects_custom = '';
-  foreach($build['field_news_subject']['#items'] as $subject) {
-    if ($subject === end($build['field_news_subject']['#items'])) {
-      $subjects_custom .= $subject['taxonomy_term']->name;
-    }
-    else {
-      $subjects_custom .= $subject['taxonomy_term']->name . ', ';
+  // Make sure #items exists before looping through. mm 08.08.2014.
+  if (isset($build['field_news_subject']['#items'])) {
+    foreach($build['field_news_subject']['#items'] as $subject) {
+      if ($subject === end($build['field_news_subject']['#items'])) {
+        $subjects_custom .= $subject['taxonomy_term']->name;
+      }
+      else {
+        $subjects_custom .= $subject['taxonomy_term']->name . ', ';
+      }
     }
   }
 }
