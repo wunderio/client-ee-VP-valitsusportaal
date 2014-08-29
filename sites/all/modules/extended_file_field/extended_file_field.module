@@ -35,35 +35,35 @@ function extended_file_field_metadata_types() {
         'sort' => 'numeric',
       ),
       'filename' => array(
-        'title' => t('File Name'),
+        'title' => t('File'),
         'sort' => 'string',
       ),
       'description' => array(
-        'title' => t('File Description'),
+        'title' => t('Description'),
         'sort' => 'string',
       ),
       'extension' => array(
-        'title' => t('File Extension'),
+        'title' => t('Extension'),
         'sort' => 'string',
       ),
       'filesize' => array(
-        'title' => t('File Size'),
+        'title' => t('Size'),
         'sort' => 'numeric',
       ),
       'timestamp' => array(
-        'title' => t('Creation timestamp'),
+        'title' => t('Created'),
         'sort' => 'numeric',
       ),
       'uid' => array(
-        'title' => t('File Author'),
+        'title' => t('Author'),
         'sort' => 'numeric',
       ),
       'uri' => array(
-        'title' => t('File URI'),
+        'title' => t('URI'),
         'sort' => 'string',
       ),
       'filemime' => array(
-        'title' => t('File Mime Type'),
+        'title' => t('Mime Type'),
         'sort' => 'string',
       ),
       'display' => array(
@@ -80,6 +80,59 @@ function extended_file_field_metadata_types() {
     $metadata = array_merge($defaults, $external);
   }
   return $metadata;
+}
+
+/**
+ * Implements hook_menu().
+ */
+function extended_file_field_menu() {
+  $items = array();
+
+  $items['admin/extended-file-field/%node/%file/delete-contents'] = array(
+    'title' => 'Delete file contents',
+    'access callback' => 'extended_file_field_delete_contents_access',
+    'access arguments' => array(3),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('extended_file_field_delete_contents_confirm', 2, 3),
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+/**
+ * Menu access callback.
+ */
+function extended_file_field_delete_contents_access($file) {
+  global $user;
+
+  return user_access('extended file field delete any file contents') ||
+  ($user->uid && $file->uid == $user->uid && user_access('extended file field delete own file contents'));
+}
+
+/**
+ * Form builder used as a menu callback.
+ */
+function extended_file_field_delete_contents_confirm($form, &$form_state, $node, $file) {
+  $dest = 'node/' . $node->nid . '/edit';
+  $form['#file'] = $file;
+  $form['#dest'] = $dest;
+
+  return confirm_form($form, 'Empty the contents of this file?', $dest, file_create_url($file->uri));
+}
+
+/*
+ * Form submit that empties file contents and replaces with text.
+ */
+function extended_file_field_delete_contents_confirm_submit($form, &$form_state) {
+  extended_file_field_delete_contents($form['#file']);
+  drupal_set_message(t('File %filename had its content deleted.', array('%filename' => $form['#file']->filename)));
+  $form_state['redirect'] = $form['#dest'];
+}
+
+function extended_file_field_delete_contents($file) {
+  $content = t("File content deleted on !date by user: !name\n", array('!date' => gmdate('c'), '!name' => $GLOBALS['user']->name));
+  file_put_contents($file->uri, $content);
+  file_save($file);
 }
 
 /**
@@ -120,6 +173,8 @@ function extended_file_field_field_formatter_info() {
         'extensionfilter' => 'all',
         // Comma-separated list of extensions to display.
         'extensions' => 'patch,diff',
+        // Unmatched extension behaviour
+        'extensionbehavior' => 'exclude',
         // Metadata columns to display.
         'columns' => array('filename', 'filesize', 'uid'),
         // Setting whether to include 'hidden' files in the display.
@@ -128,8 +183,16 @@ function extended_file_field_field_formatter_info() {
         'sortby' => 'default',
         // Default sort order ('asc' or 'desc').
         'sortorder' => 'asc',
+        // Use the description as text for the filename, if present
+        'usedescriptionforfilename' => 1,
+        // Number of items to display
+        'restrictdisplay' => -1,
+        // Behaviour for items exceeding the configured number to display
+        'restrictbehavior' => 'exclude',
         // Show a link for how to upload files?
         'showuploadlink' => 0,
+        // Wrap second table in a collapsed fieldset.
+        'usefieldset' => FALSE,
       ),
     ),
   );
@@ -163,17 +226,98 @@ function extended_file_field_field_formatter_settings_form($field, $instance, $v
     $metadata = extended_file_field_metadata();
     $metadata_types = extended_file_field_metadata_types();
 
+    // "Columns to display" select box.
+    $form['columns'] = array(
+      '#type' => 'select',
+      '#title' => t('Display columns:'),
+      '#options' => $metadata,
+      '#default_value' => $settings['columns'],
+      '#size' => min(6, count($metadata)),
+      '#multiple' => TRUE,
+    );
+
+    // Sort settings.
+    // Add a default 'none' and a 'reverse' field order sort option.
+    $options = array(
+      'default' => t('Use the field item order (i.e. default sorting)'),
+      'reverse' => t('Reverse field order'),
+    );
+    foreach ($metadata_types as $data => $value) {
+      if (!empty($value['sort'])) {
+        $options[$data] = $metadata[$data];
+      }
+    }
+    $form['sortby'] = array(
+      '#type' => 'select',
+      '#title' => t('Sort by:'),
+      '#options' => $options,
+      '#default_value' => (!empty($settings['sortby'])) ? $settings['sortby'] : 'default',
+    );
+    $form['sortorder'] = array(
+      '#type' => 'radios',
+      '#title' => t('Sort order:'),
+      '#options' => array('asc' => t('Ascending'), 'desc' => t('Descending')),
+      '#default_value' => (!empty($settings['sortorder'])) ? $settings['sortorder'] : 'asc',
+      '#states' => array(
+        'invisible' => array(
+          array(':input[name="fields[' . $field['field_name'] . '][settings_edit_form][settings][sortby]"]' => array('value' => 'default')),
+          array(':input[name="fields[' . $field['field_name'] . '][settings_edit_form][settings][sortby]"]' => array('value' => 'reverse')),
+        ),
+      ),
+    );
+
+    $form['usedescriptionforfilename'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Use description as text for filename'),
+      '#default_value' => (!empty($settings['usedescriptionforfilename']) ? $settings['usedescriptionforfilename'] : 1),
+    );
+
+    // Show a link to upload files.
+    if (extended_file_field_entity_type_supports_edit_link($instance['entity_type'])) {
+      $form['showuploadlink'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Show link to upload files'),
+        '#default_value' => $settings['showuploadlink'],
+      );
+    }
+
+    // Number of items to display
+    $options = array('-1' => t('Unlimited')) + array_combine(range(1,10), range(1,10));
+    $form['restrictdisplay'] = array(
+      '#type' => 'select',
+      '#title' => t('Number of items to display (per table)'),
+      '#options' => $options,
+      '#default_value' => (!empty($settings['restrictdisplay'])) ? $settings['restrictdisplay'] : '-1',
+    );
+
+    // Display behavior for files exceeding the number to display
+    $options = array(
+      'exclude' => t('Exclude from the table output'),
+      'hide' => t('Include in the table data but suppress display of the row'),
+      'toggle' => t('Include in the table and provide a javascript toggle to enable display'),
+    );
+    $form['restrictbehavior'] = array(
+      '#type' => 'radios',
+      '#title' => t('Display behavior for files not exceeding the "Number of items to display" count:'),
+      '#options' => $options,
+      '#default_value' => (!empty($settings['restrictbehavior'])) ? $settings['restrictbehavior'] : 'exclude',
+      '#states' => array(
+        'invisible' => array(
+          ':input[name="fields[' . $field['field_name'] . '][settings_edit_form][settings][restrictdisplay]"]' => array('value' => '-1'),
+        ),
+      ),
+    );
+
     // File extension filter
     $options = array(
       'all' => t('Include all files'),
-      'hide' => t('Include all files in the table data but suppress display of rows not matching certain file extensions'),
       'filter' => t('Only include files matching certain file extensions'),
     );
     $form['extensionfilter'] = array(
       '#type' => 'radios',
       '#title' => t('File types to include:'),
       '#options' => $options,
-      '#default_value' => $settings['extensionfilter'],
+      '#default_value' => (!empty($settings['extensionfilter'])) ? $settings['extensionfilter'] : 'all',
     );
     $form['extensions'] = array(
       '#type' => 'textfield',
@@ -187,14 +331,22 @@ function extended_file_field_field_formatter_settings_form($field, $instance, $v
       ),
     );
 
-    // "Columns to display" select box.
-    $form['columns'] = array(
-      '#type' => 'select',
-      '#title' => t('Display columns:'),
-      '#options' => $metadata,
-      '#default_value' => $settings['columns'],
-      '#size' => min(6, count($metadata)),
-      '#multiple' => TRUE,
+    // Unmatched extension behaviour
+    $options = array(
+      'exclude' => t('Exclude from the table output'),
+      'hide' => t('Include in the table data but suppress display of the row'),
+      'table' => t('Display separately in a second table following the first'),
+    );
+    $form['extensionbehavior'] = array(
+      '#type' => 'radios',
+      '#title' => t('Display behavior for files not matching included extensions:'),
+      '#options' => $options,
+      '#default_value' => (!empty($settings['extensionbehavior'])) ? $settings['extensionbehavior'] : 'exclude',
+      '#states' => array(
+        'invisible' => array(
+          ':input[name="fields[' . $field['field_name'] . '][settings_edit_form][settings][extensionfilter]"]' => array('value' => 'all'),
+        ),
+      ),
     );
 
     // "Hidden" file treatment.
@@ -203,50 +355,24 @@ function extended_file_field_field_formatter_settings_form($field, $instance, $v
       'inline' => t('Display inline with other files'),
       'hide' => t('Include in the table data but suppress display of the row'),
       'table' => t('Display separately in a second table following the first'),
-      'fieldset' => t('Display in a separate table within a collapsed fieldset'),
     );
     $form['showhidden'] = array(
       '#type' => 'radios',
-      '#title' => t('Display behaviour for files which have been marked with "display: FALSE":'),
+      '#title' => t('Display behavior for files which have been marked with "display: FALSE":'),
       '#options' => $options,
-      '#default_value' => $settings['showhidden'],
+      '#default_value' => (!empty($settings['showhidden'])) ? $settings['showhidden'] : 'exclude',
     );
-
-    // Sort settings.
-    // Add a default 'none' sort option.
-    $options = array('default' => t('Use the field item order (i.e. default sorting).'));
-    foreach ($metadata_types as $data => $value) {
-      if (!empty($value['sort'])) {
-        $options[$data] = $metadata[$data];
-      }
-    }
-    $form['sortby'] = array(
-      '#type' => 'select',
-      '#title' => t('Sort by:'),
-      '#options' => $options,
-      '#default_value' => $settings['sortby'],
-    );
-    $form['sortorder'] = array(
-      '#type' => 'radios',
-      '#title' => t('Sort order:'),
-      '#options' => array('asc' => t('Ascending'), 'desc' => t('Descending')),
-      '#default_value' => $settings['sortorder'],
+    $form['usefieldset'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Enclose second table in a collapsed fieldset'),
+      '#default_value' => $settings['usefieldset'],
       '#states' => array(
-        'invisible' => array(
-          ':input[name="fields[' . $field['field_name'] . '][settings_edit_form][settings][sortby]"]' => array('value' => 'default'),
+        'visible' => array(
+          array(':input[name="fields[' . $field['field_name'] . '][settings_edit_form][settings][extensionbehavior]"]' => array('value' => 'table')),
+          array(':input[name="fields[' . $field['field_name'] . '][settings_edit_form][settings][showhidden]"]' => array('value' => 'table')),
         ),
       ),
     );
-
-    // Show a link to upload files.
-    if (extended_file_field_entity_type_supports_edit_link($instance['entity_type'])) {
-      $form['showuploadlink'] = array(
-        '#type' => 'checkbox',
-        '#title' => t('Show link to upload files'),
-        '#default_value' => $settings['showuploadlink'],
-      );
-    }
-
   }
   return $form;
 }
@@ -280,9 +406,15 @@ function extended_file_field_field_formatter_settings_summary($field, $instance,
     else {
       $summary = t('Listing files with extension (@extensions) ', array('@extensions' => $settings['extensions']));
     }
-    if ($settings['sortby'] != 'default') {
+    if ($settings['sortby'] == 'reverse') {
+      $summary .= t('in reverse order');
+    }
+    elseif ($settings['sortby'] != 'default') {
       $summary .= t('sorted by @sorttype ', array('@sorttype' => strtolower($metadata[$settings['sortby']])));
       $summary .= $settings['sortorder'] === 'desc' ? t('descending') : t('ascending');
+    }
+    if ($settings['restrictdisplay'] != -1) {
+      $summary .= t(' (Limit @count)', array('@count' => $settings['restrictdisplay']));
     }
     $summary .= '<br />';
     $summary .= t('Columns: @columns', array('@columns' => implode(',', array_intersect_key($metadata, array_flip($settings['columns'])))));
@@ -372,24 +504,28 @@ function extended_file_field_field_formatter_view($entity_type, $entity, $field,
   $items = array_filter($items);
 
   if (!empty($items)) {
-    // Populate the 'allowed extension types' array
-    $extension_filter = extended_file_field_extension_filter($settings);
-    // Add file extensions
-    extended_file_field_add_extensions($items);
-    // Filter by extension
-    if (!empty($extension_filter)) {
-      extended_file_field_filter_by_extension($items, $extension_filter, $settings['extensionfilter']);
-    }
-    // Filter by display
-    if (in_array($settings['showhidden'], array('exclude', 'hide', 'table', 'fieldset'))) {
-      extended_file_field_filter_by_display($items, $settings['showhidden']);
-    }
     // Re-index array, keying by fid
+    $files = array();
     foreach ($items as $item) {
       $files[$item['fid']] = $item;
     }
     $items = $files;
     unset($files);
+
+    // Populate the 'allowed extension types' array
+    $extension_filter = extended_file_field_extension_filter($settings);
+    // Add file extensions
+    extended_file_field_add_extensions($items);
+
+    // Apply "file extensions" treatment according to the formatter settings
+    if (!empty($extension_filter)) {
+      extended_file_field_filter_by_extension($items, $extension_filter, $settings['extensionbehavior']);
+    }
+
+    // Apply "display = 0" treatment according to the formatter settings
+    if (in_array($settings['showhidden'], array('exclude', 'hide', 'table'))) {
+      extended_file_field_filter_by_display($items, $settings['showhidden']);
+    }
   }
 
   // Allow other modules to alter the $items array.
@@ -403,16 +539,54 @@ function extended_file_field_field_formatter_view($entity_type, $entity, $field,
   );
   drupal_alter('extended_file_field_items', $items, $context);
 
+  if (!empty($items)) {
+    // Re-order the items array according to the desired sort order.
+    if ($settings['sortby'] == 'reverse') {
+      $items = array_reverse($items, TRUE);
+    }
+    elseif ($settings['sortby'] != 'default') {
+      extended_file_field_sort($items, $settings['sortby'], $settings['sortorder']);
+    }
+
+    // Apply "Number of items" treatment according to the formatter settings
+    if ($settings['restrictdisplay'] != '-1' && count($items) > $settings['restrictdisplay']) {
+      $counter1 = $counter2 = 0;
+      foreach ($items as $key => $item) {
+        $counter = empty($item['separate-table']) ? $counter1 : $counter2;
+        if ($counter < $settings['restrictdisplay'] && $item['display'] && empty($item['hide-extension']) && empty($item['hide-display'])) {
+          if (empty($item['separate-table'])) {
+            $counter1++;
+          }
+          else {
+            $counter2++;
+          }
+        }
+        elseif ($item['display'] == 1) {
+          if (!empty($settings['restrictbehavior']) && $settings['restrictbehavior'] == 'exclude') {
+            unset($items[$key]);
+          }
+          else {
+            $items[$key]['hide-count'] = TRUE;
+          }
+        }
+      }
+    }
+  }
+
   $upload_link = array();
 
   // Even though we'll want this to be the last thing in our $elements, since
   // we'll bail early if there are no files, start by rendering the link to
   // upload more files if we're configured to display it. We'll stuff this
   // into $elements at the appropriate moment later in this function.
+  // We don't render the link in preview mode, due to the hook_entity_access()
+  // call causing PHP notices within entity_metadata_no_hook_node_access() as
+  // identified in http://drupal.org/node/2125091.
   if (!empty($settings['showuploadlink'])
-      && extended_file_field_entity_access('update', $entity_type, $entity)
-      && field_access('update', $field, $entity_type, $entity)
-      && extended_file_field_entity_type_supports_edit_link($entity_type)) {
+    && empty($entity->in_preview)
+    && extended_file_field_entity_access('update', $entity_type, $entity)
+    && field_access('update', $field, $entity_type, $entity)
+    && extended_file_field_entity_type_supports_edit_link($entity_type)) {
     // @todo: This is evil. Entities should have to tell us their edit URI.
     // This hack here only works on certain entity_types.
     // @see https://drupal.org/node/1970360
@@ -442,11 +616,6 @@ function extended_file_field_field_formatter_view($entity_type, $entity, $field,
     return $upload_link;
   }
 
-  // If desired, re-order the items array according to the desired key
-  if ($settings['sortby'] != 'default') {
-    extended_file_field_sort($items, $settings['sortby'], $settings['sortorder']);
-  }
-
   // Assemble the table header.
   $header = extended_file_field_header($settings['columns']);
 
@@ -457,19 +626,24 @@ function extended_file_field_field_formatter_view($entity_type, $entity, $field,
   // Generate the file formatter table
   if (!empty($rows['visible'])) {
     $table_id = check_plain("extended-file-field-table-" . str_replace('_', '-', $field['field_name']));
-    $elements[] = extended_file_field_generate_table($header, $rows['visible'], $table_id);
+    $table = extended_file_field_generate_table($header, $rows['visible'], $table_id);
+    // Add the javascript toggle if necessary
+    if (!empty($settings['restrictbehavior']) && $settings['restrictbehavior'] == 'toggle') {
+      $table['#attached']['js'][] = drupal_get_path('module', 'extended_file_field') . '/extended_file_field.formatter.js';
+    }
+    $elements[] = $table;
   }
   // If a second table for 'hidden' files is required, generate it
   if (!empty($rows['hidden'])) {
     $table_id = check_plain("extended-file-field-table-" . str_replace('_', '-', $field['field_name']) . "-hidden");
     $table = extended_file_field_generate_table($header, $rows['hidden'], $table_id);
-    if ($settings['showhidden'] == 'fieldset') {
+    if ($settings['usefieldset'] == TRUE) {
       // Wrap the table in a collapsed fieldset if desired
       $num_hidden_files = count($rows['hidden']);
       $elements[] = array(
         'fieldset' => array(
           '#type' => 'fieldset',
-          '#title' => format_plural($num_hidden_files, '1 hidden file', '@count hidden files'),
+          '#title' => format_plural($num_hidden_files, '1 more file', '@count more files'),
           '#attributes' => array('class' => array('collapsible', 'collapsed')),
           'content' => array($table),
         ),
@@ -479,7 +653,7 @@ function extended_file_field_field_formatter_view($entity_type, $entity, $field,
     else {
       // Create a field header and add the 'hidden' file table to $elements.
       $elements[] = array(
-        '#markup' => t('Hidden/obsolete files'),
+        '#markup' => t('Filtered files'),
       );
       $elements[] = $table;
     }
@@ -565,7 +739,7 @@ function extended_file_field_entity_access($op, $entity_type, $entity = NULL, $a
  *   extensions were defined
  */
 function extended_file_field_extension_filter($settings) {
-  if (in_array($settings['extensionfilter'], array('filter', 'hide'))) {
+  if ($settings['extensionfilter'] == 'filter') {
     $filter = array_filter(array_map('trim', explode(',', $settings['extensions'])));
   }
   return isset($filter) ? $filter : array();
@@ -601,14 +775,17 @@ function extended_file_field_add_extensions(&$items) {
  */
 function extended_file_field_filter_by_extension(&$items, $filter, $action = 'filter') {
   foreach ($items as $key => $item) {
-    if (!in_array($item['fid']['extension'], $filter)) {
-      if ($action == 'filter') {
-        // Remove this file from the array
-        unset($items[$key]);
-      }
-      elseif ($action == 'hide') {
-        // Flag this file to be hidden base on extension
-        $items[$key]['hide-extension'] = TRUE;
+    if (!in_array($item['extension'], $filter)) {
+      switch ($action) {
+        case 'exclude':
+          unset($items[$key]);
+          break;
+        case 'hide':
+          $items[$key]['hide-display'] = TRUE;
+          break;
+        case 'table':
+          $items[$key]['separate-table'] = TRUE;
+          break;
       }
     }
   }
@@ -627,8 +804,8 @@ function extended_file_field_filter_by_extension(&$items, $filter, $action = 'fi
  * @param array $items
  *   An array of file items, passed by reference.
  * @param string $action
- *   The action to apply against matched files, 'exclude', 'hide', 'table',
- *   or 'fieldset'. The 'inline' action bypasses this function call.
+ *   The action to apply against matched files, 'exclude', 'hide', or 'table'.
+ *   The 'inline' action bypasses this function call.
  */
 function extended_file_field_filter_by_display(&$items, $action = 'exclude') {
   foreach ($items as $key => $item) {
@@ -637,16 +814,12 @@ function extended_file_field_filter_by_display(&$items, $action = 'exclude') {
         case 'exclude':
           unset($items[$key]);
           break;
-
         case 'hide':
           $items[$key]['hide-display'] = TRUE;
           break;
-
         case 'table':
-        case 'fieldset':
           $items[$key]['separate-table'] = TRUE;
           break;
-
       }
     }
   }
@@ -658,14 +831,29 @@ function extended_file_field_filter_by_display(&$items, $action = 'exclude') {
 function extended_file_field_sort(&$items, $on, $order = 'ASC') {
   $metadata = extended_file_field_metadata_types();
   if (!empty($metadata[$on]['sort']) && $metadata[$on]['sort'] == 'numeric') {
-    $function = "(\$a['{$on}'] > \$b['{$on}']);";
+    if ($order == 'asc') {
+      $function = function ($a, $b) use ($on) {
+        return $a[$on] - $b[$on];
+      };
+    }
+    else {
+      $function = function ($a, $b) use ($on) {
+        return $b[$on] - $a[$on];
+      };
+    }
   }
   // For other fields, sort by string value.
-  else {
-    $function = "strcmp(\$a['{$on}'],\$b['{$on}']);";
+  elseif ($order == 'asc') {
+    $function = function ($a, $b) use ($on) {
+      return strcmp($a[$on], $b[$on]);
+    };
   }
-  $comparer = ($order === 'desc') ? "return -" . $function : "return " . $function;
-  uasort($items, create_function('$a,$b', $comparer));
+  else {
+    $function = function ($a, $b) use ($on) {
+      return -strcmp($a[$on], $b[$on]);
+    };
+  }
+  uasort($items, $function);
 }
 
 /**
@@ -782,7 +970,11 @@ function extended_file_field_rowdata($item, $context) {
     $class[] = 'hidden-extension';
     $class[] = 'element-hidden';
   }
-
+  // Limit to 'n' items
+  if (!empty($item['hide-count'])) {
+    $class[] = 'hidden-count';
+    $class[] = 'element-hidden';
+  }
   return array(
     'data' => $row,
     'class' => $class,
@@ -820,6 +1012,11 @@ function extended_file_field_celldata($column, $item, $context) {
   else {
     switch ($column) {
       case 'filename':
+        // If description is set, the theme function will use it by default
+        if ($context['display']['settings']['usedescriptionforfilename']==0) {
+          // We want to use the actual filename for the filename column
+          unset($item['description']);
+        }
         $data = theme('file_link', array('file' => (object) $item));
         break;
 
@@ -833,6 +1030,7 @@ function extended_file_field_celldata($column, $item, $context) {
 
       case 'timestamp':
         $data = format_date($item['timestamp'], 'short');
+        break;
 
       default:
         $data = check_plain($item[$column]);
@@ -857,14 +1055,16 @@ function extended_file_field_celldata($column, $item, $context) {
  *   The render array for this table.
  */
 function extended_file_field_generate_table($header, $rows, $table_id) {
-  return array(
+  $table = array(
     '#theme' => 'table',
+    '#sticky' => FALSE,
     '#header' => $header,
     '#rows' => $rows,
     '#attributes' => array(
       'id' => $table_id,
     ),
   );
+  return $table;
 }
 
 /**
@@ -882,9 +1082,13 @@ function extended_file_field_generate_table($header, $rows, $table_id) {
  */
 function extended_file_field_permission() {
   return array(
-    'administer file attachments' => array(
-      'title' => t('Administer file attachments'),
-      'description' => t('Allows users to remove files even if the file widget is configured to hide the "Remove" button.'),
+    'extended file field delete any file contents' => array(
+      'title' => t('Delete contents of any file attachment'),
+      'description' => t('Allows users to delete the content of any file even if the file widget is configured to hide the "Remove" button.'),
+    ),
+    'extended file field delete own file contents' => array(
+      'title' => t('Delete contents of own file attachment'),
+      'description' => t('Allows users to delete the content of a file they uploaded even if the file widget is configured to hide the "Remove" button.'),
     ),
   );
 }
@@ -920,20 +1124,55 @@ function extended_file_field_form_field_ui_field_edit_form_alter(&$form, &$form_
     $form['instance']['widget']['settings']['extended_file_field_show_remove'] = array(
       '#type' => 'checkbox',
       '#title' => t('Enable <em>Remove</em> button'),
-      '#description' => t('Note that the <em>Remove</em> button is always visible for users with the <em>Administer file attachments</em> permission.'),
+      '#description' => t('Note that a custom <em>Remove</em> link will be visible for users with the appropriate permission.'),
       // We can't use empty() here since the default is to show and if a field
       // hasn't resaved its widget settings, we won't have a value.
       '#default_value' => isset($settings['extended_file_field_show_remove']) ? $settings['extended_file_field_show_remove'] : TRUE,
       '#weight' => 12,
     );
+    $form['instance']['widget']['settings']['extended_file_field_show_clear_contents'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Enable <em>Clear Contents</em> link'),
+      '#description' => t('Note that a custom <em>Clear Contents</em> link will be visible for users with the appropriate permission.'),
+      // We can't use empty() here since the default is to show and if a field
+      // hasn't resaved its widget settings, we won't have a value.
+      '#default_value' => isset($settings['extended_file_field_show_clear_contents']) ? $settings['extended_file_field_show_clear_contents'] : FALSE,
+      '#weight' => 13,
+    );
+
+    // Add a checkbox for displaying the widget file listing in reverse order
+    $form['instance']['widget']['settings']['extended_file_field_reverse_display'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Reverse display order'),
+      '#description' => t('Reverses the order of files displayed in the widget, with the upload widget at the top, and most recent files listed first.'),
+      '#default_value' => !empty($settings['extended_file_field_reverse_display']),
+      '#weight' => 14,
+    );
+    // Add a checkbox for restricting the number of files displayed in the
+    // widget.  If checked, this will use the formatter setting to determine
+    // how many files to display.
+    $form['instance']['widget']['settings']['extended_file_field_restrict_display'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Restrict number of files displayed'),
+      '#description' => t('If checked, this will restrict the number of files displayed in the widget, according to the field formatter "Number of files to display" setting.  Has no effect if the formatter is set to "Unlimited".'),
+      '#default_value' => !empty($settings['extended_file_field_restrict_display']),
+      '#weight' => 15,
+    );
     // Add a checkbox which can be used to toggle the JavaScript functionality
-    // for showing/hiding files with display=FALSE.
+    // for showing/hiding hidden files
     $form['instance']['widget']['settings']['extended_file_field_hidden_toggle'] = array(
       '#type' => 'checkbox',
       '#title' => t('Enable <em>Show hidden files</em> JavaScript toggle'),
-      '#description' => t('This setting only has an effect if the field\'s "Enable <em>Display</em> field" option is enabled.'),
+      '#description' => t('This setting enables a javascript show/hide toggle when restricting display of files exceeding the "number to display" count, and/or when the field\'s "Enable <em>Display</em> field" option is enabled and the node contains non-displayed files.'),
       '#default_value' => !empty($settings['extended_file_field_hidden_toggle']),
-      '#weight' => 14,
+      '#weight' => 16,
+    );
+    // Add a checkbox for making the widget fieldset collapsible
+    $form['instance']['widget']['settings']['extended_file_field_collapsible'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Make the container fieldset collapsible'),
+      '#default_value' => !empty($settings['extended_file_field_collapsible']),
+      '#weight' => 17,
     );
     // Add a multi-select box which users can use to select additional metadata
     // to be displayed with each file in the file widget.
@@ -949,7 +1188,7 @@ function extended_file_field_form_field_ui_field_edit_form_alter(&$form, &$form_
       '#default_value' => $default,
       '#size' => min(6, count($metadata)),
       '#multiple' => TRUE,
-      '#weight' => 15,
+      '#weight' => 18,
     );
   }
 }
@@ -962,18 +1201,29 @@ function extended_file_field_form_field_ui_field_edit_form_alter(&$form, &$form_
  * file_widget_multiple widget.
  */
 function extended_file_field_field_widget_file_generic_form_alter(&$element, &$form_state, $context) {
-  // Retrieve the widget settings
-  $settings = $context['instance']['widget']['settings'];
+  if ($context['field']['cardinality'] != 1) {
+    // Retrieve the widget settings
+    $settings = $context['instance']['widget']['settings'];
 
-  // We override the #theme function for the widget, so that we may display our
-  // additional metadata columns as needed, as well as hide the operations
-  // column when it is empty.
-  $element['#theme'] = 'extended_file_field_widget_multiple';
+    // We override the #theme function for the widget, so that we may display our
+    // additional metadata columns as needed, as well as hide the operations
+    // column when it is empty.
+    $element['#theme'] = 'extended_file_field_widget_multiple';
 
-  // Add JavaScript for the 'Show hidden files' functionality if desired.
-  if (!empty($context['field']['settings']['display_field'])
-    && !empty($settings['extended_file_field_hidden_toggle'])) {
-    $element['#attached']['js'][] = drupal_get_path('module', 'extended_file_field') . '/extended_file_field.js';
+    // Add JavaScript for the 'Show hidden files' functionality if desired.
+    if ((!empty($context['field']['settings']['display_field'])
+        || !empty($settings['extended_file_field_restrict_display']))
+      && !empty($settings['extended_file_field_hidden_toggle'])) {
+      $element['#attached']['js'][] = drupal_get_path('module', 'extended_file_field') . '/extended_file_field.widget.js';
+    }
+
+    // If the setting exists, make the fieldset collapsible.
+    if ((!empty($settings['extended_file_field_collapsible']))) {
+      $element['#collapsible'] = TRUE;
+      $element['#collapsed'] = (empty($form_state['rebuild']) && empty($form_state['has_file_element'])) ? TRUE : FALSE;
+      $element['#process'][] = 'form_process_fieldset';
+    }
+
   }
 }
 
@@ -995,18 +1245,29 @@ function extended_file_field_preprocess_extended_file_field_widget_multiple(&$va
   $field_info = field_info_field($field_name);
   $instance_info = field_info_instance($entity_type, $field_name, $bundle);
   $widget_settings = $instance_info['widget']['settings'];
+  $display_settings = $instance_info['display']['default']['settings'];
 
   // Disable the 'Remove' button if the user does not have sufficient
   // permission to access it.
   // Note: We can't use empty() here since the default is to show and if a
   // field hasn't resaved its widget settings, we won't have a value.
   if (isset($widget_settings['extended_file_field_show_remove'])
-    && $widget_settings['extended_file_field_show_remove'] == FALSE
-    && !user_access('administer file attachments')) {
-      global $user;
-      foreach (element_children($element) as $key => $file) {
+    && $widget_settings['extended_file_field_show_remove'] == FALSE) {
+    foreach (element_children($element) as $key => $file) {
       if (!empty($element[$key]['#file']->status)) {
         $variables['element'][$key]['remove_button']['#access'] = FALSE;
+      }
+    }
+  }
+  // Show a 'clear contents' link if the user has sufficient permission to access it.
+  if (!empty($widget_settings['extended_file_field_show_clear_contents'])) {
+    // Add our clear contents link
+    foreach (element_children($element) as $key => $file) {
+      foreach (element_children($element) as $key => $file) {
+        if (!empty($element[$key]['#file']->status) && extended_file_field_delete_contents_access($element[$key]['#file'])) {
+          $dest = 'admin/extended-file-field/' . $element[$key]['#entity']->nid . '/' . $element[$key]['#file']->fid . '/delete-contents';
+          $variables['element'][$key]['deletecontents_link'] = array('#markup' => l(t('Delete contents'), $dest));
+        }
       }
     }
   }
@@ -1061,6 +1322,19 @@ function extended_file_field_preprocess_extended_file_field_widget_multiple(&$va
       $variables['element']['#extended_file_field_widget_metadata'][$column] = $metadata[$column];
     }
   }
+
+  // Restrict the number of displayed elements if necessary
+  if (!empty($widget_settings['extended_file_field_restrict_display'])
+    && $display_settings['restrictdisplay'] != '-1') {
+    $variables['element']['#extended_file_field_restrict_display'] = $display_settings['restrictdisplay'];
+    drupal_add_js(array('extendedFileField' => array('restrictDisplay' => $display_settings['restrictbehavior'])), 'setting');
+  }
+
+  // Reverse the file display order if necessary
+  if (!empty($widget_settings['extended_file_field_reverse_display'])) {
+    $variables['element']['#extended_file_field_reverse_display'] = TRUE;
+    drupal_add_js(array('extendedFileField' => array('reverseDisplay' => TRUE)), 'setting');
+  }
 }
 
 /**
@@ -1093,7 +1367,7 @@ function theme_extended_file_field_widget_multiple($variables) {
   foreach ($extra_columns as $column) {
     $headers[] = $column;
   }
-  if ($element['#display_field']) {
+  if (isset($element['#display_field']) && $element['#display_field']) {
     $headers[] = array(
       'data' => t('Display'),
       'class' => array('checkbox'),
@@ -1105,9 +1379,18 @@ function theme_extended_file_field_widget_multiple($variables) {
   // preview or failed validation).
   $widgets = array();
   foreach (element_children($element) as $key) {
+    // Screen out any empty file placeholders, but keep the file upload widget.
+    if ($element[$key]['#file'] == FALSE && $key != $element['#file_upload_delta']) {
+      unset($element[$key]);
+      continue;
+    }
     $widgets[] = &$element[$key];
   }
   usort($widgets, '_field_sort_items_value_helper');
+
+  if (!empty($element['#extended_file_field_reverse_display'])) {
+    $widgets = array_reverse($widgets);
+  }
 
   $rows = array();
   foreach ($widgets as $key => &$widget) {
@@ -1115,13 +1398,14 @@ function theme_extended_file_field_widget_multiple($variables) {
     if ($widget['#file'] == FALSE) {
       $widget['#title'] = $element['#file_upload_title'];
       $widget['#description'] = $element['#file_upload_description'];
+      $upload_widget = &$widget;
       continue;
     }
     // Delay rendering of the buttons, so that they can be rendered later in
     // the "operations" column.
     $operations_elements = array();
     foreach (element_children($widget) as $sub_key) {
-      if (isset($widget[$sub_key]['#type']) && $widget[$sub_key]['#type'] == 'submit') {
+      if ((isset($widget[$sub_key]['#type']) && $widget[$sub_key]['#type'] == 'submit') || $sub_key == 'deletecontents_link') {
         hide($widget[$sub_key]);
         $operations_elements[] = &$widget[$sub_key];
       }
@@ -1129,7 +1413,7 @@ function theme_extended_file_field_widget_multiple($variables) {
 
     // Delay rendering of the "Display" option and the weight selector, so that
     // each can be rendered later in its own column.
-    if ($element['#display_field']) {
+    if (isset($element['#display_field']) && $element['#display_field']) {
       hide($widget['display']);
     }
     hide($widget['_weight']);
@@ -1155,7 +1439,7 @@ function theme_extended_file_field_widget_multiple($variables) {
       $have_operations = TRUE;
     }
     $display = '';
-    if ($element['#display_field']) {
+    if (isset($element['#display_field']) && $element['#display_field']) {
       unset($widget['display']['#title']);
       $display = array(
         'data' => render($widget['display']),
@@ -1171,7 +1455,7 @@ function theme_extended_file_field_widget_multiple($variables) {
     foreach ($extra_columns as $column => $title) {
       $row[] = render($widget['extended_file_field_widget_metadata_' . $column]);
     }
-    if ($element['#display_field']) {
+    if (isset($element['#display_field']) && $element['#display_field']) {
       $row[] = $display;
     }
     $row[] = $weight;
@@ -1198,7 +1482,28 @@ function theme_extended_file_field_widget_multiple($variables) {
     }
   }
 
-  $output = empty($rows) ? '' : theme('table', array('header' => $headers, 'rows' => $rows, 'attributes' => array('id' => $table_id)));
+  // Handle 'restrict display' behavior according to the formatter settings.
+  // We only 'hide' extra files, even if the formatter is set to 'exclude',
+  // since unsetting here would cause us to lose those files upon saving.
+  $counter = 0;
+  if (!empty($element['#extended_file_field_restrict_display'])) {
+    foreach ($rows as $key => &$row) {
+      $counter++;
+      if ($counter <= $element['#extended_file_field_restrict_display']) {
+        continue;
+      }
+      else {
+        $row['class'] = array_merge($row['class'], array('element-hidden', 'hidden-count'));
+      }
+    }
+  }
+
+  $output = '';
+  if (!empty($element['#extended_file_field_reverse_display'])) {
+    $output = drupal_render($upload_widget);
+  }
+
+  $output .= empty($rows) ? '' : theme('table', array('header' => $headers, 'rows' => $rows, 'attributes' => array('id' => $table_id)));
   $output .= drupal_render_children($element);
   return $output;
 }

@@ -29,14 +29,14 @@
     if ($toggle) {
       toggleState = !toggleState;
     }
-    var $rows = $table.find('.file-display:not(:checked)').closest('tr').toggle(toggleState);
+    var $rows = $table.find('.file-display:not(:checked), .hidden-count').closest('tr').toggle(toggleState);
     var count = $rows.length;
     var linkText;
     if (toggleState) {
-      linkText = Drupal.formatPlural(count, 'Hide 1 hidden file', 'Hide @count hidden files');
+      linkText = Drupal.formatPlural(count, 'Hide 1 file', 'Hide @count files');
     }
     else {
-      linkText = Drupal.formatPlural(count, 'Show 1 hidden file', 'Show @count hidden files');
+      linkText = Drupal.formatPlural(count, 'Show 1 more file', 'Show @count more files');
     }
     tableDragObject.restripeTable();
     $toggleLink.html(linkText);
@@ -66,6 +66,16 @@
             .unbind('click.extendedFileFieldTable').remove();
         }
       }
+    }
+  };
+
+  Drupal.tableDrag.prototype.onDrop = function () {
+    if (Drupal.settings.extendedFileField.reverseDisplay == true) {
+      $('#edit-field-issue-files-und-table').find('select.form-select[name*="[_weight]"]').each(function() {
+        $(this).val(function(i, oldVal) {
+          return oldVal * -1;
+        });
+      });
     }
   };
 

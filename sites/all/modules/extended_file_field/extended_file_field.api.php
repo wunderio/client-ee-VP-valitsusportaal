@@ -119,7 +119,7 @@ function hook_extended_file_field_widget_items_alter(&$items, &$context) {
  *       '#header' => $header,
  *       '#rows' => $rows,
  *      )
- *   If $settings['showhidden'] == 'fieldset' or 'table', and there are hidden
+ *   If $settings['showhidden'] == 'table', and there are hidden
  *   files to be displayed, then $elements will contain a second render
  *   array containing a 'Hidden Files' label and the table of hidden files:
  *     array(
@@ -130,7 +130,7 @@ function hook_extended_file_field_widget_items_alter(&$items, &$context) {
  *       '#header' => $header,
  *       '#rows' => $hiddenrows,
  *     )
- *  If $settings['showhidden'] == 'fieldset', then this hidden files array will
+ *  If $settings['usefieldset'] == TRUE, then this hidden files array will
  *  be wrapped in a collapsed fieldset before being added to the render array:
  *    array(
  *      'fieldset' => array(
@@ -140,6 +140,10 @@ function hook_extended_file_field_widget_items_alter(&$items, &$context) {
  *        'content' => array($table),
  *      ),
  *    )
+ *  If adding rows to the table, be sure to inherit the row class from the
+ *  related file row, to ensure your additions abide by the formatter's
+ *  show/hide settings.
+ *
  * @param array $context
  *   Associative array of context for the table of files being altered, with
  *   the following keys:

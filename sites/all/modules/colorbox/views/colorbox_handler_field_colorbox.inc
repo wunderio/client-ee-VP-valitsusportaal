@@ -109,7 +109,7 @@ If you would like to have the characters %5B and %5D please use the html entity 
     $form['custom_gid'] = array(
       '#type' => 'textfield',
       '#title' => t('Custom Colorbox gallery'),
-      '#description' => t('Enable Colorbox gallery with a given string as gallery. Overrides the automatically generated gallery id above.'),
+      '#description' => t('Enable Colorbox gallery with a given string as gallery. Overrides the automatically generated gallery id above. You may enter data from this view as per the "Replacement patterns" below.'),
       '#default_value' => $this->options['custom_gid'],
       '#weight' => -8,
     );
@@ -160,14 +160,16 @@ If you would like to have the characters %5B and %5D please use the html entity 
     // Get the token information and generate the value for the popup and the
     // caption.
     $tokens = $this->get_render_tokens($this->options['alter']);
-    $popup = filter_xss($this->options['popup'], array('iframe', 'a', 'abbr', 'acronym', 'address', 'article', 'aside', 'b', 'bdi', 'bdo', 'big', 'blockquote', 'br', 'caption', 'cite', 'code', 'col', 'colgroup', 'command', 'dd', 'del', 'details', 'dfn', 'div', 'dl', 'dt', 'em', 'figcaption', 'figure', 'footer', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hgroup', 'hr', 'i', 'img', 'ins', 'kbd', 'li', 'mark', 'menu', 'meter', 'nav', 'ol', 'output', 'p', 'pre', 'progress', 'q', 'rp', 'rt', 'ruby', 's', 'samp', 'section', 'small', 'span', 'strong', 'sub', 'summary', 'sup', 'table', 'tbody', 'td', 'tfoot', 'th', 'thead', 'time', 'tr', 'tt', 'u', 'ul', 'var', 'wbr'));
+    $popup = filter_xss_admin($this->options['popup']);
     $caption = filter_xss_admin($this->options['caption']);
+    $gallery = drupal_html_class($this->options['custom_gid']);
     $popup = strtr($popup, $tokens);
     $caption = strtr($caption, $tokens);
+    $gallery = strtr($gallery, $tokens);
 
     $width = $this->options['width'] ? $this->options['width'] : '';
     $height = $this->options['height'] ? $this->options['height'] : '';
-    $gallery_id = !empty($this->options['custom_gid']) ? $this->options['custom_gid'] : ($this->options['gid'] ? 'gallery-' . $this->view->name : '');
+    $gallery_id = !empty($gallery) ? $gallery : ($this->options['gid'] ? 'gallery-' . $this->view->name : '');
     $link_text = $tokens["[{$this->options['trigger_field']}]"];
     $link_options = array(
       'html' => TRUE,
