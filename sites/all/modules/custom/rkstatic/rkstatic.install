@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * Implements hook_uninstall().
+ */
+function rkstatic_uninstall() {
+  variable_del('rkstatic_switch');
+  variable_del('rkstatic_view_to_use');
+  variable_del('rkstatic_build_from_menu_links');
+  variable_del('rkstatic_use_crisis_header');
+  variable_del('rkstatic_crisis_header');
+  variable_del('rkstatic_static_subdomain');
+}
+
