@@ -7,6 +7,7 @@ sites/*/private
 /cache
 
 # mm. Ignore.
+.htaccess
 robots_bkup_mai2014.txt
 htaccess_bkup_mai2014
 htaccess_orig_bkup
@@ -18,7 +19,7 @@ INSTALL.sqlite.txt
 INSTALL.txt
 LICENSE.txt
 MAINTAINERS.txt
-README.txt
+/README.txt
 UPGRADE.txt
 
 
