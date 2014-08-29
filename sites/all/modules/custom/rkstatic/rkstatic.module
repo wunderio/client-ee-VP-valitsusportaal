@@ -1,0 +1,1309 @@
+<?php
+
+/**
+ * @file
+ * Riigikantselei staatiline.
+ * Märt Matsoo. mart@matsoo.com.
+ */
+
+
+/**
+ * Implementation of hook_init().
+ */
+function rkstatic_init() {
+
+  // Load css.
+  // drupal_add_css(drupal_get_path('module', 'rkstatic') . '/css/rkstatic.css');
+
+  // Load js.
+  // drupal_add_js(drupal_get_path('module', 'rkstatic') . '/js/rkstatic.js', array('scope' => 'footer', 'weight' => 10));
+
+  //drupal_add_js('jQuery(document).ready(function () { var S5 = "do this and do that";//alert(S5); });', array('type' => 'inline', 'scope' => 'header'));
+
+}
+
+
+/**
+ * Implementation of hook_permission().
+ */
+function rkstatic_permission() {
+
+  $perms = array(
+    'admin rkstatic' => array(
+      'title' => t('Administer Riigikantselei Static Module'),
+      'description' => t('Full administrator access for Riigikantselei Static Module.'),
+      'restrict access' => FALSE,
+    ),
+  );
+
+  return $perms;
+
+}
+
+
+/**
+ * Implementation of hook_menu().
+ */
+function rkstatic_menu() {
+
+  $items = array();
+
+  $items['admin/config/rkstatic'] = array(
+    'title' => 'Riigikantselei Static Module Items',
+    'access arguments' => array('admin rkstatic'),
+    'position' => 'right',
+    'weight' => 99,
+    'page callback' => 'system_admin_menu_block_page',
+    'file' => 'system.admin.inc',
+    'file path' => drupal_get_path('module', 'system'),
+  );
+
+  $items['admin/config/rkstatic/settings'] = array(
+    'title' => 'Riigikantselei Static Module Settings',
+    'description' => t('General settings form'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('rkstatic_settings'),
+    'access arguments' => array('admin rkstatic'),
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 10,
+  );
+
+  /*$items['admin/config/rkstatic/createstatic'] = array(
+    'title' => 'Riigikantselei Build Static Pages',
+    'description' => t('Run process to create static pages for ddos.'),
+    'page callback' => 'rkstatic_createstatic',
+    // 'page arguments' => array('rkstatic_settings'),
+    'access arguments' => array('admin rkstatic'),
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 10,
+  );*/  
+
+  return $items;
+}
+
+
+/**
+ * Page callback from hook_menu().
+ */
+function rkstatic_createstatic() {
+  // Build static pages, ready for ddos.
+  drupal_set_message(t('@todo. Magically create static version of site here.'));
+}
+
+
+/**
+ * Implements hook_exit().
+ */
+function rkstatic_exit() {
+
+  // Testing to see best way to save html statically.
+  // Kind of works, but need to get all the css/js/img files too.
+  // $data = ob_get_contents();
+  // watchdog('rk', $data);
+}
+
+
+/**
+ * Form builder for general settings form.
+ */
+function rkstatic_settings($form, &$form_state) {
+
+  $form = array();
+
+  $form['rkstatic_switch'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Turn on Riigikantselei static functionality'),
+    '#default_value' => variable_get('rkstatic_switch', 0),
+    '#description' => t('Default on/off switch for module.'),
+  );
+
+  /* $form['rkstatic_paths'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Paths to save statically'),
+    '#default_value' => variable_get('rkstatic_paths', 'et'),
+    '#description' => t('The pages we want to save statically.'),
+  ); */
+
+  $form['rkstatic_view_to_use'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Machine name of View'),
+    '#default_value' => variable_get('rkstatic_view_to_use', 'ddos'),
+    '#description' => t('Default is "ddos". This view needs to return a list of paths for pages we wish to save statically.'),
+  );
+
+  $form['rkstatic_build_from_menu_links'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Include main menu links'),
+    '#default_value' => variable_get('rkstatic_build_from_menu_links', 0),
+    '#description' => t('Include all main menu links in static build.'),
+  );
+
+  $form['rkstatic_use_crisis_header'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use Crisis Header'),
+    '#default_value' => variable_get('rkstatic_use_crisis_header', 0),
+    '#description' => t('Insert html code into header of each static page.'),
+  );
+
+  $form['rkstatic_crisis_header'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Crisis Header HTML'),
+    '#default_value' => variable_get('rkstatic_crisis_header', ''),
+    '#description' => t('Option to include special header on all static pages.'),
+  );
+
+  $form['rkstatic_static_subdomain'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Static domain'),
+    '#default_value' => variable_get('rkstatic_static_subdomain', 'staatiline.riigikantselei.ee'),
+    '#description' => t('The domain for the static site. Used in building absolute links. ex. static.valitsus.ee. You do not need the http://'),
+  );
+
+  return system_settings_form($form);
+}
+
+
+/**
+ * drupal_alter of html_export function.
+ * drupal_alter('html_export_add_path_provider', $path_provders);
+ */
+function rkstatic_html_export_add_path_provider_alter(&$path_provders) {
+  $path_provders['rkstatic_custom_paths']['title'] = 'Riigikantselei static: Custom Paths';
+  $path_provders['rkstatic_custom_paths']['callback'] = '_rkstatic_export_custom_paths';
+  // watchdog('rk', 'rkstatic_html_export_add_path_provider_alter() <pre>' . print_r($path_provders, true) . '</pre>');  
+
+}
+
+function rkstatic_html_export_add_path_provider() {
+  // watchdog('rk', 'In rkstatic_html_export_add_path_provider from module_invoke_all');
+}
+
+
+/**
+ * Implementation of hook_html_export_asset_list_alter().
+ */
+function rkstatic_html_export_asset_list_alter(&$asset_list) {
+  // watchdog('rk', 'asset list alter <pre>' . print_r($asset_list, true) . '</pre>');
+
+  foreach ($asset_list as $key => $value) {    
+    // Get rid of add this js.
+    if (strstr($key, 'addthis') !== FALSE) {
+// watchdog('rk', 'add this <pre>' . $key . ' xxx ' . $value . '</pre>');
+      unset($asset_list[$key]);
+// watchdog('rk', 'after unset asset list alter <pre>' . print_r($asset_list, true) . '</pre>');
+    }
+  }
+}
+
+
+
+/**
+ * This hook function from html_export API.txt file.
+ * @data
+ *   the html
+ * @paths
+ *   array of all paths being processed
+ * @active_path_count
+ *   string of the current path being processed
+ * @dom_remove
+ *   array of dom elements to be removed.
+ */
+function rkstatic_html_export_data_alter(&$data, $paths, $active_path_count, $dom_remove) {
+  // data is the html of the page to work with
+  // watchdog('rk', 'I just blue myself. <pre>' . print_r($paths, true) . '</pre> ' . $active_path_count . '<pre>' . print_r($dom_remove, true) . '</pre>');
+
+  // Create a DOM object.
+  $html_obj = new simple_html_dom();
+  // Load HTML from a string.
+  $html_obj->load($data);
+
+  if (variable_get('rkstatic_use_crisis_header', 0) == 1) {
+    // Put ddos warning into head.
+    foreach ($html_obj->find('#skip-link') as $skip) {
+      $orig = $skip->outertext;
+      $pre = variable_get('rkstatic_crisis_header', '');
+      $skip->outertext = $pre . $orig;
+    }
+  }
+
+  // Make all anchors absolute.
+  // foreach ($html_obj->find('a') as $links) {
+    // $links->href = 'http://staatiline.riigikantselei.ee' . $links->href;
+  // }
+
+  // Get rid of <a> tags for kontakt page.
+  if (strstr($active_path_count, 'kontakt') !== FALSE || strstr($active_path_count, 'contact') !== FALSE) {
+
+    // Remove all plain text fragments.
+    foreach ($html_obj->find('div.view-contact a') as $links) {
+        // @todo. Get all simple dom clean-up done.
+        $links->href = null;
+        $links->tag = "span";
+    }
+  } 
+
+
+  // Get rid of <a> in node sub-pages.
+  // if (strstr($active_path_count, 'node') !== FALSE) {
+
+    foreach ($html_obj->find('article div.content a') as $links) {
+        // @todo. Get all simple dom clean-up done.
+        $links->href = null;
+        $links->tag = "span";
+        // $links->innertext = "This link href has been neutralised.";
+    }
+
+  // }
+
+  $data = $html_obj->save();
+
+  // Release resources to avoid memory leak in some versions.
+  $html_obj->clear();
+  unset($html_obj);
+ 
+}
+
+
+
+/**
+ * Callback for rkstatic_custom provider.
+ */
+function _rkstatic_export_custom_paths() {
+
+  // The ddos view has the last X uudised, but we need to get the aliases.
+  $view = views_get_view(variable_get('rkstatic_view_to_use', 'ddos'));
+  $view->render();
+
+  $news_aliases = array();
+  foreach ($view->result as $key => $value) {
+    $news_aliases[] = 'et/' . drupal_get_path_alias('node/' . $value->nid);
+  }
+  
+  // $menu_items = menu_tree_all_data('main-menu', NULL, 3);
+// watchdog('rk', count($menu_items) . ' menu_items matsoo <pre>' . print_r($menu_items, true) . '</pre>');
+
+  if (variable_get('rkstatic_build_from_menu_links', 0) == 1) {
+    $menu_links = menu_load_links('main-menu'); // 1130, 1139
+// @todo. remove watchdog.
+// watchdog('rk', count($menu_links) . ' menu_links matsoo <pre>' . print_r($menu_links, true) . '</pre>');
+
+
+  // $menu_links = array();
+    foreach ($menu_links as $key => $menu) {
+      if (strstr($menu['link_path'], 'node/') !== FALSE) {
+        $menu_aliases[] = 'et/' . drupal_get_path_alias($menu['link_path']);
+      }
+    }
+  }
+  
+
+  $result = (variable_get('rkstatic_build_from_menu_links', 0) == 1) ? array_merge($menu_aliases, $news_aliases) : $news_aliases;
+
+
+// watchdog('rk', 'result matsoo <pre>' . print_r($result, true) . '</pre>');
+//@todo. remove empty result array
+// $result = array();
+  return $result;
+}
+
+
+/**
+ * Implements hook_cron().
+ */
+function rkstatic_cron() {
+  // Run html_export batch.
+  // _rkstatic_run_html_export_batch();
+}
+
+
+/**
+ * Run html_export module batch process.
+ * Called from hook_cron().
+ */
+function _rkstatic_run_html_export_batch() {
+/*  watchdog('rk', 'in rkstatic_cron ' . drupal_get_path('module', 'html_export') . '/html_export.pages.inc');
+  require_once(drupal_get_path('module', 'html_export') . '/html_export.pages.inc');
+  // $form_id = '_html_export_job_page';
+  $form_state = array();  
+  $form_state['values']['path_selector'] = array('rkstatic_custom_paths' => 'rkstatic_custom_paths');
+  $form_state['values']['html_export_other_paths'] = variable_get('html_export_other_paths', '<front>');
+  $form_state['values']['html_export_dom_remove'] = variable_get('html_export_dom_remove', '');
+  $form_state['values']['html_export_format'] = 'none';
+  $form_state['values']['render_errors'] = 1;
+  $form_state['values']['anonymous'] = 1;
+  $form_state['values']['submit'] = 'Render as html';
+  $form_state['values']['op'] = 'Render as html';
+  $form_state['values']['form_id'] = '_html_export_job_page';
+
+  $form_state['build_info'] = array('args' => array(), 'form_id' => $form_state['values']['form_id'], 'files' => array('menu' => 'sites/all/modules/html_export/html_export.pages.inc'));
+
+
+  $form_state['values'][''] = '';
+  $form_state['values'][''] = '';
+
+  [form_build_id] => form-Ip5fne-HDPLhmt2qOXGl1mj2Y4_AqGdiTZdHD4BRANs
+  [form_token] => XTCjVWwkSL85D-a8Pda-aXWWBpMgcb1c9hZbOUvcUUs
+*/
+
+ // drupal_form_submit($form_state['values']['form_id'], $form_state);
+
+
+  require_once(drupal_get_path('module', 'html_export') . '/html_export.pages.inc');
+
+  // Grab paths defined in html_export interface and manual render.
+  // $rkstatic_paths = _rkstatic_export_custom_paths();
+  $html_export_other_paths = explode("\n", variable_get('html_export_other_paths'));
+
+
+  // Merge all paths into one array for batch job.
+  // $paths = array_merge($rkstatic_paths, $html_export_other_paths);
+  $paths = $html_export_other_paths;
+
+  sort($paths);
+
+// watchdog('rk', 'paths <pre>' . print_r($paths, true) . '</pre>');
+
+  // Grab dom removal items as per html_export config.
+  $dom_remove = explode("\n", variable_get('html_export_dom_remove', ''));
+
+  // Give defaults to other variables for batch job.
+  $anonymous = TRUE; // Render as anonymous user.
+  $front_found = TRUE; // Only makes sense to have <front> in list of rendered pages.
+  $render_errors = 1; // Do not render pages returning 403, 404, 500 etc.
+
+  // $export_path = 'export' . REQUEST_TIME; // $dir . '/' . $export_folder; ex. 'sites/default/files/html_export' . '/' . 'export1409041696'
+  // $export_path = variable_get('file_' . file_default_scheme() . '_path', conf_path() . '/files') . '/html_export' . '/' . 'export' . REQUEST_TIME;
+  $export_path = variable_get('file_' . file_default_scheme() . '_path', conf_path() . '/files') . '/html_export' . '/export' . REQUEST_TIME;
+  $uid = 0; // 0 is anonymous user.
+  $format = 'none'; // None means save files in sites/default/files/html_export rather than as a tar.
+
+
+  // Function html_export_render_pages builds asset_list in this context array.
+  // $context = array();
+  // $context['sandbox']['progress'] = 0;
+  // $context['sandbox']['max'] = count($paths);
+  // $context['results']['paths'] = array();
+  // $context['results']['asset_list'] = array();
+
+  // Copy/paste $batch array definition from html_export.pages.inc
+  $batch = array(
+    'operations' => array(
+      array('html_export_render_pages', array($paths, $export_path, $dom_remove, $anonymous, $front_found, $render_errors)),
+      array('html_export_copy_all_resources', array($export_path)),
+      array('html_export_cleanup', array($export_path, $uid, $format)),
+    ),
+    'finished' => 'html_export_finished',
+    'title' => t('Processing html export'),
+    'init_message' => t('HTML export is starting.'),
+    'progress_message' => t('Processed @current out of @total.'),
+    'error_message' => t('HTML export has encountered an error.'),
+    'file' => drupal_get_path('module', 'html_export') . '/html_export.pages.inc',
+  );
+
+  // From https://www.drupal.org/node/988192#comment-7132232
+  batch_set($batch);
+  $batch = &batch_get();
+  $batch['progressive'] = FALSE;
+  batch_process(NULL);
+}
+
+/*
+Sample $form_state array.
+Array
+(
+    [build_info] => Array
+        (
+            [args] => Array
+                (
+                )
+
+            [form_id] => _html_export_job_page
+            [files] => Array
+                (
+                    [menu] => sites/all/modules/html_export/html_export.pages.inc
+                )
+
+        )
+
+    [temporary] => Array
+        (
+        )
+
+    [programmed] => 
+    [programmed_bypass_access_check] => 1
+    [cache] => 
+    [rebuild] => 
+    [rebuild_info] => Array
+        (
+        )
+
+    [redirect] => 
+    [submitted] => 1
+    [executed] => 
+    [method] => post
+    [groups] => Array
+        (
+        )
+
+    [buttons] => Array
+        (
+            [0] => Array
+                (
+                    [#type] => submit
+                    [#value] => Render as html
+                    [#input] => 1
+                    [#name] => op
+                    [#button_type] => submit
+                    [#executes_submit_callback] => 1
+                    [#limit_validation_errors] => 
+                    [#process] => Array
+                        (
+                            [0] => ajax_process_form
+                        )
+
+                    [#theme_wrappers] => Array
+                        (
+                            [0] => button
+                        )
+
+                    [#defaults_loaded] => 1
+                    [#tree] => 
+                    [#parents] => Array
+                        (
+                            [0] => submit
+                        )
+
+                    [#array_parents] => Array
+                        (
+                            [0] => submit
+                        )
+
+                    [#weight] => 0.006
+                    [#processed] => 
+                    [#required] => 
+                    [#attributes] => Array
+                        (
+                        )
+
+                    [#title_display] => before
+                    [#id] => edit-submit
+                )
+
+        )
+
+    [input] => Array
+        (
+            [path_selector] => Array
+                (
+                    [0] => rkstatic_custom_paths
+                )
+
+            [html_export_other_paths] => 
+et
+et/kontakt
+et/uudised
+et/riigikantselei-ulesanded-ja-struktuur
+et/riigisekretar-heiki-loot
+et/arengukavad
+et/teabenoue
+et/isikuandmete-tootlemine
+et/valitsuse-toetamine/valitsuse-tegevusprogramm
+et/konkurentsivoime-kava-eesti-2020
+et/saastev-areng
+et/kaasamine
+et/teadus-ja-arendusnoukogu
+et/euroopa-liit
+et/eesti-riigi-sumboolika
+et/julgeoleku-ja-riigikaitse-koordineerimine
+et/valitsuse-tookorraldus
+et/avaliku-teenistuse-tippjuhid
+et/eesti-vabariik-100
+et/eelinfo
+et/uuringud
+en
+en/contact
+en/news
+            [html_export_dom_remove] => #block-vp-core-vp-core-accessibility-help-link
+.language-switcher-locale-url
+#search-block-form
+#block-search-form
+.views-exposed-form
+ul.pager
+#zone-top .block-menu-block
+ul.widget-icon-menu.vertical-push-small
+#region-sidebar-second
+section.block-views
+            [html_export_format] => none
+            [render_errors] => 1
+            [anonymous] => 1
+            [op] => Render as html
+            [form_build_id] => form-uyeK7SknP54Bfzbm79h5XqlnM6a4mVezjKlpF4mKujg
+            [form_token] => XTCjVWwkSL85D-a8Pda-aXWWBpMgcb1c9hZbOUvcUUs
+            [form_id] => _html_export_job_page
+        )
+
+    [values] => Array
+        (
+            [path_selector] => Array
+                (
+                    [rkstatic_custom_paths] => rkstatic_custom_paths
+                )
+
+            [html_export_other_paths] => 
+et
+et/kontakt
+et/uudised
+et/riigikantselei-ulesanded-ja-struktuur
+et/riigisekretar-heiki-loot
+et/arengukavad
+et/teabenoue
+et/isikuandmete-tootlemine
+et/valitsuse-toetamine/valitsuse-tegevusprogramm
+et/konkurentsivoime-kava-eesti-2020
+et/saastev-areng
+et/kaasamine
+et/teadus-ja-arendusnoukogu
+et/euroopa-liit
+et/eesti-riigi-sumboolika
+et/julgeoleku-ja-riigikaitse-koordineerimine
+et/valitsuse-tookorraldus
+et/avaliku-teenistuse-tippjuhid
+et/eesti-vabariik-100
+et/eelinfo
+et/uuringud
+en
+en/contact
+en/news
+            [html_export_dom_remove] => #block-vp-core-vp-core-accessibility-help-link
+.language-switcher-locale-url
+#search-block-form
+#block-search-form
+.views-exposed-form
+ul.pager
+#zone-top .block-menu-block
+ul.widget-icon-menu.vertical-push-small
+#region-sidebar-second
+section.block-views
+            [html_export_format] => none
+            [render_errors] => 1
+            [anonymous] => 1
+            [submit] => Render as html
+            [form_build_id] => form-Ip5fne-HDPLhmt2qOXGl1mj2Y4_AqGdiTZdHD4BRANs
+            [form_token] => XTCjVWwkSL85D-a8Pda-aXWWBpMgcb1c9hZbOUvcUUs
+            [form_id] => _html_export_job_page
+            [op] => Render as html
+        )
+
+    [complete form] => Array
+        (
+            [path_selector] => Array
+                (
+                    [#type] => select
+                    [#multiple] => 1
+                    [#title] => Path selectors
+                    [#description] => Select paths to combine in formulating a list of paths in which to use for export.
+                    [#options] => Array
+                        (
+                            [core_all_nodes] => Core: All nodes
+                            [core_all_paths] => Core: all menu paths
+                            [views_ddos] => Views: ddos
+                            [rkstatic_custom_paths] => Riigikantselei static: Custom Paths
+                        )
+
+                    [#required] => 1
+                    [#input] => 1
+                    [#process] => Array
+                        (
+                            [0] => form_process_select
+                            [1] => ajax_process_form
+                        )
+
+                    [#theme] => select
+                    [#theme_wrappers] => Array
+                        (
+                            [0] => form_element
+                        )
+
+                    [#pre_render] => Array
+                        (
+                            [0] => ctools_dependent_pre_render
+                        )
+
+                    [#defaults_loaded] => 1
+                    [#tree] => 
+                    [#parents] => Array
+                        (
+                            [0] => path_selector
+                        )
+
+                    [#array_parents] => Array
+                        (
+                            [0] => path_selector
+                        )
+
+                    [#weight] => 0
+                    [#processed] => 1
+                    [#attributes] => Array
+                        (
+                            [multiple] => multiple
+                            [name] => path_selector[]
+                        )
+
+                    [#title_display] => before
+                    [#id] => edit-path-selector
+                    [#name] => path_selector
+                    [#value] => Array
+                        (
+                            [rkstatic_custom_paths] => rkstatic_custom_paths
+                        )
+
+                    [#needs_validation] => 1
+                    [#ajax_processed] => 
+                    [#sorted] => 1
+                    [#validated] => 1
+                )
+
+            [html_export_other_paths] => Array
+                (
+                    [#type] => textarea
+                    [#title] => Other paths to export
+                    [#description] => Provide one path per line of additional paths to export.
+                    [#default_value] => 
+et
+et/kontakt
+et/uudised
+et/riigikantselei-ulesanded-ja-struktuur
+et/riigisekretar-heiki-loot
+et/arengukavad
+et/teabenoue
+et/isikuandmete-tootlemine
+et/valitsuse-toetamine/valitsuse-tegevusprogramm
+et/konkurentsivoime-kava-eesti-2020
+et/saastev-areng
+et/kaasamine
+et/teadus-ja-arendusnoukogu
+et/euroopa-liit
+et/eesti-riigi-sumboolika
+et/julgeoleku-ja-riigikaitse-koordineerimine
+et/valitsuse-tookorraldus
+et/avaliku-teenistuse-tippjuhid
+et/eesti-vabariik-100
+et/eelinfo
+et/uuringud
+en
+en/contact
+en/news
+                    [#process] => Array
+                        (
+                            [0] => imce_textarea
+                            [1] => ajax_process_form
+                        )
+
+                    [#input] => 1
+                    [#cols] => 60
+                    [#rows] => 5
+                    [#resizable] => 1
+                    [#theme] => textarea
+                    [#theme_wrappers] => Array
+                        (
+                            [0] => form_element
+                        )
+
+                    [#pre_render] => Array
+                        (
+                            [0] => ctools_dependent_pre_render
+                        )
+
+                    [#defaults_loaded] => 1
+                    [#tree] => 
+                    [#parents] => Array
+                        (
+                            [0] => html_export_other_paths
+                        )
+
+                    [#array_parents] => Array
+                        (
+                            [0] => html_export_other_paths
+                        )
+
+                    [#weight] => 0.001
+                    [#processed] => 1
+                    [#required] => 
+                    [#attributes] => Array
+                        (
+                        )
+
+                    [#title_display] => before
+                    [#id] => edit-html-export-other-paths
+                    [#name] => html_export_other_paths
+                    [#value] => 
+et
+et/kontakt
+et/uudised
+et/riigikantselei-ulesanded-ja-struktuur
+et/riigisekretar-heiki-loot
+et/arengukavad
+et/teabenoue
+et/isikuandmete-tootlemine
+et/valitsuse-toetamine/valitsuse-tegevusprogramm
+et/konkurentsivoime-kava-eesti-2020
+et/saastev-areng
+et/kaasamine
+et/teadus-ja-arendusnoukogu
+et/euroopa-liit
+et/eesti-riigi-sumboolika
+et/julgeoleku-ja-riigikaitse-koordineerimine
+et/valitsuse-tookorraldus
+et/avaliku-teenistuse-tippjuhid
+et/eesti-vabariik-100
+et/eelinfo
+et/uuringud
+en
+en/contact
+en/news
+                    [#needs_validation] => 1
+                    [#ajax_processed] => 
+                    [#sorted] => 1
+                    [#validated] => 1
+                )
+
+            [html_export_dom_remove] => Array
+                (
+                    [#type] => textarea
+                    [#title] => Advanced dom removal
+                    [#description] => Supply a css style selector to target the removal of. This is especially useful for removing things like the admin toolbar, tabs, or other elements you don't want to have exported. Add one selector per line.
+                    [#default_value] => #block-vp-core-vp-core-accessibility-help-link
+.language-switcher-locale-url
+#search-block-form
+#block-search-form
+.views-exposed-form
+ul.pager
+#zone-top .block-menu-block
+ul.widget-icon-menu.vertical-push-small
+#region-sidebar-second
+section.block-views
+                    [#process] => Array
+                        (
+                            [0] => imce_textarea
+                            [1] => ajax_process_form
+                        )
+
+                    [#input] => 1
+                    [#cols] => 60
+                    [#rows] => 5
+                    [#resizable] => 1
+                    [#theme] => textarea
+                    [#theme_wrappers] => Array
+                        (
+                            [0] => form_element
+                        )
+
+                    [#pre_render] => Array
+                        (
+                            [0] => ctools_dependent_pre_render
+                        )
+
+                    [#defaults_loaded] => 1
+                    [#tree] => 
+                    [#parents] => Array
+                        (
+                            [0] => html_export_dom_remove
+                        )
+
+                    [#array_parents] => Array
+                        (
+                            [0] => html_export_dom_remove
+                        )
+
+                    [#weight] => 0.002
+                    [#processed] => 1
+                    [#required] => 
+                    [#attributes] => Array
+                        (
+                        )
+
+                    [#title_display] => before
+                    [#id] => edit-html-export-dom-remove
+                    [#name] => html_export_dom_remove
+                    [#value] => #block-vp-core-vp-core-accessibility-help-link
+.language-switcher-locale-url
+#search-block-form
+#block-search-form
+.views-exposed-form
+ul.pager
+#zone-top .block-menu-block
+ul.widget-icon-menu.vertical-push-small
+#region-sidebar-second
+section.block-views
+                    [#needs_validation] => 1
+                    [#ajax_processed] => 
+                    [#sorted] => 1
+                    [#validated] => 1
+                )
+
+            [html_export_format] => Array
+                (
+                    [#type] => select
+                    [#title] => Packaging format
+                    [#description] => What would you like to do with your format?
+                    [#options] => Array
+                        (
+                            [] => - Vali -
+                            [none] => Leave in files folder
+                            [tar_download] => Tar export for download
+                        )
+
+                    [#required] => 1
+                    [#input] => 1
+                    [#multiple] => 
+                    [#process] => Array
+                        (
+                            [0] => form_process_select
+                            [1] => ajax_process_form
+                        )
+
+                    [#theme] => select
+                    [#theme_wrappers] => Array
+                        (
+                            [0] => form_element
+                        )
+
+                    [#pre_render] => Array
+                        (
+                            [0] => ctools_dependent_pre_render
+                        )
+
+                    [#defaults_loaded] => 1
+                    [#tree] => 
+                    [#parents] => Array
+                        (
+                            [0] => html_export_format
+                        )
+
+                    [#array_parents] => Array
+                        (
+                            [0] => html_export_format
+                        )
+
+                    [#weight] => 0.003
+                    [#processed] => 1
+                    [#attributes] => Array
+                        (
+                        )
+
+                    [#title_display] => before
+                    [#id] => edit-html-export-format
+                    [#name] => html_export_format
+                    [#value] => none
+                    [#needs_validation] => 1
+                    [#empty_value] => 
+                    [#empty_option] => - Vali -
+                    [#ajax_processed] => 
+                    [#sorted] => 1
+                    [#validated] => 1
+                )
+
+            [render_errors] => Array
+                (
+                    [#type] => checkbox
+                    [#default_value] => 1
+                    [#title] => Don't export paths returning errors
+                    [#description] => If a path request returns a 403, 404 or 500 error then don't export that page.
+                    [#input] => 1
+                    [#return_value] => 1
+                    [#theme] => checkbox
+                    [#process] => Array
+                        (
+                            [0] => form_process_checkbox
+                            [1] => ajax_process_form
+                        )
+
+                    [#theme_wrappers] => Array
+                        (
+                            [0] => form_element
+                        )
+
+                    [#title_display] => after
+                    [#pre_render] => Array
+                        (
+                            [0] => ctools_dependent_pre_render
+                        )
+
+                    [#defaults_loaded] => 1
+                    [#tree] => 
+                    [#parents] => Array
+                        (
+                            [0] => render_errors
+                        )
+
+                    [#array_parents] => Array
+                        (
+                            [0] => render_errors
+                        )
+
+                    [#weight] => 0.004
+                    [#processed] => 1
+                    [#required] => 
+                    [#attributes] => Array
+                        (
+                        )
+
+                    [#id] => edit-render-errors
+                    [#name] => render_errors
+                    [#value] => 1
+                    [#needs_validation] => 1
+                    [#checked] => 1
+                    [#ajax_processed] => 
+                    [#sorted] => 1
+                    [#validated] => 1
+                )
+
+            [anonymous] => Array
+                (
+                    [#type] => checkbox
+                    [#default_value] => 1
+                    [#title] => Render as anonymous
+                    [#description] => Render pages via an external request so that they are treated as anonymous.
+                    [#input] => 1
+                    [#return_value] => 1
+                    [#theme] => checkbox
+                    [#process] => Array
+                        (
+                            [0] => form_process_checkbox
+                            [1] => ajax_process_form
+                        )
+
+                    [#theme_wrappers] => Array
+                        (
+                            [0] => form_element
+                        )
+
+                    [#title_display] => after
+                    [#pre_render] => Array
+                        (
+                            [0] => ctools_dependent_pre_render
+                        )
+
+                    [#defaults_loaded] => 1
+                    [#tree] => 
+                    [#parents] => Array
+                        (
+                            [0] => anonymous
+                        )
+
+                    [#array_parents] => Array
+                        (
+                            [0] => anonymous
+                        )
+
+                    [#weight] => 0.005
+                    [#processed] => 1
+                    [#required] => 
+                    [#attributes] => Array
+                        (
+                        )
+
+                    [#id] => edit-anonymous
+                    [#name] => anonymous
+                    [#value] => 1
+                    [#needs_validation] => 1
+                    [#checked] => 1
+                    [#ajax_processed] => 
+                    [#sorted] => 1
+                    [#validated] => 1
+                )
+
+            [submit] => Array
+                (
+                    [#type] => submit
+                    [#value] => Render as html
+                    [#input] => 1
+                    [#name] => op
+                    [#button_type] => submit
+                    [#executes_submit_callback] => 1
+                    [#limit_validation_errors] => 
+                    [#process] => Array
+                        (
+                            [0] => ajax_process_form
+                        )
+
+                    [#theme_wrappers] => Array
+                        (
+                            [0] => button
+                        )
+
+                    [#defaults_loaded] => 1
+                    [#tree] => 
+                    [#parents] => Array
+                        (
+                            [0] => submit
+                        )
+
+                    [#array_parents] => Array
+                        (
+                            [0] => submit
+                        )
+
+                    [#weight] => 0.006
+                    [#processed] => 1
+                    [#required] => 
+                    [#attributes] => Array
+                        (
+                        )
+
+                    [#title_display] => before
+                    [#id] => edit-submit
+                    [#ajax_processed] => 
+                    [#sorted] => 1
+                    [#validated] => 1
+                )
+
+            [#form_id] => _html_export_job_page
+            [#type] => form
+            [#build_id] => form-Ip5fne-HDPLhmt2qOXGl1mj2Y4_AqGdiTZdHD4BRANs
+            [form_build_id] => Array
+                (
+                    [#type] => hidden
+                    [#value] => form-Ip5fne-HDPLhmt2qOXGl1mj2Y4_AqGdiTZdHD4BRANs
+                    [#id] => form-Ip5fne-HDPLhmt2qOXGl1mj2Y4_AqGdiTZdHD4BRANs
+                    [#name] => form_build_id
+                    [#parents] => Array
+                        (
+                            [0] => form_build_id
+                        )
+
+                    [#input] => 1
+                    [#process] => Array
+                        (
+                            [0] => ajax_process_form
+                        )
+
+                    [#theme] => hidden
+                    [#defaults_loaded] => 1
+                    [#tree] => 
+                    [#array_parents] => Array
+                        (
+                            [0] => form_build_id
+                        )
+
+                    [#weight] => 0.007
+                    [#processed] => 1
+                    [#required] => 
+                    [#attributes] => Array
+                        (
+                        )
+
+                    [#title_display] => before
+                    [#ajax_processed] => 
+                    [#sorted] => 1
+                    [#validated] => 1
+                )
+
+            [#token] => _html_export_job_page
+            [form_token] => Array
+                (
+                    [#id] => edit-html-export-job-page-form-token
+                    [#type] => token
+                    [#default_value] => XTCjVWwkSL85D-a8Pda-aXWWBpMgcb1c9hZbOUvcUUs
+                    [#parents] => Array
+                        (
+                            [0] => form_token
+                        )
+
+                    [#input] => 1
+                    [#theme] => hidden
+                    [#defaults_loaded] => 1
+                    [#tree] => 
+                    [#array_parents] => Array
+                        (
+                            [0] => form_token
+                        )
+
+                    [#weight] => 0.008
+                    [#processed] => 
+                    [#required] => 
+                    [#attributes] => Array
+                        (
+                        )
+
+                    [#title_display] => before
+                    [#name] => form_token
+                    [#value] => XTCjVWwkSL85D-a8Pda-aXWWBpMgcb1c9hZbOUvcUUs
+                    [#needs_validation] => 1
+                    [#sorted] => 1
+                    [#validated] => 1
+                )
+
+            [form_id] => Array
+                (
+                    [#type] => hidden
+                    [#value] => _html_export_job_page
+                    [#id] => edit-html-export-job-page
+                    [#parents] => Array
+                        (
+                            [0] => form_id
+                        )
+
+                    [#input] => 1
+                    [#process] => Array
+                        (
+                            [0] => ajax_process_form
+                        )
+
+                    [#theme] => hidden
+                    [#defaults_loaded] => 1
+                    [#tree] => 
+                    [#array_parents] => Array
+                        (
+                            [0] => form_id
+                        )
+
+                    [#weight] => 0.009
+                    [#processed] => 1
+                    [#required] => 
+                    [#attributes] => Array
+                        (
+                        )
+
+                    [#title_display] => before
+                    [#name] => form_id
+                    [#ajax_processed] => 
+                    [#sorted] => 1
+                    [#validated] => 1
+                )
+
+            [#id] => -html-export-job-page
+            [#method] => post
+            [#action] => /et/html_export
+            [#theme_wrappers] => Array
+                (
+                    [0] => form
+                )
+
+            [#tree] => 
+            [#parents] => Array
+                (
+                )
+
+            [#validate] => Array
+                (
+                )
+
+            [#submit] => Array
+                (
+                    [0] => _html_export_job_page_submit
+                )
+
+            [#theme] => Array
+                (
+                    [0] => _html_export_job_page
+                )
+
+            [#processed] => 
+            [#defaults_loaded] => 1
+            [#required] => 
+            [#attributes] => Array
+                (
+                )
+
+            [#title_display] => before
+            [#array_parents] => Array
+                (
+                )
+
+            [#sorted] => 1
+            [#validated] => 1
+        )
+
+    [process_input] => 1
+    [triggering_element] => Array
+        (
+            [#type] => submit
+            [#value] => Render as html
+            [#input] => 1
+            [#name] => op
+            [#button_type] => submit
+            [#executes_submit_callback] => 1
+            [#limit_validation_errors] => 
+            [#process] => Array
+                (
+                    [0] => ajax_process_form
+                )
+
+            [#theme_wrappers] => Array
+                (
+                    [0] => button
+                )
+
+            [#defaults_loaded] => 1
+            [#tree] => 
+            [#parents] => Array
+                (
+                    [0] => submit
+                )
+
+            [#array_parents] => Array
+                (
+                    [0] => submit
+                )
+
+            [#weight] => 0.006
+            [#processed] => 
+            [#required] => 
+            [#attributes] => Array
+                (
+                )
+
+            [#title_display] => before
+            [#id] => edit-submit
+        )
+
+    [clicked_button] => Array
+        (
+            [#type] => submit
+            [#value] => Render as html
+            [#input] => 1
+            [#name] => op
+            [#button_type] => submit
+            [#executes_submit_callback] => 1
+            [#limit_validation_errors] => 
+            [#process] => Array
+                (
+                    [0] => ajax_process_form
+                )
+
+            [#theme_wrappers] => Array
+                (
+                    [0] => button
+                )
+
+            [#defaults_loaded] => 1
+            [#tree] => 
+            [#parents] => Array
+                (
+                    [0] => submit
+                )
+
+            [#array_parents] => Array
+                (
+                    [0] => submit
+                )
+
+            [#weight] => 0.006
+            [#processed] => 
+            [#required] => 
+            [#attributes] => Array
+                (
+                )
+
+            [#title_display] => before
+            [#id] => edit-submit
+        )
+
+)
+*/
+
+
+function rkstatic_donothing() {
+  return;
+}

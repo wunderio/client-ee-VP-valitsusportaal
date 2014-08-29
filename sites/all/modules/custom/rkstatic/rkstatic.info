@@ -1,0 +1,7 @@
+name = Riigikantselei Staatiline
+description = "Moodul staatilise versiooni ehitamiseks."
+package = Riigikantselei
+core = 7.x
+
+dependencies[] = html_export
+configure = admin/config/rkstatic
