@@ -50,9 +50,16 @@ $handler->display->display_options['exposed_form']['options']['exposed_sorts_lab
 $handler->display->display_options['exposed_form']['options']['sort_asc_label'] = 'Kasvav';
 $handler->display->display_options['exposed_form']['options']['sort_desc_label'] = 'Kahanev';
 $handler->display->display_options['pager']['type'] = 'some';
-$handler->display->display_options['pager']['options']['items_per_page'] = '50';
+$handler->display->display_options['pager']['options']['items_per_page'] = '30';
 $handler->display->display_options['pager']['options']['offset'] = '0';
 $handler->display->display_options['style_plugin'] = 'table';
+/* Väli: Sisu: Nid */
+$handler->display->display_options['fields']['nid']['id'] = 'nid';
+$handler->display->display_options['fields']['nid']['table'] = 'node';
+$handler->display->display_options['fields']['nid']['field'] = 'nid';
+$handler->display->display_options['fields']['nid']['label'] = '';
+$handler->display->display_options['fields']['nid']['exclude'] = TRUE;
+$handler->display->display_options['fields']['nid']['element_label_colon'] = FALSE;
 /* Väli: Sisu: Tee */
 $handler->display->display_options['fields']['path']['id'] = 'path';
 $handler->display->display_options['fields']['path']['table'] = 'node';
@@ -76,13 +83,14 @@ $handler->display->display_options['filters']['language']['id'] = 'language';
 $handler->display->display_options['filters']['language']['table'] = 'node';
 $handler->display->display_options['filters']['language']['field'] = 'language';
 $handler->display->display_options['filters']['language']['value'] = array(
-  '***CURRENT_LANGUAGE***' => '***CURRENT_LANGUAGE***',
+  'et' => 'et',
 );
 $handler->display->display_options['filters']['language']['group'] = 1;
 
 /* Display: Page */
 $handler = $view->new_display('page', 'Page', 'page');
 $handler->display->display_options['path'] = 'getddos';
+
 
 /* End copy/paste */
 
