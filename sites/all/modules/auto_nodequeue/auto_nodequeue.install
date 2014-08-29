@@ -1,12 +1,12 @@
 <?php
-// $Id$
+
 /**
  * @file
  * Install, uninstall and update functions
  */
 
 /**
- * Implementation of hook_schema().
+ * Implements hook_schema().
  */
 function auto_nodequeue_schema() {
   $schema = array();
