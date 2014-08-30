@@ -110,14 +110,14 @@ function rkstatic_settings($form, &$form_state) {
 
   $form = array();
 
-  $form['rkstatic_switch'] = array(
+  /* $form['rkstatic_switch'] = array(
     '#type' => 'checkbox',
     '#title' => t('Turn on Riigikantselei static functionality'),
     '#default_value' => variable_get('rkstatic_switch', 0),
     '#description' => t('Default on/off switch for module.'),
   );
 
-  /* $form['rkstatic_paths'] = array(
+  $form['rkstatic_paths'] = array(
     '#type' => 'textarea',
     '#title' => t('Paths to save statically'),
     '#default_value' => variable_get('rkstatic_paths', 'et'),
@@ -276,6 +276,7 @@ function _rkstatic_export_custom_paths() {
 
   $news_aliases = array();
   foreach ($view->result as $key => $value) {
+    // Forcing language to be included.
     $news_aliases[] = 'et/' . drupal_get_path_alias('node/' . $value->nid);
   }
   
@@ -291,18 +292,15 @@ function _rkstatic_export_custom_paths() {
   // $menu_links = array();
     foreach ($menu_links as $key => $menu) {
       if (strstr($menu['link_path'], 'node/') !== FALSE) {
+        // Forcing language to be included.
         $menu_aliases[] = 'et/' . drupal_get_path_alias($menu['link_path']);
       }
     }
   }
   
+  // Add in the menu aliases, if this options was selected on settings page.
+  $result = (isset($menu_aliases)) ? array_merge($menu_aliases, $news_aliases) : $news_aliases;
 
-  $result = (variable_get('rkstatic_build_from_menu_links', 0) == 1) ? array_merge($menu_aliases, $news_aliases) : $news_aliases;
-
-
-// watchdog('rk', 'result matsoo <pre>' . print_r($result, true) . '</pre>');
-//@todo. remove empty result array
-// $result = array();
   return $result;
 }
 

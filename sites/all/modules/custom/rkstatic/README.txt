@@ -6,7 +6,7 @@ Moodul staatilise versiooni ehitamiseks.
 See (rkstatic) moodul lisab HTML export "Path selectors" kasti uut valikut: "Riigikantselei static: Custom Paths"
 
 
-2. Dom removal elemendid.
+2. Dom removal elemendid. (siin mõned soovitused, täiendage ise)
 #block-vp-core-vp-core-accessibility-help-link
 .language-switcher-locale-url
 #search-block-form
@@ -93,5 +93,3 @@ $handler->display->display_options['path'] = 'getddos';
 
 
 /* End copy/paste */
-
-
