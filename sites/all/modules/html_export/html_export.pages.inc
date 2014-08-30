@@ -226,8 +226,6 @@ function html_export_render_pages($paths, $export_path, $dom_remove, $anonymous,
     $data = _html_export_get_page_data($paths[$active], $anonymous, $render_errors);
     // locate all the resources used to make this page and copy them
     _html_export_copy_resources($data, $export_path, $context);
-//@todo. delete watchdog. mm
-watchdog('rk', 'context <pre>' . print_r($context, true) . '</pre>');
     // allow projects to process page data
     drupal_alter('html_export_data', $data, $paths, $paths[$active], $dom_remove);
     // prepare to save file by creating folders for path
@@ -279,8 +277,6 @@ function html_export_copy_all_resources($export_path, &$context) {
   $count = 0;
   $active_copy_id = $context['sandbox']['active_copy_id'];
   while ($count < HTML_EXPORT_FILE_PROCESS_LIMIT && $active_copy_id < $context['sandbox']['max']) {
-// @todo. delete watchdog. mm
-watchdog('rk', 'call _html_export_copy_file ' . $context['results']['asset_list'][$active_copy_id]);
     _html_export_copy_file($context['results']['asset_list'][$active_copy_id], $export_path, $context);
     // Update our progress information.
     $context['message'] = t('Now copying %file', array('%file' => $context['results']['asset_list'][$active_copy_id]));
@@ -348,7 +344,6 @@ function _html_export_copy_resources($data, $export_path, &$context) {
       }
     }
   }
-
   // assets to copy, need to filter out base path
   foreach ($asset_list as $key => $file) {
     // only replace first occurance as this will be base path
@@ -383,7 +378,6 @@ function _html_export_copy_file($source, $export_path, &$context) {
       _html_export_deep_file_copy($deepcopy, $export_path . $folder_path, $context);
     }
     $context['results']['files'][$source] = $source;
-
     return copy($source, $export_path . '/' . $source);
   }
 }
