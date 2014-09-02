@@ -17,9 +17,12 @@ ul.pager
 ul.widget-icon-menu.vertical-push-small
 #region-sidebar-second
 section.block-views
+.page-contact div.ui-dialog
 
+3. Settings page on olemas. (et/admin/config/rkstatic/settings)
+NB: Kui mingi AJAX HTTP viga html_export käivitamisel, siis ilmselt on kontakti lehe ehitamine liiga mahukas. Selleks on vaja AJUTISELT sisse lülitada "Suppress contact pop-ups". See väldib kontakt lehel pop-up'ide ehitamine.
 
-3. Vajab vaade (View) nimega "ddos". Vaade ise listib viimast X (nt 50) uudist. html_export teeb neist staatilisi versioone ka.
+4. Vajab vaade (View) nimega "ddos". Vaade ise listib viimast X (nt 50) uudist. html_export teeb neist staatilisi versioone ka.
 
 ddos impordiks (/et/admin/structure/views/import):
 

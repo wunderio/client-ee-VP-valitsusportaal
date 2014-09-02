@@ -72,7 +72,16 @@ foreach ($rows as &$row) {
         <?php endforeach; ?>
       </tr>
       <?php
-        $node = node_load((int)$result[$row_count]->nid);
+
+        // This is a workaround to allow static building of contact page.
+        if (variable_get('rkstatic_kill_contact_popup', 0) == 1) {
+          // Force $node to be false so dialogues do not get built.
+          $node = FALSE;
+        }
+        else {           
+          $node = node_load((int)$result[$row_count]->nid);          
+        }
+
         $node_view = '';
         if ($node !== FALSE) {
           $node_view = node_view($node);

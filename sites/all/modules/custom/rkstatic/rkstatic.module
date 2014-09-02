@@ -147,7 +147,14 @@ function rkstatic_settings($form, &$form_state) {
     '#title' => t('Copy print.css'),
     '#default_value' => variable_get('rkstatic_copy_printcss', 1),
     '#description' => t('VP_theme has print.css file that gets called from static.'),
-  );  
+  );
+
+  $form['rkstatic_kill_contact_popup'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Suppress contact pop-ups'),
+    '#default_value' => variable_get('rkstatic_kill_contact_popup', 0),
+    '#description' => t('Contact page hidden dialogues are not needed for static version. Suppress them temporarily but do not forget to uncheck this after the static site is made!'),
+  );   
 
   return system_settings_form($form);
 }
@@ -311,7 +318,7 @@ function rkstatic_html_export_data_alter(&$data, $paths, $active_path_count, $do
         $links->href = null;
         $links->tag = "span";
     }
-  } 
+  }
 
 
   // Get rid of <a> in node sub-pages.
