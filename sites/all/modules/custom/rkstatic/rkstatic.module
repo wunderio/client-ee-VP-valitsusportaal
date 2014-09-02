@@ -68,38 +68,7 @@ function rkstatic_menu() {
     'weight' => 10,
   );
 
-  /*$items['admin/config/rkstatic/createstatic'] = array(
-    'title' => 'Riigikantselei Build Static Pages',
-    'description' => t('Run process to create static pages for ddos.'),
-    'page callback' => 'rkstatic_createstatic',
-    // 'page arguments' => array('rkstatic_settings'),
-    'access arguments' => array('admin rkstatic'),
-    'type' => MENU_NORMAL_ITEM,
-    'weight' => 10,
-  );*/  
-
   return $items;
-}
-
-
-/**
- * Page callback from hook_menu().
- */
-function rkstatic_createstatic() {
-  // Build static pages, ready for ddos.
-  drupal_set_message(t('@todo. Magically create static version of site here.'));
-}
-
-
-/**
- * Implements hook_exit().
- */
-function rkstatic_exit() {
-
-  // Testing to see best way to save html statically.
-  // Kind of works, but need to get all the css/js/img files too.
-  // $data = ob_get_contents();
-  // watchdog('rk', $data);
 }
 
 
@@ -165,6 +134,20 @@ function rkstatic_settings($form, &$form_state) {
     '#default_value' => variable_get('rkstatic_copy_img', 1),
     '#description' => t('/profiles/vp_profile/theme/vp_theme/img has all sorts of images that we may need.'),
   );  
+  
+  $form['rkstatic_clean_contact_links'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Clean up links on contact page'),
+    '#default_value' => variable_get('rkstatic_clean_contact_links', 0),
+    '#description' => t('Get rid of links that open contact pop-ups for workers.'),
+  );
+
+  $form['rkstatic_copy_printcss'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Copy print.css'),
+    '#default_value' => variable_get('rkstatic_copy_printcss', 1),
+    '#description' => t('VP_theme has print.css file that gets called from static.'),
+  );  
 
   return system_settings_form($form);
 }
@@ -176,9 +159,7 @@ function rkstatic_settings($form, &$form_state) {
  */
 function rkstatic_html_export_add_path_provider_alter(&$path_provders) {
   $path_provders['rkstatic_custom_paths']['title'] = 'Riigikantselei static: Custom Paths';
-  $path_provders['rkstatic_custom_paths']['callback'] = '_rkstatic_export_custom_paths';
-  // watchdog('rk', 'rkstatic_html_export_add_path_provider_alter() <pre>' . print_r($path_provders, true) . '</pre>');  
-
+  $path_provders['rkstatic_custom_paths']['callback'] = '_rkstatic_export_custom_paths';  
 }
 
 function rkstatic_html_export_add_path_provider() {
@@ -190,20 +171,17 @@ function rkstatic_html_export_add_path_provider() {
  * Implementation of hook_html_export_asset_list_alter().
  */
 function rkstatic_html_export_asset_list_alter(&$asset_list) {
-  // watchdog('rk', 'asset list alter <pre>' . print_r($asset_list, true) . '</pre>');
 
   // @todo. Not sure if this is the right place. But we should grab aggregated
   // css files and save them as resources locally. It seems the html_export module
   // just assumes it will access css/js files from original domain / web server.
 
-  foreach ($asset_list as $key => $value) {    
+  /* foreach ($asset_list as $key => $value) {    
     // Get rid of add this js.
     if (strstr($key, 'addthis') !== FALSE) {
-// watchdog('rk', 'add this <pre>' . $key . ' xxx ' . $value . '</pre>');
-      // unset($asset_list[$key]);
-// watchdog('rk', 'after unset asset list alter <pre>' . print_r($asset_list, true) . '</pre>');
+      unset($asset_list[$key]);
     }
-  }
+  } */
 }
 
 
@@ -220,8 +198,6 @@ function rkstatic_html_export_asset_list_alter(&$asset_list) {
  *   array of dom elements to be removed.
  */
 function rkstatic_html_export_data_alter(&$data, $paths, $active_path_count, $dom_remove) {
-  // data is the html of the page to work with
-  // watchdog('rk', 'rkstatic_html_export_data_alter <pre>' . print_r($paths, true) . '</pre> ' . $active_path_count . '<pre>' . print_r($dom_remove, true) . '</pre>');
   // Create a DOM object.
   $html_obj = new simple_html_dom();
   // Load HTML from a string.
@@ -278,45 +254,39 @@ function rkstatic_html_export_data_alter(&$data, $paths, $active_path_count, $do
     _rkstatic_recurse_copy($imgsrc, $imgdst);    
   }
 
+  $copy_printcss = variable_get('rkstatic_copy_printcss', 1);
+  if ($copy_printcss) { // 
+    $printcsssrc = $_SERVER['DOCUMENT_ROOT'] . '/profiles/vp_profile/themes/vp_theme/css';
+    $printcssdst = $_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/profiles/vp_profile/themes/vp_theme/css';
+
+    // Make the vp_profile themecss folders here.
+    if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/profiles/vp_profile/themes/vp_theme/css')) {      
+      mkdir($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/profiles/vp_profile/themes/vp_theme/css', 0755, true);
+    }        
+  
+    // Single file, use regular copy function.
+    copy($printcsssrc . '/print.css', $printcssdst . '/print.css');
+  }  
 
   // Live site will have https.
   $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://';
 
-  foreach ($html_obj->find('link') as $link) {
+  $arr_find = array('link', 'script');
+  foreach ($arr_find as $tag) {
+    foreach ($html_obj->find($tag) as $link) {
 
-    if (($link->href != '' || $link->src != '') && strpos($link->href, 'googleapis') == 0) {
+      if (($link->href != '' || $link->src != '') && strpos($link->href, 'googleapis') == 0) {
 
-      if (strlen($link->href) > 0) {
-        $source = str_replace($protocol . $_SERVER['HTTP_HOST'] . '/', $protocol . variable_get('rkstatic_static_subdomain') . '/', $link->href);
-      }
-      else { // Assume src.
-        $source = str_replace($protocol . $_SERVER['HTTP_HOST'] . '/', $protocol . variable_get('rkstatic_static_subdomain') . '/', $link->src);
-      }
-
-// watchdog('rk', 'source (after) ' . $source);
-
-      /*$folders = scandir($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export');
-      // watchdog('rk', 'folders <pre>' . print_r($folders, true) . '</pre>');
-      if (strpos($source, '.css') !== FALSE) {
-        $filename = array_pop(explode('/', $source));
-        $activefolder = array_pop($folders);
-        $subfolder = $_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/sites/default/files/css/' . $filename;
-
-        // Create folder path if necessary and then create css file.
-        if (file_exists($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/sites/default/files/css')) {
-          $file_copied = copy($_SERVER['DOCUMENT_ROOT'] . $source, $subfolder);
+        if (strlen($link->href) > 0) {
+          $link->href = str_replace($protocol . $_SERVER['HTTP_HOST'] . '/', $protocol . variable_get('rkstatic_static_subdomain') . '/', $link->href);
         }
-        else  {
-          mkdir($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/sites/default/files/css', 0755, true);
-          $file_copied = copy($_SERVER['DOCUMENT_ROOT'] . $source, $subfolder);
+        else { // Assume src.
+          $link->src = str_replace($protocol . $_SERVER['HTTP_HOST'] . '/', $protocol . variable_get('rkstatic_static_subdomain') . '/', $link->src);
         }
 
-        if (!$file_copied) {
-          watchdog('rk', 'copy error ' . $subfolder);
-        } 
-      }*/
-    }
-  }  
+      }
+    }      
+  }
 
   if (variable_get('rkstatic_use_crisis_header', 0) == 1) {
     // Put ddos warning into head.
@@ -329,12 +299,12 @@ function rkstatic_html_export_data_alter(&$data, $paths, $active_path_count, $do
 
   // @todo. Should we make all anchors, src, href values absolute?
   // foreach ($html_obj->find('a') as $links) {
-    // $links->href = 'http://staatiline.riigikantselei.ee' . $links->href;
+    // $links->href = $protocol . variable_get('rkstatic_static_subdomain') . $links->href;
   // }
 
   // Get rid of <a> tags for kontakt page.
-  if (strstr($active_path_count, 'kontakt') !== FALSE || strstr($active_path_count, 'contact') !== FALSE) {
-
+  $clean_contact_links = variable_get('rkstatic_clean_contact_links', 0);
+  if ($clean_contact_links && (strstr($active_path_count, 'kontakt') !== FALSE || strstr($active_path_count, 'contact') !== FALSE)) {
     // Remove all plain text fragments.
     foreach ($html_obj->find('div.view-contact a') as $links) {
         // @todo. Get all simple dom clean-up done.
@@ -356,12 +326,20 @@ function rkstatic_html_export_data_alter(&$data, $paths, $active_path_count, $do
 
   // }
 
-
   $data = $html_obj->save();
 
-// watchdog('rk', 'server host ' . $_SERVER['HTTP_HOST']);
-  // Trying to get rid of absolute paths to resources in html.
-  //$data = str_replace('http://' . $_SERVER['HTTP_HOST'], '', $data);
+  // Last-ditch, carpet bomb cleaning. We do not want ..//s7.addthis or ..//fonts.googleapis.
+  $data = str_replace("../../../../..//fonts.googleapis", $protocol . 'fonts.googleapis', $data);
+  $data = str_replace("../../../..//fonts.googleapis", $protocol . 'fonts.googleapis', $data);
+  $data = str_replace("../../..//fonts.googleapis", $protocol . 'fonts.googleapis', $data);
+  $data = str_replace("../..//fonts.googleapis", $protocol . 'fonts.googleapis', $data);
+  $data = str_replace("..//fonts.googleapis", $protocol . 'fonts.googleapis', $data);
+  $data = str_replace("../../../../..//s7.addthis", $protocol . 's7.addthis', $data);
+  $data = str_replace("../../../..//s7.addthis", $protocol . 's7.addthis', $data);
+  $data = str_replace("../../..//s7.addthis", $protocol . 's7.addthis', $data);
+  $data = str_replace("../..//s7.addthis", $protocol . 's7.addthis', $data);
+  $data = str_replace("..//s7.addthis", $protocol . 's7.addthis', $data);  
+  // $data = str_replace($protocol . $_SERVER['HTTP_HOST'] . '/', $protocol . variable_get('rkstatic_static_subdomain') . '/', $data);
 
   // Release resources to avoid memory leak in some versions.
   $html_obj->clear();
@@ -402,18 +380,11 @@ function _rkstatic_export_custom_paths() {
   $news_aliases = array();
   foreach ($view->result as $key => $value) {
     $news_aliases[] = 'et/' . drupal_get_path_alias('node/' . $value->nid);
-  }
-  
-  // $menu_items = menu_tree_all_data('main-menu', NULL, 3);
-// watchdog('rk', count($menu_items) . ' menu_items matsoo <pre>' . print_r($menu_items, true) . '</pre>');
+  }  
 
   if (variable_get('rkstatic_build_from_menu_links', 0) == 1) {
-    $menu_links = menu_load_links('main-menu'); // 1130, 1139
-// @todo. remove watchdog.
-// watchdog('rk', count($menu_links) . ' menu_links matsoo <pre>' . print_r($menu_links, true) . '</pre>');
+    $menu_links = menu_load_links('main-menu'); 
 
-
-  // $menu_links = array();
     foreach ($menu_links as $key => $menu) {
       if (strstr($menu['link_path'], 'node/') !== FALSE) {
         $menu_aliases[] = 'et/' . drupal_get_path_alias($menu['link_path']);
