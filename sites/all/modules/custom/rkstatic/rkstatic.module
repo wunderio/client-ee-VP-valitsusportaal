@@ -158,6 +158,13 @@ function rkstatic_settings($form, &$form_state) {
     '#default_value' => variable_get('rkstatic_static_subdomain', 'staatiline.riigikantselei.ee'),
     '#description' => t('The domain for the static site. Used in building absolute links. ex. static.valitsus.ee. You do not need the http://'),
   );
+  
+  $form['rkstatic_copy_img'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Copy vp_profile images'),
+    '#default_value' => variable_get('rkstatic_copy_img', 1),
+    '#description' => t('/profiles/vp_profile/theme/vp_theme/img has all sorts of images that we may need.'),
+  );  
 
   return system_settings_form($form);
 }
@@ -185,11 +192,15 @@ function rkstatic_html_export_add_path_provider() {
 function rkstatic_html_export_asset_list_alter(&$asset_list) {
   // watchdog('rk', 'asset list alter <pre>' . print_r($asset_list, true) . '</pre>');
 
+  // @todo. Not sure if this is the right place. But we should grab aggregated
+  // css files and save them as resources locally. It seems the html_export module
+  // just assumes it will access css/js files from original domain / web server.
+
   foreach ($asset_list as $key => $value) {    
     // Get rid of add this js.
     if (strstr($key, 'addthis') !== FALSE) {
 // watchdog('rk', 'add this <pre>' . $key . ' xxx ' . $value . '</pre>');
-      unset($asset_list[$key]);
+      // unset($asset_list[$key]);
 // watchdog('rk', 'after unset asset list alter <pre>' . print_r($asset_list, true) . '</pre>');
     }
   }
@@ -210,12 +221,102 @@ function rkstatic_html_export_asset_list_alter(&$asset_list) {
  */
 function rkstatic_html_export_data_alter(&$data, $paths, $active_path_count, $dom_remove) {
   // data is the html of the page to work with
-  // watchdog('rk', 'I just blue myself. <pre>' . print_r($paths, true) . '</pre> ' . $active_path_count . '<pre>' . print_r($dom_remove, true) . '</pre>');
-
+  // watchdog('rk', 'rkstatic_html_export_data_alter <pre>' . print_r($paths, true) . '</pre> ' . $active_path_count . '<pre>' . print_r($dom_remove, true) . '</pre>');
   // Create a DOM object.
   $html_obj = new simple_html_dom();
   // Load HTML from a string.
   $html_obj->load($data);
+
+  // Tuimalt kopeeri kõik preprocess css / js.
+  $folders = scandir($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export');
+  $activefolder = array_pop($folders);
+  $csssrc = $_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/css';
+  $cssdst = $_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/sites/default/files/css';
+  $jssrc = $_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/js';
+  $jsdst = $_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/sites/default/files/js';
+
+  // Make the css and js folders here.
+  if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/sites/default/files/css')) {    
+    mkdir($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/sites/default/files/css', 0755, true);
+  }
+  if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/sites/default/files/js')) {    
+    mkdir($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/sites/default/files/js', 0755, true);
+  }
+  if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/sites/default/files/js/wysiwyg')) {    
+    mkdir($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/sites/default/files/js/wysiwyg', 0755, true);
+  }
+
+  // Copy preprocessed css files.
+  _rkstatic_recurse_copy($csssrc, $cssdst);
+  // Copy preprocessed js files.
+  _rkstatic_recurse_copy($jssrc, $jsdst);  
+
+  // @todo. Kopeeri teema img failid ka? Add conditional for settings.
+  $copy_img = variable_get('rkstatic_copy_img', 1);
+  if ($copy_img) { // 
+    $imgsrc = $_SERVER['DOCUMENT_ROOT'] . '/profiles/vp_profile/themes/vp_theme/img';
+    $imgdst = $_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/profiles/vp_profile/themes/vp_theme/img';
+
+    // Make the vp_profile img folders here.
+    if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/profiles/vp_profile/themes/vp_theme/img/10-global')) {      
+      mkdir($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/profiles/vp_profile/themes/vp_theme/img/10-global', 0755, true);
+    }
+    if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/profiles/vp_profile/themes/vp_theme/img/20-default')) {      
+      mkdir($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/profiles/vp_profile/themes/vp_theme/img/20-default', 0755, true);
+    }
+    if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/profiles/vp_profile/themes/vp_theme/img/30-tablet')) {
+      mkdir($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/profiles/vp_profile/themes/vp_theme/img/30-tablet', 0755, true);      
+    }
+    if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/profiles/vp_profile/themes/vp_theme/img/40-desktop')) {      
+      mkdir($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/profiles/vp_profile/themes/vp_theme/img/40-desktop', 0755, true);
+    }
+    if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/profiles/vp_profile/themes/vp_theme/img/example-content')) {      
+      mkdir($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/profiles/vp_profile/themes/vp_theme/img/example-content', 0755, true);
+    } 
+
+    // Copy img files.
+    _rkstatic_recurse_copy($imgsrc, $imgdst);    
+  }
+
+
+  // Live site will have https.
+  $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://';
+
+  foreach ($html_obj->find('link') as $link) {
+
+    if (($link->href != '' || $link->src != '') && strpos($link->href, 'googleapis') == 0) {
+
+      if (strlen($link->href) > 0) {
+        $source = str_replace($protocol . $_SERVER['HTTP_HOST'] . '/', $protocol . variable_get('rkstatic_static_subdomain') . '/', $link->href);
+      }
+      else { // Assume src.
+        $source = str_replace($protocol . $_SERVER['HTTP_HOST'] . '/', $protocol . variable_get('rkstatic_static_subdomain') . '/', $link->src);
+      }
+
+// watchdog('rk', 'source (after) ' . $source);
+
+      /*$folders = scandir($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export');
+      // watchdog('rk', 'folders <pre>' . print_r($folders, true) . '</pre>');
+      if (strpos($source, '.css') !== FALSE) {
+        $filename = array_pop(explode('/', $source));
+        $activefolder = array_pop($folders);
+        $subfolder = $_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/sites/default/files/css/' . $filename;
+
+        // Create folder path if necessary and then create css file.
+        if (file_exists($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/sites/default/files/css')) {
+          $file_copied = copy($_SERVER['DOCUMENT_ROOT'] . $source, $subfolder);
+        }
+        else  {
+          mkdir($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/sites/default/files/css', 0755, true);
+          $file_copied = copy($_SERVER['DOCUMENT_ROOT'] . $source, $subfolder);
+        }
+
+        if (!$file_copied) {
+          watchdog('rk', 'copy error ' . $subfolder);
+        } 
+      }*/
+    }
+  }  
 
   if (variable_get('rkstatic_use_crisis_header', 0) == 1) {
     // Put ddos warning into head.
@@ -226,7 +327,7 @@ function rkstatic_html_export_data_alter(&$data, $paths, $active_path_count, $do
     }
   }
 
-  // Make all anchors absolute.
+  // @todo. Should we make all anchors, src, href values absolute?
   // foreach ($html_obj->find('a') as $links) {
     // $links->href = 'http://staatiline.riigikantselei.ee' . $links->href;
   // }
@@ -255,7 +356,12 @@ function rkstatic_html_export_data_alter(&$data, $paths, $active_path_count, $do
 
   // }
 
+
   $data = $html_obj->save();
+
+// watchdog('rk', 'server host ' . $_SERVER['HTTP_HOST']);
+  // Trying to get rid of absolute paths to resources in html.
+  //$data = str_replace('http://' . $_SERVER['HTTP_HOST'], '', $data);
 
   // Release resources to avoid memory leak in some versions.
   $html_obj->clear();
@@ -263,6 +369,25 @@ function rkstatic_html_export_data_alter(&$data, $paths, $active_path_count, $do
  
 }
 
+
+/**
+ * From http://php.net/manual/en/function.copy.php comments.
+ */
+function _rkstatic_recurse_copy($src, $dst) { 
+    $dir = opendir($src); 
+    // mkdir($dst, 0755, true); 
+    while(false !== ( $file = readdir($dir)) ) { 
+        if (( $file != '.' ) && ( $file != '..' )) { 
+            if ( is_dir($src . '/' . $file) ) { 
+                _rkstatic_recurse_copy($src . '/' . $file, $dst . '/' . $file);
+            } 
+            else { 
+                copy($src . '/' . $file,$dst . '/' . $file); 
+            } 
+        } 
+    } 
+    closedir($dir); 
+}
 
 
 /**
@@ -276,7 +401,6 @@ function _rkstatic_export_custom_paths() {
 
   $news_aliases = array();
   foreach ($view->result as $key => $value) {
-    // Forcing language to be included.
     $news_aliases[] = 'et/' . drupal_get_path_alias('node/' . $value->nid);
   }
   
@@ -292,13 +416,12 @@ function _rkstatic_export_custom_paths() {
   // $menu_links = array();
     foreach ($menu_links as $key => $menu) {
       if (strstr($menu['link_path'], 'node/') !== FALSE) {
-        // Forcing language to be included.
         $menu_aliases[] = 'et/' . drupal_get_path_alias($menu['link_path']);
       }
     }
   }
-  
-  // Add in the menu aliases, if this options was selected on settings page.
+
+  // Add in the menu aliases if they were selected.
   $result = (isset($menu_aliases)) ? array_merge($menu_aliases, $news_aliases) : $news_aliases;
 
   return $result;
@@ -345,6 +468,9 @@ function _rkstatic_run_html_export_batch() {
 
  // drupal_form_submit($form_state['values']['form_id'], $form_state);
 
+  // @todo and test. Manually turn off preprocessors for css and js?
+  variable_set('preprocess_css', 0);
+  variable_set('preprocess_css', 0);
 
   require_once(drupal_get_path('module', 'html_export') . '/html_export.pages.inc');
 
@@ -403,6 +529,10 @@ function _rkstatic_run_html_export_batch() {
   $batch = &batch_get();
   $batch['progressive'] = FALSE;
   batch_process(NULL);
+
+  // @todo and test. Manually turn back on preprocessors for css and js?
+  variable_set('preprocess_css', 1);
+  variable_set('preprocess_css', 1);
 }
 
 /*

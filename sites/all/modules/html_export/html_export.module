@@ -231,12 +231,25 @@ function html_export_html_export_data_alter(&$data, $paths, $active_path, $dom_r
     $alias = drupal_get_path_alias($path);
     // seems odd but ensures that its not part of another string
     // and is instead the end of a resource
+
+// @todo. mm. Hack alert! "et" path is changing the end of rel="stylesheet" to rel="stylesheet/index.html".
+// Temporarily change stylesheet to stylesheets and then change back again after path str_replace done.
+$data = str_replace('stylesheet', 'stylesheets', $data);
+
     $data = str_replace($path . '"', $path . '/index.html"', $data);
     $data = str_replace($path . "'", $path . "/index.html'", $data);
     if ($alias != $path) {
       $data = str_replace($alias . '"', $path . '/index.html"', $data);
       $data = str_replace($alias . "'", $path . "/index.html'", $data);
     }
+
+// @todo. Change back from stylesheets to stylesheet. mm.
+$data = str_replace('stylesheets', 'stylesheet', $data);
+// @todo. Forcing static domain in here. mm.
+$static = variable_get('rkstatic_static_subdomain');
+$protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://';
+$data = str_replace('href="' . $protocol . $_SERVER['HTTP_HOST'] . '/', 'href="' . $protocol . $static . '/', $data);
+
   }
   // clean up for potentially full paths goofed up
   $data = str_replace('/index.html/', '/', $data);

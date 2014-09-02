@@ -208,7 +208,7 @@ function html_export_render_pages($paths, $export_path, $dom_remove, $anonymous,
       // locate all the resources used to make this page and copy them
       _html_export_copy_resources($data, $export_path, $context);
       // special alter that doesn't rewrite base path
-      drupal_alter('html_export_data', $data, $paths, $front, $dom_remove, FALSE);
+      drupal_alter('html_export_data', $data, $paths, $front, $dom_remove, FALSE); 
       // open a writable file at that location
       if ($file = fopen($export_path . '/index.html', 'w')) {
         fwrite($file, $data);
@@ -357,7 +357,7 @@ function _html_export_copy_resources($data, $export_path, &$context) {
 /**
  * Helper function to deep copy all resource files
  */
-function _html_export_copy_file($source, $export_path, &$context) {
+function _html_export_copy_file($source, $export_path, &$context) {  
   // Simple copy for a file
   if (is_file($source)) {
     // split to build the folder structure
@@ -386,6 +386,8 @@ function _html_export_copy_file($source, $export_path, &$context) {
  * Helper function to deep copy all resource files
  */
 function _html_export_deep_file_copy($source, $dest, &$context) {
+  // @todo. mm. When css is passed in, why is it not being copied somewhere?
+  
   // Simple copy for a file
   if (is_file($source)) {
     $context['results']['files'][$source] = $source;
