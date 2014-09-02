@@ -100,6 +100,57 @@ function rkstatic_settings($form, &$form_state) {
     '#description' => t('Default is "ddos". This view needs to return a list of paths for pages we wish to save statically.'),
   );
 
+  $form['rkstatic_static_subdomain'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Static domain'),
+    '#default_value' => variable_get('rkstatic_static_subdomain', 'staatiline.riigikantselei.ee'),
+    '#description' => t('The domain for the static site. Used in building absolute links. ex. static.valitsus.ee. You do not need the http://'),
+  );
+
+  $form['copy'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Resource Copying'),
+    '#description' => t('The html_export process may fail to copy all resources over to static folder. This sweeps through some important subfolders and copies their contents.'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  );   
+  
+  $form['copy']['rkstatic_copy_img'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Copy vp_profile images'),
+    '#default_value' => variable_get('rkstatic_copy_img', 1),
+    '#description' => t('/profiles/vp_profile/theme/vp_theme/img has all sorts of images that we may need.'),
+  );  
+
+  $form['copy']['rkstatic_copy_printcss'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Copy print.css'),
+    '#default_value' => variable_get('rkstatic_copy_printcss', 1),
+    '#description' => t('VP_theme has print.css file that gets called from static.'),
+  );
+
+  $form['kontakt'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Contact Page'),
+    '#description' => t('HTML clean-up options for contact page.'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  );  
+
+  $form['kontakt']['rkstatic_clean_contact_links'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Clean up links on contact page'),
+    '#default_value' => variable_get('rkstatic_clean_contact_links', 0),
+    '#description' => t('Get rid of links that open contact pop-ups for workers.'),
+  );  
+
+  $form['kontakt']['rkstatic_kill_contact_popup'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Suppress contact pop-ups'),
+    '#default_value' => variable_get('rkstatic_kill_contact_popup', 0),
+    '#description' => t('Contact page hidden dialogues are not needed for static version. Suppress them temporarily but do not forget to uncheck this after the static site is made!'),
+  );
+
   $form['rkstatic_build_from_menu_links'] = array(
     '#type' => 'checkbox',
     '#title' => t('Include main menu links'),
@@ -107,54 +158,42 @@ function rkstatic_settings($form, &$form_state) {
     '#description' => t('Include all main menu links in static build.'),
   );
 
-  $form['rkstatic_use_crisis_header'] = array(
+  $form['crisis'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('HTML Insert'),
+    '#description' => t('Insert custom html into top of each static page.'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  );  
+
+  $form['crisis']['rkstatic_use_crisis_header'] = array(
     '#type' => 'checkbox',
     '#title' => t('Use Crisis Header'),
     '#default_value' => variable_get('rkstatic_use_crisis_header', 0),
     '#description' => t('Insert html code into header of each static page.'),
   );
 
-  $form['rkstatic_crisis_header'] = array(
+  $form['crisis']['rkstatic_crisis_header'] = array(
     '#type' => 'textarea',
     '#title' => t('Crisis Header HTML'),
     '#default_value' => variable_get('rkstatic_crisis_header', ''),
     '#description' => t('Option to include special header on all static pages.'),
-  );
-
-  $form['rkstatic_static_subdomain'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Static domain'),
-    '#default_value' => variable_get('rkstatic_static_subdomain', 'staatiline.riigikantselei.ee'),
-    '#description' => t('The domain for the static site. Used in building absolute links. ex. static.valitsus.ee. You do not need the http://'),
-  );
-  
-  $form['rkstatic_copy_img'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Copy vp_profile images'),
-    '#default_value' => variable_get('rkstatic_copy_img', 1),
-    '#description' => t('/profiles/vp_profile/theme/vp_theme/img has all sorts of images that we may need.'),
   );  
-  
-  $form['rkstatic_clean_contact_links'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Clean up links on contact page'),
-    '#default_value' => variable_get('rkstatic_clean_contact_links', 0),
-    '#description' => t('Get rid of links that open contact pop-ups for workers.'),
-  );
 
-  $form['rkstatic_copy_printcss'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Copy print.css'),
-    '#default_value' => variable_get('rkstatic_copy_printcss', 1),
-    '#description' => t('VP_theme has print.css file that gets called from static.'),
-  );
+  $form['debug'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Debug'),
+    '#description' => t('Allow for rk watchdog statements during execution.'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  ); 
 
-  $form['rkstatic_kill_contact_popup'] = array(
+  $form['debug']['rkstatic_debug'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Suppress contact pop-ups'),
-    '#default_value' => variable_get('rkstatic_kill_contact_popup', 0),
-    '#description' => t('Contact page hidden dialogues are not needed for static version. Suppress them temporarily but do not forget to uncheck this after the static site is made!'),
-  );   
+    '#title' => t('Turn on debugging'),
+    '#default_value' => variable_get('rkstatic_debug', 0),
+    '#description' => t('Flag debugging on or off.'),
+  );    
 
   return system_settings_form($form);
 }
@@ -276,7 +315,11 @@ function rkstatic_html_export_data_alter(&$data, $paths, $active_path_count, $do
   }  
 
   // Live site will have https.
-  $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://';
+  $protocol = (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on') ? 'https://' : 'http://';
+
+  if (variable_get('rkstatic_debug', 0) == 1) {
+    watchdog('rk', 'protocol ' . $protocol . ' SERVER[HTTPS]: ' . $_SERVER['HTTPS']);    
+  }
 
   $arr_find = array('link', 'script');
   foreach ($arr_find as $tag) {
@@ -286,9 +329,15 @@ function rkstatic_html_export_data_alter(&$data, $paths, $active_path_count, $do
 
         if (strlen($link->href) > 0) {
           $link->href = str_replace($protocol . $_SERVER['HTTP_HOST'] . '/', $protocol . variable_get('rkstatic_static_subdomain') . '/', $link->href);
+              if (variable_get('rkstatic_debug', 0) == 1) {
+                watchdog('rk', 'link->href ' . $link->href . ' protocol . _SERVER[HTTP_HOST] ' . $protocol . $_SERVER['HTTP_HOST']);
+              }          
         }
         else { // Assume src.
           $link->src = str_replace($protocol . $_SERVER['HTTP_HOST'] . '/', $protocol . variable_get('rkstatic_static_subdomain') . '/', $link->src);
+              if (variable_get('rkstatic_debug', 0) == 1) {
+                watchdog('rk', 'link->src ' . $link->src . ' protocol . _SERVER[HTTP_HOST] ' . $protocol . $_SERVER['HTTP_HOST']);
+              }      
         }
 
       }
