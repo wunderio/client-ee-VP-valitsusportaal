@@ -68,7 +68,38 @@ function rk_abi_menu() {
     'weight' => 10,
   );
 
+
+  /* $items['admin/config/rkabi/createstatic'] = array(
+    'title' => 'Riigikantselei Build Static Pages',
+    'description' => t('Run process to create static pages for ddos.'),
+    'page callback' => 'rk_abi_createstatic',
+    // 'page arguments' => array('rk_abi_settings'),
+    'access arguments' => array('admin riigikantselei abimoodul'),
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 10,
+  );*/ 
+
   return $items;
+}
+
+
+/**
+ * Page callback from hook_menu().
+ */
+function rk_abi_createstatic() {
+  // Build static pages, ready for ddos.
+}
+
+
+/**
+ * Implements hook_exit().
+ */
+function rk_abi_exit() {
+
+  // Testing to see best way to save html statically.
+  // Kind of works, but need to get all the css/js/img files too.
+  // $data = ob_get_contents();
+  // watchdog('rk', $data);
 }
 
 
@@ -79,25 +110,58 @@ function rk_abi_settings($form, &$form_state) {
 
   $form = array();
 
-  $form['rk_abi_contact_email_obfuscate'] = array(
+  $form['rk_abi_contact_email_obfuscate_punkt'] = array(
     '#type' => 'checkbox',
     '#title' => t('Obfuscate emails on Contact pages'),
-    '#default_value' => variable_get('rk_abi_contact_email_obfuscate', 0),
+    '#default_value' => variable_get('rk_abi_contact_email_obfuscate_punkt', 0),
     '#description' => t('The contact views output needs to be plain text, not email link for this to work.'),
   );
 
-  $form['rk_abi_newsletter_use_social_media_insert_block'] = array(
+  $form['rk_abi_social_media_fieldset'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Social Media in Newsletters'),
+    '#description' => t('Insert a pre-defined block into the footer of your newsletters.'),
+  );  
+
+  $form['rk_abi_social_media_fieldset']['rk_abi_newsletter_use_social_media_insert_block'] = array(
     '#type' => 'checkbox',
     '#title' => t('Use social media footer block in newsletters'),
     '#default_value' => variable_get('rk_abi_newsletter_use_social_media_insert_block', 0),
     '#description' => t('Turn on/off the insertion of this block at the bottom of newsletters.'),
   );
 
-  $form['rk_abi_newsletter_social_media_insert'] = array(
+  $form['rk_abi_social_media_fieldset']['rk_abi_newsletter_social_media_insert'] = array(
     '#type' => 'textfield',
     '#title' => t('Block ID of social media footer block'),
     '#default_value' => variable_get('rk_abi_newsletter_social_media_insert', 0),
     '#description' => t('This block can be created and used in the footer of press releases and other newsletters. You can use it to include links to Facebook, Twitter etc. You have to create this block by hand. Blocks are found at Structure -> Blocks. The Block ID is the 2nd last (often integer) value in the URL when you hover over the block\'s "configure" link. Ex. The number "14" in admin/structure/block/manage/block/<strong><u>14</u></strong>/configure'),
+  );
+
+  $form['rk_abi_use_custom_category_specific_template'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use category-specific newsletter template'),
+    '#default_value' => variable_get('rk_abi_use_custom_category_specific_template', 0),
+    '#description' => t('Uses hook_theme_registry_alter to give different path for newsletter template location.'),
+  );
+
+  $form['rk_abi_clean_old_crap_fieldset'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Stripping inline styles for old content'),
+    '#description' => t('Settings used by custom Riigikantselei input filter. The input filter is turned on/off for each text format.'),
+  );  
+
+  $form['rk_abi_clean_old_crap_fieldset']['rk_abi_clean_old_crap_tags'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Inline Styles Stripped for Tags'),
+    '#default_value' => variable_get('rk_abi_clean_old_crap_tags', ''),
+    '#description' => t('<p>HTML tags to clean. Leave a space between tags, do not use brackets. (ex. "p span div")</p><p>Background info: This module has a custom input filter ("Riigikantselei Remove Inline Styles from Old Content") that will get rid of inline styles from old content, ostensibly imported news articles. Here we can define the html tags that will have their inline styles stripped.</p>'),
+  );
+
+  $form['rk_abi_clean_old_crap_fieldset']['rk_abi_clean_old_crap_date'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Old Content is Before'),
+    '#default_value' => variable_get('rk_abi_clean_old_crap_date', '2014-01-01'),
+    '#description' => t('Any content with a created date earlier than this is considered old and will have inline styles stripped from defined tags.'),
   );  
 
   return system_settings_form($form);
@@ -110,11 +174,13 @@ function rk_abi_settings($form, &$form_state) {
 function rk_abi_preprocess_html(&$variables) {
 
   // Get domain name from http_host variable.
-  $arrDomain = explode('.', $_SERVER['HTTP_HOST']);
-  $index = sizeof($arrDomain) - 2;
+  if (isset($_SERVER['HTTP_HOST'])) {
+    $arrDomain = explode('.', $_SERVER['HTTP_HOST']);
+    $index = sizeof($arrDomain) - 2;
 
-  // Add domain (ex. riigikantselei) to body classes. We can hook off it to apply styles to specific sites.
-  $variables['classes_array'][] = $arrDomain[$index];
+    // Add domain (ex. riigikantselei) to body classes. We can hook off it to apply styles to specific sites.
+    $variables['classes_array'][] = $arrDomain[$index];
+  }
 }
 
 
@@ -161,4 +227,118 @@ function rk_abi_filter_info_alter(&$info) {
  */
 function rk_abi_plain_text_email($text, $filter, $format, $langcode, $cache, $cache_id) {
   return $text;
+}
+
+
+/**
+ * Implements hook_theme_registry_alter().
+ */
+function rk_abi_theme_registry_alter(&$theme_registry) {
+
+  $use_custom_template = variable_get('rk_abi_use_custom_category_specific_template', 0);
+
+// watchdog('rk', 'theme registry<br /><pre>' . print_r($theme_registry['simplenews_newsletter_body'], true) . '</pre>');  
+
+  if ($use_custom_template && 2 == 3) {
+
+    if (isset($theme_registry['simplenews_newsletter_body'])) {
+      $theme_registry['simplenews_newsletter_body']['path'] = drupal_get_path('module', 'rk_abi') . '/theme';
+    }
+
+// watchdog('rk', 'theme registry<br /><pre>' . print_r($theme_registry['simplenews_newsletter_body'], true) . '</pre>');
+
+/*
+    if (isset($theme_registry['simplenews_newsletter_body'])) {
+      $theme_registry['simplenews_newsletter_body']['path'] = drupal_get_path('module', 'rk_abi') . '/templates';
+    }
+
+    if (isset($theme_registry['simplenews_newsletter_footer'])) {
+      $theme_registry['simplenews_newsletter_footer']['path'] = drupal_get_path('module', 'rk_abi') . '/templates';
+    }
+*/
+
+
+
+
+  }
+}
+
+
+/**
+ * Implements hook_filter_info().
+ * From http://definitivedrupal.org/suggestions/how-make-custom-input-filter
+ */
+function rk_abi_filter_info() {
+  $filters['rk_abi_clean_crap'] = array(
+    'title' => t('Riigikantselei Remove Inline Styles from Old Content'),
+    'description' => t('Get rid of inline styles for old (imported) content.'),
+    'process callback' => '_rk_abi_filter_process',
+    // 'prepare callback' => '_rk_abi_filter_prepare',    
+    // 'tips callback' => '_rk_abi_filter_tips',
+    'cache' => FALSE, // Live system needs to have TRUE otherwise performance hit.
+  );
+  return $filters;
+}
+
+/**
+ * Implements filter prepare callback.
+ */
+function _rk_abi_filter_prepare() {
+}
+
+
+/**
+ * Implements filter process callback.
+ * Using to strip inline styles from old content.
+ */
+function _rk_abi_filter_process($text, $filter, $format, $langcode, $cache, $cache_id) {
+  // Load the node and then make it is old.
+  $node = node_load(arg(1));
+  if (isset($node->nid) && date('Y-m-d', $node->created) < variable_get('rk_abi_clean_old_crap_date', '2014-01-01')) {
+
+    $html_dom = filter_dom_load($text);
+
+    // Clean inline styles from these tags. @todo. Make this array configurable on settings page.    
+    $tags = explode(' ', variable_get('rk_abi_clean_old_crap_tags'));
+    foreach ($tags as $tag) {
+      $elements = $html_dom->getElementsByTagName($tag);
+      foreach ($elements as $element) {
+        if ($element->getAttribute('style') != '') {
+          $element->setAttribute('style', '');
+          $element->removeAttribute('style');
+        }
+        // Trying to get rid of xml:lang already defined php warning.
+        if ($element->getAttribute('xml:lang') != '') {
+          $element->setAttribute('xml:lang', '');
+          $element->removeAttribute('xml:lang');
+        }
+        // $element->setAttribute('lang', '');
+      }
+    }
+
+    $text = filter_dom_serialize($html_dom);
+
+  }
+
+  return trim($text);
+}
+
+
+/**
+ * Implements filter tips callback.
+ */
+function _rk_abi_filter_tips() {
+}
+
+
+/**
+ * Implements hook_menu_alter().
+ * Trying to unset "Reply" link that is displayed in each comment.
+ * We do not want people to be able to reply to indiv comments.
+ * We can always hide with css, but that doesn't disable the actual menu path
+ * like we are trying to do here. mm 8.sep.14.
+ */
+function rk_abi_menu_alter(&$items) {  
+  // $items['comment/reply/%node']['access callback'] = FALSE;
+  // watchdog('rk', 'menu alter <pre>' . print_r($items, true) . '</pre>');
 }

@@ -2,3 +2,5 @@ name = Riigikantselei Abimoodul
 description = "Koht kuhu panna custom css / js jms."
 package = Riigikantselei
 core = 7.x
+
+configure = admin/config/rkabi
