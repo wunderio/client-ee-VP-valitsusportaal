@@ -58,3 +58,8 @@ sass-watch.bat
 
 # Ignore validation htmls.
 google*.html
+
+# Ignore devel and migrate modules
+sites/all/modules/devel
+sites/all/modules/devel_themer
+sites/all/modules/migrate
