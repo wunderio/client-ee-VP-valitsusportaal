@@ -34,6 +34,10 @@ function bg_image_permission() {
     'administer background image' => array(
       'title' => t('Administer Background Image'),
     ),
+    'view all background images' => array(
+      'title' => t('View All Background Images'),
+      'description' => t('View all background images regardless of node access permissions'),
+    ),
   );
 }
 
@@ -106,6 +110,13 @@ function bg_image_settings_form($form, &$form_state) {
     '#title' => t('Exclude from Admin Pages'),
     '#description' => t('Background Images will be ignored on admin pages.'),
     '#default_value' => variable_get('bg_image_exclude_admin', 0),
+  );
+
+  $form['exclusions']['bg_image_exclude_paths'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Exclude paths'),
+    '#description' => t('Specify paths that Background Images will not be applied on. One path per line. Paths will be relative to the domain root. Do not include a preceeding "/". Use &lt;front&gt; for the front page. Wildcards can be used by specifying "*". e.g. node/*'),
+    '#default_value' => variable_get('bg_image_exclude_paths', ''),
   );
 
 
@@ -225,7 +236,7 @@ function bg_image_get_fields_for_node_type($node_type) {
   // Loop through the fields of the node type
   foreach (field_info_instances('node', $node_type) as $field_name => $field) {
     // Check that it's a media field or an image field
-    if ($all_fields[$field_name]['type'] == 'image' || $all_fields[$field_name]['type'] == 'media') {
+    if ($all_fields[$field_name]['type'] == 'image' || $all_fields[$field_name]['type'] == 'media' || $all_fields[$field_name]['type'] == 'atom_reference') {
       // Add the item to our option list
       $fields[$field_name] = $field['label'];
     }
@@ -247,7 +258,9 @@ function bg_image_get_fields_for_node_type($node_type) {
 * css 'background' property.
 *
 * @param $image_path
-*    The path of the image to use
+*    The path of the image to use. This can be either
+*      - A relative path e.g. sites/default/files/image.png
+*      - A uri: e.g. public://image.png
 *
 * @param $css_settings
 *    An array of css settings to use. Possible values are:
@@ -269,6 +282,15 @@ function bg_image_get_fields_for_node_type($node_type) {
 */
 function bg_image_add_background_image($image_path, $css_settings = array(), $image_style = NULL) {
 
+  // Skip this if we're on an excluded page.
+  if (bg_image_is_excluded()) {
+    return FALSE;
+  }
+
+  // Check if path is a stream wrapper
+  $image_uri = file_uri_scheme($image_path) ? $image_path : _bg_image_path_to_uri($image_path);
+  $image_path = file_uri_scheme($image_path) ? file_create_url($image_path) : $image_path;
+
   // Pull the default css setting if not provided.
   $selector = isset($css_settings['bg_image_selector']) ? $css_settings['bg_image_selector'] : variable_get('bg_image_selector', '');
   $bg_color = isset($css_settings['bg_image_color']) ? $css_settings['bg_image_color'] : variable_get('bg_image_color', '#FFFFFF');
@@ -278,6 +300,8 @@ function bg_image_add_background_image($image_path, $css_settings = array(), $im
   $repeat = isset($css_settings['bg_image_repeat']) ? $css_settings['bg_image_repeat'] : variable_get('bg_image_repeat', 'no-repeat');
   $important = isset($css_settings['bg_image_important']) ? $css_settings['bg_image_important'] : variable_get('bg_image_important', 1);
   $background_size = isset($css_settings['bg_image_background_size']) ? $css_settings['bg_image_background_size'] : variable_get('bg_image_background_size', '');
+  $background_size_ie8 = isset($css_settings['bg_image_background_size_ie8']) ? $css_settings['bg_image_background_size_ie8'] : variable_get('bg_image_background_size_ie8', 0);
+  $media_query = isset($css_settings['bg_image_media_query']) ? $css_settings['bg_image_media_query'] : variable_get('bg_image_media_query', 'all');
 
   // Apply an Image Style?
   $image_style = $image_style ? $image_style : variable_get('bg_image_style', '');
@@ -301,22 +325,19 @@ function bg_image_add_background_image($image_path, $css_settings = array(), $im
     $bg_size .= "-moz-background-size: $background_size $important;";
     $bg_size .= "-o-background-size: $background_size $important;";
     // IE filters to apply the cover effect
-    if ($background_size == 'cover' && variable_get('bg_image_background_size_ie8', 0))  {
+    if ($background_size == 'cover' && $background_size_ie8)  {
       $ie_bg_size = 'filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'.' . $image_path . '\', sizingMethod=\'scale\');
       -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'' .$image_path . '\', sizingMethod=\'scale\')";';
     }
   }
 
-  // See if admin pages are excluded from bg images
-  $admin = variable_get('bg_image_exclude_admin', 0) ? !path_is_admin($_GET['q']) : TRUE;
-
   // Check if we need to run this through an image style
   if ($image_style) {
-    $image_path = image_style_url($image_style, _bg_image_path_to_uri($image_path));
+    $image_path = image_style_url($image_style, $image_uri);
   }
 
   // Add the css if we have everything we need.
-  if ($selector && $image_path && $admin) {
+  if ($selector && $image_path) {
     $style = "$selector {";
     $style .= "background-color: $bg_color $important;";
     $style .= "background-image: url('$image_path') $important;";
@@ -324,8 +345,9 @@ function bg_image_add_background_image($image_path, $css_settings = array(), $im
     $style .= "background-attachment: $attachment $important;";
     $style .= "background-position: $bg_x $bg_y $important;";
     $style .= $bg_size;
+    $style .= $background_size_ie8 ? $ie_bg_size : '';
     $style .= "}";
-    drupal_add_css($style, array('type' => 'inline', 'media' => variable_get('bg_image_media_query', 'all'), 'group' => CSS_THEME));
+    drupal_add_css($style, array('type' => 'inline', 'media' => $media_query, 'group' => CSS_THEME));
     return TRUE;
   }
   else {
@@ -370,6 +392,17 @@ function bg_image_get_image_path_from_node($nid, $build_url = TRUE) {
         }
       }
     }
+    elseif (isset($fields[$field_name]) && $fields[$field_name]['type'] == 'atom_reference') {
+      if ($node->{$field_name}) {
+        $items = field_get_items('node', $node, $field_name);
+        if (isset($items[0]['sid'])) {
+          $atom = scald_atom_load($items[0]['sid']);
+          if ($atom->type == 'image') {
+            $image_path = $atom->file_source;
+          }
+        }
+      }
+    }
   }
   if ($image_path && $build_url) {
     $image_path = file_create_url($image_path);
@@ -403,8 +436,13 @@ function bg_image_add_background_image_from_node($nid, $css_settings = array(), 
     $type = variable_get('bg_image_node_type', '');
     if ($type) {
       // Generate a random nid of the configured node type
-      $nid = db_select('node')
-        ->fields('node', array('nid'))
+      $query = db_select('node');
+      // Add the node_access tag if user doesn't have permission to view all
+      // background images
+      if (!user_access('view all background images')) {
+        $query->addTag('node_access');
+      }
+      $nid = $query->fields('node', array('nid'))
         ->condition('node.type', $type)
         ->orderRandom()
         ->execute()
@@ -415,18 +453,20 @@ function bg_image_add_background_image_from_node($nid, $css_settings = array(), 
     }
   }
 
-  // Load the node so we can check it's status
-  $node = node_load($nid);
-  // Only add the image if it's published
-  if ($node->status == 1) {
-    // Get the path of the image on the node
-    $image_path = bg_image_get_image_path_from_node($nid);
-    // Add the background image
-    return bg_image_add_background_image($image_path, $css_settings);
+  if (is_numeric($nid)) {
+    // Load the node so we can check it's status
+    $node = node_load($nid);
+    // Check node access permissions
+    if (user_access('view all background images') || node_access('view', $node)) {
+      // Get the path of the image on the node
+      $image_uri = bg_image_get_image_path_from_node($nid, FALSE);
+      // Add the background image
+      return bg_image_add_background_image($image_uri, $css_settings);
+    }
   }
-  else {
-    return FALSE;
-  }
+
+  // If all else fails
+  return FALSE;
 
 }
 
@@ -474,8 +514,8 @@ function bg_image_node_options($include_nid = TRUE, $include_random = TRUE) {
     }
   }
   if (!$node_options) {
-    $node_type_path = str_replace('_', '-', $node_type);
-    drupal_set_message("You don't have any $node_type nodes created yet. You must <a href=\"/node/add/$node_type_path\">create at least one $node_type node</a> before you can assign background images to pages.",'warning');
+    $node_type_path = base_path() . 'node/add/' . str_replace('_', '-', $node_type);
+    drupal_set_message("You don't have any $node_type nodes created yet. You must <a href=\"$node_type_path\">create at least one $node_type node</a> before you can assign background images to pages.",'warning');
     return FALSE;
   }
   else {
@@ -486,6 +526,53 @@ function bg_image_node_options($include_nid = TRUE, $include_random = TRUE) {
       return $node_options;
     }
   }
+}
+
+/**
+ * Checks if a path should be excluded from background images
+ *
+ * @param  string $path
+ *         The path to check against exclusions. Will default to current path
+ *         if not provided
+ *
+ * @return boolean
+ *         TRUE if the path should be excluded or FALSE
+ */
+function bg_image_is_excluded($path = NULL) {
+
+  // Get Current Path if not provided
+  if (!$path) {
+    $path = current_path();
+  }
+
+  // Set to <front> if necessary
+  if ($path === '') {
+    $path = '<front>';
+  }
+
+  // Create an array of paths
+  $paths = array($path);
+
+  // Add alias to paths array if exists
+  if ($path != drupal_get_path_alias($path)) {
+    $paths[] = drupal_get_path_alias($path);
+  }
+
+  // Check for admin paths first
+  if (variable_get('bg_image_exclude_admin', 0) && path_is_admin($_GET['q'])) {
+    return TRUE;
+  }
+
+  // Check custom exclusions
+  if ($exclusions = variable_get('bg_image_exclude_paths', '')) {
+    foreach ($paths as $path) {
+      if (drupal_match_path($path, $exclusions)) {
+        return TRUE;
+      }
+    }
+  }
+
+  return FALSE;
 }
 
 /**

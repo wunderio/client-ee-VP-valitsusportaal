@@ -29,6 +29,9 @@ b) If you're using nodes to manage the images you can call bg_image_add_backgrou
       bg_image_attachment: (string) The attachment setting for the background image. http://www.w3schools.com/css/pr_background-attachment.asp
       bg_image_repeat: (string) The repeat settings for the background image. http://www.w3schools.com/css/pr_background-repeat.asp
       bg_image_important: (boolean) Add !important to the background property to help override any other background images added in the theme. <link to w3schools>
+      bg_image_background_size: (string) The CSS3 size property to use for the background image.
+      bg_image_background_size_ie8: (boolean) Use a workaround for IE using Internet Explorer's built-in filters (http://msdn.microsoft.com/en-us/library/ms532969%28v=vs.85%29.aspx). Sometimes it works well, sometimes it doesn't. Use at your own risk
+      bg_image_media_query: (string) The media query to use, if at all. E.G. 'all' or 'screen'.
     The default values will be used for any settings not provided.
 
 After calling the function, a css statement will be concatenated, using the path of the image on the node and the css settings provided, and added to the page:
@@ -47,7 +50,7 @@ $css_settings = array(
   'bg_image_selector' => 'body #main',
   'bg_image_color' => 'transparent',
   'bg_image_x' => 'center',
-  'bg_iamge_y' => 'center',
+  'bg_image_y' => 'center',
   'bg_image_attachment' => 'fixed',
   'bg_image_repeat' => 'no-repeat',
   'bg_image_important' => TRUE,
@@ -58,7 +61,7 @@ bg_image_add_background_image($nid, $css_settings);
 The above php code would output the following css:
 
 @code
-body #wrapper {
+body #main {
   background: transparent url(http://example.com/sites/default/files/image.jpg) fixed no-repeat center center !important;
 }
 @endcode

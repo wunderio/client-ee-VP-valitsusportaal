@@ -4,9 +4,9 @@ package = Fields
 core = 7.x
 dependencies[] = computed_field
 
-; Information added by drupal.org packaging script on 2013-04-26
-version = "7.x-1.x-dev"
+; Information added by Drupal.org packaging script on 2014-03-24
+version = "7.x-1.0"
 core = "7.x"
 project = "computed_field_tools"
-datestamp = "1366980359"
+datestamp = "1395655759"
 
