@@ -52,9 +52,18 @@
 }
 
 /* Sinised lingid */
-.front .static-fp-tab-block-2..static-fp-tab-block-2 .tab-content ul a {
+.front .static-fp-tab-block-2 .tab-content ul a {
     color: #00698C;
 }
+
+
+/* Moved from riigikantselei.ee css injector. */
+.submitted .username {display: none;}
+.view-tippjuhtide-konkursid .view-content h3 {margin-top: 2em;padding-bottom: 1em;}
+.view-tippjuhtide-konkursid .views-row {border-bottom: 1px dotted #cccccc;}
+.view-tippjuhtide-konkursid .views-row .views-field-title {padding-top: 1em;margin-bottom: 1em;}
+.view-tippjuhtide-konkursid .views-field-created {font-size: 0.9em;}
+.view-id-top_news_tabs .view-id-news_tabs_right_side .views-row.views-row-last h2 {background: none;}
 
 
 /* Media queries */
