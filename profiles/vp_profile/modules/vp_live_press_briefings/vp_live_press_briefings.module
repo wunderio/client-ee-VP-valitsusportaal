@@ -133,10 +133,10 @@ function vp_live_press_briefings_block_view($delta = '') {
           });
         });})(jQuery);', 'inline');
 
-        $block['content'] .= '<div class="import-video-stream-video-wrap clearfix">'.
+        $block['content'] .= '<div class="import-video-stream-video-wrap livestream clearfix">'.
             '<div id="import-video-stream-live"></div>'.
             '<div class="aside">' . '<a href="'.variable_get('import_video_stream_stream_url').'" class="import-video-stream-live"><img alt="" src="'.$base_url.'/'.drupal_get_path('module', 'vp_live_press_briefings').'/video.png" /></a></div>' .
-            '<div class="text">' . t('LIVE').'!<br />'.t('Watch the press conference as a live stream.') . '</div>' .
+            '<div class="text">' . t('LIVE').'!<br />'.t('Watch the press conference as a live stream.') . '</div><div class="mobiillink"><a href="http://meediaveeb.valitsus.ee/show.php">' . t('Watch live press conference') . '</a></div>' .
           '</div>'
         ;
       }
@@ -144,7 +144,7 @@ function vp_live_press_briefings_block_view($delta = '') {
         $hour_minute = explode(':', variable_get('import_video_stream_time', '00:00'));
         $block['content'] .= '<div class="import-video-stream-video-wrap starting clearfix">'.
             '<div class="aside"><span class="time-wrap"><span class="title">'.t('Live stream starts at:').'</span><span class="time"><span class="hour">'.$hour_minute[0].'</span><span class="spacer">:</span><span class="minute">'.$hour_minute[1].'</span></span></span></div>'.
-            '<div class="text">'.t('Watch the press conference as a live stream.').'</div>'.
+            '<div class="text">'.t('Watch the press conference as a live stream.').'</div><div class="mobiillink"><a href="http://meediaveeb.valitsus.ee/show.php">' . t('Watch live press conference') . '</a></div>'.
           '</div>'
         ;
       }
@@ -163,7 +163,7 @@ function vp_live_press_briefings_block_view($delta = '') {
           });
         });})(jQuery);</script>';
         $block['content'] .=
-          '<div class="import-video-stream-video-wrap clearfix">'.
+          '<div class="import-video-stream-video-wrap previous clearfix">'.
             '<div class="aside"><a href="'.variable_get('import_video_stream_youtube_url').'" class="import-video-youtube-live"><img alt="" src="'.$base_url.'/'.drupal_get_path('module', 'vp_live_press_briefings').'/video.png" /></a></div>' .
             '<div class="text">'.t('Watch the recording of the last press conference.').'</div>'.
           '</div>'
