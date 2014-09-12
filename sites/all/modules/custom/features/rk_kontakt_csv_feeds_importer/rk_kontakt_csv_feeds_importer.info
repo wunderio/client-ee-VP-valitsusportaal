@@ -1,4 +1,4 @@
-name = Kontakt CSV Feeds Importer
+name = Riigikantselei Kontakt CSV Feeds Importer
 description = Feature to create kontakt csv import
 core = 7.x
 package = Riigikantselei

@@ -1,4 +1,4 @@
-name = Eelinfo Plokk
+name = Riigikantselei Eelinfo Plokk
 description = Automatically display 2 most current eelinfo items in a block.
 core = 7.x
 package = Riigikantselei

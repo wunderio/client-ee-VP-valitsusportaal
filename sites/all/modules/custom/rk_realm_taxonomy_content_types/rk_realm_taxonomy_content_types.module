@@ -1,7 +1,0 @@
-<?php
-/**
- * @file
- * Code for the Realm Taxonomy Content Types feature.
- */
-
-include_once 'rk_realm_taxonomy_content_types.features.inc';
