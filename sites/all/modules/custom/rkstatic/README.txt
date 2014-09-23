@@ -2,6 +2,14 @@ RK Static
 
 Moodul staatilise versiooni ehitamiseks.
 
+1. Sõltuvus HTML Export moodulisse
+2. DOM eemaldamine
+3. Mooduli settings leht
+4. Cron automaatika
+5. "ddos" View definitsioon (copy/paste)
+
+########################################
+
 1. Vajab html_export moodulit. (https://www.drupal.org/project/html_export)
 See (rkstatic) moodul lisab HTML export "Path selectors" kasti uut valikut: "Riigikantselei static: Custom Paths"
 
@@ -18,13 +26,17 @@ ul.widget-icon-menu.vertical-push-small
 #region-sidebar-second
 section.block-views
 .page-contact div.ui-dialog
+.webform-client-form
+.nostatic
 
 3. Settings page on olemas. (et/admin/config/rkstatic/settings)
 NB: Kui mingi AJAX HTTP viga html_export käivitamisel, siis ilmselt on kontakti lehe ehitamine liiga mahukas. Selleks on vaja AJUTISELT sisse lülitada "Suppress contact pop-ups". See väldib kontakt lehel pop-up'ide ehitamine.
 
-4. Vajab vaade (View) nimega "ddos". Vaade ise listib viimast X (nt 50) uudist. html_export teeb neist staatilisi versioone ka.
+4. Cron automaatika - 
 
-ddos impordiks (/et/admin/structure/views/import):
+5. Vajab vaade (View) nimega "ddos". Vaade ise listib viimast X (nt 30) uudist. html_export teeb neist staatilisi versioone ka.
+
+ddos View import käib siit: /et/admin/structure/views/import
 
 /* Start copy/paste */
 
@@ -96,3 +108,4 @@ $handler->display->display_options['path'] = 'getddos';
 
 
 /* End copy/paste */
+ 
