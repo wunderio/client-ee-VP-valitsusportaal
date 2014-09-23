@@ -296,8 +296,21 @@ function html_export_tar_create($name, $contents) {
  * Helper function to pull in page data
  */
 function _html_export_get_page_data($path, $anonymous, $render_errors) {
+
   if ($anonymous) {
-    $root = $_SERVER['HTTP_ORIGIN'] . base_path();
+
+    // @todo. Hack alert! Added this conditional to replace the one original line which is now in the else statement.
+    if (module_exists('rkstatic')) {
+      // @todo. More hacking. Building protocol and domain here. mm.
+      $protocol = (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on') ? 'https://' : 'http://';
+      // Build root variable by hand with rkstatic module setting for domain. mm.
+      $root = $protocol . variable_get('rkstatic_force_http_origin') . base_path();
+    }
+    else {
+      // Original line from before conditional. mm.
+      $root = $_SERVER['HTTP_ORIGIN'] . base_path();
+    }
+    
     if (variable_get('clean_url', 0)) {
       $http = drupal_http_request($root . $path);
     }
