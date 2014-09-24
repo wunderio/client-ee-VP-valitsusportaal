@@ -190,7 +190,7 @@ function rkstatic_settings($form, &$form_state) {
   $form['cron'] = array(
     '#type' => 'fieldset',
     '#title' => t('Cron'),
-    '#description' => t('Settings to run static build only at night and not very often. Checking "Run with Cron" will display more settings.'),
+    '#description' => t('<p>Settings to run static build only at night and not very often. Checking "Run with Cron" will display more settings.</p><p>Last cron run was at @lastcron</p>', array('@lastcron' => date('Y-m-d H:i:s', variable_get('rkstatic_cron_last_run', 0)))),
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
   );
@@ -231,7 +231,7 @@ function rkstatic_settings($form, &$form_state) {
   $form['cron']['rkstatic_time_range_end'] = array(
     '#type' => 'select',
     '#title' => t('Do Not Build After (a.m.)'),
-    '#options' => array('4' => '4', '5' => '5', '6' => '6'),
+    '#options' => array('4' => '4', '5' => '5', '6' => '6', '7' => '7', '8' => '8', '9' => '9'),
     '#default_value' => variable_get('rkstatic_time_range_end', '6'),
     '#description' => t('Only do build at night, between hours of...'),
     '#states' => array(
@@ -534,13 +534,17 @@ function rkstatic_cron() {
     $night_time_end = variable_get('rkstatic_time_range_end', '6');
 
     // Array with allowed time range for night builds. (ex. Allow between 3-5 a.m.)
-    for($i = $night_time_start;$i <= $night_time_end;$i++) {
+    for($i = $night_time_start;$i < $night_time_end;$i++) { // Using <= would incorrectly include upper limit time range.
       $allowed_night_time_range[] = $i;
     }
 
     // Check that sufficient time has passed since last cron build and whether it is late at night.
-    if ($rkstatic_last_cron_build + (3600 * $min_cron_interval) <= REQUEST_TIME && in_array(date('G', REQUEST_TIME), $allowed_night_time_range)) {
+    if ($rkstatic_last_cron_build + (3600 * $min_cron_interval) <= REQUEST_TIME 
+          && in_array(date('G', REQUEST_TIME), $allowed_night_time_range)) {
+      // For logging's sake.
       watchdog('rk', t('<p>Running rkstatic build using cron. rkstatic last cron static build: ' . date('H:i:s d.m.Y', $rkstatic_last_cron_build) . '</p>'));
+
+      // RK static cron is running so update the rkstatic_cron_last_run variable.
       variable_set('rkstatic_cron_last_run', REQUEST_TIME);
 
       // Suppress contact pop-ups. They should be unsuppressed in rkstatic_cron_finished().
