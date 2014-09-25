@@ -160,9 +160,9 @@ function vp_search_form_alter(&$form, &$form_state, $form_id) {
     global $base_root;
     global $base_url;
     
-    // Casting GET to expected format. mm 25.07.2014.
-    $_GET['time-between-start'] = date('d.m.Y', strtotime($_GET['time-between-start']));
-    $_GET['time-between-end'] = date('d.m.Y', strtotime($_GET['time-between-end']));
+    // Casting GET to expected format. mm 25.07.2014. Made a bit more robust, was often inserting 01.01.1970. mm 25.09.2014.
+    $_GET['time-between-start'] = (trim($_GET['time-between-start']) != '') ? date('d.m.Y', strtotime($_GET['time-between-start'])) : '';
+    $_GET['time-between-end'] = (trim($_GET['time-between-end']) != '') ? date('d.m.Y', strtotime($_GET['time-between-end'])) : '';
 
     drupal_add_library('system', 'ui.datepicker');
     drupal_add_js('(function($){$().ready(function(){
