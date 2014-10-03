@@ -9,6 +9,10 @@
   <!--[if lt IE 9]><script src="<?php global $base_url; print $base_url; ?>/profiles/vp_profile/themes/vp_theme/js/html5.js"></script><![endif]-->
 </head>
 <body<?php print $attributes;?>>
+<noscript>
+  <h1 class="noscript"><?php print t('Please Enable JavaScript');?></h1><p class="noscript"><?php print t('This site requires JavaScript support to function properly. It appears that your web browser does not support JavaScript,
+      or you have disabled scripting.');?></p>
+</noscript>
   <div id="skip-link">
     <a href="#main-content" class="element-invisible element-focusable"><?php print t('Skip to main content'); ?></a>
     <?php print l(t('Accessibility Help'), drupal_get_normal_path('accessibility', 'en'), array('attributes' => array('class' => array('element-invisible', 'element-focusable')))); ?>
