@@ -71,9 +71,45 @@ endif;
 ?>
 <div align="center" style="background: #f6f5ef;">
   <table bgcolor="#fff" width="600" cellpadding="0" cellspacing="0" border="0" style="border: 0; border: 0 !important; background-color: #fff; width: 600px;">
+
+<?php
+
+// Figure out which newsletter this is from taxonomy id. Used in two separate conditionals so running it here once.
+$tid = $build['#node']->simplenews->tid;
+
+// @todo. Get this logo logic out of here. Consider template_preprocess_simplenews_newsletter_body().
+// First check if we are allowed to use logos at all.
+if (variable_get('rk_abi_use_custom_newsletter_logos', 0) == 1) {
+  // Get the block associated with this newsletter. The variable is set in rk_abi module settings page.
+  $logo_block_to_use = variable_get('rk_abi_logo_newsletter_' . $tid, '-1');
+
+
+  if ($logo_block_to_use != '-1') {    
+    // @todo. Check the returned block is okay before displaying it?
+    $uudiskiri_logo_block = block_block_view($logo_block_to_use);
+  ?>
+    <tr>
+      <td style="border: 0; border: 0 !important;padding: 0 0 5px 45px;"><?php print $uudiskiri_logo_block['content'];?></td>
+    </tr>
+  <?php
+  }
+  ?>
+
+<?php
+}
+?>
+
+
+<?php
+$show_site_name = variable_get('rk_abi_show_site_name_in_newsletter_' . $tid, 1);
+if ($show_site_name === 1) {
+?>  
     <tr>
       <td style="border: 0; border: 0 !important; font-size: 24px; color: #444; line-height: 24px; font-family: Tahoma, Verdana, Segoe, sans-serif; padding: 40px 0 20px 45px; "><?php print variable_get('site_name'); ?></td>
     </tr>
+<?php
+}
+?>
     <tr>
       <td align="left" bgcolor="#fff" style="background-color: #fff; border: 0; border: 0 !important; font-family: Tahoma, Verdana, Segoe, sans-serif; font-size: 13px; line-height: 20px; color: #333; padding: 0; margin: 0;">
         <div style="background: #fff; padding: 25px 45px;">
@@ -85,10 +121,10 @@ endif;
           <!-- Social Media -->
           <?php if (variable_get('rk_abi_newsletter_use_social_media_insert_block') == 1): ?>
             <?php                             
-              $block = block_block_view(variable_get('rk_abi_newsletter_social_media_insert'));             
+              $block = block_block_view(variable_get('rk_abi_newsletter_social_media_insert'));
               // @todo. Figure out how to display correct language. Do we use a preprocess hook first?
             ?>
-            <div align="left" style="background: #fff;"><?php print $block['content']; ?></div>
+            <div align="left" style="background: #fff;border: 0 !important;"><?php print $block['content']; ?></div>
           <?php endif; ?>
         </div>
       </td><!--Content-->

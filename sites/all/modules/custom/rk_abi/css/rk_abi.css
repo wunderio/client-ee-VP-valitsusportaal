@@ -71,6 +71,16 @@
 }
 
 
+/* rk_abi settings page tweaks */ 
+#rk-abi-settings div.form-item-rk-abi-use-custom-newsletter-logos {
+  margin-bottom: 1em;
+}
+
+#rk-abi-settings div.form-item-rk-abi-use-custom-newsletter-logos label {
+  font-weight: 700;
+}
+
+
 /* Media queries */
 @media screen and (min-device-width: 1024px) {
 

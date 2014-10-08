@@ -68,17 +68,6 @@ function rk_abi_menu() {
     'weight' => 10,
   );
 
-
-  /* $items['admin/config/rkabi/createstatic'] = array(
-    'title' => 'Riigikantselei Build Static Pages',
-    'description' => t('Run process to create static pages for ddos.'),
-    'page callback' => 'rk_abi_createstatic',
-    // 'page arguments' => array('rk_abi_settings'),
-    'access arguments' => array('admin riigikantselei abimoodul'),
-    'type' => MENU_NORMAL_ITEM,
-    'weight' => 10,
-  );*/ 
-
   return $items;
 }
 
@@ -110,51 +99,96 @@ function rk_abi_settings($form, &$form_state) {
 
   $form = array();
 
-  $form['rk_abi_contact_email_obfuscate_punkt'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Obfuscate emails on Contact pages'),
-    '#default_value' => variable_get('rk_abi_contact_email_obfuscate_punkt', 0),
-    '#description' => t('The contact views output needs to be plain text, not email link for this to work.'),
+  $form['rk_abi_newsletters_fieldset'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Newsletter Settings'),
+    '#description' => t('Optional blocks and functionality for newsletters.'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
   );
 
-  $form['rk_abi_social_media_fieldset'] = array(
+  $form['rk_abi_newsletters_fieldset']['rk_abi_social_media_fieldset'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Social Media in Newsletters'),
-    '#description' => t('Insert a pre-defined block into the footer of your newsletters.'),
+    '#title' => t('Social Media Block in Newsletter Footer'),
+    '#description' => t('Insert block into newsletter footer. Envisioned as place to put social media links.'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
   );  
 
-  $form['rk_abi_social_media_fieldset']['rk_abi_newsletter_use_social_media_insert_block'] = array(
+  $form['rk_abi_newsletters_fieldset']['rk_abi_social_media_fieldset']['rk_abi_newsletter_use_social_media_insert_block'] = array(
     '#type' => 'checkbox',
     '#title' => t('Use social media footer block in newsletters'),
     '#default_value' => variable_get('rk_abi_newsletter_use_social_media_insert_block', 0),
     '#description' => t('Turn on/off the insertion of this block at the bottom of newsletters.'),
   );
 
-  $form['rk_abi_social_media_fieldset']['rk_abi_newsletter_social_media_insert'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Block ID of social media footer block'),
-    '#default_value' => variable_get('rk_abi_newsletter_social_media_insert', 0),
-    '#description' => t('This block can be created and used in the footer of press releases and other newsletters. You can use it to include links to Facebook, Twitter etc. You have to create this block by hand. Blocks are found at Structure -> Blocks. The Block ID is the 2nd last (often integer) value in the URL when you hover over the block\'s "configure" link. Ex. The number "14" in admin/structure/block/manage/block/<strong><u>14</u></strong>/configure'),
+  $form['rk_abi_newsletters_fieldset']['rk_abi_social_media_fieldset']['rk_abi_newsletter_social_media_insert'] = array(
+    '#type' => 'select',  // 'textfield',
+    '#title' => t('Block ID to use as social media footer block'),
+    '#options' => _rk_abi_block_list(),
+    '#default_value' => variable_get('rk_abi_newsletter_social_media_insert', '-1'),
+    '#description' => t('This block can be created and used in the footer of press releases and other newsletters. You can use it to include links to Facebook, Twitter etc. You have to create this block by hand. Blocks are found at Structure -> Blocks.'),
   );
 
-  $form['rk_abi_use_custom_category_specific_template'] = array(
+  $form['rk_abi_newsletters_fieldset']['rk_abi_newsletter_logo_fieldset'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Logos in Newsletters'),
+    '#description' => t('<p>Options to insert blocks at beginning of newsletter. Envisioned for logos.</p><p>NB: "Add logos to newsletters" checkbox must be checked for any logo block insertion to function.</p>'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );   
+
+  $form['rk_abi_newsletters_fieldset']['rk_abi_newsletter_logo_fieldset']['rk_abi_use_custom_newsletter_logos'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Use category-specific newsletter template'),
-    '#default_value' => variable_get('rk_abi_use_custom_category_specific_template', 0),
-    '#description' => t('Uses hook_theme_registry_alter to give different path for newsletter template location.'),
+    '#title' => t('Add logos to newsletters'),
+    '#default_value' => variable_get('rk_abi_use_custom_newsletter_logos', 0),
+    '#description' => t('Turn this functionality on / off universally. The settings below will not override this master setting. Insert a pre-defined logo into newsletter header. Works in conjunction with simplenews template file found at /profiles/vp_profile/themes/vp_theme/templates/simplenews-newsletter-body.tpl.php'),
   );
+
+
+  // Find all newsletters and build logo settings for them.
+  $vocab = taxonomy_vocabulary_machine_name_load('newsletter');
+  $all_newsletters = taxonomy_get_tree($vocab->vid);
+
+  foreach ($all_newsletters as $key => $value) {
+    $form['rk_abi_newsletters_fieldset']['rk_abi_newsletter_logo_fieldset']['rk_abi_indiv_newsletter_setting_' . $value->tid] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Settings for @newsletter newsletter', array('@newsletter' => $value->name)),
+      '#description' => t('Individual options for newsletter customisation.'),
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+    );
+
+    $form['rk_abi_newsletters_fieldset']['rk_abi_newsletter_logo_fieldset']['rk_abi_indiv_newsletter_setting_' . $value->tid]['rk_abi_show_site_name_in_newsletter_' . $value->tid] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show site name as main heading in @newsletter newsletter template', array('@newsletter' => $value->name)),
+      '#default_value' => variable_get('rk_abi_show_site_name_in_newsletter_' . $value->tid, 1),
+      '#description' => t('Display or hide site name. Default is to display.'),
+    );
+
+    $form['rk_abi_newsletters_fieldset']['rk_abi_newsletter_logo_fieldset']['rk_abi_indiv_newsletter_setting_' . $value->tid]['rk_abi_logo_newsletter_' . $value->tid] = array(
+      '#type' => 'select',
+      '#title' => t('Block ID to use for logo in @newsletter', array('@newsletter' => $value->name)),
+      '#description' => t('Leave blank to forego logo.'),
+      '#options' => _rk_abi_block_list(),
+      '#default_value' => variable_get('rk_abi_logo_newsletter_' . $value->tid, '-1'),
+    );
+  }
+
 
   $form['rk_abi_clean_old_crap_fieldset'] = array(
     '#type' => 'fieldset',
     '#title' => t('Stripping inline styles for old content'),
-    '#description' => t('Settings used by custom Riigikantselei input filter. The input filter is turned on/off for each text format.'),
+    '#description' => t('Settings used by custom Riigikantselei input filter. Its name is "Riigikantselei Remove Inline Styles from Old Content" and can be switched on/off for each ' . l('text format', 'admin/config/content/formats', array('attributes' => array('title' => 'Text format admin page', 'class' => 'rk-abi'))) . '. (ex. Filtered HTML, Full HTML etc.)'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
   );  
 
   $form['rk_abi_clean_old_crap_fieldset']['rk_abi_clean_old_crap_tags'] = array(
     '#type' => 'textfield',
     '#title' => t('Inline Styles Stripped for Tags'),
     '#default_value' => variable_get('rk_abi_clean_old_crap_tags', ''),
-    '#description' => t('<p>HTML tags to clean. Leave a space between tags, do not use brackets. (ex. "p span div")</p><p>Background info: This module has a custom input filter ("Riigikantselei Remove Inline Styles from Old Content") that will get rid of inline styles from old content, ostensibly imported news articles. Here we can define the html tags that will have their inline styles stripped.</p>'),
+    '#description' => t('<p>HTML tags to clean. Leave a space between tags, do not use brackets. (ex. "p span div")</p><p>Background info: This module has a custom input filter ("Riigikantselei Remove Inline Styles from Old Content") that will get rid of inline styles (as in &lt;p style="font-family: comic sans ms;"&gt;) from old content, ostensibly to be used for imported news articles that might be full of inline styles suited to their original site design. Here we can define the html tags that will have their inline styles stripped.</p>'),
   );
 
   $form['rk_abi_clean_old_crap_fieldset']['rk_abi_clean_old_crap_date'] = array(
@@ -162,7 +196,22 @@ function rk_abi_settings($form, &$form_state) {
     '#title' => t('Old Content is Before'),
     '#default_value' => variable_get('rk_abi_clean_old_crap_date', '2014-01-01'),
     '#description' => t('Any content with a created date earlier than this is considered old and will have inline styles stripped from defined tags.'),
-  );  
+  );
+
+  $form['rk_abi_security_options_fieldset'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Security Options'),
+    '#description' => t('These options turned on or "secured" by default.'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+
+  $form['rk_abi_security_options_fieldset']['rk_abi_autocomplete_off'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Add autocomplete=off to forms'),
+    '#default_value' => variable_get('rk_abi_autocomplete_off', 1),
+    '#description' => t('Forms with autocomplete parameter set to "off" tells browser not to remember and display former field entries. (usernames etc.)'),
+  );
 
   return system_settings_form($form);
 }
@@ -230,39 +279,6 @@ function rk_abi_plain_text_email($text, $filter, $format, $langcode, $cache, $ca
 }
 
 
-/**
- * Implements hook_theme_registry_alter().
- */
-function rk_abi_theme_registry_alter(&$theme_registry) {
-
-  $use_custom_template = variable_get('rk_abi_use_custom_category_specific_template', 0);
-
-// watchdog('rk', 'theme registry<br /><pre>' . print_r($theme_registry['simplenews_newsletter_body'], true) . '</pre>');  
-
-  if ($use_custom_template && 2 == 3) {
-
-    if (isset($theme_registry['simplenews_newsletter_body'])) {
-      $theme_registry['simplenews_newsletter_body']['path'] = drupal_get_path('module', 'rk_abi') . '/theme';
-    }
-
-// watchdog('rk', 'theme registry<br /><pre>' . print_r($theme_registry['simplenews_newsletter_body'], true) . '</pre>');
-
-/*
-    if (isset($theme_registry['simplenews_newsletter_body'])) {
-      $theme_registry['simplenews_newsletter_body']['path'] = drupal_get_path('module', 'rk_abi') . '/templates';
-    }
-
-    if (isset($theme_registry['simplenews_newsletter_footer'])) {
-      $theme_registry['simplenews_newsletter_footer']['path'] = drupal_get_path('module', 'rk_abi') . '/templates';
-    }
-*/
-
-
-
-
-  }
-}
-
 
 /**
  * Implements hook_filter_info().
@@ -292,13 +308,13 @@ function _rk_abi_filter_prepare() {
  * Using to strip inline styles from old content.
  */
 function _rk_abi_filter_process($text, $filter, $format, $langcode, $cache, $cache_id) {
-  // Load the node and then make it is old.
+  // Load the node and then make sure it is old.
   $node = node_load(arg(1));
   if (isset($node->nid) && date('Y-m-d', $node->created) < variable_get('rk_abi_clean_old_crap_date', '2014-01-01')) {
 
     $html_dom = filter_dom_load($text);
 
-    // Clean inline styles from these tags. @todo. Make this array configurable on settings page.    
+    // Clean inline styles from these tags. @todo. Make this array configurable on settings page. 
     $tags = explode(' ', variable_get('rk_abi_clean_old_crap_tags'));
     foreach ($tags as $tag) {
       $elements = $html_dom->getElementsByTagName($tag);
@@ -325,6 +341,29 @@ function _rk_abi_filter_process($text, $filter, $format, $langcode, $cache, $cac
 
 
 /**
+ * Helper function to return list of blocks.
+ */
+function _rk_abi_block_list() {
+
+  // Using a function from block.admin.inc.
+  module_load_include('inc', 'block', 'block.admin');
+
+  // Using this to load all blocks.
+  $blocks = block_admin_display_prepare_blocks('vp_theme'); // delta info
+
+  // Seed with no logo option.
+  $options = array('-1' => t('-----')); // Leave logo block unassigned
+  
+  foreach ($blocks as $key => $value) {
+    $options[$value['delta']] = $value['info'];
+  }
+
+  return $options;
+
+}
+
+
+/**
  * Implements filter tips callback.
  */
 function _rk_abi_filter_tips() {
@@ -342,3 +381,15 @@ function rk_abi_menu_alter(&$items) {
   // $items['comment/reply/%node']['access callback'] = FALSE;
   // watchdog('rk', 'menu alter <pre>' . print_r($items, true) . '</pre>');
 }
+
+
+/**
+ * Implements hook_form_alter().
+ */
+function rk_abi_form_alter(&$form, &$form_state, $form_id) {
+  if (variable_get('rk_abi_autocomplete_off', 1) === 1) {
+    // Add autocomplete=off to all forms, security best practice. mm 07.10.2014.
+    $form['#attributes']['autocomplete'] = 'off';
+  }
+}
+
