@@ -545,6 +545,7 @@ function vp_theme_process_field(&$variables, $hook) {
  * Better login screen.
  */
 function vp_theme_form_alter( &$form, &$form_state, $form_id ) {
+
   if (in_array($form_id, array('user_login', 'user_login_block', 'user_pass'))) {
     // Move the digidoc and mobileid buttons to the bottom.
     $form['actions']['#weight'] = 1;
@@ -650,3 +651,16 @@ function vp_theme_image_formatter($variables) {
   return $output;
 }
 
+
+/**
+ * Implements hook_preprocess_node().
+ * Removing author as per bad security idea to advertise usernames.
+ */
+function vp_theme_preprocess_node(&$vars) {
+  // Look for author- in $vars['attributes_array']['class'] and unset it.
+  foreach ($vars['attributes_array']['class'] as $key => $value) {
+    if (strpos($value, 'author-') !== FALSE) {
+      unset($vars['attributes_array']['class'][$key]);
+    }
+  }
+}
