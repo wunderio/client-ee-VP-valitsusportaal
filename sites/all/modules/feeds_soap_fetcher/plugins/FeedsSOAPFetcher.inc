@@ -28,7 +28,15 @@ class FeedsSOAPFetcher extends FeedsFetcher {
     
     // Convert replacement patterns.
     $envelope = $this->config['envelope'];
-    $envelope = format_string($envelope, array(
+    // Adding replacement pattern options. mm. 10.10.2014.
+    $envelope = format_string($envelope, array(      
+      '!twoweeksago' => date('Y-m-d', strtotime('-14 days')),
+      '!weekago' => date('Y-m-d', strtotime('-7 days')),
+      '!sixdaysago' => date('Y-m-d', strtotime('-6 days')),
+      '!fivedaysago' => date('Y-m-d', strtotime('-5 days')),
+      '!fourdaysago' => date('Y-m-d', strtotime('-4 days')),
+      '!threedaysago' => date('Y-m-d', strtotime('-3 days')),
+      '!twodaysago' => date('Y-m-d', strtotime('-2 days')),
       '!yesterday' => date('Y-m-d', strtotime('-1 day')),
       '!today' => date('Y-m-d'),
       '!tomorrow' => date('Y-m-d', strtotime('+1 day')),
@@ -86,7 +94,7 @@ class FeedsSOAPFetcher extends FeedsFetcher {
       '#type' => 'textarea',
       '#title' => 'Envelope XML',
       '#default_value' => $this->config['envelope'],
-      '#description' => 'You can use these tokens (Y-m-d):<br />!yesterday<br />!today<br />!tomorrow'
+      '#description' => 'You can use these tokens (Y-m-d):<br />!twoweeksago<br />!weekago<br />!sixdaysago<br />!fivedaysago<br />!fourdaysago<br />!threedaysago<br />!twodaysago<br />!yesterday<br />!today<br />!tomorrow'
     );
 
     return $form;
