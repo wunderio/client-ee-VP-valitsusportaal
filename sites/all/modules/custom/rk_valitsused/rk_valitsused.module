@@ -58,6 +58,11 @@ function rk_valitsused_permission() {
       'description' => t('Full administrator access for varasemad valitsused.'),
       'restrict access' => FALSE,
     ),
+    'view rk valitsus' => array(
+      'title' => t('View Varasemad Valitsused'),
+      'description' => t('Open varasemad valitsused pages to public.'),
+      'restrict access' => FALSE,
+    ),    
   );
 
   return $perms;
@@ -186,7 +191,7 @@ function rk_valitsused_menu() {
     'description' => t('List of Estonian Republic governments'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('rk_valitsused_valitsused'), // Ajax.
-    'access arguments' => array('access content'),
+    'access arguments' => array('view rk valitsus'),
     'type' => MENU_CALLBACK,
   );
 
@@ -195,7 +200,7 @@ function rk_valitsused_menu() {
     'description' => t('List of Estonian Republic governments using GET'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('rk_valitsused_get'), // Get.
-    'access arguments' => array('access content'),
+    'access arguments' => array('view rk valitsus'),
     'type' => MENU_CALLBACK,
   );
 
@@ -204,7 +209,7 @@ function rk_valitsused_menu() {
     'description' => t('Varasemad valitsused statistics'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('rk_valitsused_statistika'),
-    'access arguments' => array('access content'),
+    'access arguments' => array('view rk valitsus'),
     'type' => MENU_CALLBACK,
   );
 
@@ -213,7 +218,7 @@ function rk_valitsused_menu() {
     'description' => t('Searchable minister list'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('rk_valitsused_ministrid'), // Ajax.
-    'access arguments' => array('access content'),
+    'access arguments' => array('view rk valitsus'),
     'type' => MENU_CALLBACK,
   );
 
@@ -222,7 +227,7 @@ function rk_valitsused_menu() {
     'description' => t('Search Estonian Ministers'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('rk_valitsused_ministrid_get'), // Get.
-    'access arguments' => array('access content'),
+    'access arguments' => array('view rk valitsus'),
     'type' => MENU_CALLBACK,
   );
 
@@ -291,7 +296,7 @@ function rk_valitsused_ministrid_get($form, &$form_state) {
 
   $form['h1-intro'] = array(
     '#type' => 'markup',
-    '#markup' => '<p class="h1-intro">' . t(variable_get('rk_valitsused_varasemad_tekst', '')) . '</p>',
+    '#markup' => '<p class="h1-intro">' . t('@tekst', array('@tekst' => variable_get('rk_valitsused_varasemad_tekst', ''))) . '</p>',
   );
 
   $form['vasak'] = array(
@@ -299,20 +304,20 @@ function rk_valitsused_ministrid_get($form, &$form_state) {
     '#title' => '',
   );
 
-  $form['vasak']['markup'] = array(
-    '#markup' => '<div id="sissejuhatus" class="sissejuhatus"><h2 class="varasem">' . t('Search Ministers') . '</h2><p>' . t(variable_get('rk_valitsused_ministrid_sissejuhatav_tekst', '')) . '</p></div>',
-  );
-
   $form['grupp'] = array(
     '#type' => 'fieldset',
     '#title' => '',
   );
 
+  $form['grupp']['markup'] = array(
+    '#markup' => '<div id="sissejuhatus" class="sissejuhatus"><h2 class="varasem">' . t('Search Ministers') . '</h2><p>' . t('@tekst', array('@tekst' => variable_get('rk_valitsused_ministrid_sissejuhatav_tekst', ''))) . '</p></div>',
+  );  
+
   $value = (isset($_GET['NIMI'])) ? $_GET['NIMI'] : '';
   $form['grupp']['nimi'] = array(
     '#type' => 'textfield',
     '#title' => t('Search Minister by Name'), // Leia minister nime järgi:
-    '#default_value' => $value,
+    '#default_value' => $value, // FAPI does check_plain().
     '#size' => 34,
     '#description' => '',
   );
@@ -320,9 +325,9 @@ function rk_valitsused_ministrid_get($form, &$form_state) {
   $form['grupp']['periood'] = array(
     '#type' => 'checkboxes',
     '#title' => '',
-	'#options' => _rk_valitsused_periood_linnukesed(),
+	  '#options' => _rk_valitsused_periood_linnukesed(),
     '#attributes' => array('class' => array('varasemad')), // 'checked' => TRUE
-    '#default_value' => array($_GET['FIRST_REPUBLIC'], $_GET['EXILE_GOVERNMENTS'], $_GET['SECOND_REPUBLIC']),
+    '#default_value' => array(check_plain($_GET['FIRST_REPUBLIC']), check_plain($_GET['EXILE_GOVERNMENTS']), check_plain($_GET['SECOND_REPUBLIC'])),
     '#description' => '',
   );
 
@@ -334,8 +339,8 @@ function rk_valitsused_ministrid_get($form, &$form_state) {
   $form['grupp']['ametikohad'] = array(
     '#type' => 'select',
     '#title' => '', //t('Minister'),
-	'#options' => $options,
-    '#default_value' => $value,
+	  '#options' => $options, // FAPI does check_plain().
+    '#default_value' => $value, // FAPI does check_plain().
     '#description' => '',
   );
 
@@ -343,21 +348,21 @@ function rk_valitsused_ministrid_get($form, &$form_state) {
   $form['grupp']['sugu'] = array(
     '#type' => 'select',
     '#title' => '', //t('Gender'),
-	'#options' => array('all' => t('Both Genders'), 'SEX_TYPE_MALE' => t('Male'), 'SEX_TYPE_FEMALE' => t('Female')), // Kõik ministrid, mees, naine
-    '#default_value' => $value,
+	  '#options' => array('all' => t('Both Genders'), 'SEX_TYPE_MALE' => t('Male'), 'SEX_TYPE_FEMALE' => t('Female')), // Kõik ministrid, mees, naine
+    '#default_value' => $value, // FAPI does check_plain().
     '#description' => '',
   );
 
   $sortby = (isset($_GET['SORTBY'])) ? $_GET['SORTBY'] : 'DEFAULT';
   $form['SORTBY'] = array(
     '#type' => 'hidden',
-    '#value' => $sortby,
+    '#value' => check_plain($sortby),
   );
 
   $order = (isset($_GET['ORDER'])) ? $_GET['ORDER'] : 'ASC';
   $form['ORDER'] = array(
     '#type' => 'hidden',
-    '#value' => $order,
+    '#value' => check_plain($order),
   );
 
   $form['grupp']['submit'] = array(
@@ -372,7 +377,7 @@ function rk_valitsused_ministrid_get($form, &$form_state) {
     '#type' => 'markup',
     '#prefix' => '<div id="query_result_ministrid" class="result">',
     '#suffix' => '</div>',
-    '#markup' => $value,
+    '#markup' => $value, // Not sanitising. This comes straight from db query and theme functions.
   );
 
   return $form;
@@ -415,7 +420,7 @@ function _rk_valitsused_ministrid_get() {
   }
 
   // Täida array valitud perioodidega.
-  $millised_valitsused = _rk_valitsused_millised_valitsused();
+  $millised_valitsused = _rk_valitsused_millised_valitsused(); // This function is safe, only returns allowed values.
 
   $nimi = $_GET['NIMI'];
   $ametikoht = $_GET['AMETIKOHAD'];
@@ -513,7 +518,7 @@ function rk_valitsused_get($form, &$form_state) {
   );
 
   $form['vasak']['markup'] = array(
-    '#markup' => '<div id="sissejuhatus" class="sissejuhatus"><p>' . t(variable_get('rk_valitsused_sissejuhatav_tekst', '')) . '</p></div>',
+    '#markup' => '<div id="sissejuhatus" class="sissejuhatus"><p>' . t('@tekst', array('@tekst' => variable_get('rk_valitsused_sissejuhatav_tekst', ''))) . '</p></div>',
   );
 
   $form['grupp'] = array(
@@ -521,32 +526,25 @@ function rk_valitsused_get($form, &$form_state) {
     '#title' => t('Former Governments'),
   );
 
-  /* $form['vasak']['sissejuhatus'] = array(
-    '#type' => 'markup',
-    '#prefix' => '<div id="sissejuhatus" class="sissejuhatus">',
-    '#suffix' => '</div>',
-    '#markup' => '<h2 class="varasem">' . t('Former Governments') . '</h2><p>' . t(variable_get('rk_valitsused_sissejuhatav_tekst', '')) . '</p>',
-  ); */
-
   $form['grupp']['periood'] = array(
     '#type' => 'checkboxes',
     '#title' => '',
-	'#options' => _rk_valitsused_periood_linnukesed(),
+	  '#options' => _rk_valitsused_periood_linnukesed(),
     '#attributes' => array('class' => array('varasemad')), 
-    '#default_value' => array($_GET['FIRST_REPUBLIC'], $_GET['EXILE_GOVERNMENTS'], $_GET['SECOND_REPUBLIC']),
+    '#default_value' => array(check_plain($_GET['FIRST_REPUBLIC']), check_plain($_GET['EXILE_GOVERNMENTS']), check_plain($_GET['SECOND_REPUBLIC'])),
     '#description' => '',
   );
 
   $sortby = (isset($_GET['SORTBY'])) ? $_GET['SORTBY'] : 'DEFAULT';
   $form['SORTBY'] = array(
     '#type' => 'hidden',
-    '#value' => $sortby,
+    '#value' => check_plain($sortby),
   );
 
   $order = (isset($_GET['ORDER'])) ? $_GET['ORDER'] : 'DESC';
   $form['ORDER'] = array(
     '#type' => 'hidden',
-    '#value' => $order,
+    '#value' => check_plain($order),
   );
 
   $form['grupp']['submit'] = array(
@@ -561,7 +559,7 @@ function rk_valitsused_get($form, &$form_state) {
     '#type' => 'markup',
     '#prefix' => '<div id="query_result" class="result">',
     '#suffix' => '</div>',
-    '#markup' => $value,
+    '#markup' => $value, // Results from db, not sanitising.
   );
 
   return $form;
@@ -583,7 +581,7 @@ function rk_valitsused_get_submit($form, &$form_state) {
 function _rk_valitsused_varasemad_valitsused_get() {
 
   // Täida array valitud perioodidega.
-  $millised_valitsused = _rk_valitsused_millised_valitsused();
+  $millised_valitsused = _rk_valitsused_millised_valitsused(); // This function is safe, only returns allowed values.
 
   $query = db_select('rk_government', 'g');
   $query->join('rk_minister_government', 'mg', 'g.id = mg.government_id');
@@ -629,7 +627,10 @@ function _rk_valitsused_varasemad_valitsused_get() {
   foreach($result as $record) {
     $even_odd = ($counter % 2) ? 'even' : 'odd';
     // $strOutput .= theme('table_valitsus_object', array('muutujad' => $record, 'even_odd' => $even_odd));
-    $strOutput .= theme('ul_valitsus_object', array('muutujad' => $record, 'even_odd' => $even_odd));
+    // Pass sortby in to figure out if and where to insert the molotov-ribbentrop text.
+    $molotov = (isset($_GET['SORTBY'])) ? $_GET['SORTBY'] : 'PERIOD';
+    $ribbentrop = (isset($_GET['ORDER'])) ? $_GET['ORDER'] : 'DESC';
+    $strOutput .= theme('ul_valitsus_object', array('muutujad' => $record, 'even_odd' => $even_odd, 'sortby' => $molotov, 'order' => $ribbentrop));
     $counter++;
   }
 
@@ -789,7 +790,7 @@ function rk_valitsused_ministrid($form, &$form_state) {
 
   $form['h1-intro'] = array(
     '#type' => 'markup',
-    '#markup' => '<p class="h1-intro">' . t(variable_get('rk_valitsused_varasemad_tekst', '')) . '</p>',
+    '#markup' => '<p class="h1-intro">' . t('@tekst', array('@tekst' => variable_get('rk_valitsused_varasemad_tekst', ''))) . '</p>',
   );
 
   $form['grupp'] = array(
@@ -803,7 +804,7 @@ function rk_valitsused_ministrid($form, &$form_state) {
     '#default_value' => '',
     '#size' => 34,
     '#description' => '',
-    '#prefix' => '<div id="sissejuhatus" class="sissejuhatus"><h2 class="varasem">' . t('Search Ministers') . '</h2><p>' . t(variable_get('rk_valitsused_ministrid_sissejuhatav_tekst', '')) . '</p>',
+    '#prefix' => '<div id="sissejuhatus" class="sissejuhatus"><h2 class="varasem">' . t('Search Ministers') . '</h2><p>' . t('@tekst', array('@tekst' => variable_get('rk_valitsused_ministrid_sissejuhatav_tekst', ''))) . '</p>',
     '#suffix' => '</div>',
   );
 
@@ -1688,7 +1689,7 @@ function theme_table_valitsus_start($variables) {
   $output .= '<th class="gov-head">';
   $output .=   _rk_valitsused_build_get_link_with_query_string('HEAD', 'valitsus');
   $output .= '</th>';
-  $output .= '<th class="head-title">' . t('Title') . '</th></tr>';
+  $output .= '<th class="head-title">' . t('Title', $args = array(), $options = array('context' => 'rk_valitsused')) . '</th></tr>';
 
   return $output;
 }
@@ -1699,7 +1700,7 @@ function theme_table_valitsus_start($variables) {
  */
 function theme_ul_valitsus_start($variables) {
 
-  $output = '<ul class="varasemad">';
+  $output = '<ul class="varasemad start">';
   $output .= '<li class="gov-num-narrow">' . t('Ordering') . '</li>';
   $output .= '<li class="time-span">';
   $output .=   _rk_valitsused_build_get_link_with_query_string('PERIOD', 'valitsus');
@@ -1710,7 +1711,7 @@ function theme_ul_valitsus_start($variables) {
   $output .= '<li class="gov-head">';
   $output .=   _rk_valitsused_build_get_link_with_query_string('HEAD', 'valitsus');
   $output .= '</li>';
-  $output .= '<li class="head-title">' . t('Title') . '</li></ul>';
+  $output .= '<li class="head-title">' . t('Title', $args = array(), $options = array('context' => 'rk_valitsused')) . '</li></ul>';
 
   return $output;
 }
@@ -1721,7 +1722,7 @@ function theme_ul_valitsus_start($variables) {
  */
 function theme_ul_valitsus_object($variables) {
 
-  $output = '<ul class="' . $variables['even_odd'] . ' varasemad">';
+  $output .= '<ul class="' . $variables['even_odd'] . ' varasemad">';
   $output .= '<li class="gov-num-narrow"><span class="m-label">' . t('Government Number:') . '</span> <a href="' . VALITSUS_URL . '/' . $variables['muutujad']->government_number . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']->government_number . '">' . $variables['muutujad']->government_number . '</a></li>';
   $output .= '<li class="time-span"><span class="m-label">' . t('Period:') . '</span> <span class="ametiaeg"><a href="' . VALITSUS_URL . '/' . $variables['muutujad']->government_number . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']->government_number . '">' . _rk_valitsused_eesti_format_date($variables['muutujad']->ruled_start_date) . ' - ' . _rk_valitsused_eesti_format_date($variables['muutujad']->ruled_end_date) . '</a></span></li>';
   $output .= '<li class="duration"><span class="m-label">' . t('Duration:') . '</span> ' . $variables['muutujad']->calculated_days . '</li>';
@@ -1743,7 +1744,22 @@ function theme_ul_valitsus_object($variables) {
   }  
   $output .= '<li class="head-title"><span class="m-label">' . t('Head of Government:') . '</span> ' . $display_title . '</li></ul>';
 
-  return $output;
+
+  // @todo. Is there better place for this seletustekst? Check if we can insert molotov ribbentrop text.
+  if ($variables['muutujad']->government_number == '27' && $variables['sortby'] == 'PERIOD' && $variables['order'] == 'DESC') {
+    $prefix = '<div id="valitsus-seletus-tekst">' . variable_get('rk_valitsused_molotov_ribbentrop', '') . '</div>';
+    $suffix = '';
+  }
+  elseif ($variables['muutujad']->government_number == '27' && $variables['sortby'] == 'PERIOD' && $variables['order'] == 'ASC') {
+    $prefix = '';
+    $suffix = '<div id="valitsus-seletus-tekst">' . variable_get('rk_valitsused_molotov_ribbentrop', '') . '</div>';    
+  }
+  else {
+    $prefix = '';
+    $suffix = '';
+  }
+
+  return $prefix . $output . $suffix;
 }
 
 
@@ -1778,7 +1794,6 @@ function theme_table_valitsus($variables) {
  * Defined in rk_valitsused_theme.
  */
 function theme_table_valitsus_object($variables) {
-//print_r($variables);exit;
   // @todo. Is there a way to use drupal_render elegantly here?
   $output = '<tr class="' . $variables['even_odd'] . '">';
   $output .= '<td><a href="' . VALITSUS_URL . '/' . $variables['muutujad']->government_number . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']->government_number . '">' . $variables['muutujad']->government_number . '</a></td>';
@@ -1898,12 +1913,11 @@ Array
 )
 
 */
-//print_r($variables);exit;
-  $output = '<ul class="varasemad">';
+
+  $output = '<ul class="varasemad start">';
   $output .= '<li class="head-title">';
 
-  if ($variables['muutujad']->rk_minister_government_rk_minister_display_indiv_name != '') {
-    //print_r($variables['muutujad']);exit;
+  if ($variables['muutujad']->rk_minister_government_rk_minister_display_indiv_name != '') {    
     $display_name = $variables['muutujad']->rk_minister_government_rk_minister_display_indiv_name;
   }
   else {
@@ -1920,7 +1934,6 @@ Array
   $output .= '<li class="duration"> <span class="m-label">' . t('Duration (days):') . '</span> ' . _rk_valitsused_calculate_days($variables['muutujad']->rk_minister_government_rk_minister_ruled_start_date, $variables['muutujad']->rk_minister_government_rk_minister_ruled_end_date) . '</li>';
 
   if ($variables['muutujad']->rk_minister_government_rk_minister_display_title != '') {
-    //print_r($variables['muutujad']);exit;
     $display_title = $variables['muutujad']->rk_minister_government_rk_minister_display_title;
   }
   else {
@@ -1960,7 +1973,7 @@ function theme_table_search_minister($variables) {
   $output .= '<th class="gov-head">' . t('Role') . '</th>';
 */
 
-  $output = '<ul class="varasemad">';
+  $output = '<ul class="varasemad start">';
   $output .= '<li class="head-title">';
   $output .= _rk_valitsused_build_get_link_with_query_string('LNAME', 'minister');
   // $output .=   $variables['pealkiri'];
@@ -2076,7 +2089,7 @@ function theme_valitsus_description($variables) {
  * Defined in rk_valitsused_theme.
  */
 function theme_minister_description($variables) {
-//print_r($variables);exit;
+
     $strOutput = '';
 
     $strOutput .= '<div class="varasemad-wrapper minister-wrapper">';
@@ -2160,7 +2173,7 @@ function rk_valitsused_statistika_mitupaeva_submit($form, &$form_state) {
         ->fields('g', array('ruled_start_date'));
     }
     else {
-//print $gov_id . ' ' . $val_min . ' ' . $type;exit;
+
       $query = db_select('rk_minister_government', 'g');
 
       $arrOptions = _rk_valitsused_amet_options(strtoupper($type));
@@ -2345,6 +2358,14 @@ function rk_valitsused_settings($form, &$form_state) {
     '#description' => t('Text which is displayed on the searchable ministers page. HTML allowed.'),
   );
 
+
+  $form['rk_valitsused_molotov_ribbentrop'] = array(
+    '#type' => 'textarea',
+    '#title' => t('WWII Occupation Blurb'),
+    '#default_value' => variable_get('rk_valitsused_molotov_ribbentrop', 'Tekst valitsuste loetelus, mis asub 27. ja 28. valitsuste vahel.'),
+    '#description' => t('<p>17.06.1940 okupeeris Nõukogude Liit Eesti Vabariigi. Eesti Vabariigi põhiseaduse (Riigi Teataja 03.09.1937 nr 71 art 590) kohaselt (§ 46), kui Vabariigi Presidendi ametikoht oli vaba või kui Vabariigi President seaduses määratud juhtudel oli takistatud ametikohustuste täitmisel, täitis Vabariigi Presidendi ülesandeid peaminister, pannes peaministri ülesanded selleks ajaks peaministri asetäitjale.</p><p>Kui peaminister ega tema asetäitja ei saanud täita peaministri ülesandeid, siis täitis neid Vabariigi Valitsuse kõige vanem liige (§ 52). 1945. a, pärast Jüri Uluotsa surma, oli 18.09.1944 Jüri Uluotsa ametisse nimetatud Vabariigi Valitsuse (peaministri asetäitja Otto Tief) vanim liige välisminister August Rei, kes astus ametisse pärast Jüri Uluotsa surma. Sama moodi astus Eesti Vabariigi peaminister presidendi ülesannetes Eelnev viide avaneb uues aknas ametisse kuni 1992. aastani.</p>'),
+  );  
+
   return system_settings_form($form);
 }
 
@@ -2494,8 +2515,7 @@ endif; */
 
   }
   elseif ($vars['field']->field_alias == 'unknown' && strpos(current_path(), 'varasemad')) {
-    // print_r($vars['field']);exit;
-    // print_r($vars['row']);exit;
+    
     return theme('minister_glossary_row', array('muutujad' => $vars['row']));
 
   }
@@ -3111,7 +3131,7 @@ function _rk_valitsused_periood_linnukesed() {
 function _rk_valitsused_general_intro() {
   return array(
     '#type' => 'markup',
-    '#markup' => '<p class="h1-intro">' . t(variable_get('rk_valitsused_varasemad_tekst', '')) . '</p>',
+    '#markup' => '<p class="h1-intro">' . t('@tekst', array('@tekst' => variable_get('rk_valitsused_varasemad_tekst', ''))) . '</p>',
   );
 }
 
@@ -3379,6 +3399,8 @@ function _rk_valitsused_build_get_link_with_query_string($sortby = 'DEFAULT', $g
   global $language;
   $class = 'no-sort';
 
+
+  // Not sanitising $_GET it is used here to build query string array for l() function.
   // FIRST_REPUBLIC=0&EXILE_GOVERNMENTS=0&SECOND_REPUBLIC=SECOND_REPUBLIC&SORTBY=DEFAULT&ORDER=DESC
   $qs = array();
   $qs['FIRST_REPUBLIC'] = (isset($_GET['FIRST_REPUBLIC'])) ? $_GET['FIRST_REPUBLIC'] : 'FIRST_REPUBLIC';
@@ -3408,11 +3430,6 @@ function _rk_valitsused_build_get_link_with_query_string($sortby = 'DEFAULT', $g
   $qs['SORTBY'] = $sortby; //(isset($_GET['SORTBY'])) ? $_GET['SORTBY'] : 'DEFAULT';
   $qs['ORDER'] = $order; //(isset($_GET['ORDER'])) ? $_GET['ORDER'] : 'ASC'; 
 
-  $query_string = '';
-  foreach ($qs as $key => $value) {
-    $query_string .= $key . '=' . $value . '&';
-  }
-
   // URL lähtub tüübist.
   if ($gov_or_minister == 'minister') {
     $url = 'varasemad-valitsused/ministrid';
@@ -3423,7 +3440,6 @@ function _rk_valitsused_build_get_link_with_query_string($sortby = 'DEFAULT', $g
 
   $arr_sortable_link = array('PERIOD' => t('Period'), 'DURATION' => t('Duration (days)'), 'HEAD' => t('Head of Government'), 'LNAME' => t('Last Name'));
 
-  //return '<a class="' . $class . '" href="/' . $language->language . '/valitsus/' . $url . '?' . substr($query_string, 0, -1) . '">';
   return l($arr_sortable_link[$sortby], 'valitsus/' . $url, $options = array('query' => $qs, 'attributes' => array('title' => t('Order by' . ' ' .  strtolower($arr_sortable_link[$sortby])), 'class' => array($class, 'sortable'))));
 }
 

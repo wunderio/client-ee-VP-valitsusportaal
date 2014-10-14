@@ -36,12 +36,16 @@ tbody {
 }
 
 .varasemad-form select {
-  height: 28px;
+  /* height: 28px; */
 }
 
 .varasemad-form .form-item {
   margin: 0.4em 1em;
   display: inline;
+}
+
+.varasemad-form #rk-valitsused-ministrid-get .form-item {
+  margin: 0;
 }
 
 .varasemad-form .form-item.form-item-ametikohad {
@@ -167,7 +171,35 @@ fieldset.varasemad-wrapper #edit-periood-kauem {
 }
 
 #rk-valitsused-ministrid-get #edit-vasak {
-  min-height: 165px;
+  /* min-height: 165px; */
+}
+
+#rk-valitsused-get #edit-vasak,
+#rk-valitsused-ministrid-get #edit-vasak {
+  display: none;
+}
+
+#rk-valitsused-get #edit-grupp,
+#rk-valitsused-ministrid-get #edit-grupp {
+  width: 66%;
+  margin: 0 auto;
+}
+
+#rk-valitsused-get #edit-grupp #edit-periood .form-item,
+#rk-valitsused-ministrid-get #edit-grupp #edit-periood .form-item {
+  float: left;
+  width: 27%;
+}
+
+#rk-valitsused-ministrid-get #edit-grupp .form-item-nimi {
+  display: block;
+}
+
+#rk-valitsused-ministrid-get #edit-grupp #edit-periood .form-item,
+#rk-valitsused-ministrid-get #edit-grupp .form-item-ametikohad,
+#rk-valitsused-ministrid-get #edit-grupp .form-item-sugu {
+  /* margin-top: 2em; */
+  padding-bottom: 1.6em;
 }
 
 #rk-valitsused-ministrid-get #edit-periood .form-type-checkbox {
@@ -176,7 +208,7 @@ fieldset.varasemad-wrapper #edit-periood-kauem {
 }
 
 #edit-sugu {
-  margin-top: 4px;
+ /* margin-top: 4px; */
 }
 
 #sissejuhatus {
@@ -222,7 +254,7 @@ table td.juht a:after,
 ul li span.ametikoht:after,
 ul li span.ametiaeg:after,
 ul li.juht a:after {
-  content: " »";
+  content: " \00bb";
 }
 
 .view-minister-info .view-footer,
@@ -238,7 +270,7 @@ ul li.juht a:after {
 
 .view-minister-info .view-footer a.varasemad:before,
 .varasemad-footer a.varasemad:before {
-  content: "« "; /* « » */
+  content: "\00ab "; /* « » */
 }
 
 #query_result,
@@ -255,7 +287,11 @@ ul li.juht a:after {
 }
 
 #edit-grupp .submit-wrapper {
-  margin-top: 0.8em;
+  margin-top: 1.6em;
+}
+
+#rk-valitsused-ministrid-get #edit-grupp .submit-wrapper {
+  margin-left: 1em;
 }
 
 #rk-valitsused-ministrid #edit-submit {
@@ -264,6 +300,13 @@ ul li.juht a:after {
   left: 280px;*/
   margin-left: -120px;
   display: inline-block;
+}
+
+#rk-valitsused-get #edit-submit {
+  margin-top: 1.6em;
+  /*display: block;
+  clear: both;*/
+
 }
 
 #edit-submit-kuupaev, 
@@ -317,7 +360,7 @@ fieldset.even .fieldset-content {background: #f9e4e6;} /* pink=f9e4e6 blue=7cc1f
 fieldset.odd .fieldset-content {background: #b8c6d1;}
 
 div.form-item-ametikohad {
-  float: left;
+  /* float: left; */
 }
 
 ul.varasemad li a,
@@ -334,15 +377,15 @@ a.desc:active {
 }
 
 a.dormant:after {
-  content: ' ▲▼';
+  content: ' \25b2\25bc';
 }
 
 a.asc:after {
-  content: ' ▲';
+  content: ' \25b2'; /* \25b2 */
 }
 
 a.desc:after {
-  content: ' ▼';
+  content: ' \25bc'; /* \25bc */
 } 
 
 /* Hide gallery title from node_load. */
@@ -362,20 +405,41 @@ a.desc:after {
 span.upload {padding-right: 1em;}
 span.m-label {display: none;}
 
+#valitsus-seletus-tekst {  
+  padding: 0.6em 0;
+}
+
 /* Media queries */
 @media (max-width: 740px) {
 
-  div.form-item {
-    float: none;
-	clear: both;
+  div.form-item,
+  #rk-valitsused-ministrid-get #edit-grupp .form-item-ametikohad,
+  #rk-valitsused-ministrid-get #edit-grupp .form-item-sugu {
+    display: block;  
+	  clear: both;
   }
 
   #rk-valitsused-ministrid #edit-submit {
     margin-left: 0;
   }
 
+  #rk-valitsused-get #edit-grupp,
+  #rk-valitsused-ministrid-get #edit-grupp {    
+    margin: 0;
+  }  
+
+  #rk-valitsused-get #edit-submit {
+    display: block;
+    clear: both;
+  }  
+
   #rk-valitsused-get fieldset .submit-wrapper {
     padding-left: 0;
+  }
+
+  ul.varasemad.start li {
+    display: inline-block;
+    width: 10%;
   }
 
   ul.varasemad li {
@@ -393,6 +457,8 @@ span.m-label {display: none;}
 
   span.m-label {display: inline;font-weight: bold;}
 
+  #valitsus-seletus-tekst {float: left;width: 100%;}
+
   #edit-vasak, 
   #edit-grupp {
     width: 100%;
@@ -404,6 +470,14 @@ span.m-label {display: none;}
 
   #rk-valitsused-get fieldset .submit-wrapper {
     clear: both;
+  }
+
+  .view-footer ul.varasemad {
+    display: none;
+  }
+
+  #query_result_ministrid .views-summary.views-summary-unformatted {
+    padding: 0 0.4em;
   }
 
 }
