@@ -13,7 +13,6 @@
     $lastActiveL1MenuItem,
     $breadCrumbLinks = $('#block-delta-blocks-breadcrumb a');
 
-
   jQuery.fn.vpMenuEqualHeight = function() {
     var $el = $(this);
 
@@ -78,7 +77,8 @@
    *
    * Capsulate variables by menu items.
    */
-  if ('ontouchstart' in document.documentElement) {
+  // Assuming if onclick does not exist, then dealing with touch-only device.
+  if ('ontouchstart' in document.documentElement && 'onclick' in document.documentElement == false) {
     $l1menulinks.on('touchstart', function(e) { l1menulinksEvent(this, e); });
     $('body').on('touchstart', function() { closeAll(); });
     $l2menus.on('touchstart', function(e) { e.stopPropagation(); });
@@ -138,7 +138,7 @@
     }
 
     e.stopPropagation();
-    e.preventDefault();
+    e.preventDefault();   
   }
 
   // Close the menus if escape is used.
