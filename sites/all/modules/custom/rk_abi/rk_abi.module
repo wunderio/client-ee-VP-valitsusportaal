@@ -314,7 +314,7 @@ function _rk_abi_filter_process($text, $filter, $format, $langcode, $cache, $cac
 
     $html_dom = filter_dom_load($text);
 
-    // Clean inline styles from these tags. @todo. Make this array configurable on settings page. 
+    // Clean inline styles from tags defined on settings page.
     $tags = explode(' ', variable_get('rk_abi_clean_old_crap_tags'));
     foreach ($tags as $tag) {
       $elements = $html_dom->getElementsByTagName($tag);
@@ -393,3 +393,28 @@ function rk_abi_form_alter(&$form, &$form_state, $form_id) {
   }
 }
 
+
+/**
+ * Implements hook_help().
+ */
+function rk_abi_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#rk_abi':
+      $strOutput = '';
+      $strOutput .= '<h3>' . t('About') . '</h3>';
+      $strOutput .= '<p>' . t('The Riigikantselei Abimoodul provides miscellaneous settings to enhance the functionality and security of the Estonian government portal profile. Sometimes you just need a place to put a hook_form_alter() here or add css / javascript there.') . '</p>';
+      $strOutput .= '<h3>' . t('Riigikantselei Abimoodul Settings Page') . '</h3>';
+      $strOutput .= '<p>' . t('<a href="@rkabi">Riigikantselei abi settings page</a>.', array('@rkabi' => url('admin/config/rkabi/settings'))) . '</p>';
+      $strOutput .= '<h3>' . t('Newsletter Settings') . ':</h3>';
+      $strOutput .= '<p>' . t('Various settings to enable / disable the insertion of blocks into newsletters. For instance, a particular newsletter can include a specific logo while others have no logo at all. Also, there is the ability to insert a block into the footer. Currently the footer block is used as a "Social Media Block".') . ':</p>';
+      $strOutput .= '<h3>' . t('Stripping Inline Styles for Old Content') . ':</h3>';
+      $strOutput .= '<p>' . t('These are settings used by a custom input filter. Its purpose is to strip inline styles from old content that has been imported into Drupal. For instance, old content might have nasty font tags telling all text to be in Times New Roman.') . '</p>';
+      $strOutput .= '<h3>' . t('Security suggestions') . ':</h3>';
+      $strOutput .= '<ul>';
+      $strOutput .= ' <li>' . t('Make sure autocomplete=off setting is turned on at <a href="@rkabi">settings page</a>', array('@rkabi' => url('admin/config/rkabi/settings'))) . '</li>';
+      $strOutput .= ' <li>' . t('<strong>Disallow php execution in subfolders</strong> with this line in .htaccess (after index.php rewrite rules):<br /><strong>RewriteRule "^.+/.*\.php$" - [F]</strong>') . '<br /><br /></li>';
+      $strOutput .= '</ul>';
+
+      return $strOutput;
+  }
+}
