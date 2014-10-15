@@ -57,15 +57,21 @@ foreach ($rows as &$row) {
       <tr <?php if ($row_classes[$row_count]) { print 'class="' . implode(' ', $row_classes[$row_count]) .'"';  } ?>>
         <?php foreach ($row as $field => $content): ?>
           <?php //end($row); ?>
-              <td <?php if ($field_classes[$field][$row_count]) { print 'class="'. $field_classes[$field][$row_count] . ( $field === key($header) ?  ' last' : '' ) . '" '; } ?><?php print drupal_attributes($field_attributes[$field][$row_count]); ?>>                
+              <td <?php if ($field_classes[$field][$row_count]) { print 'class="' . $field_classes[$field][$row_count] . ( $field === key($header) ?  ' last' : '' ) . '" '; } ?><?php print drupal_attributes($field_attributes[$field][$row_count]); ?>>                
                 <?php 
 
+                  // EN and RU "teenistuskoht täitmata" equivalents.
+                  if ($language->language != 'et' && $field == 'title' && strpos($content, 'teenistus') !== FALSE):
+                    $content = '<strong>' . t('Position Unfilled') . '</strong>';
+                  endif;
+
                   // E-posti php obfuscation.
-                  if ($field == 'field_contact_e_mail' && function_exists('_rk_peida_email') && variable_get('rk_abi_contact_email_obfuscate', 0)):                  
+                  if ($field == 'field_contact_e_mail' && function_exists('_rk_peida_email') && variable_get('rk_abi_contact_email_obfuscate', 0)):
                     $content = _rk_peida_email(trim($content));
                   endif;
 
-                  $riigikood = ($language->language != 'et' && $field == 'field_contact_phone_nr') ? '(+372) ': '';
+                  $riigikood = ($language->language != 'et' && $field == 'field_contact_phone_nr' && trim($content) != '') ? '(+372) ': '';
+
                   print $riigikood . $content;
                 ?>
               </td>
