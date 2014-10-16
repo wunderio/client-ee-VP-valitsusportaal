@@ -322,12 +322,19 @@ function rk_valitsused_ministrid_get($form, &$form_state) {
     '#description' => '',
   );
 
+  // Check for $_GET.
+  if (isset($_GET['FIRST_REPUBLIC']) && isset($_GET['EXILE_GOVERNMENTS']) && isset($_GET['SECOND_REPUBLIC'])) {
+    $periood_default = array(check_plain($_GET['FIRST_REPUBLIC']), check_plain($_GET['EXILE_GOVERNMENTS']), check_plain($_GET['SECOND_REPUBLIC']));
+  }
+  else {
+    $periood_default = array('FIRST_REPUBLIC', 'EXILE_GOVERNMENTS', 'SECOND_REPUBLIC');
+  }
   $form['grupp']['periood'] = array(
     '#type' => 'checkboxes',
     '#title' => '',
 	  '#options' => _rk_valitsused_periood_linnukesed(),
     '#attributes' => array('class' => array('varasemad')), // 'checked' => TRUE
-    '#default_value' => array(check_plain($_GET['FIRST_REPUBLIC']), check_plain($_GET['EXILE_GOVERNMENTS']), check_plain($_GET['SECOND_REPUBLIC'])),
+    '#default_value' => $periood_default,
     '#description' => '',
   );
 
@@ -526,12 +533,19 @@ function rk_valitsused_get($form, &$form_state) {
     '#title' => t('Former Governments'),
   );
 
+  // Check for $_GET.
+  if (isset($_GET['FIRST_REPUBLIC']) && isset($_GET['EXILE_GOVERNMENTS']) && isset($_GET['SECOND_REPUBLIC'])) {
+    $periood_default = array(check_plain($_GET['FIRST_REPUBLIC']), check_plain($_GET['EXILE_GOVERNMENTS']), check_plain($_GET['SECOND_REPUBLIC']));
+  }
+  else {
+    $periood_default = array('FIRST_REPUBLIC', 'EXILE_GOVERNMENTS', 'SECOND_REPUBLIC');
+  }
   $form['grupp']['periood'] = array(
     '#type' => 'checkboxes',
     '#title' => '',
 	  '#options' => _rk_valitsused_periood_linnukesed(),
     '#attributes' => array('class' => array('varasemad')), 
-    '#default_value' => array(check_plain($_GET['FIRST_REPUBLIC']), check_plain($_GET['EXILE_GOVERNMENTS']), check_plain($_GET['SECOND_REPUBLIC'])),
+    '#default_value' => $periood_default,
     '#description' => '',
   );
 
@@ -1722,6 +1736,7 @@ function theme_ul_valitsus_start($variables) {
  */
 function theme_ul_valitsus_object($variables) {
 
+  $output = '';
   $output .= '<ul class="' . $variables['even_odd'] . ' varasemad">';
   $output .= '<li class="gov-num-narrow"><span class="m-label">' . t('Government Number:') . '</span> <a href="' . VALITSUS_URL . '/' . $variables['muutujad']->government_number . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']->government_number . '">' . $variables['muutujad']->government_number . '</a></li>';
   $output .= '<li class="time-span"><span class="m-label">' . t('Period:') . '</span> <span class="ametiaeg"><a href="' . VALITSUS_URL . '/' . $variables['muutujad']->government_number . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']->government_number . '">' . _rk_valitsused_eesti_format_date($variables['muutujad']->ruled_start_date) . ' - ' . _rk_valitsused_eesti_format_date($variables['muutujad']->ruled_end_date) . '</a></span></li>';
@@ -1768,6 +1783,9 @@ function theme_ul_valitsus_object($variables) {
  */
 function theme_ul_valitsus_end($variables) {
   global $language;
+
+  // Preparing for gallery insertion.
+  $gallery = '';
 
   $output = $gallery . '<div class="varasemad-footer"><a href="/' . $language->language . '/valitsus/varasemad-valitsused/ministrid" class="varasemad" title="' . t('Estonian Ministers') . '">' . t('Estonian Ministers') . '</a><a href="/' . $language->language . '/valitsus/varasemad-valitsused/huvitav-teada" class="varasemad" title="' . t('Good to Know') . '">' . t('Good to Know') . '</a></div>';
   return $output;
@@ -3193,7 +3211,7 @@ function _rk_valitsused_millised_valitsused() {
 function rk_valitsused_preprocess_views_view(&$vars) {
 
   // @todo. What is with $vars['view']->old_view[1]->is_attachment? undefined index error, Trying to get property of non-object.
-  if ($vars['view']->name == 'minister_info' && $vars['view']->old_view[1]->is_attachment == 1) {
+  if ($vars['view']->name == 'minister_info' && isset($vars['view']->old_view[1]) && $vars['view']->old_view[1]->is_attachment == 1) {
     
     // Attach gallery.
     $gallery = _rk_valitsused_build_gallery($vars['view']->args[0], 'minister');
@@ -3413,11 +3431,11 @@ function _rk_valitsused_build_get_link_with_query_string($sortby = 'DEFAULT', $g
     $qs['NIMI'] = (isset($_GET['NIMI'])) ? $_GET['NIMI'] : '';
   }
 
-  if ($_GET['SORTBY'] === $sortby && $_GET['ORDER'] === 'DESC') {
+  if (isset($_GET['SORTBY']) && $_GET['SORTBY'] === $sortby && $_GET['ORDER'] === 'DESC') {
     $order = 'ASC';
     $class = 'desc';
   }
-  elseif ($_GET['SORTBY'] === $sortby && $_GET['ORDER'] === 'ASC') {
+  elseif (isset($_GET['SORTBY']) && $_GET['SORTBY'] === $sortby && $_GET['ORDER'] === 'ASC') {
     $order = 'DESC';
     $class = 'asc';
   }
