@@ -136,14 +136,19 @@ function _id_card_user_login_form_alter(&$form, &$form_state) {
  *
  * @return string description
  */
-function id_card_login() {
+function id_card_login() {  
   // @TODO: Testing this I found that the value was in
   // REDIRECT_SSL_CLIENT_VERIFY instead of SSL_CLIENT_VERIFY,
   // maybe should check both?
-  if (@$_SERVER['REDIRECT_SSL_CLIENT_VERIFY'] == 'SUCCESS') {
-    if ($_SERVER['REDIRECT_SSL_CLIENT_S_DN_CN']) {
+
+  // Implementing original developer's above @todo, checking both formats. mm 15.10.2014.
+  if (@$_SERVER['SSL_CLIENT_VERIFY'] == 'SUCCESS' || @$_SERVER['REDIRECT_SSL_CLIENT_VERIFY'] == 'SUCCESS') {
+    if ($_SERVER['SSL_CLIENT_S_DN_CN'] || $_SERVER['REDIRECT_SSL_CLIENT_S_DN_CN']) {
       // Extract the ID Code from SSL_CLIENT_S_DN_CN
-      list($lastname, $firstname, $id_code) = explode(',', $_SERVER['REDIRECT_SSL_CLIENT_S_DN_CN']);
+      // Added this conditional to check between REDIRECT_* and SSL_CLIENT_S_DN_CN. mm 15.10.2014.
+      $ssl_client_s_dn_cn = (isset($_SERVER['REDIRECT_SSL_CLIENT_S_DN_CN'])) ? $_SERVER['REDIRECT_SSL_CLIENT_S_DN_CN']: $_SERVER['SSL_CLIENT_S_DN_CN'];
+      //list($lastname, $firstname, $id_code) = explode(',', $_SERVER['REDIRECT_SSL_CLIENT_S_DN_CN']);
+      list($lastname, $firstname, $id_code) = explode(',', $ssl_client_s_dn_cn);
 
       if (variable_get('id_card_create_new_user', '1')) {
         user_external_login_register($id_code, 'id_card');
