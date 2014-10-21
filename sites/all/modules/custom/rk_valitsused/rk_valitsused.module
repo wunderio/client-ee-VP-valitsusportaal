@@ -2502,7 +2502,7 @@ endif; */
     }
     else {
       $display_name = $min_first . ' ' . $min_last;
-    }  
+    }
 
   
     return '<a href="' . MINISTER_URL . '/' . $min_id .'" title="' . $display_name . '">' . $display_name . '</a>' . $ruled;
@@ -2519,7 +2519,11 @@ endif; */
 
     $ruled = $min_start . ' - ' . $min_end;
 
-    return $ruled;
+    // Make a link to the valitsus he/she ruled in.
+    $link_ruled = l($ruled, 'valitsus/varasemad-valitsused/id/' . $vars['row']->rk_government_rk_minister_government_government_number,
+      $options = array('attributes' => array('title' => t('Government %nr', array('%nr' => $vars['row']->rk_government_rk_minister_government_government_number))))); 
+
+    return $link_ruled;
 
   }
   elseif ($vars['field']->field_alias == 'rk_government_description') {

@@ -196,7 +196,21 @@ $handler->display->display_options['defaults']['relationships'] = FALSE;
 $handler->display->display_options['relationships']['id']['id'] = 'id';
 $handler->display->display_options['relationships']['id']['table'] = 'rk_minister';
 $handler->display->display_options['relationships']['id']['field'] = 'id';
+/* Suhte: Riigikantselei: rk_government and rk_minister_government */
+$handler->display->display_options['relationships']['government_id']['id'] = 'government_id';
+$handler->display->display_options['relationships']['government_id']['table'] = 'rk_minister_government';
+$handler->display->display_options['relationships']['government_id']['field'] = 'government_id';
+$handler->display->display_options['relationships']['government_id']['relationship'] = 'id';
 $handler->display->display_options['defaults']['fields'] = FALSE;
+/* Väli: Riigikantselei: Valitsuse number */
+$handler->display->display_options['fields']['government_number']['id'] = 'government_number';
+$handler->display->display_options['fields']['government_number']['table'] = 'rk_government';
+$handler->display->display_options['fields']['government_number']['field'] = 'government_number';
+$handler->display->display_options['fields']['government_number']['relationship'] = 'government_id';
+$handler->display->display_options['fields']['government_number']['label'] = '';
+$handler->display->display_options['fields']['government_number']['exclude'] = TRUE;
+$handler->display->display_options['fields']['government_number']['element_label_colon'] = FALSE;
+$handler->display->display_options['fields']['government_number']['separator'] = '';
 /* Väli: Riigikantselei: Ministri ID */
 $handler->display->display_options['fields']['id']['id'] = 'id';
 $handler->display->display_options['fields']['id']['table'] = 'rk_minister';
@@ -250,4 +264,3 @@ $handler->display->display_options['displays'] = array(
   'default' => 0,
 );
 $handler->display->display_options['attachment_position'] = 'after';
-

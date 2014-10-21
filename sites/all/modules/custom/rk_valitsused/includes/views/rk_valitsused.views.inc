@@ -44,7 +44,16 @@ function rk_valitsused_views_data() {
             ),
 			'government_number' => array(
                             'title' => t('Government Number'), 
-                            'help' => t('Government # 1, 2, 3... Found in rk_government.'), 
+                            'help' => t('Government # 1, 2, 3... Found in rk_government.'),
+							'relationship' => array(
+							  'base' => 'rk_minister_government', // The name of the table to join with.
+							  'base field' => 'government_id', // The name of the field on the joined table.
+							  // 'field' => 'nid' -- see hook_views_data_alter(); not needed here.
+							  'handler' => 'views_handler_relationship',
+							  'label' => t('Join tables rk_government and rk_minister_government'),
+							  'title' => t('rk_government and rk_minister_government'),
+							  'help' => t('Relationship for tables rk_government and rk_minister_government.'),
+							),                            
 							'field' => array(
 							  'handler' => 'views_handler_field_numeric', 
 							  'click sortable' => TRUE,
