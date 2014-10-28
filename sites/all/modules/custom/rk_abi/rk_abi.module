@@ -213,6 +213,37 @@ function rk_abi_settings($form, &$form_state) {
     '#description' => t('Forms with autocomplete parameter set to "off" tells browser not to remember and display former field entries. (usernames etc.)'),
   );
 
+  $form['rk_abi_security_options_fieldset']['rk_abi_use_local_addthis'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use local addthis_widget.js file'),
+    '#default_value' => variable_get('rk_abi_use_local_addthis', 0),
+    '#description' => t('Option to have locally saved version of addthis_widget file in use.'),
+  );
+
+  $form['rk_abi_security_options_fieldset']['rk_abi_use_local_addthis_path'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Path to local addthis_widget.js file'),
+    '#states' => array(
+      'invisible' => array(
+       ':input[name="rk_abi_use_local_addthis"]' => array('checked' => FALSE),
+      ),
+    ),    
+    '#default_value' => variable_get('rk_abi_use_local_addthis_path', ''),
+    '#description' => t('Work with your server admin to get the necessary js file uploaded onto the server and then reference that path here. Ex. /sites/default/files/addthis/local_addthis_widget.js'),
+  );
+  
+  $form['rk_abi_security_options_fieldset']['rk_abi_addthis_pubid'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Addthis service\'s fragment identifier'),
+    '#states' => array(
+      'invisible' => array(
+       ':input[name="rk_abi_use_local_addthis"]' => array('checked' => FALSE),
+      ),
+    ),    
+    '#default_value' => variable_get('rk_abi_addthis_pubid', 'ra-51f90a0115ca9e8f'),
+    '#description' => t('Originally hard-coded to "ra-51f90a0115ca9e8f". (Ex. https://s7.addthis.com/js/300/addthis_widget.js#pubid=ra-51f90a0115ca9e8f'),
+  );  
+
   return system_settings_form($form);
 }
 
@@ -236,6 +267,7 @@ function rk_abi_preprocess_html(&$variables) {
 /**
  * Abifunktsioon, obfuscate e-postid.
  * Siit: http://www.maurits.vdschee.nl/php_hide_email/
+ * Kasutuses views-view-table--contact--page.tpl.php templiidis.
  */
 function _rk_peida_email($email) { 
   $character_set = '+-.0123456789@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz';
@@ -410,10 +442,14 @@ function rk_abi_help($path, $arg) {
       $strOutput .= '<h3>' . t('Stripping Inline Styles for Old Content') . ':</h3>';
       $strOutput .= '<p>' . t('These are settings used by a custom input filter. Its purpose is to strip inline styles from old content that has been imported into Drupal. For instance, old content might have nasty font tags telling all text to be in Times New Roman.') . '</p>';
       $strOutput .= '<h3>' . t('Security suggestions') . ':</h3>';
-      $strOutput .= '<ul>';
+      $strOutput .= '<ol class="rk-abi-help">';
       $strOutput .= ' <li>' . t('Make sure autocomplete=off setting is turned on at <a href="@rkabi">settings page</a>', array('@rkabi' => url('admin/config/rkabi/settings'))) . '</li>';
-      $strOutput .= ' <li>' . t('<strong>Disallow php execution in subfolders</strong> with this line in .htaccess (after index.php rewrite rules):<br /><strong>RewriteRule "^.+/.*\.php$" - [F]</strong>') . '<br /><br /></li>';
-      $strOutput .= '</ul>';
+      $strOutput .= ' <li>' . t('<strong>Disallow php execution in subfolders</strong> with this line in .htaccess (after index.php rewrite rules):<br /><strong><em>RewriteRule "^.+/.*\.php$" - [F]</em></strong>') . '</li>';
+      $strOutput .= ' <li>' . t('<strong>settings.php</strong> - Uncomment allow_authorize_operations flag and make sure it is FALSE:<br /><strong><em>$conf[\'allow_authorize_operations\'] = FALSE;</em></strong><br />This disables authorize.php file.') . '</li>';
+      $strOutput .= ' <li>' . t('<strong>settings.php</strong> - Force Secure and httponly cookie flags. <strong>NB: Secure flag only if running https</strong>!!!<br /><strong><em>ini_set(\'session.cookie_secure\', 1); // Secure flag, https only.<br />ini_set(\'session.cookie_httponly\', 1); // HttpOnly flag.
+</em></strong>') . '</li>';
+      $strOutput .= ' <li>' . t('<strong>Apache config</strong> - Forbid your site from display in other site iframes. Configure apache with:<br /><strong><em>Header always append X-Frame-Options SAMEORIGIN</em></strong>') . '</li>';   
+      $strOutput .= '</ol>';
 
       return $strOutput;
   }

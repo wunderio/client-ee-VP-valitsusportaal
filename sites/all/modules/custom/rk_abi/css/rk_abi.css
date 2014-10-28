@@ -67,7 +67,7 @@
 
 /* Link pressika lehele, mis töötab mobiilis. Peida desktop vaates. */
 .front .mobiillink {
-  display: none;  
+  display: none;
 }
 
 
@@ -78,6 +78,30 @@
 
 #rk-abi-settings div.form-item-rk-abi-use-custom-newsletter-logos label {
   font-weight: 700;
+}
+
+/* In Memoriam comments */
+.comment-by-anonymous header,
+nav.comment-links {
+  display: none;
+}
+
+/* Eelinfo unformatted list - tabel ei ole mobiilivaates ilus. */ 
+.view-weekly-schedule div.views-field.views-field-field-weekly-schedule-date {float:left;width:20%;color:#666;}
+.view-weekly-schedule div.views-field.views-field-body {margin-left: 20%;}
+.view-weekly-schedule div.views-row {padding: 1em 0;border-bottom: solid 1px #bbb;}
+
+/* rk_abi help page */
+.help-page-content h3,
+.help-page-content p,
+.help-page-content ol,
+.help-page-content ul {
+  margin: 1em 0;
+}
+
+.help-page-content ol.rk-abi-help {
+  list-style-type: decimal;
+  margin-left: 35px;
 }
 
 

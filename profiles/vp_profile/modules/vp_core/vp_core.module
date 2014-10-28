@@ -23,9 +23,22 @@ function vp_core_page_build(&$page) {
     addthis_config.data_track_clickback = false;',
     array('type' => 'inline', 'scope' => 'footer', 'weight' => 5)
   );
-  drupal_add_js('//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-51f90a0115ca9e8f',
-    array('type' => 'external', 'scope' => 'footer', 'weight' => 6)
-  );
+
+  // 3rd party js security concern.´Option to use local copy of addthis_widget.js file. 
+  // mm. 28.10.2014. Settings page for local file path found in rk_abi.module.
+  $addthis_frag_identifier = variable_get('rk_abi_addthis_pubid', 'ra-51f90a0115ca9e8f');
+  if (variable_get('rk_abi_use_local_addthis', 0) == '1') {
+    $local_addthis_path = variable_get('rk_abi_use_local_addthis_path');    
+    drupal_add_js($local_addthis_path . '#pubid=' . $addthis_frag_identifier,
+      array('type' => 'file', 'scope' => 'footer', 'weight' => 6)
+    );
+  }
+  else {
+    drupal_add_js('//s7.addthis.com/js/300/addthis_widget.js#pubid=' . $addthis_frag_identifier,
+      array('type' => 'external', 'scope' => 'footer', 'weight' => 6)
+    );    
+  }
+
 
   // Force IE8, IE9 or IE10
   drupal_add_http_header('X-UA-Compatible', 'IE=Edge');
