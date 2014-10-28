@@ -448,7 +448,8 @@ function rk_abi_help($path, $arg) {
       $strOutput .= ' <li>' . t('<strong>settings.php</strong> - Uncomment allow_authorize_operations flag and make sure it is FALSE:<br /><strong><em>$conf[\'allow_authorize_operations\'] = FALSE;</em></strong><br />This disables authorize.php file.') . '</li>';
       $strOutput .= ' <li>' . t('<strong>settings.php</strong> - Force Secure and httponly cookie flags. <strong>NB: Secure flag only if running https</strong>!!!<br /><strong><em>ini_set(\'session.cookie_secure\', 1); // Secure flag, https only.<br />ini_set(\'session.cookie_httponly\', 1); // HttpOnly flag.
 </em></strong>') . '</li>';
-      $strOutput .= ' <li>' . t('<strong>Apache config</strong> - Forbid your site from display in other site iframes. Configure apache with:<br /><strong><em>Header always append X-Frame-Options SAMEORIGIN</em></strong>') . '</li>';   
+      $strOutput .= ' <li>' . t('<strong>Apache config</strong> - Forbid your site from display in other site iframes. Configure apache with:<br /><strong><em>Header always append X-Frame-Options SAMEORIGIN</em></strong>') . '</li>';
+      $strOutput .= ' <li>' . t('<strong>Addthis.com javascript locally</strong> - Use local file for addthis_widget.js to increase security against 3rd party service risk.') . '</li>';      
       $strOutput .= '</ol>';
 
       return $strOutput;
