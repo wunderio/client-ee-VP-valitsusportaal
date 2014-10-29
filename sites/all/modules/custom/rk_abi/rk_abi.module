@@ -242,7 +242,12 @@ function rk_abi_settings($form, &$form_state) {
     ),    
     '#default_value' => variable_get('rk_abi_addthis_pubid', 'ra-51f90a0115ca9e8f'),
     '#description' => t('Originally hard-coded to "ra-51f90a0115ca9e8f". (Ex. https://s7.addthis.com/js/300/addthis_widget.js#pubid=ra-51f90a0115ca9e8f'),
-  );  
+  );
+
+  $form['rk_abi_security_options_fieldset']['rk_abi_help_text_security'] = array(
+    '#type' => 'markup',
+    '#markup' => '<br />' . _rk_abi_help_text_security(),
+  );
 
   return system_settings_form($form);
 }
@@ -431,7 +436,18 @@ function rk_abi_form_alter(&$form, &$form_state, $form_id) {
  */
 function rk_abi_help($path, $arg) {
   switch ($path) {
-    case 'admin/help#rk_abi':
+    case 'admin/help#rk_abi': 
+      $strOutput = _rk_abi_help_text();
+      return $strOutput;
+  }
+}
+
+
+/**
+ * Helper function.
+ * One-stop shop for help text.
+ */
+function _rk_abi_help_text() {
       $strOutput = '';
       $strOutput .= '<h3>' . t('About') . '</h3>';
       $strOutput .= '<p>' . t('The Riigikantselei Abimoodul provides miscellaneous settings to enhance the functionality and security of the Estonian government portal profile. Sometimes you just need a place to put a hook_form_alter() here or add css / javascript there.') . '</p>';
@@ -441,7 +457,19 @@ function rk_abi_help($path, $arg) {
       $strOutput .= '<p>' . t('Various settings to enable / disable the insertion of blocks into newsletters. For instance, a particular newsletter can include a specific logo while others have no logo at all. Also, there is the ability to insert a block into the footer. Currently the footer block is used as a "Social Media Block".') . ':</p>';
       $strOutput .= '<h3>' . t('Stripping Inline Styles for Old Content') . ':</h3>';
       $strOutput .= '<p>' . t('These are settings used by a custom input filter. Its purpose is to strip inline styles from old content that has been imported into Drupal. For instance, old content might have nasty font tags telling all text to be in Times New Roman.') . '</p>';
-      $strOutput .= '<h3>' . t('Security suggestions') . ':</h3>';
+
+      $strOutput .= _rk_abi_help_text_security();
+
+      return $strOutput;
+}
+
+
+/**
+ * Helper function.
+ * One-stop shop for security text.
+ */
+function _rk_abi_help_text_security() {      
+      $strOutput = '<h3>' . t('Security suggestions') . ':</h3>';
       $strOutput .= '<ol class="rk-abi-help">';
       $strOutput .= ' <li>' . t('Make sure autocomplete=off setting is turned on at <a href="@rkabi">settings page</a>', array('@rkabi' => url('admin/config/rkabi/settings'))) . '</li>';
       $strOutput .= ' <li>' . t('<strong>Disallow php execution in subfolders</strong> with this line in .htaccess (after index.php rewrite rules):<br /><strong><em>RewriteRule "^.+/.*\.php$" - [F]</em></strong>') . '</li>';
@@ -453,5 +481,4 @@ function rk_abi_help($path, $arg) {
       $strOutput .= '</ol>';
 
       return $strOutput;
-  }
 }
