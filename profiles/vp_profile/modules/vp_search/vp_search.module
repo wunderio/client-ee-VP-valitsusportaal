@@ -62,7 +62,8 @@ function vp_search_block_view($delta = '') {
           $gss->SetLanguage(variable_get('gss_language', ''));
         }
         try {
-          $results = $gss->GetSearchResults($page);
+          // @todo. Make sure $page variable exists before calling this function. Need to research. mm. 28.10.2014. PHP warning being thrown in watchdog logs.
+          $results = $gss->GetSearchResults($page);        
         }
         catch(Exception $e) {
            watchdog('gss', $e, NULL, WATCHDOG_ERROR);
@@ -101,7 +102,7 @@ function vp_search_views_query_alter(&$view, &$query) {
     }
     else {
       foreach ($get_filter_relations as $field => $condition) {
-        if ((int)$field === (int)$_GET['radios']) {
+        if (isset($_GET['radios']) && (int)$field === (int)$_GET['radios']) {
           $query->where[1]['conditions'][$condition]['value'] = '%' . check_plain($_GET['filter']) . '%';
         }
         else {
@@ -341,22 +342,22 @@ function vp_search_gss_search_key_alter(&$query) {
 }
 
 function vp_search_gss_search_extraparams_alter(&$extra) {
-  if ($_GET['time'] === '1-week') {
+  if (isset($_GET['time']) && $_GET['time'] === '1-week') {
     $extra = array(
       'sort' => 'item-date:r:'.date('Ymd', strtotime('-1 week')).':'.date('Ymd')
     );
   }
-  elseif ($_GET['time'] === '1-month') {
+  elseif (isset($_GET['time']) && $_GET['time'] === '1-month') {
     $extra = array(
       'sort' => 'item-date:r:'.date('Ymd', strtotime('-1 month')).':'.date('Ymd')
     );
   }
-  elseif ($_GET['time'] === '12-months') {
+  elseif (isset($_GET['time']) && $_GET['time'] === '12-months') {
     $extra = array(
       'sort' => 'item-date:r:'.date('Ymd', strtotime('-12 months')).':'.date('Ymd')
     );
   }
-  elseif ($_GET['time'] === 'between') {
+  elseif (isset($_GET['time']) && $_GET['time'] === 'between') {
     $extra = array(
       'sort' => 'item-date:r:'.date('Ymd', strtotime($_GET['time-between-start'])).':'.date('Ymd', strtotime($_GET['time-between-end']))
     );
