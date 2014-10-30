@@ -44,7 +44,7 @@ function vp_core_page_build(&$page) {
   drupal_add_http_header('X-UA-Compatible', 'IE=Edge');
 
   // Message for static views.
-  if (strpos(drupal_strtolower($_SERVER['HTTP_USER_AGENT']), 'httrack') !== FALSE) {
+  if (isset($_SERVER['HTTP_USER_AGENT']) && strpos(drupal_strtolower($_SERVER['HTTP_USER_AGENT']), 'httrack') !== FALSE) {
     drupal_add_js('(function($){$().ready(function(){
       $("body").prepend("<div style="+\'"background:#b80000;color:#fff;padding:10px 0;text-align: center"\'+">'.t('Attention! This is the static version of !url, due to special circumstances. Some of the dynamic functionality, such as search or filtering, will not work.', array('!url' => $base_url)).'</div>");
     });})(jQuery);', 'inline');
