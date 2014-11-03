@@ -753,7 +753,7 @@ function _rk_valitsused_varasemad_valitsused() {
       $arrResult[$counter]['government_number'] = $row->government_number;
       $arrResult[$counter]['government_id'] = $row->government_id;
       $arrResult[$counter]['minister_id'] = $row->minister_id;
-      $arrResult[$counter]['ruled_start_date'] = _rk_valitsused_eesti_format_date($row->ruled_start_date);
+      $arrResult[$counter]['ruled_start_date'] = _rk_valitsused_eesti_format_date($row->ruled_start_date, FALSE);
       $arrResult[$counter]['ruled_end_date'] = _rk_valitsused_eesti_format_date($row->ruled_end_date);
       $arrResult[$counter]['ruled_days'] = (int) $ruled_days;
       $arrResult[$counter]['first_name'] = $row->first_name;
@@ -1200,7 +1200,7 @@ function rk_valitsused_valitsused_submit($form, &$form_state) {
       $arrResult[$counter]['government_number'] = $row->government_number;
       $arrResult[$counter]['government_id'] = $row->government_id;
       $arrResult[$counter]['minister_id'] = $row->minister_id;
-      $arrResult[$counter]['ruled_start_date'] = _rk_valitsused_eesti_format_date($row->ruled_start_date);
+      $arrResult[$counter]['ruled_start_date'] = _rk_valitsused_eesti_format_date($row->ruled_start_date, FALSE);
       $arrResult[$counter]['ruled_end_date'] = _rk_valitsused_eesti_format_date($row->ruled_end_date);
       $arrResult[$counter]['ruled_days'] = (int) $ruled_days;
       $arrResult[$counter]['first_name'] = $row->first_name;
@@ -1307,9 +1307,9 @@ function rk_valitsused_ministrid_submit($form, &$form_state) {
       $arrResult[$counter]['government_number'] = $row->government_number;
       $arrResult[$counter]['government_id'] = $row->government_id;
       $arrResult[$counter]['minister_id'] = $row->minister_id;
-      $arrResult[$counter]['ruled_start_date'] = _rk_valitsused_eesti_format_date($row->ruled_start_date);
+      $arrResult[$counter]['ruled_start_date'] = _rk_valitsused_eesti_format_date($row->ruled_start_date, FALSE);
       $arrResult[$counter]['ruled_end_date'] = _rk_valitsused_eesti_format_date($row->ruled_end_date);
-      $arrResult[$counter]['ruled_combined'] = _rk_valitsused_eesti_format_date($row->ruled_start_date) . ' - ' . _rk_valitsused_eesti_format_date($row->ruled_end_date);
+      $arrResult[$counter]['ruled_combined'] = _rk_valitsused_eesti_format_date($row->ruled_start_date, FALSE) . ' - ' . _rk_valitsused_eesti_format_date($row->ruled_end_date);
       $arrResult[$counter]['ruled_days'] = (int) $ruled_days;
       $arrResult[$counter]['first_name'] = $row->first_name;
       $arrResult[$counter]['last_name'] = $row->last_name;
@@ -1400,7 +1400,7 @@ function rk_valitsused_statistika_kauem_submit($form, &$form_state) {
       $arrResult[$counter]['government_number'] = $row->government_number;
       $arrResult[$counter]['government_id'] = $row->id;
       $arrResult[$counter]['minister_id'] = $row->minister_id;
-      $arrResult[$counter]['ruled_start_date'] = _rk_valitsused_eesti_format_date($row->ruled_start_date);
+      $arrResult[$counter]['ruled_start_date'] = _rk_valitsused_eesti_format_date($row->ruled_start_date, FALSE);
       $arrResult[$counter]['ruled_end_date'] = _rk_valitsused_eesti_format_date($row->ruled_end_date);
       $arrResult[$counter]['ruled_days'] = (int) $ruled_days;
       $arrResult[$counter]['name'] = $row->first_name . ' ' . $row->last_name;
@@ -1739,7 +1739,7 @@ function theme_ul_valitsus_object($variables) {
   $output = '';
   $output .= '<ul class="' . $variables['even_odd'] . ' varasemad">';
   $output .= '<li class="gov-num-narrow"><span class="m-label">' . t('Government Number:') . '</span> <a href="' . VALITSUS_URL . '/' . $variables['muutujad']->government_number . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']->government_number . '">' . $variables['muutujad']->government_number . '</a></li>';
-  $output .= '<li class="time-span"><span class="m-label">' . t('Period:') . '</span> <span class="ametiaeg"><a href="' . VALITSUS_URL . '/' . $variables['muutujad']->government_number . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']->government_number . '">' . _rk_valitsused_eesti_format_date($variables['muutujad']->ruled_start_date) . ' - ' . _rk_valitsused_eesti_format_date($variables['muutujad']->ruled_end_date) . '</a></span></li>';
+  $output .= '<li class="time-span"><span class="m-label">' . t('Period:') . '</span> <span class="ametiaeg"><a href="' . VALITSUS_URL . '/' . $variables['muutujad']->government_number . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']->government_number . '">' . _rk_valitsused_eesti_format_date($variables['muutujad']->ruled_start_date, FALSE) . ' - ' . _rk_valitsused_eesti_format_date($variables['muutujad']->ruled_end_date) . '</a></span></li>';
   $output .= '<li class="duration"><span class="m-label">' . t('Duration:') . '</span> ' . $variables['muutujad']->calculated_days . '</li>';
 
   // Prefer display_indiv_name over concatenation of first and last names.
@@ -1799,7 +1799,7 @@ function theme_table_valitsus($variables) {
   // @todo. Is there a way to use drupal_render elegantly here?
   $output = '<tr class="' . $variables['even_odd'] . '">';
   $output .= '<td><a href="' . VALITSUS_URL . '/' . $variables['muutujad']['government_number'] . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']['government_number'] . '">' . $variables['muutujad']['government_number'] . '</a></td>';
-  $output .= '<td><span class="ametiaeg">' . _rk_valitsused_eesti_format_date($variables['muutujad']['ruled_start_date']) . ' - ' . _rk_valitsused_eesti_format_date($variables['muutujad']['ruled_end_date']) . '</span></td>';
+  $output .= '<td><span class="ametiaeg">' . _rk_valitsused_eesti_format_date($variables['muutujad']['ruled_start_date'], FALSE) . ' - ' . _rk_valitsused_eesti_format_date($variables['muutujad']['ruled_end_date']) . '</span></td>';
   $output .= '<td>' . $variables['muutujad']['ruled_days'] . '</td>';
   $output .= '<td class="juht"><a href="' . MINISTER_URL . '/' . $variables['muutujad']['minister_id'] . '" title="' . $variables['muutujad']['name'] . '">' . $variables['muutujad']['name'] . '</td>';
   $output .= '<td>' . $variables['muutujad']['ametinimetus'] . '</td></tr>';
@@ -1947,7 +1947,7 @@ Array
   $output .= ' <span class="m-label">' . t('Government Number:') . '</span> <a href="' . VALITSUS_URL . '/' . $variables['muutujad']->rk_government_rk_minister_government_government_number . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']->rk_government_rk_minister_government_government_number . '">' . $variables['muutujad']->rk_government_rk_minister_government_government_number . '</a>';
   $output .= '</li>';
   $output .= '<li class="time-span">';
-  $output .= ' <span class="m-label">' . t('Period:') . '</span> <span class="ametiaeg"><a href="' . VALITSUS_URL . '/' . $variables['muutujad']->rk_government_rk_minister_government_government_number . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']->rk_government_rk_minister_government_government_number . '">' . _rk_valitsused_eesti_format_date($variables['muutujad']->rk_minister_government_rk_minister_ruled_start_date) . ' - ' . _rk_valitsused_eesti_format_date($variables['muutujad']->rk_minister_government_rk_minister_ruled_end_date) . '</a></span>';
+  $output .= ' <span class="m-label">' . t('Period:') . '</span> <span class="ametiaeg"><a href="' . VALITSUS_URL . '/' . $variables['muutujad']->rk_government_rk_minister_government_government_number . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']->rk_government_rk_minister_government_government_number . '">' . _rk_valitsused_eesti_format_date($variables['muutujad']->rk_minister_government_rk_minister_ruled_start_date, FALSE) . ' - ' . _rk_valitsused_eesti_format_date($variables['muutujad']->rk_minister_government_rk_minister_ruled_end_date) . '</a></span>';
   $output .= '</li>';
   $output .= '<li class="duration"> <span class="m-label">' . t('Duration (days):') . '</span> ' . _rk_valitsused_calculate_days($variables['muutujad']->rk_minister_government_rk_minister_ruled_start_date, $variables['muutujad']->rk_minister_government_rk_minister_ruled_end_date) . '</li>';
 
@@ -2045,7 +2045,7 @@ function theme_table_row_search_minister_object($variables) {
   $output .= '  <a href="' . VALITSUS_URL . '/' . $variables['muutujad']->government_number . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']->government_number . '">' . $variables['muutujad']->government_number . '</a>';
   $output .= '</li>';
   $output .= '<li class="time-span">';
-  $output .= '  <span class="ametiaeg"><a href="' . VALITSUS_URL . '/' . $variables['muutujad']->government_number . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']->government_number . '">' . _rk_valitsused_eesti_format_date($variables['muutujad']->ruled_start_date) . ' - ' . _rk_valitsused_eesti_format_date($variables['muutujad']->ruled_end_date) . '</a></span>';
+  $output .= '  <span class="ametiaeg"><a href="' . VALITSUS_URL . '/' . $variables['muutujad']->government_number . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']->government_number . '">' . _rk_valitsused_eesti_format_date($variables['muutujad']->ruled_start_date, FALSE) . ' - ' . _rk_valitsused_eesti_format_date($variables['muutujad']->ruled_end_date) . '</a></span>';
   $output .= '</li>';
   $output .= '<li class="duration">' . $variables['muutujad']->calculated_days . '</li>';
   $output .= '<li class="gov-head">' . _rk_valitsused_translate_amet($variables['muutujad']->position_type_code) . '</li>';
@@ -2086,7 +2086,7 @@ function theme_valitsus_description($variables) {
     $strOutput .= '<div class="varasemad-wrapper gov-wrapper">';
     $strOutput .= '<div class="grid-6">';
 
-    $formatted_date_output = _rk_valitsused_eesti_format_date($variables['muutujad']->rk_government_ruled_start_date) . ' - ' . _rk_valitsused_eesti_format_date($variables['muutujad']->rk_government_ruled_end_date);
+    $formatted_date_output = _rk_valitsused_eesti_format_date($variables['muutujad']->rk_government_ruled_start_date, FALSE) . ' - ' . _rk_valitsused_eesti_format_date($variables['muutujad']->rk_government_ruled_end_date);
     $strOutput .= '<h2 class="varasemad-title gov-title">' . t('Government @num', array('@num' => $formatted_date_output)) . '</h2>';
 
     $strOutput .= '<p><strong>' . t('Days ruled') . ':</strong> ' . _rk_valitsused_days_in_power($variables['muutujad']->rk_government_id, 'valitsus') . '</p>';
@@ -2493,7 +2493,7 @@ endif; */
     $ruled = '';
     if (($min_start != '' && $min_start != $gov_start) || ($min_end != '' && $min_end != $gov_end)) {
       $min_end = ($vars['row']->rk_minister_government_rk_government_ruled_end_date != '') ? _rk_valitsused_eesti_format_date($vars['row']->rk_minister_government_rk_government_ruled_end_date) : '...';
-      $ruled = ' <span class="smaller">(' . _rk_valitsused_eesti_format_date($min_start) . '-' . $min_end . ')</span>';
+      $ruled = ' <span class="smaller">(' . _rk_valitsused_eesti_format_date($min_start, FALSE) . '-' . $min_end . ')</span>';
     }
 
     // Giving option to have different Minister name displayed. (ex. unmarried vs married name)
@@ -2514,7 +2514,7 @@ endif; */
 	return '<span class="ametikoht">' . _rk_valitsused_translate_amet($vars['row']->rk_minister_government_rk_minister_position_type_code) . '</span>';
   }
   elseif ($vars['field']->field_alias == 'rk_minister_government_rk_minister_ruled_end_date') {
-    $min_start = _rk_valitsused_eesti_format_date($vars['row']->rk_minister_government_rk_minister_ruled_start_date);
+    $min_start = _rk_valitsused_eesti_format_date($vars['row']->rk_minister_government_rk_minister_ruled_start_date, FALSE);
     $min_end = ($vars['row']->rk_minister_government_rk_minister_ruled_end_date != '') ? _rk_valitsused_eesti_format_date($vars['row']->rk_minister_government_rk_minister_ruled_end_date) : '...';
 
     $ruled = $min_start . ' - ' . $min_end;
