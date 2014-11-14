@@ -198,6 +198,33 @@ function rk_abi_settings($form, &$form_state) {
     '#description' => t('Any content with a created date earlier than this is considered old and will have inline styles stripped from defined tags.'),
   );
 
+
+  $form['rk_abi_contact_options'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Contact Page Options'),
+    '#description' => t('Settings to make contact page display more flexible.'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+
+    // Find all newsletters and build logo settings for them.
+  $vocab = taxonomy_vocabulary_machine_name_load('department');
+  $all_departments = taxonomy_get_tree($vocab->vid);
+  $dept_options = array();
+  foreach ($all_departments as $key => $value) {
+    $dept_options[$value->tid] = $value->name;
+  }
+
+  $form['rk_abi_contact_options']['rk_abi_contact_popup_depts_to_hide'] = array(
+    '#type' => 'select',
+    '#multiple' => TRUE,
+    '#title' => t('Hide Department Name in Contact Pop-up'),
+    '#description' => t('Most likely you do not need this. Built for a very odd Riigikantselei use case. Multiple departments can be picked by holding down Ctrl key.'),
+    '#options' => $dept_options,
+    '#default_value' => variable_get('rk_abi_contact_popup_depts_to_hide'),
+  );
+
+
   $form['rk_abi_security_options_fieldset'] = array(
     '#type' => 'fieldset',
     '#title' => t('Security Options'),

@@ -116,6 +116,13 @@ foreach ($rows as &$row) {
             // Ära kasuta no-profile-image. mm 03.06.2014.
             $node_view['field_profile_photo'] = '';
           }
+
+          // Option to not display department in pop-up. mm 13.11.2014.
+          $dept_tid = (isset($node_view['field_department']['#object']->field_department[LANGUAGE_NONE][0]['taxonomy_term']->tid)) ? $node_view['field_department']['#object']->field_department[LANGUAGE_NONE][0]['taxonomy_term']->tid : -1;
+          $hide_dept = variable_get('rk_abi_contact_popup_depts_to_hide');
+          if (in_array($dept_tid, array_keys($hide_dept))) {
+            unset($node_view['field_department']);
+          }
           $node_view = render($node_view);
         }
 
