@@ -531,7 +531,6 @@ function rk_valitsused_ministrid_edit_submit($form, &$form_state) {
   }  
 
   // From https://api.drupal.org/api/drupal/developer!topics!forms_api_reference.html/7#managed_file.
-  // print_r($form_state['values']);exit;
   if (isset($form_state['values']['minister_img_fid']) && $form_state['values']['minister_img_fid'] != '') {
     // Load the file via file.fid.
     $file = file_load($form_state['values']['minister_img_fid']);
@@ -854,7 +853,7 @@ function _rk_valitsused_get_dropdown_values($table = 'rk_minister_government', $
  * @todo. No longer need this function.
  */
 function rk_valitsused_remove_file($form, &$form_state) {
-  watchdog('rk', 'tere <pre>' . print_r($form_state, true) . '</pre>');
+  // watchdog('rk', 'tere <pre>' . print_r($form_state, true) . '</pre>');
   // @todo. Try array_key_exists on next line.
   $table = 'rk_minister';
   $field = ($table == 'rk_minister') ? 'minister_img_fid' : 'cabinet_img_fid';
@@ -897,14 +896,14 @@ function _rk_valitsused_delete_file_empty_field($table, $field, $id) {
     ))
     ->condition('id', $id, '=')
     ->execute();    
-    watchdog('rk', 'got rid of ' . $field . ' for ' . $id);
+    // watchdog('rk', 'got rid of ' . $field . ' for ' . $id);
   //}
 
 }
 
 
 /**
- * Abifunktsioon. Olemasolevad galleriid rippmenüüse.
+ * Abifunktsioon. Olemasolevad galeriid rippmenüüse.
  * @return $id
  *   Array. Dropdown options. 
  */
