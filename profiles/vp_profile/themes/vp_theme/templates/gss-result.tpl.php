@@ -11,7 +11,7 @@
     <?php if ($url) : ?>
       <p class="gss-search-url"><a href="<?php print $url; ?>"><?php print $url; ?></a></p>
     <?php endif; ?>
-    <?php if ($info_split['date']): ?>
+    <?php if (isset($info_split['date'])): ?>
       <p class="gss-info">
         <?php print $info_split['date']; ?>
       </p>

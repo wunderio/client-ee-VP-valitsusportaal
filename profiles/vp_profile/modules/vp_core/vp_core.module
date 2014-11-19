@@ -24,7 +24,7 @@ function vp_core_page_build(&$page) {
     array('type' => 'inline', 'scope' => 'footer', 'weight' => 5)
   );
 
-  // 3rd party js security concern.´Option to use local copy of addthis_widget.js file. 
+  // 3rd party js security concern. Option to use local copy of addthis_widget.js file. 
   // mm. 28.10.2014. Settings page for local file path found in rk_abi.module.
   $addthis_frag_identifier = variable_get('rk_abi_addthis_pubid', 'ra-51f90a0115ca9e8f');
   if (variable_get('rk_abi_use_local_addthis', 0) == '1') {

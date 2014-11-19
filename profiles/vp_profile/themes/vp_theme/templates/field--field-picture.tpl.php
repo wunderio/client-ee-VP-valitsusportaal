@@ -22,7 +22,7 @@ $gallery = node_load($gallery_nids[0]);
     if (isset($item['#entity']->field_author[LANGUAGE_NONE])) {
       $author = $item['#entity']->field_author[LANGUAGE_NONE][0]['value'];
     }
-    if (empty($author)) $author = $gallery->field_author[LANGUAGE_NONE][0]['value'];
+    if (empty($author) && isset($gallery->field_author[LANGUAGE_NONE][0]['value'])) $author = $gallery->field_author[LANGUAGE_NONE][0]['value'];
     if (!empty($author)) $author = ' | ' . $author;
     // Date
     $date = '';

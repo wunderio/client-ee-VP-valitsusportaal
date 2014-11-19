@@ -62,8 +62,9 @@ function vp_search_block_view($delta = '') {
           $gss->SetLanguage(variable_get('gss_language', ''));
         }
         try {
-          // @todo. Make sure $page variable exists before calling this function. Need to research. mm. 28.10.2014. PHP warning being thrown in watchdog logs.
-          $results = $gss->GetSearchResults($page);        
+          // Set page variable here to avoid watchdog errors. mm 19.11.2014.
+          $page = (isset($page)) ? $page : 1; // Default to getting page 1 of search results.
+          $results = $gss->GetSearchResults($page);
         }
         catch(Exception $e) {
            watchdog('gss', $e, NULL, WATCHDOG_ERROR);
@@ -162,8 +163,8 @@ function vp_search_form_alter(&$form, &$form_state, $form_id) {
     global $base_url;
     
     // Casting GET to expected format. mm 25.07.2014. Made a bit more robust, was often inserting 01.01.1970. mm 25.09.2014.
-    $_GET['time-between-start'] = (trim($_GET['time-between-start']) != '') ? date('d.m.Y', strtotime($_GET['time-between-start'])) : '';
-    $_GET['time-between-end'] = (trim($_GET['time-between-end']) != '') ? date('d.m.Y', strtotime($_GET['time-between-end'])) : '';
+    $_GET['time-between-start'] = (isset($_GET['time-between-start']) && trim($_GET['time-between-start']) != '') ? date('d.m.Y', strtotime($_GET['time-between-start'])) : '';
+    $_GET['time-between-end'] = (isset($_GET['time-between-end']) && trim($_GET['time-between-end']) != '') ? date('d.m.Y', strtotime($_GET['time-between-end'])) : '';
 
     drupal_add_library('system', 'ui.datepicker');
     drupal_add_js('(function($){$().ready(function(){
@@ -297,11 +298,19 @@ function vp_search_form_alter(&$form, &$form_state, $form_id) {
       $value = 'more:pagemap:item-type:' . $node_type->type;
       $content_type_radios[$value] = t($node_type->name);
     }
+    
+    // From Handle text in a secure fashion https://www.drupal.org/node/28984
+    // Only #default_value for a select type is sanitized? What about checkboxes?
+    // Looping through GET['type'] and sanitizing each value. mm 18.nov.2014.
+    $get_type = (isset($_GET['type'])) ? $_GET['type'] : array();
+    foreach($get_type as $key => $value) {
+      $get_type[$key] = check_plain($value);
+    }   
     $form['type'] = array(
       '#prefix' => '<div class="views-exposed-widget"><label>' . t('Content type') . '</label>',
       '#suffix' => '</div>',
       '#type' => 'checkboxes',
-      '#default_value' => check_plain($_GET['type']),
+      '#default_value' => $get_type,
       '#options' => $content_type_radios,
     );
 
@@ -315,11 +324,19 @@ function vp_search_form_alter(&$form, &$form_state, $form_id) {
       $value = 'more:pagemap:item-subject:'.$value;
       $subject_ratios[$value] = t($term->name);
     }
+    
+    // From Handle text in a secure fashion https://www.drupal.org/node/28984
+    // Only #default_value for a select type is sanitized? What about checkboxes?
+    // Looping through GET['subject'] and sanitizing each value. mm 18.nov.2014.
+    $get_subject = (isset($_GET['subject'])) ? $_GET['subject'] : array();
+    foreach($get_subject as $key => $value) {
+      $get_subject[$key] = check_plain($value);
+    }
     $form['subject'] = array(
       '#prefix' => '<div class="views-exposed-widget"><label>' . t('Subject') . '</label>',
       '#suffix' => '</div>',
       '#type' => 'checkboxes',
-      '#default_value' => check_plain($_GET['subject']),
+      '#default_value' => $get_subject,
       '#options' => $subject_ratios,
     );
   }
@@ -333,11 +350,11 @@ function vp_search_gss_search_key_alter(&$query) {
   }
 
   if (isset($_GET['type']) && !empty($_GET['type']) && !in_array('all', $_GET['type'])) {
-    $query .= ' ' . implode(' OR ', check_plain($_GET['type']));
+    $query .= ' ' . check_plain(implode(' OR ', $_GET['type']));
   }
 
   if (isset($_GET['subject']) && !empty($_GET['subject']) && !in_array('all', $_GET['subject'])) {
-    $query .= ' ' . implode(' OR ', check_plain($_GET['subject']));
+    $query .= ' ' . check_plain(implode(' OR ', $_GET['subject']));
   }
 }
 
