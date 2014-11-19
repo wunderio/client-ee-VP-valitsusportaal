@@ -664,3 +664,13 @@ function vp_theme_preprocess_node(&$vars) {
     }
   }
 }
+
+
+/**
+ * Implements theme_html_head_alter().
+ * Removes the Generator tag from the head for Drupal 7
+ * From https://docs.acquia.com/articles/hiding-fact-your-site-runs-drupal.
+ */
+function vp_theme_html_head_alter(&$head_elements) {
+  unset($head_elements['system_meta_generator']);
+}
