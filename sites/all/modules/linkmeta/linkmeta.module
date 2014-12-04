@@ -107,7 +107,7 @@ function _linkmeta_process($text, $filter, $format, $langcode, $cache, $cache_id
     }
 
     // Skip if not http://, https://, //, relative or absolute path.
-    if (!empty($url_scheme) && $url_scheme !== 'http' && $url_scheme !== 'https') {
+    if (!empty($url_scheme) && $url_scheme !== 'http' && $url_scheme !== 'https') {      
       continue;
     }
 
@@ -143,15 +143,17 @@ function _linkmeta_process($text, $filter, $format, $langcode, $cache, $cache_id
       if (strpos($class, 'icon-' . $extension) === FALSE) {
         $class .= ' icon-' . $extension;
       }
-    }
 
-    // Does current extension exist, if not take next one.
-    if (empty($extension)) {
-      continue;
     }
 
     // Set class variable as class attribute for a tag.
     $a->setAttribute('class', $class);
+
+    // Does current extension exist, if not take next one.
+    // Moved this empty($extension) below $a->setAttribute. mm 4dec14.    
+    if (empty($extension)) {
+      continue;
+    }
 
     // Enrichments.
     $enrichments = array();
