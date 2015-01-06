@@ -89,6 +89,7 @@ function rk_abi_exit() {
   // Kind of works, but need to get all the css/js/img files too.
   // $data = ob_get_contents();
   // watchdog('rk', $data);
+
 }
 
 
@@ -105,6 +106,28 @@ function rk_abi_settings($form, &$form_state) {
     '#description' => t('Optional blocks and functionality for newsletters.'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
+  );
+
+  $form['rk_abi_newsletters_fieldset']['rk_abi_show_links_files_fieldset'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Show Links and/or Files Block'),
+    '#description' => t('These are the optional blocks that appear in the right sidebar of any news item. By default these are not displayed in newsletter output.'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+
+  $form['rk_abi_newsletters_fieldset']['rk_abi_show_links_files_fieldset']['rk_abi_newsletter_show_links'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show Links in Newsletter'),
+    '#default_value' => variable_get('rk_abi_newsletter_show_links', 0),
+    '#description' => t('Output list of links in newsletter.'),
+  );
+
+  $form['rk_abi_newsletters_fieldset']['rk_abi_show_links_files_fieldset']['rk_abi_newsletter_show_files'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show Files in Newsletter'),
+    '#default_value' => variable_get('rk_abi_newsletter_show_files', 0),
+    '#description' => t('Output list of attached files in newsletter.'),
   );
 
   $form['rk_abi_newsletters_fieldset']['rk_abi_social_media_fieldset'] = array(
@@ -174,6 +197,22 @@ function rk_abi_settings($form, &$form_state) {
       '#default_value' => variable_get('rk_abi_logo_newsletter_' . $value->tid, '-1'),
     );
   }
+
+  
+  $form['rk_abi_flush_boost'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Clean Boost cache'),
+    '#description' => t('Time-conscious web admins want to see their updated content immediately on the live site. <em>(Caching for performance be damned!)</em> For this we need to clean the Boost cache when any node is updated.'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+
+  $form['rk_abi_flush_boost']['rk_abi_flush_boost_on_node_update'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Clear Boost cache on node update'),
+    '#default_value' => variable_get('rk_abi_flush_boost_on_node_update', 0),
+    '#description' => t('Checks if Boost module is enabled and clears its cache on node update.'),
+  );
 
 
   $form['rk_abi_clean_old_crap_fieldset'] = array(
@@ -454,6 +493,19 @@ function rk_abi_form_alter(&$form, &$form_state, $form_id) {
   if (variable_get('rk_abi_autocomplete_off', 1) === 1) {
     // Add autocomplete=off to all forms, security best practice. mm 07.10.2014.
     $form['#attributes']['autocomplete'] = 'off';
+  }
+}
+
+
+
+/**
+ * Implements hook_node_update().
+ */
+function rk_abi_node_update($node) {
+  // Check if boost is enabled and that we want to clear cache.
+  if (module_exists('boost') && variable_get('rk_abi_flush_boost_on_node_update', 0) === 1) { 
+    boost_flush_caches();
+    watchdog('rk', t('Boost cache flushed on update of node @id, <em>@pealkiri</em>', array('@id' => $node->nid, '@pealkiri' => $node->title)));
   }
 }
 
