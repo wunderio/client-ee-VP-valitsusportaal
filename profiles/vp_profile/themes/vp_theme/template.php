@@ -203,19 +203,23 @@ function add_facebook_meta_tags() {
 
   if (arg(0) == 'node' && (int) arg(1) > 0) {
     $node = node_load(arg(1));
-    $teaser_object = node_view($node, 'view_mode_facebook');
-    $teaser = '';
-    if (isset($teaser_object['body'][0]['#markup'])) {
-      $teaser = str_replace("\n", ' ', strip_tags($teaser_object['body'][0]['#markup']));
-    }
-    if ($node->type === 'news') {
-      if (!empty($node->field_cover_image)) {
-        $image_og_meta['#attributes']['content'] = image_style_url('large', $node->field_cover_image['und'][0]['uri']);
-      }
-    }
 
-    if (!empty($teaser)) {
-      $description_og_meta['#attributes']['content'] = $teaser;
+    // Check if node object is created. This avoids EntityMalformedException from $teaser_object node_view line.
+    if ($node !== FALSE) {    
+      $teaser_object = node_view($node, 'view_mode_facebook');
+      $teaser = '';
+      if (isset($teaser_object['body'][0]['#markup'])) {
+        $teaser = str_replace("\n", ' ', strip_tags($teaser_object['body'][0]['#markup']));
+      }
+      if ($node->type === 'news') {
+        if (!empty($node->field_cover_image)) {
+          $image_og_meta['#attributes']['content'] = image_style_url('large', $node->field_cover_image['und'][0]['uri']);
+        }
+      }
+
+      if (!empty($teaser)) {
+        $description_og_meta['#attributes']['content'] = $teaser;
+      }
     }
   }
 
@@ -463,7 +467,7 @@ function vp_theme_alpha_preprocess_block(&$vars) {
     $vars['content'] = $breadcrumb;
   }
 }
-
+         
 function vp_theme_preprocess_date_views_pager(&$vars) {
   global $language;
 
@@ -490,6 +494,30 @@ function vp_theme_preprocess_date_views_pager(&$vars) {
     $max = date('U', strtotime($max[0]));
     $current_min = $vars['plugin']->view->argument['field_weekly_schedule_date_value']->min_date->format('U');
     $current_max = $vars['plugin']->view->argument['field_weekly_schedule_date_value']->max_date->format('U');
+
+    // Make sure the before or next link does not jump a year. mm 9jan15.
+    $filter_year_week = (isset($_GET['week'])) ? check_plain($_GET['week']) : date('Y-\WW');
+    $arrFilter = explode('-W', $filter_year_week);
+    $filter_year = $arrFilter[0]; // ex. 2015
+    $filter_week = $arrFilter[1]; // ex. 02 as in W02
+
+    // From week 02, go back to previous year's W53.
+    if ((int) $filter_week === 02) {
+      $filter_year_minus_one = (int) $filter_year - 1;
+      $prev_arg = $filter_year_minus_one . '-W53';
+      $next_arg = $filter_year . '-W03';
+      $vars['prev_url'] = date_pager_url($vars['plugin']->view, NULL, $prev_arg);
+      $vars['next_url'] = date_pager_url($vars['plugin']->view, NULL, $next_arg);
+    }    
+    
+    // From 52 go to 53 of the filter year. (ex. 2014-W53 NOT 2015-W53 which is what was happening).
+    if ((int) $filter_week === 52) {
+      $prev_arg = $filter_year . '-W51';
+      $next_arg = $filter_year . '-W53';
+      $vars['prev_url'] = date_pager_url($vars['plugin']->view, NULL, $prev_arg);
+      $vars['next_url'] = date_pager_url($vars['plugin']->view, NULL, $next_arg);
+    }
+    
     if ($current_min < $min && $current_min < time()) {
       unset($vars['prev_url']);
     }
@@ -593,6 +621,7 @@ function vp_theme_preprocess_simplenews_multi_block(&$vars) {
   $vars['message'] = t($vars['message']);
 }
 
+
 /**
  * Implements theme_image_formatter().
  *
@@ -673,4 +702,168 @@ function vp_theme_preprocess_node(&$vars) {
  */
 function vp_theme_html_head_alter(&$head_elements) {
   unset($head_elements['system_meta_generator']);
+}
+
+
+/**
+ * Implements template_preprocess_simplenews_newsletter_body().
+ */
+function vp_theme_preprocess_simplenews_newsletter_body(&$vars) {
+
+  // Add links block for newsletter.
+  // @todo. Use theme() functions.
+  if (isset($vars['build']['#node']->field_links[LANGUAGE_NONE]) 
+      && count($vars['build']['#node']->field_links[LANGUAGE_NONE]) >= 1) {
+    $links = '<p><strong>' . t('Links') . '</strong><br>';
+    foreach ($vars['build']['#node']->field_links[LANGUAGE_NONE] as $key => $value) {
+      $links .= '<a href="' . $value['url'] . '">' . $value['url'] . '</a><br>';
+    }
+    $links .= '</p>';
+  }
+  else {
+    $links = '';
+  }
+
+  // Variable passed to simplenews template.
+  $vars['vp_theme_newsletter_links'] = $links;
+
+  // Add files block for newsletter.
+  // @todo. Use theme() functions.
+  if (isset($vars['build']['#node']->field_files['und']) 
+      && count($vars['build']['#node']->field_files['und']) >= 1) {
+    $files = '<p><strong>' . t('Files') . '</strong><br>';
+    // $files = theme('newsletter_list_title', array('pealkiri' => t('Files')));
+
+    // $files .= theme('newsletter_list_wrapper_open');
+    foreach ($vars['build']['#node']->field_files['und'] as $key => $value) {
+      if ($value['display'] == 1) {
+        $files .= l($value['filename'], file_create_url($value['uri']), array()) . '<br>';
+        //$files .= theme('newsletter_list_item', array('markup' => file_create_url($value['uri'])));
+      }
+    }
+    // $files .= theme('newsletter_list_wrapper_close');
+    $files .= '</p>';
+  }
+  else {
+    $files = '';
+  }
+
+  // Variable passed to simplenews template.
+  $vars['vp_theme_newsletter_files'] = $files;
+
+  // Check body and make relative file links absolute.
+  // This is a fix for conflict with locale module locale_language_url_rewrite_url
+  // Where the language prefix was incorrectly being put into file paths.
+  if (isset($vars['build']['#node']->body['und'][0]['value'])) {
+    // Add post_render function to clean paths to files.
+    $vars['build']['#post_render'] = array('vp_theme_newsletter_clean_link_path');
+  }
+}
+
+
+/**
+ * Make sure paths to files are correct.
+ * DOMDocument pinched from linkmeta module.
+ * @param $children
+ *   string - $elements['#children'] from drupal_render.
+ * @param $elements
+ *   array - $elements from drupal_render.
+ * @return
+ *   string - Altered version of $elements['#children'] or original $children.
+ */
+function vp_theme_newsletter_clean_link_path($children, $elements) {
+
+  // Expects $children to be a string of html.
+  if (!empty($children)) {
+
+    $dom = new DOMDocument();
+    $dom->loadHTML($children);
+    // $dom->encoding = 'UTF-8';
+
+    $a_tags = $dom->getElementsByTagName('a');
+    foreach ($a_tags as $a) {
+      $url = $a->getAttribute('href');
+      // Look for different kinds of link extensions.
+      $current_url = pathinfo(strtok($url, '?'));
+      $extension = '';
+      // @todo. Check that file extension is amongst allowed file extensions?
+      if (isset($current_url['extension']) 
+          && isset($current_url['dirname']) 
+          && substr($url, 0, 1) == '/' ) {
+        // Make file link absolute.
+        $path_from_files = str_replace('sites/default/files', '', $current_url['dirname']);
+        $href = file_create_url('public://' . $path_from_files . '/' . $current_url['basename']);
+        $a->setAttribute('href', $href);
+      }   
+    }
+      
+    $children_clean = $dom->saveHTML();
+
+    return $children_clean;
+  }
+  else {
+    return $children;
+  }
+
+}
+
+
+/**
+ * Implements hook_theme().
+ * The function parameter needs to be used in array definitions.
+ * https://api.drupal.org/comment/30713#comment-30713
+ */
+function vp_theme_theme($existing, $type, $theme, $path) {
+  return array(
+    'newsletter_list_title' => array(
+      'variables' => array(
+        'pealkiri' => NULL,
+      ),
+      'function' => 'vp_theme_newsletter_list_title',
+    ),
+    'newsletter_list_wrapper_open' => array(
+      'variables' => array(),
+      'function' => 'newsletter_list_wrapper_open',
+    ),
+    'newsletter_list_wrapper_close' => array(
+      'variables' => array(),
+      'function' => 'newsletter_list_wrapper_close',
+    ),    
+    'newsletter_list_item' => array(
+      'variables' => array(
+        'markup' => NULL,
+      ),
+      'function' => 'newsletter_list_item',
+    ),    
+  );
+  
+}
+
+
+/**
+ * Theme function for list title.
+ */
+function vp_theme_newsletter_list_title($variables) {
+  return '<p><strong>' . $variables['pealkiri'] . '</strong></p>';
+}
+
+/**
+ * Theme function to open ul or ol.
+ */
+function vp_theme_newsletter_list_wrapper_open($variables) {
+  return '<ul>';
+}
+
+/**
+ * Theme function to close ul or ol.
+ */
+function vp_theme_newsletter_list_wrapper_close($variables) {
+  return '</ul>';
+}
+
+/**
+ * Theme function for list item.
+ */
+function vp_theme_newsletter_list_item($variables) {
+  return '<li>' . $variables['markup'] . '</li>';
 }
