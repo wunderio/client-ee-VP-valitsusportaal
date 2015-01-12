@@ -122,11 +122,11 @@ function vp_theme_select_as_links($vars) {
   if (!empty($element['#value'])) {
     if (is_array($element['#value'])) {
       foreach ($element['#value'] as $value) {
-        $output .= '<input type="hidden" name="' . $name . '[]" value="' . $value . '" />';
+        $output .= '<input type="hidden" name="' . check_plain($name) . '[]" value="' . check_plain($value) . '" />';
       }
     }
     else {
-      $output .= '<input type="hidden" name="' . $name . '" value="' . $element['#value'] . '" />';
+      $output .= '<input type="hidden" name="' . check_plain($name) . '" value="' . check_plain($element['#value']) . '" />';
     }
   }
   $output .= '</div>';
@@ -508,7 +508,7 @@ function vp_theme_preprocess_date_views_pager(&$vars) {
       $next_arg = $filter_year . '-W03';
       $vars['prev_url'] = date_pager_url($vars['plugin']->view, NULL, $prev_arg);
       $vars['next_url'] = date_pager_url($vars['plugin']->view, NULL, $next_arg);
-    }    
+    } 
     
     // From 52 go to 53 of the filter year. (ex. 2014-W53 NOT 2015-W53 which is what was happening).
     if ((int) $filter_week === 52) {
@@ -814,12 +814,13 @@ function vp_theme_newsletter_clean_link_path($children, $elements) {
  * https://api.drupal.org/comment/30713#comment-30713
  */
 function vp_theme_theme($existing, $type, $theme, $path) {
-  return array(
+  return array(   
     'newsletter_list_title' => array(
       'variables' => array(
         'pealkiri' => NULL,
       ),
-      'function' => 'vp_theme_newsletter_list_title',
+      'render element' => 'element',
+      'function' => 'theme_newsletter_list_title',
     ),
     'newsletter_list_wrapper_open' => array(
       'variables' => array(),
@@ -843,7 +844,7 @@ function vp_theme_theme($existing, $type, $theme, $path) {
 /**
  * Theme function for list title.
  */
-function vp_theme_newsletter_list_title($variables) {
+function theme_newsletter_list_title($variables) {
   return '<p><strong>' . $variables['pealkiri'] . '</strong></p>';
 }
 
