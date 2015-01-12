@@ -5,6 +5,7 @@ var rsseses_keyword = '';
     $('#rsseses').before(Drupal.t('Keyword') + ': <input type="text" name="rsseses" />');
     $('input[name="rsseses"]').on('input', function() {
       var keyword = $(this).val();
+      var keyword = keyword.replace(/(<([^>]+)>)/ig,""); // From http://css-tricks.com/snippets/javascript/strip-html-tags-in-javascript/        
       $('#rsseses a').each(function() {
         // URL
         $(this).attr('href', url_parameter($(this).attr('href'), 'keyword', keyword));
