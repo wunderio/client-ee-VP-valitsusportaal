@@ -711,14 +711,32 @@ function vp_theme_html_head_alter(&$head_elements) {
 function vp_theme_preprocess_simplenews_newsletter_body(&$vars) {
 
   // Add links block for newsletter.
-  // @todo. Use theme() functions.
   if (isset($vars['build']['#node']->field_links[LANGUAGE_NONE]) 
       && count($vars['build']['#node']->field_links[LANGUAGE_NONE]) >= 1) {
-    $links = '<p><strong>' . t('Links') . '</strong><br>';
+
+    $build = array(
+      '#theme' => 'newsletter_list_title',
+      '#pealkiri' => t('Links'),
+    );
+    $links = drupal_render($build);
+
+    $build = array(
+      '#theme' => 'newsletter_list_wrapper_open',
+    );
+    $links .= drupal_render($build);
+
     foreach ($vars['build']['#node']->field_links[LANGUAGE_NONE] as $key => $value) {
-      $links .= '<a href="' . $value['url'] . '">' . $value['url'] . '</a><br>';
+      $build = array(
+        '#theme' => 'newsletter_list_item',
+        '#markup' => l($value['url'], $value['url']),
+      );
+      $links .= drupal_render($build);      
     }
-    $links .= '</p>';
+
+    $build = array(
+      '#theme' => 'newsletter_list_wrapper_close',
+    );
+    $links .= drupal_render($build);
   }
   else {
     $links = '';
@@ -728,21 +746,34 @@ function vp_theme_preprocess_simplenews_newsletter_body(&$vars) {
   $vars['vp_theme_newsletter_links'] = $links;
 
   // Add files block for newsletter.
-  // @todo. Use theme() functions.
   if (isset($vars['build']['#node']->field_files['und']) 
       && count($vars['build']['#node']->field_files['und']) >= 1) {
-    $files = '<p><strong>' . t('Files') . '</strong><br>';
-    // $files = theme('newsletter_list_title', array('pealkiri' => t('Files')));
 
-    // $files .= theme('newsletter_list_wrapper_open');
+    $build = array(
+      '#theme' => 'newsletter_list_title',
+      '#pealkiri' => t('Files'),
+    );
+    $files = drupal_render($build);    
+
+    $build = array(
+      '#theme' => 'newsletter_list_wrapper_open',
+    );
+    $files .= drupal_render($build);
+
     foreach ($vars['build']['#node']->field_files['und'] as $key => $value) {
       if ($value['display'] == 1) {
-        $files .= l($value['filename'], file_create_url($value['uri']), array()) . '<br>';
-        //$files .= theme('newsletter_list_item', array('markup' => file_create_url($value['uri'])));
+        $build = array(
+          '#theme' => 'newsletter_list_item',
+          '#markup' => l($value['filename'], file_create_url($value['uri']), array()),
+        );
+        $files .= drupal_render($build); 
       }
     }
-    // $files .= theme('newsletter_list_wrapper_close');
-    $files .= '</p>';
+
+    $build = array(
+      '#theme' => 'newsletter_list_wrapper_close',
+    );
+    $files .= drupal_render($build);
   }
   else {
     $files = '';
@@ -808,63 +839,3 @@ function vp_theme_newsletter_clean_link_path($children, $elements) {
 }
 
 
-/**
- * Implements hook_theme().
- * The function parameter needs to be used in array definitions.
- * https://api.drupal.org/comment/30713#comment-30713
- */
-function vp_theme_theme($existing, $type, $theme, $path) {
-  return array(   
-    'newsletter_list_title' => array(
-      'variables' => array(
-        'pealkiri' => NULL,
-      ),
-      'render element' => 'element',
-      'function' => 'theme_newsletter_list_title',
-    ),
-    'newsletter_list_wrapper_open' => array(
-      'variables' => array(),
-      'function' => 'newsletter_list_wrapper_open',
-    ),
-    'newsletter_list_wrapper_close' => array(
-      'variables' => array(),
-      'function' => 'newsletter_list_wrapper_close',
-    ),    
-    'newsletter_list_item' => array(
-      'variables' => array(
-        'markup' => NULL,
-      ),
-      'function' => 'newsletter_list_item',
-    ),    
-  );
-  
-}
-
-
-/**
- * Theme function for list title.
- */
-function theme_newsletter_list_title($variables) {
-  return '<p><strong>' . $variables['pealkiri'] . '</strong></p>';
-}
-
-/**
- * Theme function to open ul or ol.
- */
-function vp_theme_newsletter_list_wrapper_open($variables) {
-  return '<ul>';
-}
-
-/**
- * Theme function to close ul or ol.
- */
-function vp_theme_newsletter_list_wrapper_close($variables) {
-  return '</ul>';
-}
-
-/**
- * Theme function for list item.
- */
-function vp_theme_newsletter_list_item($variables) {
-  return '<li>' . $variables['markup'] . '</li>';
-}

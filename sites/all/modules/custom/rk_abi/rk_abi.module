@@ -68,9 +68,36 @@ function rk_abi_menu() {
     'weight' => 10,
   );
 
+  $items['admin/config/rkabi/help'] = array(
+    'title' => 'Riigikantselei Abimoodul Help',
+    'description' => t('Help page'),
+    'page callback' => '_rk_abi_help_redirect',
+    'access arguments' => array('admin riigikantselei abimoodul'),
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 20,
+  );
+
+  // Overriding. Original URL in dblog.module.
+  $items['admin/reports/event/%'] = array(
+    'title' => 'Details',
+    'page callback' => 'rk_abi_event',
+    'page arguments' => array(3),
+    'access arguments' => array('access site reports'),
+    // 'file' => 'dblog.admin.inc',
+  );
+
+  
+
   return $items;
 }
 
+
+/**
+ * Helper function to redirect user to rk_abi help.
+ */
+function _rk_abi_help_redirect() {
+  drupal_goto('admin/help/rk_abi');
+}
 
 /**
  * Page callback from hook_menu().
@@ -553,11 +580,141 @@ function _rk_abi_help_text_security() {
       $strOutput .= ' <li>' . t('Make sure autocomplete=off setting is turned on at <a href="@rkabi">settings page</a>', array('@rkabi' => url('admin/config/rkabi/settings'))) . '</li>';
       $strOutput .= ' <li>' . t('<strong>Disallow php execution in subfolders</strong> with this line in .htaccess (after index.php rewrite rules):<br /><strong><em>RewriteRule "^.+/.*\.php$" - [F]</em></strong>') . '</li>';
       $strOutput .= ' <li>' . t('<strong>settings.php</strong> - Uncomment allow_authorize_operations flag and make sure it is FALSE:<br /><strong><em>$conf[\'allow_authorize_operations\'] = FALSE;</em></strong><br />This disables authorize.php file.') . '</li>';
-      $strOutput .= ' <li>' . t('<strong>settings.php</strong> - Force Secure and httponly cookie flags. <strong>NB: Secure flag only if running https</strong>!!!<br /><p>Drupal actually uses separate session ids for http and https. (prefixed with "sess" for http and "ssess" for https) and session.cookie_secure is automatically set when Drupal recognises that communication is over https. The best idea is to have all traffic over https, but <strong>if nothing else</strong>, then make sure admin traffic is over https. Then sniffing the http cookie will not allow a malicious user into the https admin section of the site in the case of a man-in-the-middle attack. So Drupal already does some of this automatically, but you can also apply the ini_set rules below.</p><strong><em>ini_set(\'session.cookie_secure\', 1); // Secure flag, https only.<br />ini_set(\'session.cookie_httponly\', 1); // HttpOnly flag.
+      $strOutput .= ' <li>' . t('<strong>settings.php</strong> - Force Secure and httponly cookie flags. <strong>NB: Secure flag only if running https</strong>!!!<br /><p>Drupal actually uses separate session ids for http and https. (prefixed with "sess" for http and "ssess" for https) and session.cookie_secure is automatically set when Drupal recognises that communication is over https. The best idea is to have all traffic over https, but <strong>if nothing else</strong>, then make sure admin traffic is over https. Then sniffing the http cookie will not allow a malicious user into the https admin section of the site in the case of a man-in-the-middle attack. So Drupal already does some of this automatically, but you can also apply the ini_set rules below.</p><strong><em>ini_set(\'session.cookie_secure\', 1); // Secure flag, https only.<br />ini_set(\'session.cookie_httponly\', 1); // HttpOnly flag.        
 </em></strong>') . '</li>';
+      $strOutput .= ' <li>' . t('<strong>settings.php</strong> - Reduce session and cookie expiration:<br /><strong><em>ini_set(\'session.gc_maxlifetime\', 3600);</em></strong> // 1 hour, down from 55 hours<br /><strong><em>ini_set(\'session.cookie_lifetime\', 36000);</em></strong> // 10 hours, down from 23 days') . '</li>';      
       $strOutput .= ' <li>' . t('<strong>Apache config</strong> - Forbid your site from display in other site iframes. Configure apache with:<br /><strong><em>Header always append X-Frame-Options SAMEORIGIN</em></strong>') . '</li>';
+      $strOutput .= ' <li>' . t('<strong>Apache config</strong> - Do not advertise on error or bad request pages which web server and version are being used.') . '</li>';      
       $strOutput .= ' <li>' . t('<strong>Addthis.com javascript locally</strong> - Use local file for addthis_widget.js to increase security against 3rd party service risk.') . '</li>';      
       $strOutput .= '</ol>';
 
       return $strOutput;
+}
+
+
+/**
+ * Security enhancement.
+ * Taken from dblog.admin.inc
+ * Overriding here to make location and referer links plain text in log output.
+ * Attacker could put malicious links into logs and we admins could carelessly
+ * click on them. Ex. Referer: http://hacker.com/infected.exe. Making them
+ * plain text means we would need to carelessly copy/paste the links into browser.
+ */
+function rk_abi_event($id) {
+  $severity = watchdog_severity_levels();
+  $result = db_query('SELECT w.*, u.name, u.uid FROM {watchdog} w INNER JOIN {users} u ON w.uid = u.uid WHERE w.wid = :id', array(':id' => $id))->fetchObject();
+  if ($dblog = $result) {
+    $rows = array(
+      array(
+        array('data' => t('Type'), 'header' => TRUE),
+        t($dblog->type),
+      ),
+      array(
+        array('data' => t('Date'), 'header' => TRUE),
+        format_date($dblog->timestamp, 'long'),
+      ),
+      array(
+        array('data' => t('User'), 'header' => TRUE),
+        theme('username', array('account' => $dblog)),
+      ),
+      array(
+        array('data' => t('Location'), 'header' => TRUE),
+        $dblog->location, // Removed l() function.
+      ),
+      array(
+        array('data' => t('Referrer'), 'header' => TRUE),
+        $dblog->referer, // Removed l() function.
+      ),
+      array(
+        array('data' => t('Message'), 'header' => TRUE),
+        theme('dblog_message', array('event' => $dblog)),
+      ),
+      array(
+        array('data' => t('Severity'), 'header' => TRUE),
+        $severity[$dblog->severity],
+      ),
+      array(
+        array('data' => t('Hostname'), 'header' => TRUE),
+        check_plain($dblog->hostname),
+      ),
+      array(
+        array('data' => t('Operations'), 'header' => TRUE),
+        $dblog->link,
+      ),
+    );
+    $build['dblog_table'] = array(
+      '#theme' => 'table',
+      '#rows' => $rows,
+      '#attributes' => array('class' => array('dblog-event')),
+    );
+    return $build;
+  }
+  else {
+    return '';
+  }
+}
+
+
+/**
+ * Implements hook_theme().
+ * The function parameter needs to be used in array definitions.
+ * https://api.drupal.org/comment/30713#comment-30713
+ */
+function rk_abi_theme($existing, $type, $theme, $path) {
+  return array(   
+    'newsletter_list_title' => array(
+      'variables' => array(
+        'pealkiri' => NULL,
+      ),
+      'render element' => 'element',
+      'function' => 'rk_abi_newsletter_list_title',
+    ),
+    'newsletter_list_wrapper_open' => array(
+      'variables' => array(),
+      'render element' => 'element',
+      'function' => 'rk_abi_newsletter_list_wrapper_open',
+    ),
+    'newsletter_list_wrapper_close' => array(
+      'variables' => array(),
+      'render element' => 'element',
+      'function' => 'rk_abi_newsletter_list_wrapper_close',
+    ),    
+    'newsletter_list_item' => array(
+      'variables' => array(
+        'markup' => NULL,
+      ),
+      'render element' => 'element',
+      'function' => 'rk_abi_newsletter_list_item',
+    ),
+  );
+  
+}
+
+
+/**
+ * Theme function for list title.
+ */
+function rk_abi_newsletter_list_title($variables) {
+  return '<p><strong>' . $variables['pealkiri'] . '</strong><br>';
+}
+
+/**
+ * Theme function to open ul or ol.
+ */
+function rk_abi_newsletter_list_wrapper_open($variables) {
+  return '';
+}
+
+/**
+ * Theme function for list item.
+ */
+function rk_abi_newsletter_list_item($variables) {
+  return $variables['markup'] . '<br>';
+}
+
+/**
+ * Theme function to close ul or ol.
+ */
+function rk_abi_newsletter_list_wrapper_close($variables) {
+  return '</p>';
 }

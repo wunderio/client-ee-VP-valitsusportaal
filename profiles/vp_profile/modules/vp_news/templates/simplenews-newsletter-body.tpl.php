@@ -79,7 +79,7 @@ $tid = $build['#node']->simplenews->tid;
 
 // @todo. Get this logo logic out of here. Consider template_preprocess_simplenews_newsletter_body().
 // First check if we are allowed to use logos at all.
-if (variable_get('rk_abi_use_custom_newsletter_logos', 0) == 1) {
+if (variable_get('rk_abi_use_custom_newsletter_logos', 0) === 1) {
   // Get the block associated with this newsletter. The variable is set in rk_abi module settings page.
   $logo_block_to_use = variable_get('rk_abi_logo_newsletter_' . $tid, '-1');
 
@@ -115,11 +115,33 @@ if ($show_site_name === 1) {
         <div style="background: #fff; padding: 25px 45px;">
           <h2 style="color: #00668C; font-size: 20px; line-height: 36px; font-weight: normal; text-shadow: 0 0 4px rgba(0, 0, 0, 0.18);"><?php print $title; ?></h2>
           <div style="color: #686868; font-size: 11px; margin: 0 0 15px 0;"><?php print $created_custom; ?></div>
-          <?php print render($build); ?>
+          <?php 
+            // The body of newsletter also checked in vp_theme_newsletter_clean_link_path().
+            print render($build);
+           ?>
+
+          <?php if (variable_get('rk_abi_newsletter_show_links') === 1): ?>
+            <!-- Links -->
+            <?php
+              // See vp_theme_preprocess_simplenews_newsletter_body() in template.php.
+              print $vp_theme_newsletter_links;
+            ?>
+          <?php endif; ?>
+
+
+          <?php if (variable_get('rk_abi_newsletter_show_files') === 1): ?>
+            <!-- Files -->
+            <?php
+              // See vp_theme_preprocess_simplenews_newsletter_body() in template.php.
+              print $vp_theme_newsletter_files;
+            ?>
+          <?php endif; ?>
+
+
           <!-- Autor -->
           <div align="left" style="background: #fff;"><?php print $autor_output; ?></div>
           <!-- Social Media -->
-          <?php if (variable_get('rk_abi_newsletter_use_social_media_insert_block') == 1): ?>
+          <?php if (variable_get('rk_abi_newsletter_use_social_media_insert_block') === 1): ?>
             <?php                             
               $block = block_block_view(variable_get('rk_abi_newsletter_social_media_insert'));
               // @todo. Figure out how to display correct language. Do we use a preprocess hook first?
