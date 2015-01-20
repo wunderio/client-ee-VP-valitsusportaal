@@ -1,8 +1,17 @@
 (function($){
+
   Drupal.behaviors.gssAutocomplete = {
     attach: function(context, settings) {
       if (typeof settings.gss == undefined) {
         return;
+      }
+
+      // Check if we can do over ssl. mm 20jan15.
+      if (typeof Drupal.settings.rk_abi.rk_abi_gss_ssl != 'undefined' && Drupal.settings.rk_abi.rk_abi_gss_ssl == 1) {
+        var protocol = 'https';
+      }
+      else {
+        var protocol = 'http';
       }
 
       $('.gss .form-item-keys input.form-text')
@@ -21,7 +30,7 @@
           },
           source: function (request, response) {
             $.ajax({
-              url: "http://clients1.google.com/complete/search?q=" + request.term + "&hl=en&client=partner&source=gcsc&partnerid=" + settings.gss.key + "&ds=cse&nocache=" + Math.random().toString(),
+              url: protocol + "://clients1.google.com/complete/search?q=" + request.term + "&hl=en&client=partner&source=gcsc&partnerid=" + settings.gss.key + "&ds=cse&nocache=" + Math.random().toString(),
               dataType: "jsonp",
               success: function (data) {
                 response($.map(data[1], function (item) {
@@ -61,7 +70,7 @@
           var input = $(this);
           if (input.val().length > 2) {
             $.ajax({
-              url: "http://clients1.google.com/complete/search?q=" + encodeURIComponent(input.val()) + "&hl=en&client=partner&source=gcsc&partnerid=" + settings.gss.key + "&ds=cse&nocache=" + Math.random().toString(),
+              url: protocol + "://clients1.google.com/complete/search?q=" + encodeURIComponent(input.val()) + "&hl=en&client=partner&source=gcsc&partnerid=" + settings.gss.key + "&ds=cse&nocache=" + Math.random().toString(),
               dataType: "jsonp",
               success: function (data) {
                 $vpAutocompletePopup.hide();
