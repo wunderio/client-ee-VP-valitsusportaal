@@ -123,17 +123,19 @@ function vp_news_form_views_exposed_form_alter(&$form, &$form_state, $form_id) {
     }
     
     // Hide empty subjects.
-    foreach ($form['subject']['#options'] as $tid => $title) {
-      $query = new EntityFieldQuery();
-      $query->entityCondition('entity_type', 'node')
-        ->entityCondition('bundle', 'news')
-        ->propertyCondition('status', 1)
-        ->fieldCondition('field_news_subject', 'tid', $tid)
-        ->range(0, 1)
-        ->addMetaData('account', user_load(1));
-      $result = $query->execute();
-      if (!isset($result['node'])) {
-        unset($form['subject']['#options'][$tid]);
+    if (isset($form['subject']['#options'])) {
+      foreach ($form['subject']['#options'] as $tid => $title) {
+        $query = new EntityFieldQuery();
+        $query->entityCondition('entity_type', 'node')
+          ->entityCondition('bundle', 'news')
+          ->propertyCondition('status', 1)
+          ->fieldCondition('field_news_subject', 'tid', $tid)
+          ->range(0, 1)
+          ->addMetaData('account', user_load(1));
+        $result = $query->execute();
+        if (!isset($result['node'])) {
+          unset($form['subject']['#options'][$tid]);
+        }
       }
     }
   }
