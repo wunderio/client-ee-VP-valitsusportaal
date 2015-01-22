@@ -116,10 +116,19 @@ function vp_news_form_views_exposed_form_alter(&$form, &$form_state, $form_id) {
   	$form['#validate'] = array_merge(array('vp_news_form_views_exposed_body'), $form['#validate']);
     
     if ($language->language !== 'en') {
-      $form['#info']['filter-tid_i18n']['label'] = t($form['#info']['filter-tid_i18n']['label']);
-      $form['#info']['filter-field_news_subject_tid_i18n']['label'] = t($form['#info']['filter-field_news_subject_tid_i18n']['label']);
-      $form['#info']['filter-date']['label'] = t($form['#info']['filter-date']['label']);
-      $form['#info']['filter-title']['label'] = t($form['#info']['filter-title']['label']);
+      // Adding isset() to avoid php undefined index warnings. mm 22jan15.
+      if (isset($form['#info']['filter-tid_i18n']['label'])) {
+        $form['#info']['filter-tid_i18n']['label'] = t($form['#info']['filter-tid_i18n']['label']);
+      }
+      if (isset($form['#info']['filter-field_news_subject_tid_i18n']['label'])) {
+        $form['#info']['filter-field_news_subject_tid_i18n']['label'] = t($form['#info']['filter-field_news_subject_tid_i18n']['label']);
+      }      
+      if (isset($form['#info']['filter-date']['label'])) {
+        $form['#info']['filter-date']['label'] = t($form['#info']['filter-date']['label']);
+      }
+      if (isset($form['#info']['filter-title']['label'])) {
+        $form['#info']['filter-title']['label'] = t($form['#info']['filter-title']['label']);
+      }
     }
     
     // Hide empty subjects.
