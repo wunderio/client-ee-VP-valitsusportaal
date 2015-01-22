@@ -235,6 +235,13 @@ function add_facebook_meta_tags() {
  * Add extra body classes.
  */
  function vp_theme_preprocess_html(&$vars) {
+
+  // Avoid implode error in theme.inc template_process().
+  if (!isset($vars['classes_array'])) {
+    $vars['classes_array'] = 'vabariik';
+  }
+
+
   if (isset($vars['page']['content']['content']['sidebar_first'])) {
     $vars['attributes_array']['class'][] = 'has-sidebar-first';
 
