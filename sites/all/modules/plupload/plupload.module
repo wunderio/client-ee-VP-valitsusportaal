@@ -167,7 +167,7 @@ function plupload_element_value(&$element, $input = FALSE, $form_state = NULL) {
         // be intended for public://subdirectory rather than public://, and we
         // don't want an attacker to be able to get them back into the top
         // level of public:// in that case).
-        $value = rtrim(basename($value), '.');
+        $value = rtrim(drupal_basename($value), '.');
 
 
         // Based on the same feture from file_save_upload().
@@ -236,7 +236,7 @@ function plupload_element_validate($element, &$form_state) {
 
     $destination = variable_get('file_default_scheme', 'public') . '://' . $file_info['name'];
     $destination = file_stream_wrapper_uri_normalize($destination);
-    $file->filename = basename($destination);
+    $file->filename = drupal_basename($destination);
     $file->filemime = file_get_mimetype($destination);
 
     foreach (file_validate($file, $element['#upload_validators']) as $error_message) {
@@ -336,19 +336,6 @@ function plupload_library() {
               'unique_names' => TRUE,
               'flash_swf_url' => file_create_url($library_path . '/js/plupload.flash.swf'),
               'silverlight_xap_url' => file_create_url($library_path . '/js/plupload.silverlight.xap'),
-            ),
-            // The plupload.js integration file in the module folder can do
-            // additional browser checking to remove unsupported runtimes.
-            // This is in addition to what is done by the Plupload library.
-            '_requirements' => array(
-              'html5' => array(
-                // The Plupload library recognizes Firefox 3.5 as supporting
-                // HTML 5, but Firefox 3.5 does not support the HTML 5
-                // "multiple" attribute for file input controls. This makes the
-                // html5 runtime much less appealing, so we treat all Firefox
-                // versions less than 3.6 as ineligible for the html5 runtime.
-                'mozilla' => '1.9.2',
-              ),
             ),
           ),
         ),
@@ -483,7 +470,7 @@ function plupload_file_uri_to_object($uri) {
   $wrapper = file_stream_wrapper_get_instance_by_uri($uri);
   $file = new StdClass();
   $file->uid = $user->uid;
-  $file->filename = basename($uri);
+  $file->filename = drupal_basename($uri);
   $file->uri = $uri;
   $file->filemime = file_get_mimetype($uri);
   // This is gagged because some uris will not support it.
