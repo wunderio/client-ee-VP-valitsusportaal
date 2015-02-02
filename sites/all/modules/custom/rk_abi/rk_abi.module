@@ -60,6 +60,14 @@ function rk_abi_menu() {
 
   $items = array();
 
+  // Alternate login path, in case id-kaart and mobiil-id not working.
+  $items['rkabi/telliskivi'] = array(
+    'title' => 'Riigikantselei Sissepääs',
+    'page callback' => 'rk_abi_alternate_login',    
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
   $items['admin/config/rkabi'] = array(
     'title' => 'Riigikantselei Abimoodul',
     'access arguments' => array('admin riigikantselei abimoodul'),
@@ -96,11 +104,43 @@ function rk_abi_menu() {
     'page arguments' => array(3),
     'access arguments' => array('access site reports'),
     // 'file' => 'dblog.admin.inc',
-  );
-
-  
+  );  
 
   return $items;
+}
+
+
+/**
+ * Alternate username/password login.
+ * To be used in emergency, in case ID-Kaart
+ * and/or Mobiil-ID don't work.
+ */
+function rk_abi_alternate_login() {
+
+  // Get user-defined key from rk_abi settings.
+  $key = variable_get('rk_abi_user_login_key');
+
+  $strOutput = '';
+  $user_input = arg(2); // ex. 24A486937AF75BB36BEC
+
+  if (strlen($key) >= 20 
+      && ctype_alnum($key) 
+      && !is_null($key) 
+      && $key == $user_input) {    
+
+    $elements = drupal_get_form('user_login');
+    $strOutput .= drupal_render($elements);
+  }
+  else {
+    global $user;
+    if ($user->uid == 0) {      
+      watchdog('rk', t('Dubious login attempt from %ip. User tried key %userinput. This could be an honest mistake or it is within the realm of possibility that an attacker has discovered this alternate login area and is trying to use it.', array('%ip' => $user->hostname, '%userinput' => $user_input)), array(), WATCHDOG_WARNING);
+
+      $strOutput = t('<h2>Security Incident</h2><p>This access attempt has been logged and reported to administrators.</p>');
+    }
+  }  
+
+  return $strOutput;
 }
 
 
@@ -109,26 +149,6 @@ function rk_abi_menu() {
  */
 function _rk_abi_help_redirect() {
   drupal_goto('admin/help/rk_abi');
-}
-
-/**
- * Page callback from hook_menu().
- */
-function rk_abi_createstatic() {
-  // Build static pages, ready for ddos.
-}
-
-
-/**
- * Implements hook_exit().
- */
-function rk_abi_exit() {
-
-  // Testing to see best way to save html statically.
-  // Kind of works, but need to get all the css/js/img files too.
-  // $data = ob_get_contents();
-  // watchdog('rk', $data);
-
 }
 
 
@@ -310,6 +330,25 @@ function rk_abi_settings($form, &$form_state) {
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
   );
+
+  $form['rk_abi_security_options_fieldset']['rk_abi_remove_username_password_login'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Forbid Username and Password Login'),
+    '#default_value' => variable_get('rk_abi_remove_username_password_login', 0),
+    '#description' => t('Option to remove username and password fields from login form.'),
+  );
+
+  $form['rk_abi_security_options_fieldset']['rk_abi_user_login_key'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Private Login Key'),
+    '#states' => array(
+      'invisible' => array(
+       ':input[name="rk_abi_remove_username_password_login"]' => array('checked' => FALSE),
+      ),
+    ),    
+    '#default_value' => variable_get('rk_abi_user_login_key', ''),
+    '#description' => t('Combined with an alternate login path, this key must match for the system to display the username / password login form. It must be at least 20 characters long and use alphanumeric characters to work. (ex. 24A486937AF75BB36BEC)'),
+  );  
 
   $form['rk_abi_security_options_fieldset']['rk_abi_autocomplete_off'] = array(
     '#type' => 'checkbox',
@@ -549,6 +588,20 @@ function rk_abi_form_alter(&$form, &$form_state, $form_id) {
     // Add autocomplete=off to all forms, security best practice. mm 07.10.2014.
     $form['#attributes']['autocomplete'] = 'off';
   }
+
+  // Check if user wants to forbid username/password login.
+  if ($form_id == 'user_login' 
+        && variable_get('rk_abi_remove_username_password_login', 0) === 1) {
+
+    // Allow for alternate login with rkabi as arg(0).
+    $argzero = arg(0);
+    if ($argzero !== 'rkabi') {
+      unset($form['name']);
+      unset($form['pass']);
+      // Submit button.
+      unset($form['actions']['submit']);
+    }
+  }
 }
 
 
@@ -606,14 +659,14 @@ function _rk_abi_help_text_security() {
       $strOutput = '<h3>' . t('Security suggestions') . ':</h3>';
       $strOutput .= '<ol class="rk-abi-help">';
       $strOutput .= ' <li>' . t('Make sure autocomplete=off setting is turned on at <a href="@rkabi">settings page</a>', array('@rkabi' => url('admin/config/rkabi/settings'))) . '</li>';
-      $strOutput .= ' <li>' . t('<strong>Disallow php execution in subfolders</strong> with this line in .htaccess (after index.php rewrite rules):<br /><strong><em>RewriteRule "^.+/.*\.php$" - [F]</em></strong>') . '</li>';
+      $strOutput .= ' <li>' . t('<strong>Remove sensitive HTTP header info</strong> so that the web server and environment details are not advertised. (ex. "Server" and "X-Powered-By" headers)') . '</li>';
+      $strOutput .= ' <li>' . t('<strong>Disallow php execution in subfolders</strong> with this line in .htaccess (after index.php rewrite rules):<br /><strong><em>RewriteRule "^.+/.*\.php$" - [F]</em></strong><br />NB: This rule can help, but it does not cover all bases. We also need to rely on the server admin\'s expertise to protect against rogue php execution.') . '</li>';
       $strOutput .= ' <li>' . t('<strong>settings.php</strong> - Uncomment allow_authorize_operations flag and make sure it is FALSE:<br /><strong><em>$conf[\'allow_authorize_operations\'] = FALSE;</em></strong><br />This disables authorize.php file.') . '</li>';
-      $strOutput .= ' <li>' . t('<strong>settings.php</strong> - Force Secure and httponly cookie flags. <strong>NB: Secure flag only if running https</strong>!!!<br /><p>Drupal actually uses separate session ids for http and https. (prefixed with "sess" for http and "ssess" for https) and session.cookie_secure is automatically set when Drupal recognises that communication is over https. The best idea is to have all traffic over https, but <strong>if nothing else</strong>, then make sure admin traffic is over https. Then sniffing the http cookie will not allow a malicious user into the https admin section of the site in the case of a man-in-the-middle attack. So Drupal already does some of this automatically, but you can also apply the ini_set rules below.</p><strong><em>ini_set(\'session.cookie_secure\', 1); // Secure flag, https only.<br />ini_set(\'session.cookie_httponly\', 1); // HttpOnly flag.        
-</em></strong>') . '</li>';
-      $strOutput .= ' <li>' . t('<strong>settings.php</strong> - Reduce session and cookie expiration:<br /><strong><em>ini_set(\'session.gc_maxlifetime\', 3600);</em></strong> // 1 hour, down from 55 hours<br /><strong><em>ini_set(\'session.cookie_lifetime\', 36000);</em></strong> // 10 hours, down from 23 days') . '</li>';      
+      $strOutput .= ' <li>' . t('<strong>settings.php</strong> - Force Secure and httponly cookie flags. <strong>NB: Secure flag only if running https</strong>!!!<br /><p>Drupal actually uses separate session ids for http and https. (prefixed with "sess" for http and "ssess" for https) and session.cookie_secure is automatically set when Drupal recognises that communication is over https. The best idea is to have all traffic over https, but <strong>if nothing else</strong>, then make sure admin traffic is over https. Then sniffing the http cookie will not allow a malicious user into the https admin section of the site in the case of a man-in-the-middle attack. So Drupal already does some of this automatically, but you can also apply the ini_set rules below.</p><strong><em>ini_set(\'session.cookie_secure\', 1); // Secure flag, https only.<br />ini_set(\'session.cookie_httponly\', 1); // HttpOnly flag.</em></strong>') . '</li>';
+      $strOutput .= ' <li>' . t('<strong>settings.php</strong> - Reduce session and cookie expiration:<br /><strong><em>ini_set(\'session.gc_maxlifetime\', 3600);</em></strong> // 1 hour, down from 55 hours<br /><strong><em>ini_set(\'session.cookie_lifetime\', 36000);</em></strong> // 10 hours, down from 23 days') . '</li>';
       $strOutput .= ' <li>' . t('<strong>Apache config</strong> - Forbid your site from display in other site iframes. Configure apache with:<br /><strong><em>Header always append X-Frame-Options SAMEORIGIN</em></strong>') . '</li>';
-      $strOutput .= ' <li>' . t('<strong>Apache config</strong> - Do not advertise on error or bad request pages which web server and version are being used.') . '</li>';      
-      $strOutput .= ' <li>' . t('<strong>Addthis.com javascript locally</strong> - Use local file for addthis_widget.js to increase security against 3rd party service risk.') . '</li>';      
+      $strOutput .= ' <li>' . t('<strong>Apache config</strong> - Do not advertise on error or bad request pages which web server and version are being used. (ex. use ServerSignature Off in vhost') . '</li>';
+      $strOutput .= ' <li>' . t('<strong>Addthis.com javascript locally</strong> - Use local file for addthis_widget.js to increase security against 3rd party service risk.') . '</li>';
       $strOutput .= '</ol>';
 
       return $strOutput;
