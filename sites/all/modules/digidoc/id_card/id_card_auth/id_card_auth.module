@@ -183,7 +183,7 @@ function id_card_login() {
         }
       }
       else {
-        drupal_goto('');
+        drupal_goto('user');
       }
     } else {
       // @TODO: ID code could also be extracted from another $_SERVER value
