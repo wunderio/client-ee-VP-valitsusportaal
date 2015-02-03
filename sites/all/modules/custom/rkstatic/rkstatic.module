@@ -3,7 +3,7 @@
 /**
  * @file
  * Riigikantselei staatiline.
- * Märt Matsoo. mart@matsoo.com.
+ * Märt Matsoo. mart.matsoo@riigikantselei.ee mart@matsoo.com. 
  */
 
 
@@ -66,7 +66,7 @@ function rkstatic_menu() {
     'access arguments' => array('admin rkstatic'),
     'type' => MENU_NORMAL_ITEM,
     'weight' => 10,
-  );
+  );  
 
   return $items;
 }
@@ -105,6 +105,13 @@ function rkstatic_settings($form, &$form_state) {
     '#title' => t('Static domain'),
     '#default_value' => variable_get('rkstatic_static_subdomain', 'staatiline.riigikantselei.ee'),
     '#description' => t('The domain for the static site. Used in building absolute links. ex. static.valitsus.ee. You do not need the http://'),
+  );
+
+  $form['rkstatic_static_use_ssl'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Static Site will be SSL'),
+    '#default_value' => variable_get('rkstatic_static_use_ssl', 1),
+    '#description' => t('Default is checked. This will force absolute links to be prefixed over ssl. (ie. https://)'),
   );
 
   $form['rkstatic_force_http_origin'] = array(
@@ -195,6 +202,26 @@ function rkstatic_settings($form, &$form_state) {
     '#collapsed' => FALSE,
   );
 
+  $form['cron']['rkstatic_delete_stale_copies'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Delete Stale Static Copies'),
+    '#default_value' => variable_get('rkstatic_delete_stale_copies', 0),
+    '#description' => t('Delete static site copies that have been building up in the sites/default/files/html_export directory.'),
+  );
+
+  $form['cron']['rkstatic_number_old_folders_to_preserve'] = array(
+    '#type' => 'select',
+    '#title' => t('Number Directories to Preserve'),
+    '#options' => array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15'),
+    '#default_value' => variable_get('rkstatic_number_old_folders_to_preserve', '3'),
+    '#description' => t('Ideally the latest version is all we need, but it seems sensible to keep a few older copies in reserve.'),
+    '#states' => array(
+      'invisible' => array(
+       ':input[name="rkstatic_delete_stale_copies"]' => array('checked' => FALSE),
+      ),
+    ),
+  );  
+
   $form['cron']['rkstatic_use_cron'] = array(
     '#type' => 'checkbox',
     '#title' => t('Run with Cron'),
@@ -217,8 +244,8 @@ function rkstatic_settings($form, &$form_state) {
 
   $form['cron']['rkstatic_time_range_start'] = array(
     '#type' => 'select',
-    '#title' => t('Do Not Build Before (a.m.)'),
-    '#options' => array('1' => '1', '2' => '2', '3' => '3'),
+    '#title' => t('Do Not Build Before (time of day)'),
+    '#options' => array('0' => '0', '1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5', '6' => '6', '7' => '7', '8' => '8', '9' => '9', '10' => '10', '11' => '11', '12' => '12', '13' => '13', '14' => '14', '15' => '15', '16' => '16', '17' => '17', '18' => '18', '19' => '19', '20' => '20', '21' => '21', '22' => '22', '23' => '23'),
     '#default_value' => variable_get('rkstatic_time_range_start', '3'),
     '#description' => t('Only do build at night, between hours of...'),
     '#states' => array(
@@ -230,8 +257,8 @@ function rkstatic_settings($form, &$form_state) {
 
   $form['cron']['rkstatic_time_range_end'] = array(
     '#type' => 'select',
-    '#title' => t('Do Not Build After (a.m.)'),
-    '#options' => array('4' => '4', '5' => '5', '6' => '6', '7' => '7', '8' => '8', '9' => '9'),
+    '#title' => t('Do Not Build After (time of day)'),
+    '#options' => array('0' => '0', '1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5', '6' => '6', '7' => '7', '8' => '8', '9' => '9', '10' => '10', '11' => '11', '12' => '12', '13' => '13', '14' => '14', '15' => '15', '16' => '16', '17' => '17', '18' => '18', '19' => '19', '20' => '20', '21' => '21', '22' => '22', '23' => '23'),
     '#default_value' => variable_get('rkstatic_time_range_end', '6'),
     '#description' => t('Only do build at night, between hours of...'),
     '#states' => array(
@@ -244,7 +271,13 @@ function rkstatic_settings($form, &$form_state) {
   $form['cron']['rkstatic_cron_markup'] = array(
     '#type' => 'markup',
     '#markup' => t('<div class="description">If we "Run with Cron", the purpose of these cron settings is to limit the time between static site builds and to only run them at night. We don\'t want the system needlessly running these builds on every cron job throughout the day.</div>'),   
-  );  
+  );
+
+  /*$dir = _rkstatic_last_build_directory();
+  $form['cron']['rkstatic_fun_markup'] = array(
+    '#type' => 'markup',
+    '#markup' => 'dir ' . $dir . '<br />drupal_realpath(file_default_scheme(): ' . drupal_realpath(file_default_scheme() . '://html_export/') . '<br>base_path(): ' . base_path() . '<br> drupal_get_path profile: ' . drupal_get_path('profile', 'vp_profile'),
+  );*/   
 
   $form['debug'] = array(
     '#type' => 'fieldset',
@@ -275,7 +308,7 @@ function rkstatic_html_export_add_path_provider_alter(&$path_provders) {
 }
 
 function rkstatic_html_export_add_path_provider() {
-  // watchdog('rk', 'In rkstatic_html_export_add_path_provider from module_invoke_all');
+  // watchdog('rkstatic', 'In rkstatic_html_export_add_path_provider from module_invoke_all');
 }
 
 
@@ -316,16 +349,19 @@ function rkstatic_html_export_data_alter(&$data, $paths, $active_path_count, $do
   // Load HTML from a string.
   $html_obj->load($data);
 
+
+// @todo. Original blocks of code I.  
   // Tuimalt kopeeri kõik preprocess css / js.
-  $folders = scandir($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export');
+  /*$folders = scandir($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export');
   $activefolder = array_pop($folders);
   $csssrc = $_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/css';
   $cssdst = $_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/sites/default/files/css';
   $jssrc = $_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/js';
-  $jsdst = $_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/sites/default/files/js';
+  $jsdst = $_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/sites/default/files/js';*/
+
 
   // Make the css and js folders here.
-  if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/sites/default/files/css')) {    
+  /*if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/sites/default/files/css')) {    
     mkdir($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/sites/default/files/css', 0775, true);
   }
   if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/sites/default/files/js')) {    
@@ -333,15 +369,41 @@ function rkstatic_html_export_data_alter(&$data, $paths, $active_path_count, $do
   }
   if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/sites/default/files/js/wysiwyg')) {    
     mkdir($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/sites/default/files/js/wysiwyg', 0775, true);
+  }*/
+
+// @todo end original blocks of code I.
+
+
+// @todo. Alternative blocks of code I. 
+  $folders = scandir(drupal_realpath(file_default_scheme() . '://html_export/'));
+  $activefolder = '/' . array_pop($folders);
+  $csssrc = drupal_realpath(file_default_scheme() . '://css');
+  $cssdst = drupal_realpath(file_default_scheme() . '://html_export/') . $activefolder . '/sites/default/files/css';
+  $jssrc = drupal_realpath(file_default_scheme() . '://js');
+  $jsdst = drupal_realpath(file_default_scheme() . '://html_export/') . $activefolder . '/sites/default/files/js';
+
+  // Make the css and js folders here.
+  if (!file_exists(drupal_realpath(file_default_scheme() . '://html_export/') . $activefolder . '/sites/default/files/css')) {    
+    mkdir(drupal_realpath(file_default_scheme() . '://html_export/') . $activefolder . '/sites/default/files/css', 0775, true);
   }
+  if (!file_exists(drupal_realpath(file_default_scheme() . '://html_export/') . $activefolder . '/sites/default/files/js')) {    
+    mkdir(drupal_realpath(file_default_scheme() . '://html_export/') . $activefolder . '/sites/default/files/js', 0775, true);
+  }
+  if (!file_exists(drupal_realpath(file_default_scheme() . '://html_export/') . $activefolder . '/sites/default/files/js/wysiwyg')) {    
+    mkdir(drupal_realpath(file_default_scheme() . '://html_export/') . $activefolder . '/sites/default/files/js/wysiwyg', 0775, true);
+  }
+
+// @todo. End Alternative blocks of code I.  
 
   // Copy preprocessed css files.
   _rkstatic_recurse_copy($csssrc, $cssdst);
   // Copy preprocessed js files.
   _rkstatic_recurse_copy($jssrc, $jsdst);  
 
+
+// @todo. Original block of code II
   // @todo. Kopeeri teema img failid ka? Add conditional for settings.
-  $copy_img = variable_get('rkstatic_copy_img', 1);
+ /* $copy_img = variable_get('rkstatic_copy_img', 1);
   if ($copy_img) { // 
     $imgsrc = $_SERVER['DOCUMENT_ROOT'] . '/profiles/vp_profile/themes/vp_theme/img';
     $imgdst = $_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/profiles/vp_profile/themes/vp_theme/img';
@@ -364,47 +426,106 @@ function rkstatic_html_export_data_alter(&$data, $paths, $active_path_count, $do
     } 
 
     // Copy img files.
-    _rkstatic_recurse_copy($imgsrc, $imgdst);    
+    _rkstatic_recurse_copy($imgsrc, $imgdst); 
+  } */
+// @todo. End original block of code II
+
+// @todo. Alternative block of code II.
+  $copy_img = variable_get('rkstatic_copy_img', 1);
+  if ($copy_img) {
+    //$imgsrc = $_SERVER['DOCUMENT_ROOT'] . '/profiles/vp_profile/themes/vp_theme/img';
+    //$imgsrc = base_path() . 'profiles/vp_profile/themes/vp_theme/img';
+    $imgsrc = drupal_get_path('profile', 'vp_profile') . '/themes/vp_theme/img';
+    $imgdst = drupal_realpath(file_default_scheme() . '://html_export/') . $activefolder . '/profiles/vp_profile/themes/vp_theme/img';
+
+    // Make the vp_profile img folders here.
+    if (!file_exists(drupal_realpath(file_default_scheme() . '://html_export/') . $activefolder . '/profiles/vp_profile/themes/vp_theme/img/10-global')) {      
+      mkdir(drupal_realpath(file_default_scheme() . '://html_export/') . $activefolder . '/profiles/vp_profile/themes/vp_theme/img/10-global', 0775, true);
+    }
+    if (!file_exists(drupal_realpath(file_default_scheme() . '://html_export/') . $activefolder . '/profiles/vp_profile/themes/vp_theme/img/20-default')) {      
+      mkdir(drupal_realpath(file_default_scheme() . '://html_export/') . $activefolder . '/profiles/vp_profile/themes/vp_theme/img/20-default', 0775, true);
+    }
+    if (!file_exists(drupal_realpath(file_default_scheme() . '://html_export/') . $activefolder . '/profiles/vp_profile/themes/vp_theme/img/30-tablet')) {
+      mkdir(drupal_realpath(file_default_scheme() . '://html_export/') . $activefolder . '/profiles/vp_profile/themes/vp_theme/img/30-tablet', 0775, true);      
+    }
+    if (!file_exists(drupal_realpath(file_default_scheme() . '://html_export/') . $activefolder . '/profiles/vp_profile/themes/vp_theme/img/40-desktop')) {      
+      mkdir(drupal_realpath(file_default_scheme() . '://html_export/') . $activefolder . '/profiles/vp_profile/themes/vp_theme/img/40-desktop', 0775, true);
+    }
+    if (!file_exists(drupal_realpath(file_default_scheme() . '://html_export/') . $activefolder . '/profiles/vp_profile/themes/vp_theme/img/example-content')) {      
+      mkdir(drupal_realpath(file_default_scheme() . '://html_export/') . $activefolder . '/profiles/vp_profile/themes/vp_theme/img/example-content', 0775, true);
+    }
+
+    // Copy img files.
+    _rkstatic_recurse_copy($imgsrc, $imgdst);
   }
+// @todo. End alternative block of code II.
 
   $copy_printcss = variable_get('rkstatic_copy_printcss', 1);
-  if ($copy_printcss) { // 
-    $printcsssrc = $_SERVER['DOCUMENT_ROOT'] . '/profiles/vp_profile/themes/vp_theme/css';
+  if ($copy_printcss) {
+// @todo. Original block of code III.
+    /*$printcsssrc = $_SERVER['DOCUMENT_ROOT'] . '/profiles/vp_profile/themes/vp_theme/css';
     $printcssdst = $_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/profiles/vp_profile/themes/vp_theme/css';
 
     // Make the vp_profile themecss folders here.
     if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/profiles/vp_profile/themes/vp_theme/css')) {      
       mkdir($_SERVER['DOCUMENT_ROOT'] . '/sites/default/files/html_export/' . $activefolder . '/profiles/vp_profile/themes/vp_theme/css', 0775, true);
-    }        
-  
+    }*/
+// @todo. End original block of code III.
+
+// @todo. Alternative block of code III.
+    //$printcsssrc = base_path() . 'profiles/vp_profile/themes/vp_theme/css';
+    $printcsssrc = drupal_get_path('profile', 'vp_profile') . '/themes/vp_theme/css';
+    $printcssdst = drupal_realpath(file_default_scheme() . '://html_export/') . $activefolder . '/profiles/vp_profile/themes/vp_theme/css';
+
+    // Make the vp_profile themecss folders here.
+    if (!file_exists(drupal_realpath(file_default_scheme() . '://html_export/') . $activefolder . '/profiles/vp_profile/themes/vp_theme/css')) {      
+      mkdir(drupal_realpath(file_default_scheme() . '://html_export/') . $activefolder . '/profiles/vp_profile/themes/vp_theme/css', 0775, true);
+    }    
+// @todo. End alternative block of code III.
+
     // Single file, use regular copy function.
     copy($printcsssrc . '/print.css', $printcssdst . '/print.css');
   }  
 
-  // Live site will have https.
-  $protocol = (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on') ? 'https://' : 'http://';
+  // Live site will hopefully have https.
+  $protocol_orig = (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on') ? 'https://' : 'http://';
+  $protocol = (variable_get('rkstatic_static_use_ssl') == 1) ? 'https://' : 'http://';
 
   if (variable_get('rkstatic_debug', 0) == 1) {
-    watchdog('rk', 'protocol ' . $protocol . ' SERVER[HTTPS]: ' . $_SERVER['HTTPS']);    
+    watchdog('rkstatic', '[debug] protocol setting: ' . $protocol);
   }
 
-  $arr_find = array('link', 'script');
+  $arr_find = array('link', 'script', 'img');
   foreach ($arr_find as $tag) {
     foreach ($html_obj->find($tag) as $link) {
 
       if (($link->href != '' || $link->src != '') && strpos($link->href, 'googleapis') == 0) {
 
+        $rkstatic_static_subdomain = variable_get('rkstatic_static_subdomain');
         if (strlen($link->href) > 0) {
-          $link->href = str_replace($protocol . $_SERVER['HTTP_HOST'] . '/', $protocol . variable_get('rkstatic_static_subdomain') . '/', $link->href);
+          $link->href = str_replace($protocol_orig . $_SERVER['HTTP_HOST'] . '/', $protocol . $rkstatic_static_subdomain . '/', $link->href);
               if (variable_get('rkstatic_debug', 0) == 1) {
-                watchdog('rk', 'link->href ' . $link->href . ' protocol . _SERVER[HTTP_HOST] ' . $protocol . $_SERVER['HTTP_HOST']);
+                watchdog('rkstatic', '[debug] link->href ' . $link->href . ' protocol . _SERVER[HTTP_HOST] ' . $protocol . $_SERVER['HTTP_HOST']);
               }          
         }
         else { // Assume src.
-          $link->src = str_replace($protocol . $_SERVER['HTTP_HOST'] . '/', $protocol . variable_get('rkstatic_static_subdomain') . '/', $link->src);
+          // str_replace ( mixed $search , mixed $replace , mixed $subject [, int &$count ] )
+          $orig_link_src = $link->src;
+          $link->src = str_replace($protocol_orig . $_SERVER['HTTP_HOST'] . '/', $protocol . $rkstatic_static_subdomain . '/', $link->src);
               if (variable_get('rkstatic_debug', 0) == 1) {
-                watchdog('rk', 'link->src ' . $link->src . ' protocol . _SERVER[HTTP_HOST] ' . $protocol . $_SERVER['HTTP_HOST']);
-              }      
+                watchdog('rkstatic', '[debug] search:' . $protocol_orig . $_SERVER['HTTP_HOST'] . '/' . '<br>replace:' . $protocol . $rkstatic_static_subdomain . '/' . '<br>orig link->src: ' . $orig_link_src . '<br>str_replaced link->src: ' . $link->src . '<br>protocol . _SERVER[HTTP_HOST] ' . $protocol . $_SERVER['HTTP_HOST']);
+              }
+
+          if ($tag == 'img') {
+            // Trying to make image path relative.
+              global $base_root;
+              $orig_link_src = $link->src;              
+              // Get rid of protocol and http_host. This helps html_export save images for static copy.
+              $link->src = str_replace($base_root, '', $link->src);
+              if (variable_get('rkstatic_debug', 0) == 1) {
+                watchdog('rkstatic', '[debug] img orig src: ' . $orig_link_src . '<br />replaced src: ' . $link->src);
+              }
+          }
         }
 
       }
@@ -455,9 +576,21 @@ function rkstatic_html_export_data_alter(&$data, $paths, $active_path_count, $do
   $data = str_replace("../../../..//s7.addthis", $protocol . 's7.addthis', $data);
   $data = str_replace("../../..//s7.addthis", $protocol . 's7.addthis', $data);
   $data = str_replace("../..//s7.addthis", $protocol . 's7.addthis', $data);
-  $data = str_replace("..//s7.addthis", $protocol . 's7.addthis', $data);  
-  // $data = str_replace($protocol . $_SERVER['HTTP_HOST'] . '/', $protocol . variable_get('rkstatic_static_subdomain') . '/', $data);
+  $data = str_replace("..//s7.addthis", $protocol . 's7.addthis', $data);
+  
+  //str_replace(search, replace, subject)
+  //watchdog('rkstatic', 'needle http_host: ' . $protocol_orig . $_SERVER['HTTP_HOST'] . '/<br>replace: ' . $protocol . variable_get('rkstatic_static_subdomain') . '/');
+  // This was commented out, but perhaps accidentally. I want to force static domain.
+  $data = str_replace($protocol_orig . $_SERVER['HTTP_HOST'] . '/', $protocol . variable_get('rkstatic_static_subdomain') . '/', $data);
 
+  // If we do not want static over https, then we do another mass search/replace.
+  if (variable_get('rkstatic_static_use_ssl') == 0) {
+    $data = str_replace("https://", $protocol, $data);
+  }
+  else { // Using ssl.
+    $data = str_replace("http://", $protocol, $data);
+  }
+  
   // Release resources to avoid memory leak in some versions.
   $html_obj->clear();
   unset($html_obj);
@@ -468,20 +601,25 @@ function rkstatic_html_export_data_alter(&$data, $paths, $active_path_count, $do
 /**
  * From http://php.net/manual/en/function.copy.php comments.
  */
-function _rkstatic_recurse_copy($src, $dst) { 
-    $dir = opendir($src); 
-    // mkdir($dst, 0775, true); 
-    while(false !== ( $file = readdir($dir)) ) { 
-        if (( $file != '.' ) && ( $file != '..' )) { 
-            if ( is_dir($src . '/' . $file) ) { 
-                _rkstatic_recurse_copy($src . '/' . $file, $dst . '/' . $file);
-            } 
-            else { 
-                copy($src . '/' . $file,$dst . '/' . $file); 
-            } 
-        } 
-    } 
-    closedir($dir); 
+function _rkstatic_recurse_copy($src, $dst) {
+
+    $dir = @opendir($src);
+
+    // mkdir($dst, 0775, true);
+    while(false !== ( $file = @readdir($dir)) ) {
+      if (( $file != '.' ) && ( $file != '..' )) {
+        if ( @is_dir($src . '/' . $file) ) {          
+          _rkstatic_recurse_copy($src . '/' . $file, $dst . '/' . $file);
+
+        }
+        else {          
+          //@copy($src . '/' . $file, $dst . '/' . $file);
+          file_unmanaged_copy($src . '/' . $file, $dst . '/' . $file, FILE_EXISTS_REPLACE);
+         
+        }
+      }
+    }
+    @closedir($dir);
 }
 
 
@@ -520,6 +658,7 @@ function _rkstatic_export_custom_paths() {
  * Implements hook_cron().
  */
 function rkstatic_cron() {
+
   // Only run if switched on from rkstatic module settings page.
   if (variable_get('rkstatic_use_cron', 0) == 1) {    
     // First time should run and then the rkstatic_cron_last_run will get set.
@@ -542,7 +681,7 @@ function rkstatic_cron() {
     if ($rkstatic_last_cron_build + (3600 * $min_cron_interval) <= REQUEST_TIME 
           && in_array(date('G', REQUEST_TIME), $allowed_night_time_range)) {
       // For logging's sake.
-      watchdog('rk', t('<p>Running rkstatic build using cron. rkstatic last cron static build: ' . date('H:i:s d.m.Y', $rkstatic_last_cron_build) . '</p>'));
+      watchdog('rkstatic', t('<p>Running rkstatic build using cron. rkstatic last cron static build: :date</p>', array(':date' => date('H:i:s d.m.Y', $rkstatic_last_cron_build))));
 
       // RK static cron is running so update the rkstatic_cron_last_run variable.
       variable_set('rkstatic_cron_last_run', REQUEST_TIME);
@@ -569,13 +708,13 @@ function _rkstatic_run_html_export_batch() {
   $rkstatic_paths = _rkstatic_export_custom_paths();
   $html_export_other_paths = explode("\n", variable_get('html_export_other_paths'));
 
-// watchdog('rk', 'other paths <pre>' . print_r($html_export_other_paths, true) . '</pre>');
+// watchdog('rkstatic', 'other paths <pre>' . print_r($html_export_other_paths, true) . '</pre>');
 
   // Merge all paths into one array for batch job.
   // $paths = array_merge($rkstatic_paths, $html_export_other_paths);
 
   // sort($html_export_other_paths);
-// watchdog('rk', 'paths <pre>' . print_r($paths, true) . '</pre>');
+// watchdog('rkstatic', 'paths <pre>' . print_r($paths, true) . '</pre>');
 
   // Get rid of space at end of each path.
   $arrTmp = array();  
@@ -602,14 +741,6 @@ function _rkstatic_run_html_export_batch() {
   $uid = 0; // 0 is anonymous user.
   $format = 'none'; // None means save files in sites/default/files/html_export rather than as a tar.
 
-
-  // Function html_export_render_pages builds asset_list in this context array.
-  // $context = array();
-  // $context['sandbox']['progress'] = 0;
-  // $context['sandbox']['max'] = count($paths);
-  // $context['results']['paths'] = array();
-  // $context['results']['asset_list'] = array();
-
   // Copy/paste $batch array definition from html_export.pages.inc
   $batch = array(
     'operations' => array(
@@ -632,16 +763,6 @@ function _rkstatic_run_html_export_batch() {
   $batch['progressive'] = FALSE;
   batch_process(NULL);
 
-  // Use background batch module which is part of background_process.
-  /*if (module_exists('background_batch')) {
-    background_batch_process_batch(NULL); // Pass null since no drupal_goto at end of job.
-  }
-  else {
-    if (function_exists('watchdog')) {
-      watchdog('rkstatic', t('Background Batch module needs to be enabled for rkstatic\'s cron job to work.'));
-    }
-  }*/
-
   // @todo and test. Manually turn back on preprocessors for css and js?
   // variable_set('preprocess_css', 1);
   // variable_set('preprocess_css', 1);
@@ -656,13 +777,98 @@ function rkstatic_cron_finished($success, $results, $operations) {
   if ($success) {
     // Make sure contact page pop-ups are not suppressed anymore.
     variable_set('rkstatic_kill_contact_popup', 0);
-    watchdog('rk', t('rkstatic cron batch finished <pre>' . print_r($results, true) . '</pre>'));
+
+    // Name of last static build directory.
+    $last_build_dir = _rkstatic_last_build_directory();    
+
+    // Check latest build and report if any index.html files are sized 0 kb.
+    if (isset($results['paths'])) {
+      $bad_paths = array();
+      foreach($results['paths'] as $key => $value) {
+        $path = drupal_realpath(file_default_scheme() . '://html_export/') . '/' . $last_build_dir . '/' . $value . '/index.html';
+        $size = _rkstatic_check_index_size($path);
+
+        if ($size == 0) {
+          $bad_paths[] = $path; // $value
+        }
+      }
+    }
+
+    // Log it if some index.html files have 0 size.
+    if (sizeof($bad_paths) > 0) {
+      watchdog('rkstatic', t('Warning! 0 bytes for :last_build <pre>:path</pre>', array(':last_build' => $last_build_dir, ':path' => print_r($bad_paths, TRUE))));
+    }
+
+    watchdog('rkstatic', t('rkstatic cron batch finished :last_build <pre>' . print_r($results, true) . '</pre>', array(':last_build' => $last_build_dir)));
   }
   else {
     // An error occurred.
     // $operations contains the operations that remained unprocessed.
     $error_operation = reset($operations);
     $message = t('An error occurred while processing %error_operation with arguments: @arguments', array('%error_operation' => $error_operation[0], '@arguments' => print_r($error_operation[1], TRUE)));
-    watchdog('rk', $message);
+    watchdog('rkstatic', $message);
   }
+
+
+  // Limit number of saved copies.
+  if (variable_get('rkstatic_delete_stale_copies') == 1) {
+    $dir_to_scan = file_default_scheme() . '://html_export/';
+    $arrHtmlExport = scandir($dir_to_scan);
+    $num_folders_in_directory = sizeof($arrHtmlExport);
+    $num_folders_to_preserve = variable_get('rkstatic_number_old_folders_to_preserve');
+    // Put array into reverse order.
+    arsort($arrHtmlExport);
+
+    // Delete if we have more folders than we need.
+    if ($num_folders_in_directory > $num_folders_to_preserve) {
+      $deleted_directories = '';
+      $counter = 0;
+      $num_deleted = 0;
+      foreach ($arrHtmlExport as $key => $value) {
+        // Delete user-defined number of older static copies.
+        if ($counter >= $num_folders_to_preserve && substr($value, 0, 1) !== '.') {
+          if (file_unmanaged_delete_recursive($dir_to_scan . $value)) {
+            $num_deleted++;
+            $deleted_directories .= '<li>' . $value . '</li>';
+          }
+        }
+        $counter++;
+      }
+
+      watchdog('rkstatic', t('rkstatic cron job deleted :folder. Deleted folders: <ul>!list</ul>', array(':folder' => format_plural($num_deleted, '1 folder', '@count folders'), '!list' => $deleted_directories)));
+    }
+  }
+
+}
+
+
+/**
+ * Helper function to check size of static index.html files.
+ */
+function _rkstatic_check_index_size($path) {  
+
+  if (is_file($path)) {
+    $size = filesize($path);
+    return $size;
+  }  
+  else {
+    return 0; // Assuming 0 bytes if it gets to else.
+  }
+}
+
+
+/**
+ * Get folder name of latest build.
+ * @return string - Returns just directory name, not full path.
+ */
+function _rkstatic_last_build_directory() {
+    $dir_to_scan = file_default_scheme() . '://html_export/';
+    $arrHtmlExport = scandir($dir_to_scan);    
+    // Put array into reverse order.
+    arsort($arrHtmlExport);
+
+    $dir = array_shift($arrHtmlExport);
+
+    // Returns just directory name, not full path.
+    return $dir;
 }
