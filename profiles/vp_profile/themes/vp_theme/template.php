@@ -633,6 +633,7 @@ function vp_theme_preprocess_simplenews_multi_block(&$vars) {
  * Implements theme_image_formatter().
  *
  * Default image for vp_contacts.
+ * Added image work for frontpage_first_news_thumbnail. mm 3feb15.
  */
 function vp_theme_image_formatter($variables) {
   $item = $variables['item'];
@@ -672,6 +673,19 @@ function vp_theme_image_formatter($variables) {
     $dimensions = array();
     image_style_transform_dimensions('search_contact_thumbnail', $dimensions);
     $output = '<img src="/' . drupal_get_path('module', 'vp_contact') . '/no-profile-image_w104.png" height="'.$dimensions['height'].'" width="'.$dimensions['width'].'" alt="" />';
+  }
+
+  // Force relative path for front page cover image.
+  if (isset($variables['image_style']) && $variables['image_style'] === 'frontpage_first_news_thumbnail') {
+    global $base_root;
+    $dimensions = array();
+    image_style_transform_dimensions('frontpage_first_news_thumbnail', $dimensions);
+    $image['style_name'] = $variables['image_style'];
+    $image['width'] = $dimensions['width'];
+    $image['height'] = $dimensions['height'];
+    $output = theme('image_style', $image);
+    // Get rid of protocol and http_host. This helps html_export save images for static copy.
+    $output = str_replace($base_root, '', $output);
   }
 
   // The link path and link options are both optional, but for the options to be
@@ -843,6 +857,45 @@ function vp_theme_newsletter_clean_link_path($children, $elements) {
     return $children;
   }
 
+}
+
+
+/**
+ * Modified from delta_blocks.theme.inc.
+ */
+function vp_theme_delta_blocks_logo($variables) {
+  if ($variables['logo']) {
+
+    // Just making sure image variable is instantiated.
+    $image = $variables['logo'];
+
+    // Make logo path relative by stripping host out.
+    if (isset($_SERVER['HTTP_HOST'])) {
+      $protocol = (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on') ? 'https://' : 'http://';
+      $image = str_replace($protocol . $_SERVER['HTTP_HOST'], '', $variables['logo']);
+    }
+
+    $image = array(
+      '#theme' => 'image',
+      '#path' => $image,
+      '#alt' => $variables['site_name'],
+    );
+    
+    $image = render($image);
+
+    if ($variables['logo_linked']) {
+      $options['html'] = TRUE;
+      $options['attributes']['id'] = 'logo';
+      $options['attributes']['title'] = t('Return to the @name home page', array('@name' => $variables['site_name']));
+      
+      // Do not redundantly link front page to front page.
+      if (!drupal_is_front_page()) {
+        $image = l($image, '<front>', $options);
+      }
+    }
+  
+    return '<div class="logo-img">' . $image . '</div>';
+  }
 }
 
 
