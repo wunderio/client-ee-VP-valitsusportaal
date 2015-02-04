@@ -61,8 +61,26 @@ function vp_news_views_query_alter(&$view, &$query) {
       unset($query->where[4]);
     }
     elseif ($view->exposed_input['date'] == 4) {
+      // Date widget uses / slashes so assuming them here. mm.
+      $arrStart = explode('/', $view->exposed_input['date_custom']['min']);
+      $arrEnd = explode('/', $view->exposed_input['date_custom']['max']);
+      $view->exposed_input['date_custom']['min'] = $arrStart[2] . '-' . $arrStart[1] . '-' . $arrStart[0];
+      $view->exposed_input['date_custom']['max'] = $arrEnd[2] . '-' . $arrEnd[1] . '-' . $arrEnd[0];
+
+      // Exposed input format has been made non-arbitrary. YYYY-mm-dd.
       $start = strtotime($view->exposed_input['date_custom']['min']);
       $end = strtotime($view->exposed_input['date_custom']['max']);
+
+      // Force a start date if date range chosen without start date. mm.
+      if ($start === FALSE) {
+        $start = strtotime('1918-02-24'); // Non-arbitrary arbitrary date;)
+      }
+      // Force an end date, if necessary. mm.
+      if ($end === FALSE) {
+        $end = REQUEST_TIME;
+      }
+
+      // The two if-then conditionals just above force this into elseif. mm.
       if ($start === FALSE) {
         $query->where[4]['conditions'][0]['field'] = 'node.created < ' . $end;
       }
@@ -72,6 +90,11 @@ function vp_news_views_query_alter(&$view, &$query) {
       elseif ($end !== FALSE && $start !== FALSE) {
         unset($query->where[4]['conditions'][0]);
         $query->where[4]['conditions'][1]['field'] = 'node.created BETWEEN ' . $start . ' AND ' . $end;
+
+        // Adding these two since the query was not actually working without them. mm 04feb15.
+        $query->where[4]['conditions'][1]['value'] = array();
+        $query->where[4]['conditions'][1]['operator'] = 'formula';
+
       }
     }
     else {
