@@ -8,6 +8,7 @@ sites/*/private
 /cache
 
 # mm. Ignore.
+.htaccess
 /.htaccess
 /robots_bkup_mai2014.txt
 /htaccess_bkup_mai2014
@@ -22,6 +23,9 @@ sites/*/private
 /MAINTAINERS.txt
 /README.txt
 /UPGRADE.txt
+
+# Ignore original logo since others may have just overwritten it with their own.
+profiles/vp_profile/themes/vp_theme/logo.png
 
 
 # OS generated files
