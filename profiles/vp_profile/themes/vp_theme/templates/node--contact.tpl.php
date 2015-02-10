@@ -13,9 +13,28 @@ global $language;
       hide($content['links']);
     ?>
     <?php print render($content['field_profile_photo']); ?>
-    <div class="field-group-format group_main field-group-div group-main  speed-none effect-none">
+    <div class="field-group-format group_main field-group-div group-main speed-none effect-none">
       <h3><span><?php print $title; ?></span></h3>
-      <?php print render($content['field_department']); ?>
+      <?php 
+        // Get departments where department name should not be displayed.
+        $dept_tid = (isset($content['field_department']['#object']->field_department[LANGUAGE_NONE][0]['tid'])) ? $content['field_department']['#object']->field_department[LANGUAGE_NONE][0]['tid'] : 0;
+        $hide_dept = variable_get('rk_abi_contact_popup_depts_to_hide');
+        // Empty array for hide_dept gives "needs to be array" error in array_keys.
+        if (empty($hide_dept)) {
+          // Give it an empty array to avoid "array expected" notice below.
+          $dept_check = array();
+        }
+        else {
+          $dept_check = array_keys($hide_dept);
+        }
+        // Check if this department name should be unset in rendered contact.
+        if (in_array($dept_tid, $dept_check)) {
+          unset($content['field_department']);
+        }      
+        if (isset($content['field_department'])) {
+          print render($content['field_department']);
+        }
+      ?>
       <?php if ($language->language !== 'et') print render($content['field_position']); ?>
       <?php print render($content['field_status']); ?>
     </div>
