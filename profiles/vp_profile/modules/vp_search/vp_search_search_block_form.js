@@ -89,7 +89,7 @@
                     cs = $('#contact-autocomplete');
                     cs.html('');
                     $.each(ca_data, function(i, v) {
-                      cs.append('<li' + (i == 0 ? ' class="first"' : '') + '><a href="' + Drupal.settings.basePath + Drupal.settings.pathPrefix + 'contact-search?filter=' + encodeURIComponent(v['title']) + '">' + v['title'] + '</a></li>');
+                      cs.append('<li' + (i == 0 ? ' class="first"' : '') + '><a href="' + Drupal.settings.basePath + Drupal.settings.pathPrefix + 'contact-search?filter=' + encodeURIComponent(v['title']) + '&radios=0">' + v['title'] + '</a></li>');
                     });
                   }
                 });
