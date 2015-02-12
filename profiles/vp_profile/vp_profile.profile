@@ -24,7 +24,7 @@ function vp_profile_form_install_configure_form_alter(&$form, $form_state) {
 
   $form['site_information']['site_name']['#default_value'] = 'Government installation profile';
   $form['site_information']['site_name']['#disabled'] = TRUE;
-  $form['site_information']['site_mail'] = array('#type' => 'hidden', '#value' => 'info@mekaia.com');
+  $form['site_information']['site_mail'] = array('#type' => 'hidden', '#value' => 'valitsusportaal@riigikantselei.ee');
   
   unset($form['update_notifications']);
   unset($form['server_settings']);
