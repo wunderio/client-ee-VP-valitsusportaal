@@ -717,13 +717,12 @@ function vp_theme_preprocess_node(&$vars) {
   // Add alt tag to contact image.
   if (isset($vars['type']) 
       && $vars['type'] == 'contact') {
-
     // Force an alt tag if none exists. Hats off to accessibility. mm 11.02.2015.
-    if (isset($vars['content']['field_profile_photo'][0]['#item']['alt']) 
-        && isset($vars['title'])
-        && empty($vars['content']['field_profile_photo'][0]['#item']['alt'])) {
+    if (isset($vars['content']['field_profile_photo']['#object']->field_profile_photo[LANGUAGE_NONE][0]['alt']) 
+        && empty($vars['content']['field_profile_photo']['#object']->field_profile_photo[LANGUAGE_NONE][0]['alt']) 
+        && isset($vars['title'])) {
       $vars['content']['field_profile_photo'][0]['#item']['alt'] = $vars['title'];
-    }    
+    }
   }
 
 }
