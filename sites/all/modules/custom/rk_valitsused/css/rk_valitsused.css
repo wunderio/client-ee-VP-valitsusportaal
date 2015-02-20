@@ -412,7 +412,7 @@ span.m-label {display: none;}
 /* Media queries */
 @media (max-width: 740px) {
 
-  div.form-item,
+  .varasemad-form div.form-item,
   #rk-valitsused-ministrid-get #edit-grupp .form-item-ametikohad,
   #rk-valitsused-ministrid-get #edit-grupp .form-item-sugu {
     display: block;  
