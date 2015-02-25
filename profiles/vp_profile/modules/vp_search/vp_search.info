@@ -4,5 +4,6 @@ package = VP
 version = 7.x-1.0
 project = vp_search
 dependencies[] = vp_core
+dependencies[] = rk_abi
 scripts[] = vp_search_search_block_form.js
 

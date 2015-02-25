@@ -62,6 +62,32 @@ function vp_search_block_view($delta = '') {
           $gss->SetLanguage(variable_get('gss_language', ''));
         }
         try {
+
+          // Configured to block flooding of our search. mm. 19feb15.
+          if (variable_get('rk_abi_limit_search_flood') === 1) {
+
+            if (!isset($_SESSION)) {
+              session_start();
+            }
+            $uri = md5($_SERVER['REQUEST_URI']);
+            $exp = variable_get('rk_abi_minimum_seconds_between_searches', 3);
+            $hash = $uri .'|'. time();
+            if (!isset($_SESSION['ddos'])) {
+              $_SESSION['ddos'] = $hash;
+            }
+
+            list($_uri, $_exp) = explode('|', $_SESSION['ddos']);
+            if ($_uri == $uri && time() - $_exp < $exp) {              
+                watchdog('vp_search', t('Suspicious search frequency.<ul><li>$_SERVER[REMOTE_ADDR] => :ip</li><li> $_SERVER[REQUEST_URI] => :uri</li></ul>', array(':ip' => $_SERVER['REMOTE_ADDR'], ':uri' => $_SERVER['REQUEST_URI'])));
+                header('HTTP/1.1 503 Service Unavailable');
+                die('Otsingu sagedus piiratud.');
+            }
+
+            // Save last request
+            $_SESSION['ddos'] = $hash;
+
+          }
+
           // Set page variable here to avoid watchdog errors. mm 19.11.2014.
           $page = (isset($page)) ? $page : 1; // Default to getting page 1 of search results.
           $results = $gss->GetSearchResults($page);
@@ -76,7 +102,7 @@ function vp_search_block_view($delta = '') {
 
       $block['content'] =
         '<ul>'.
-        '<li'.(arg(0) == 'contact-search' ? ' class="item first active "' : ' class="item first"').'>'.l(t('Contact').' ('.$count_contact.')', 'contact-search', array('query' => array('filter' => $keyword))).'</li>'.
+        '<li'.(arg(0) == 'contact-search' ? ' class="item first active "' : ' class="item first"').'>'.l(t('Contact').' ('.$count_contact.')', 'contact-search', array('query' => array('filter' => $keyword, 'radios' => 0))).'</li>'.
         '<li class="spacer">|</li>'.
         '<li'.(arg(0) == 'search' && arg(1) == 'gss' ? ' class="item last active"' : ' class="item last"').'>'.l(t('Content'), 'search/gss/'.$keyword).$count_gss.'</li>'.
         '</ul>';
@@ -251,94 +277,117 @@ function vp_search_form_alter(&$form, &$form_state, $form_id) {
     $form['basic']['#prefix'] = '<div class="views-exposed-widget"><label>' . t('Search') . '</label>';
     $form['basic']['#suffix'] = '</div>';
 
-    // Source.
-    $form['source'] = array(
-      '#prefix' => '<div class="views-exposed-widget"><label>' . t('Source') . '</label>',
-      '#suffix' => '</div>',
-      '#type' => 'radios',
-      '#default_value' => (!isset($_GET['source']) || $_GET['source'] == 0) ? 0 : 1,
-      '#options' => array(
-        0 => t('Search from !site', array('!site' => parse_url($base_url, PHP_URL_HOST))),
-        1 => t('Search from all Government Portal sites'),
-      ),
-    );
 
-    // Intervals.
-    $intervals = array(
-      '0' => t('All'),
-      '1-week' => t('Last 7 days'),
-      '1-month' => t('Last 30 days'),
-      '12-months' => t('Last 12 months'),
-      'between' => '<div class="form-item form-type-textfield form-item-date-custom-min"><input class="bef-datepicker" type="text" name="time-between-start" value="' . (isset($_GET['time-between-start']) && !empty($_GET['time-between-start']) ? $_GET['time-between-start'] : '') . '" /></div><div class="form-item form-type-textfield form-item-date-custom-max"><input class="bef-datepicker" type="text" name="time-between-end" value="' . (isset($_GET['time-between-end']) && !empty($_GET['time-between-end']) ? $_GET['time-between-end'] : '') .'" /></div>',
-    );
-    $time = (isset($_GET['time']) ? check_plain($_GET['time']) : 0);
-    $interval_radios = '';
-    foreach ($intervals as $value => $name) {
-      $interval_radios .= '<div class="form-item form-type-radio form-item-date">';
-      $interval_radios .= '<input id="' . ($value === 'between' ? 'edit-date-4' : 'edit-date-' . $value) . '" type="radio" name="time" value="' . $value . '"' . ((string) $time === (string) $value ? ' checked' : '') . ' /> ' . ($value !== 'between' ? '<label class="option" for="' . ('edit-date-' . $value) . '">' : '<div id="form-label-filter-in-radio-field" class="option">') . $name . ($value !== 'between' ? '</label>' : '</div>');
-      $interval_radios .= '</div>';
+    // Adding ability to remove the source filter using help of rk_abi module. mm 11.02.2015.
+    if (variable_get('rk_abi_remove_search_result_source_filter') === 0) {
+      // Source.
+      $form['source'] = array(
+        '#prefix' => '<div class="views-exposed-widget"><label>' . t('Source') . '</label>',
+        '#suffix' => '</div>',
+        '#type' => 'radios',
+        '#default_value' => (!isset($_GET['source']) || $_GET['source'] == 0) ? 0 : 1,
+        '#options' => array(
+          0 => t('Search from !site', array('!site' => parse_url($base_url, PHP_URL_HOST))),
+          1 => t('Search from all Government Portal sites'),
+        ),
+      );
     }
-    $form['filters'] = array('#markup' =>
-      '<div id="edit-date-wrapper" class="views-exposed-widget"><label>' . t('Interval') . '</label>' . $interval_radios . '</div>
-      <script>
-      // Check radio if time input is focused.
-      jQuery("#form-label-filter-in-radio-field").click(function() {
-        jQuery("#edit-date-4").attr("checked", "checked");
-      });
-      </script>
-      ',
-    );
 
-    // Content types.
-    $node_types = node_type_get_types();
-    $content_type_radios = array();
-    $exclude = array('youtube_importer', 'youtube_video', 'announcements', 'background_image', 'important_announcements', 'vp_menu_dropdown_box', 'webform', 'contact');
-    foreach ($node_types as $node_type) {
-      if (in_array($node_type->type, $exclude)) continue;
-      $value = 'more:pagemap:item-type:' . $node_type->type;
-      $content_type_radios[$value] = t($node_type->name);
-    }
-    
-    // From Handle text in a secure fashion https://www.drupal.org/node/28984
-    // Only #default_value for a select type is sanitized? What about checkboxes?
-    // Looping through GET['type'] and sanitizing each value. mm 18.nov.2014.
-    $get_type = (isset($_GET['type'])) ? $_GET['type'] : array();
-    foreach($get_type as $key => $value) {
-      $get_type[$key] = check_plain($value);
-    }   
-    $form['type'] = array(
-      '#prefix' => '<div class="views-exposed-widget"><label>' . t('Content type') . '</label>',
-      '#suffix' => '</div>',
-      '#type' => 'checkboxes',
-      '#default_value' => $get_type,
-      '#options' => $content_type_radios,
-    );
 
-    // Subject.
-    $vocabulary = taxonomy_vocabulary_machine_name_load('news_subjects');
-    $terms = taxonomy_get_tree($vocabulary->vid);
-    $subject_ratios = array();
-    foreach ($terms as $term) {
-      $value = drupal_strtolower($term->name);
-      $value = str_replace(' ', '_', drupal_strtolower($value));
-      $value = 'more:pagemap:item-subject:'.$value;
-      $subject_ratios[$value] = t($term->name);
+    // Adding ability to remove the interval filter using help of rk_abi module. mm 11.02.2015.
+    if (variable_get('rk_abi_remove_search_result_interval_filter') === 0) {
+      // Intervals.
+      $intervals = array(
+        '0' => t('All'),
+        '1-week' => t('Last 7 days'),
+        '1-month' => t('Last 30 days'),
+        '12-months' => t('Last 12 months'),
+        'between' => '<div class="form-item form-type-textfield form-item-date-custom-min"><input class="bef-datepicker" type="text" name="time-between-start" value="' . (isset($_GET['time-between-start']) && !empty($_GET['time-between-start']) ? $_GET['time-between-start'] : '') . '" /></div><div class="form-item form-type-textfield form-item-date-custom-max"><input class="bef-datepicker" type="text" name="time-between-end" value="' . (isset($_GET['time-between-end']) && !empty($_GET['time-between-end']) ? $_GET['time-between-end'] : '') .'" /></div>',
+      );
+      $time = (isset($_GET['time']) ? check_plain($_GET['time']) : 0);
+      $interval_radios = '';
+      foreach ($intervals as $value => $name) {
+        $interval_radios .= '<div class="form-item form-type-radio form-item-date">';
+        $interval_radios .= '<input id="' . ($value === 'between' ? 'edit-date-4' : 'edit-date-' . $value) . '" type="radio" name="time" value="' . $value . '"' . ((string) $time === (string) $value ? ' checked' : '') . ' /> ' . ($value !== 'between' ? '<label class="option" for="' . ('edit-date-' . $value) . '">' : '<div id="form-label-filter-in-radio-field" class="option">') . $name . ($value !== 'between' ? '</label>' : '</div>');
+        $interval_radios .= '</div>';
+      }
+      $form['filters'] = array('#markup' =>
+        '<div id="edit-date-wrapper" class="views-exposed-widget"><label>' . t('Interval') . '</label>' . $interval_radios . '</div>
+        <script>
+        // Check radio if time input is focused.
+        jQuery("#form-label-filter-in-radio-field").click(function() {
+          jQuery("#edit-date-4").attr("checked", "checked");
+        });
+        </script>
+        ',
+      );
     }
-    
-    // From Handle text in a secure fashion https://www.drupal.org/node/28984
-    // Only #default_value for a select type is sanitized? What about checkboxes?
-    // Looping through GET['subject'] and sanitizing each value. mm 18.nov.2014.
-    $get_subject = (isset($_GET['subject'])) ? $_GET['subject'] : array();
-    foreach($get_subject as $key => $value) {
-      $get_subject[$key] = check_plain($value);
+
+
+    // Adding ability to remove the content type filters using help of rk_abi module. mm 11.02.2015.
+    if (variable_get('rk_abi_remove_search_result_content_type_filter') === 0) {
+      // Content types.
+      $node_types = node_type_get_types();
+      $content_type_radios = array();
+      $exclude = array('youtube_importer', 'youtube_video', 'announcements', 'background_image', 'important_announcements', 'vp_menu_dropdown_box', 'webform', 'contact');
+
+      // rk_abi module allows additional content types to be excluded. mm 11.02.2015.
+      $additional_exclude = variable_get('rk_abi_additional_content_type_filters_to_hide');
+      if (gettype($additional_exclude) == 'array') {
+        $exclude = array_merge($exclude, $additional_exclude);
+      }
+
+      foreach ($node_types as $node_type) {
+        if (in_array($node_type->type, $exclude)) continue;
+        $value = 'more:pagemap:item-type:' . $node_type->type;
+        $content_type_radios[$value] = t($node_type->name);
+      }
+      
+      // From Handle text in a secure fashion https://www.drupal.org/node/28984
+      // Only #default_value for a select type is sanitized? What about checkboxes?
+      // Looping through GET['type'] and sanitizing each value. mm 18.nov.2014.
+      $get_type = (isset($_GET['type'])) ? $_GET['type'] : array();
+      foreach($get_type as $key => $value) {
+        $get_type[$key] = check_plain($value);
+      }   
+      $form['type'] = array(
+        '#prefix' => '<div class="views-exposed-widget"><label>' . t('Content type') . '</label>',
+        '#suffix' => '</div>',
+        '#type' => 'checkboxes',
+        '#default_value' => $get_type,
+        '#options' => $content_type_radios,
+      );
     }
-    $form['subject'] = array(
-      '#prefix' => '<div class="views-exposed-widget"><label>' . t('Subject') . '</label>',
-      '#suffix' => '</div>',
-      '#type' => 'checkboxes',
-      '#default_value' => $get_subject,
-      '#options' => $subject_ratios,
-    );
+
+
+    // Adding ability to remove the subject filter with help of rk_abi module. mm 11.02.2015.    
+    if (variable_get('rk_abi_remove_search_result_subject_filter') === 0) {
+      // Subject.
+      $vocabulary = taxonomy_vocabulary_machine_name_load('news_subjects');
+      $terms = taxonomy_get_tree($vocabulary->vid);
+      $subject_ratios = array();
+      foreach ($terms as $term) {
+        $value = drupal_strtolower($term->name);
+        $value = str_replace(' ', '_', drupal_strtolower($value));
+        $value = 'more:pagemap:item-subject:'.$value;
+        $subject_ratios[$value] = t($term->name);
+      }
+      
+      // From Handle text in a secure fashion https://www.drupal.org/node/28984
+      // Only #default_value for a select type is sanitized? What about checkboxes?
+      // Looping through GET['subject'] and sanitizing each value. mm 18.nov.2014.
+      $get_subject = (isset($_GET['subject'])) ? $_GET['subject'] : array();
+      foreach($get_subject as $key => $value) {
+        $get_subject[$key] = check_plain($value);
+      }
+      $form['subject'] = array(
+        '#prefix' => '<div class="views-exposed-widget"><label>' . t('Subject') . '</label>',
+        '#suffix' => '</div>',
+        '#type' => 'checkboxes',
+        '#default_value' => $get_subject,
+        '#options' => $subject_ratios,
+      );
+    }
   }
 }
 

@@ -133,7 +133,7 @@ function rk_abi_alternate_login() {
   }
   else {
     global $user;
-    if ($user->uid == 0) {      
+    if ($user->uid == 0) {
       watchdog('rk', t('Dubious login attempt from %ip. User tried key %userinput. This could be an honest mistake or it is within the realm of possibility that an attacker has discovered this alternate login area and is trying to use it.', array('%ip' => $user->hostname, '%userinput' => $user_input)), array(), WATCHDOG_WARNING);
 
       $strOutput = t('<h2>Security Incident</h2><p>This access attempt has been logged and reported to administrators.</p>');
@@ -305,7 +305,7 @@ function rk_abi_settings($form, &$form_state) {
     '#collapsed' => TRUE,
   );
 
-    // Find all newsletters and build logo settings for them.
+  // Find all newsletters and build logo settings for them.
   $vocab = taxonomy_vocabulary_machine_name_load('department');
   $all_departments = taxonomy_get_tree($vocab->vid);
   $dept_options = array();
@@ -408,6 +408,85 @@ function rk_abi_settings($form, &$form_state) {
     '#default_value' => variable_get('rk_abi_gss_ssl', 0),
     '#description' => t('Run Google Site Search ajax call over ssl. (https)'),
   );  
+
+  $form['rk_abi_search_options_fieldset']['rk_abi_limit_search_flood'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Limit Search Frequency'),
+    '#default_value' => variable_get('rk_abi_limit_search_flood', 0),
+    '#description' => t('Automatic scripts, if they want, can flood our search with requests that in turn get sent to Google and we pay for each search request.'),
+  );
+
+  $form['rk_abi_search_options_fieldset']['rk_abi_minimum_seconds_between_searches'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Minimum Seconds Required Between Searches'),
+    '#default_value' => variable_get('rk_abi_minimum_seconds_between_searches', 3),
+    '#description' => t('A repeated search request will be considered an automated script if the frequency is greater than this <em>Seconds Allowed Between Searches</em> setting. (3 second default). Upon finding a greater frequency, the system will log the event, throw a 503 and then tell the application to die().'),
+    '#states' => array(
+      'invisible' => array(
+       ':input[name="rk_abi_limit_search_flood"]' => array('checked' => FALSE),
+      ),
+    ),    
+  );
+
+  $form['rk_abi_search_options_fieldset']['rk_abi_remove_search_result_source_filter'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Remove Source Filter from Search Results Page'),
+    '#default_value' => variable_get('rk_abi_remove_search_result_source_filter', 0),
+    '#description' => t('On/off switch to remove the source filter from the search results page.'),
+  );
+  
+  $form['rk_abi_search_options_fieldset']['rk_abi_remove_search_result_interval_filter'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Remove Date Interval Filter from Search Results Page'),
+    '#default_value' => variable_get('rk_abi_remove_search_result_interval_filter', 0),
+    '#description' => t('On/off switch to remove the date interval filter from the search results page.'),
+  );
+
+  $form['rk_abi_search_options_fieldset']['rk_abi_remove_search_result_content_type_filter'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Remove Content Type Filters from Search Results Page'),
+    '#default_value' => variable_get('rk_abi_remove_search_result_content_type_filter', 0),
+    '#description' => t('On/off switch to remove the content types checkbox filters from the search results page.'),
+  );
+
+  $form['rk_abi_search_options_fieldset']['rk_abi_remove_search_result_subject_filter'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Remove Subject Filters from Search Results Page'),
+    '#default_value' => variable_get('rk_abi_remove_search_result_subject_filter', 0),
+    '#description' => t('The subject filter does not actually make too much sense as a default anywhere other than valitsus.ee'),
+  );
+
+    // Find all newsletters and build logo settings for them.
+  $content_types = node_type_get_types(); //node_type_get_names();
+  $content_type_options = array();
+  foreach ($content_types as $key => $value) {
+    $content_type_options[$key] = $key;
+  }
+
+  $form['rk_abi_search_options_fieldset']['rk_abi_additional_content_type_filters_to_hide'] = array(
+    '#type' => 'select',
+    '#multiple' => TRUE,
+    '#title' => t('Remove Content Type in Search Filter'),
+    '#description' => t('The vp_search module shows many content types in the search filter, but this is not very elegant as it reveals stuff to the user we do not necessarily want to show. The following content types are already excluded in vp_search: youtube_importer, youtube_video, announcements, background_image, important_announcements, vp_menu_dropdown_box, webform, contact.'),
+    '#options' => $content_type_options,
+    '#default_value' => variable_get('rk_abi_additional_content_type_filters_to_hide'),
+  );  
+  
+
+  $form['rk_abi_user_options_fieldset'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('User Options'),
+    '#description' => t('Additional options for user configuration.'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+
+  $form['rk_abi_user_options_fieldset']['rk_abi_user_signature_from_idcard'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Add Name from ID-Card to User Signature'),
+    '#default_value' => variable_get('rk_abi_user_signature_from_idcard', 0),
+    '#description' => t('The ID-Card authentication module allows for automatic user account creation, however, it uses the isikukood as the user name without saving the user\'s actual name anywhere. Checking this setting here allows for hook_user_insert to be applied and to have the user\'s actual name saved into the signature field of the user table.'),
+  );
 
   return system_settings_form($form);
 }
@@ -602,6 +681,7 @@ function rk_abi_form_alter(&$form, &$form_state, $form_id) {
       unset($form['actions']['submit']);
     }
   }
+
 }
 
 
@@ -614,6 +694,32 @@ function rk_abi_node_update($node) {
   if (module_exists('boost') && variable_get('rk_abi_flush_boost_on_node_update', 0) === 1) { 
     boost_flush_caches();
     watchdog('rk', t('Boost cache flushed on update of node @id, <em>@pealkiri</em>', array('@id' => $node->nid, '@pealkiri' => $node->title)));
+  }
+}
+
+
+/**
+ * Implements hook_node_update().
+ */
+function rk_abi_user_insert(&$edit, $account, $category) {
+  // Check if we want to save name to signature from rk_abi settings.
+  if (variable_get('rk_abi_user_signature_from_idcard', 0) === 1) { 
+    // Saving name from ID card to signature so that it can be displayed, if necessary.
+    if (isset($_SERVER['REDIRECT_SSL_CLIENT_S_DN_CN'])) {
+      $ssl_client_s_dn_cn = $_SERVER['REDIRECT_SSL_CLIENT_S_DN_CN'];
+    }
+    elseif (isset($_SERVER['SSL_CLIENT_S_DN_CN'])) {
+      $ssl_client_s_dn_cn = $_SERVER['SSL_CLIENT_S_DN_CN'];
+    }
+    else {
+      $ssl_client_s_dn_cn = NULL; 
+    }
+
+    if ($ssl_client_s_dn_cn !== NULL) {
+      list($lastname, $firstname, $id_code) = explode(',', $ssl_client_s_dn_cn);
+      $signature = $firstname . ' ' . $lastname;
+      $edit['signature'] = $signature;
+    }
   }
 }
 
