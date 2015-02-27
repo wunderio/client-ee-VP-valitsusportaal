@@ -101,11 +101,11 @@ function vp_theme_select_as_links($vars) {
           $elem['#children'] = l($value, 'medium/taxonomy', array('query' => array($name => $key)));
         }
         else {
-          $elem['#children'] = l($value, bef_replace_query_string_arg($name, $key, $multiple));
+          $elem['#children'] = l($value, bef_replace_query_string_arg($name, $key, $multiple), array('attributes' => array('rel' => 'nofollow')));
         }
         $output .= theme('form_element', array('element' => $elem));
       } else {
-        $elem['#children'] = l($value, bef_replace_query_string_arg($name, $key, $multiple, true));
+        $elem['#children'] = l($value, bef_replace_query_string_arg($name, $key, $multiple, true), array('attributes' => array('rel' => 'nofollow')));
         _form_set_class($elem, array('bef-select-as-links-selected'));
         $output .= str_replace('form-item', 'form-item selected', theme('form_element', array('element' => $elem)));
       }
