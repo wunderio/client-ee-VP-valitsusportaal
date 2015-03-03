@@ -5,7 +5,7 @@
 
     // Do not treat image if it is inline icon or has no-treatment class.
     if ($(this).hasClass('vp-inline-icon') || $(this).hasClass('no-treatment')) {
-      return false;
+      return;
     }
 
     var $this = $(this),
