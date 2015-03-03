@@ -2,6 +2,12 @@
   var isNodeTypeNews = $('body.node-type-news').length === 1 ? true : false;
 
   $('.node img').each(function() {
+
+    // Do not treat image if it is inline icon or has no-treatment class.
+    if ($(this).hasClass('vp-inline-icon') || $(this).hasClass('no-treatment')) {
+      return false;
+    }
+
     var $this = $(this),
         longdesc = $this.attr('longdesc'),
         style,

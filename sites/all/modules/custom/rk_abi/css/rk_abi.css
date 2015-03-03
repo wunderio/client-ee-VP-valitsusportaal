@@ -104,6 +104,19 @@ nav.comment-links {
   margin-left: 35px;
 }
 
+/* Lisatud templiitide valikutesse */
+.node img.vp-inline-icon {
+  display: inline-block;
+  float: left;
+  clear: both;
+  margin: -0.6em 0 0 0;
+  padding: 0 0.4em 0.2em 0;
+}
+
+.node img.vp-inline-icon.no-margin {
+  margin: 0;
+}
+
 
 /* Media queries */
 @media screen and (min-device-width: 1024px) {
