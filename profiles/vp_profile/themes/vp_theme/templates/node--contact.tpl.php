@@ -11,6 +11,7 @@ global $language;
       hide($content['field_department']);
       hide($content['comments']);
       hide($content['links']);
+      hide($content['field_sap_ametikood']);
     ?>
     <?php print render($content['field_profile_photo']); ?>
     <div class="field-group-format group_main field-group-div group-main speed-none effect-none">
