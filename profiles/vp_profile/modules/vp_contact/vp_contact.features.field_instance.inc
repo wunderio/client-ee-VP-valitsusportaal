@@ -10,39 +10,6 @@
 function vp_contact_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'comment-comment_node_contact-comment_body'
-  $field_instances['comment-comment_node_contact-comment_body'] = array(
-    'bundle' => 'comment_node_contact',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'hidden',
-        'module' => 'text',
-        'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'comment',
-    'field_name' => 'comment_body',
-    'label' => 'Comment',
-    'required' => TRUE,
-    'settings' => array(
-      'text_processing' => 1,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'module' => 'text',
-      'settings' => array(
-        'rows' => 5,
-      ),
-      'type' => 'text_textarea',
-      'weight' => 0,
-    ),
-  );
-
   // Exported field_instance: 'node-contact-field_contact_e_mail'
   $field_instances['node-contact-field_contact_e_mail'] = array(
     'bundle' => 'contact',
@@ -54,14 +21,20 @@ function vp_contact_field_default_field_instances() {
         'label' => 'above',
         'module' => 'email',
         'settings' => array(),
-        'type' => 'email_default',
+        'type' => 'email_plain',
         'weight' => 9,
+      ),
+      'scs' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
       'search_result' => array(
         'label' => 'inline',
         'module' => 'email',
         'settings' => array(),
-        'type' => 'email_default',
+        'type' => 'email_plain',
         'weight' => 4,
       ),
       'view_mode_facebook' => array(
@@ -103,6 +76,12 @@ function vp_contact_field_default_field_instances() {
         'type' => 'text_default',
         'weight' => 8,
       ),
+      'scs' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
       'search_result' => array(
         'label' => 'inline',
         'module' => 'text',
@@ -119,7 +98,7 @@ function vp_contact_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_contact_phone_nr',
-    'label' => 'Phone nr',
+    'label' => 'Phone',
     'required' => 0,
     'settings' => array(
       'text_processing' => 0,
@@ -149,6 +128,12 @@ function vp_contact_field_default_field_instances() {
         'settings' => array(),
         'type' => 'text_default',
         'weight' => 9,
+      ),
+      'scs' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
       'search_result' => array(
         'label' => 'above',
@@ -195,10 +180,16 @@ function vp_contact_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'hidden',
-        'module' => 'taxonomy',
+        'module' => 'i18n_taxonomy',
         'settings' => array(),
-        'type' => 'taxonomy_term_reference_plain',
-        'weight' => 1,
+        'type' => 'i18n_taxonomy_term_reference_plain',
+        'weight' => 2,
+      ),
+      'scs' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
       'search_result' => array(
         'label' => 'hidden',
@@ -244,6 +235,12 @@ function vp_contact_field_default_field_instances() {
         'type' => 'text_default',
         'weight' => 7,
       ),
+      'scs' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
       'search_result' => array(
         'label' => 'above',
         'settings' => array(),
@@ -287,7 +284,13 @@ function vp_contact_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 10,
+        'weight' => 7,
+      ),
+      'scs' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
       'search_result' => array(
         'label' => 'above',
@@ -331,6 +334,12 @@ function vp_contact_field_default_field_instances() {
         'settings' => array(),
         'type' => 'text_default',
         'weight' => 6,
+      ),
+      'scs' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
       'search_result' => array(
         'label' => 'above',
@@ -376,7 +385,13 @@ function vp_contact_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 2,
+        'weight' => 3,
+      ),
+      'scs' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
       'search_result' => array(
         'label' => 'hidden',
@@ -423,7 +438,13 @@ function vp_contact_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 3,
+        'weight' => 4,
+      ),
+      'scs' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
       'search_result' => array(
         'label' => 'hidden',
@@ -470,7 +491,13 @@ function vp_contact_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 4,
+        'weight' => 5,
+      ),
+      'scs' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
       'search_result' => array(
         'label' => 'hidden',
@@ -521,6 +548,12 @@ function vp_contact_field_default_field_instances() {
         'type' => 'image',
         'weight' => 0,
       ),
+      'scs' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
       'search_result' => array(
         'label' => 'hidden',
         'module' => 'image',
@@ -543,7 +576,7 @@ function vp_contact_field_default_field_instances() {
     'label' => 'Profile photo',
     'required' => 0,
     'settings' => array(
-      'alt_field' => 0,
+      'alt_field' => 1,
       'default_image' => 582,
       'file_directory' => '',
       'file_extensions' => 'png gif jpg jpeg',
@@ -598,11 +631,128 @@ function vp_contact_field_default_field_instances() {
             'autocomplete' => 0,
           ),
         ),
+        'insert' => 0,
+        'insert_absolute' => 0,
+        'insert_class' => '',
+        'insert_default' => 'auto',
+        'insert_styles' => array(
+          'auto' => 'auto',
+          'colorbox__94x57' => 0,
+          'colorbox__100x80' => 0,
+          'colorbox__240x' => 0,
+          'colorbox__1024x' => 0,
+          'colorbox__flexslider_full' => 0,
+          'colorbox__flexslider_thumbnail' => 0,
+          'colorbox__frontpage_first_news_thumbnail' => 0,
+          'colorbox__gallery_thumbnail_200x140_cropped' => 0,
+          'colorbox__important_topics_wallpaper' => 0,
+          'colorbox__large' => 0,
+          'colorbox__media_gallery_large' => 0,
+          'colorbox__media_gallery_thumbnail' => 0,
+          'colorbox__medium' => 0,
+          'colorbox__modal_contact_thumbnail' => 0,
+          'colorbox__news_detail_cover_image' => 0,
+          'colorbox__news_list_thumbnail' => 0,
+          'colorbox__newsletter_thumbnail' => 0,
+          'colorbox__rk_valitsused_minister' => 0,
+          'colorbox__rk_valitsused_valitsus' => 0,
+          'colorbox__search_contact_thumbnail' => 0,
+          'colorbox__square_thumbnail' => 0,
+          'colorbox__subject_related_news_thumbnail' => 0,
+          'colorbox__thumbnail' => 0,
+          'colorbox__wysiwyg_template_thumbnail' => 0,
+          'icon_link' => 0,
+          'image' => 0,
+          'image_94x57' => 0,
+          'image_100x80' => 0,
+          'image_240x' => 0,
+          'image_1024x' => 0,
+          'image_flexslider_full' => 0,
+          'image_flexslider_thumbnail' => 0,
+          'image_frontpage_first_news_thumbnail' => 0,
+          'image_gallery_thumbnail_200x140_cropped' => 0,
+          'image_important_topics_wallpaper' => 0,
+          'image_large' => 0,
+          'image_media_gallery_large' => 0,
+          'image_media_gallery_thumbnail' => 0,
+          'image_medium' => 0,
+          'image_modal_contact_thumbnail' => 0,
+          'image_news_detail_cover_image' => 0,
+          'image_news_list_thumbnail' => 0,
+          'image_newsletter_thumbnail' => 0,
+          'image_rk_valitsused_minister' => 0,
+          'image_rk_valitsused_valitsus' => 0,
+          'image_search_contact_thumbnail' => 0,
+          'image_square_thumbnail' => 0,
+          'image_subject_related_news_thumbnail' => 0,
+          'image_thumbnail' => 0,
+          'image_wysiwyg_template_thumbnail' => 0,
+          'link' => 0,
+        ),
+        'insert_width' => '',
         'preview_image_style' => '',
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
       'weight' => 5,
+    ),
+  );
+
+  // Exported field_instance: 'node-contact-field_sap_ametikood'
+  $field_instances['node-contact-field_sap_ametikood'] = array(
+    'bundle' => 'contact',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => ' ',
+        ),
+        'type' => 'number_integer',
+        'weight' => 10,
+      ),
+      'scs' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'view_mode_facebook' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_sap_ametikood',
+    'label' => 'SAP ametikood',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 39,
     ),
   );
 
@@ -619,6 +769,12 @@ function vp_contact_field_default_field_instances() {
         'settings' => array(),
         'type' => 'text_default',
         'weight' => 7,
+      ),
+      'scs' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
       'search_result' => array(
         'label' => 'above',
@@ -667,7 +823,13 @@ function vp_contact_field_default_field_instances() {
         'label' => 'hidden',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 11,
+        'weight' => 8,
+      ),
+      'scs' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
       'search_result' => array(
         'label' => 'above',
@@ -711,6 +873,12 @@ function vp_contact_field_default_field_instances() {
         'settings' => array(),
         'type' => 'text_default',
         'weight' => 8,
+      ),
+      'scs' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
       'search_result' => array(
         'label' => 'above',
@@ -756,7 +924,13 @@ function vp_contact_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 5,
+        'weight' => 6,
+      ),
+      'scs' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
       'search_result' => array(
         'label' => 'above',
@@ -804,6 +978,12 @@ function vp_contact_field_default_field_instances() {
         'type' => 'text_default',
         'weight' => 5,
       ),
+      'scs' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
       'search_result' => array(
         'label' => 'above',
         'settings' => array(),
@@ -836,20 +1016,66 @@ function vp_contact_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'taxonomy_term-department-field_sap_osakonnakood'
+  $field_instances['taxonomy_term-department-field_sap_osakonnakood'] = array(
+    'bundle' => 'department',
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => 'Peaks olema <OBJEKTI_ID> SAPi XMLis. Osakond (mitte töötaja) on siis kui [OBJEKTI_TYYP] => O. nt Riigikantselei kood on 51085550. Riigikantselei istungiosakonna kood on 51087455.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => ' ',
+        ),
+        'type' => 'number_integer',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'taxonomy_term',
+    'field_name' => 'field_sap_osakonnakood',
+    'label' => 'SAP osakonnakood',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 31,
+    ),
+  );
+
   // Translatables
   // Included for use with string extractors like potx.
-  t('Comment');
   t('Degree');
   t('Department');
   t('E-mail');
   t('Educational institution');
   t('Field lock');
   t('Files');
-  t('Phone nr');
+  t('Peaks olema <OBJEKTI_ID> SAPi XMLis. Osakond (mitte töötaja) on siis kui [OBJEKTI_TYYP] => O. nt Riigikantselei kood on 51085550. Riigikantselei istungiosakonna kood on 51087455.');
+  t('Phone');
   t('Position');
   t('Position in English');
   t('Position in Russian');
   t('Profile photo');
+  t('SAP ametikood');
+  t('SAP osakonnakood');
   t('Select which fields will be locked and cannot be modified by automatic SAP database updates.');
   t('Skype');
   t('Source');

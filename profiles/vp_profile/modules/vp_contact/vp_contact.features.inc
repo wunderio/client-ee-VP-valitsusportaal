@@ -5,6 +5,21 @@
  */
 
 /**
+ * Implements hook_ctools_plugin_api().
+ */
+function vp_contact_ctools_plugin_api($module = NULL, $api = NULL) {
+  if ($module == "feeds" && $api == "feeds_importer_default") {
+    return array("version" => "1");
+  }
+  if ($module == "field_group" && $api == "field_group") {
+    return array("version" => "1");
+  }
+  if ($module == "strongarm" && $api == "strongarm") {
+    return array("version" => "1");
+  }
+}
+
+/**
  * Implements hook_views_api().
  */
 function vp_contact_views_api($module = NULL, $api = NULL) {
@@ -44,33 +59,19 @@ function vp_contact_fe_nodequeue_export_fields() {
 }
 
 /**
- * Implements hook_image_default_styles().
+ * Implements hook_node_info().
  */
-function vp_contact_image_default_styles() {
-  $styles = array();
-
-  // Exported image style: search_contact_thumbnail.
-  $styles['search_contact_thumbnail'] = array(
-    'name' => 'search_contact_thumbnail',
-    'label' => 'search_contact_thumbnail',
-    'effects' => array(
-      26 => array(
-        'label' => 'Skaleeri ja lõika',
-        'help' => 'Scale and crop will maintain the aspect-ratio of the original image, then crop the larger dimension. This is most useful for creating perfectly square thumbnails without stretching the image.',
-        'effect callback' => 'image_scale_and_crop_effect',
-        'dimensions callback' => 'image_resize_dimensions',
-        'form callback' => 'image_resize_form',
-        'summary theme' => 'image_resize_summary',
-        'module' => 'image',
-        'name' => 'image_scale_and_crop',
-        'data' => array(
-          'width' => 104,
-          'height' => 120,
-        ),
-        'weight' => 1,
-      ),
+function vp_contact_node_info() {
+  $items = array(
+    'contact' => array(
+      'name' => t('Contact'),
+      'base' => 'node_content',
+      'description' => t('A contact sheet for one employee of the organization. By default imported from SAP database.'),
+      'has_title' => '1',
+      'title_label' => t('Name'),
+      'help' => '',
     ),
   );
-
-  return $styles;
+  drupal_alter('node_info', $items);
+  return $items;
 }

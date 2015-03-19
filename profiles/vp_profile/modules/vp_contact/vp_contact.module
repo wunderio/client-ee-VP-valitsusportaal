@@ -62,12 +62,42 @@ function vp_contact_views_pre_render(&$view) {
   }
 }
 
+
+/**
+ * Implements hook_feeds_plugins().
+ *
+ * Building custom processor to populate
+ * table with SAP amkood and kuulub values. mm.
+ * 
+ * @see feeds_feeds_plugin()
+ */
+function vp_contact_feeds_plugins() {
+  $info = array();
+
+  $info['VPContactProcessor'] = array(
+    'name' => 'VP Contact Processor',
+    'description' => 'Custom processor to save SAP department contact feeds data into custom table which can be used to join contacts with their departments.',
+    'help' => 'Save SAP AMKOOD and KUULUB information into a custom table called vp_contact_amkood_kuulub.',
+    'handler' => array(
+      'parent' => 'FeedsProcessor',
+      'class' => 'VPContactProcessor',
+      'file' => 'VPContactProcessor.inc',
+      'path' => drupal_get_path('module', 'vp_contact'),
+    ),
+  );
+ 
+  return $info;
+}
+
+
 /**
  * Implements hook_feeds_presave().
  */
 function vp_contact_feeds_presave(FeedsSource $source, $entity, $item) {
   // Log(for some reason doesn't work without this).
-  watchdog('vp_contact', print_r($entity, TRUE));
+  // @todo. Is the above "doesn't work without this" statement accurate? mm.
+  // watchdog('vp_contact', 'hook_feeds_presave <pre>' . print_r($entity, TRUE) . '</pre>');
+
   // Contacts from x-road import.
   if ($entity->feeds_item->id == 'contacts') {
 
@@ -149,22 +179,166 @@ function vp_contact_feeds_before_import(FeedsSource $source) {
 /**
  * Implements hook_feeds_after_import().
  */
-function vp_contact_feeds_after_import(FeedsSource $source){
-  // Delete expired departments
-  $query = db_select('feeds_item', 'fi')
-  ->condition('fi.id', 'contacts_departments')
-  ->fields('fi', array('entity_id'));
-  $query->addExpression('fi.entity_id', 'entity_id');
-  $query->addExpression('fi.url', 'expiration');
-  $entities = $query->execute()->fetchAll();
+function vp_contact_feeds_after_import(FeedsSource $source) {
 
-  foreach($entities as $key=>$entity){
-    if(strtotime($entity->expiration) <= time()){
-      // watchdog('vp_contact_departments', 'Found expired entity: ' . $entity->entity_id);
-      taxonomy_term_delete($entity->entity_id);
+  // Check for published contacts not in nodequeue.
+  if ($source->id == 'contacts_departments') {    
+    // Delete expired departments
+    $query = db_select('feeds_item', 'fi')
+    ->condition('fi.id', 'contacts_departments')
+    ->fields('fi', array('entity_id'));
+    $query->addExpression('fi.entity_id', 'entity_id');
+    $query->addExpression('fi.url', 'expiration');
+    $entities = $query->execute()->fetchAll();
+
+    foreach($entities as $key=>$entity){
+      // Added empty check. mm.
+      if(!empty($entity->expiration) && strtotime($entity->expiration) <= time()) {
+        taxonomy_term_delete($entity->entity_id);
+      }
     }
   }
+
+  // Check for published contacts not in nodequeue.
+  if ($source->id == 'contacts') {
+
+    // Taking this from Mekaia's Rule "Imported nodes to nodequeue". mm.
+    $qids = db_select('nodequeue_queue', 'n')
+      ->condition('n.name', 'contacts')
+      ->fields('n', array('qid'))
+      ->execute()
+      ->fetchCol();
+    $qid = $qids[0];
+    db_merge('nodequeue_auto')
+      ->key(array('qid' => $qid))
+      ->fields(array(
+          'qid' => $qid,
+          'auto_add' => 1,
+      ))
+      ->execute();
+    // Add existing nodes.
+    $qids = db_select('nodequeue_queue', 'n')
+      ->condition('n.name', 'contacts')
+      ->fields('n', array('qid'))
+      ->execute()
+      ->fetchCol();
+    $qid = $qids[0];
+    $nodequeue = nodequeue_load($qid);
+    $subqueues = nodequeue_load_subqueues_by_queue($qid);
+    $subqueue = reset($subqueues);
+    // Building $query over many rows because leftJoin can't be chained. mm.
+    $query = db_select('node', 'n');
+    $query->leftJoin('nodequeue_nodes', 'nq', 'n.nid = nq.nid', array());
+    $result = $query->condition('n.type', 'contact')
+                ->condition('n.status', 1)
+                ->isNull('nq.nid')
+                ->fields('n', array('nid'))
+                ->execute();
+
+    if ($result->rowCount() > 0) {
+      while ($row = $result->fetchAssoc()) {
+        nodequeue_subqueue_add($nodequeue, $subqueue, $row['nid']);
+      }
+    }
+    // End take this from Mekaia rule. mm. 
+  }
+
+  // Do contact dept association after these feeds. mm.
+  if ($source->id == 'contacts' || $source->id == 'vp_contact_amkood_kuulub') {
+    $done = _vp_contact_contact_dept_assocation();
+    if ($done) {
+      watchdog('vp_contact', t('VP Contact module ran process to associate contacts with their departments. The :feed feed precipitated the running of this process.', array(':feed' => $source->id)));
+    }
+  }
+
 }
+
+
+/**
+ * Helper function to associate contacts
+ * with departments.
+ */
+function _vp_contact_contact_dept_assocation() {
+  // Load department codes and loop through contacts, matching them up. mm.
+  $vocab = taxonomy_vocabulary_machine_name_load('department');
+  $vid = $vocab->vid;
+
+  $term_tree = taxonomy_get_tree($vid, $parent = 0, $max_depth = NULL, $load_entities = TRUE);
+
+  $dept_codes = array();
+  foreach ($term_tree as $key => $value) {
+    $dept_codes[] = $value->tid;
+  }
+
+  // Now that we have the departments and their SAP codes, make sure they're attached to contacts.
+  $query = db_select('node', 'n');
+  $result = $query->condition('n.type', 'contact')
+              ->condition('n.status', 1, '=')
+              ->fields('n', array('nid'))
+              ->execute();
+
+  foreach ($result as $row) {
+    $node = node_load($row->nid);
+
+    // Start by assuming no field lock for department.
+    $field_lock_for_department = FALSE;
+
+    // Check and do nothing if field locked for department. mm.
+    if (isset($node->field_field_lock[LANGUAGE_NONE])) {      
+      // Loop through
+      foreach ($node->field_field_lock[LANGUAGE_NONE] as $key => $value) {
+        if ($value['value'] == 'field_department') {
+          $field_lock_for_department = TRUE;
+          break;
+        }
+      }
+      
+      if ($field_lock_for_department) {
+        continue;
+      }
+    }
+
+    // Make departmental association.
+    if (!empty($node->field_sap_ametikood[LANGUAGE_NONE][0]['value'])) {
+
+      // Get department associated with the given amkood.
+      $tid = _vp_contact_get_tid_for_amkood($node->field_sap_ametikood[LANGUAGE_NONE][0]['value']);
+
+      // Only try to update node if returned tid is valid department.
+      if (in_array($tid, $dept_codes)) {
+        $node->field_department[LANGUAGE_NONE][0]['tid'] = $tid;
+        node_save($node);
+      }
+    }
+  }
+
+  return TRUE;  
+}
+
+
+/**
+ * Helper function to grab department tid for amkood.
+ */
+function _vp_contact_get_tid_for_amkood($amkood) {
+  // select kuulub from vp where amkood = X
+  $query = db_select('vp_contact_amkood_kuulub', 'vp');
+  $query
+    ->fields('vp', array('kuulub'))
+    ->condition('vp.amkood', $amkood, '=');  
+
+  $kuulub = $query->execute()->fetchField();
+
+  // Being a bit hacky here and grabbing directly from db, assuming table. mm.
+  $query = db_select('field_data_field_sap_osakonnakood', 'osakonnakood');
+  $query
+    ->fields('osakonnakood', array('entity_id'))
+    ->condition('osakonnakood.field_sap_osakonnakood_value', $kuulub);  
+
+  $tid = $query->execute()->fetchField();
+
+  return $tid;
+}
+
 
 /**
  * Implements hook_form_views_exposed_form_alter()

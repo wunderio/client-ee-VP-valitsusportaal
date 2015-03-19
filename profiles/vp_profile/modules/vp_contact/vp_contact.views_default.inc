@@ -351,11 +351,12 @@ function vp_contact_views_default_views() {
   $handler->display->display_options['relationships']['field_department_tid']['id'] = 'field_department_tid';
   $handler->display->display_options['relationships']['field_department_tid']['table'] = 'field_data_field_department';
   $handler->display->display_options['relationships']['field_department_tid']['field'] = 'field_department_tid';
+  $handler->display->display_options['relationships']['field_department_tid']['required'] = TRUE;
   /* Relationship: Nodequeue: Queue */
   $handler->display->display_options['relationships']['nodequeue_rel']['id'] = 'nodequeue_rel';
   $handler->display->display_options['relationships']['nodequeue_rel']['table'] = 'node';
   $handler->display->display_options['relationships']['nodequeue_rel']['field'] = 'nodequeue_rel';
-  $handler->display->display_options['relationships']['nodequeue_rel']['limit'] = 1;
+  $handler->display->display_options['relationships']['nodequeue_rel']['limit'] = 0;
   $handler->display->display_options['relationships']['nodequeue_rel']['names'] = array(
     'contacts' => 'contacts',
   );
@@ -409,6 +410,8 @@ function vp_contact_views_default_views() {
   $handler->display->display_options['fields']['field_contact_e_mail']['id'] = 'field_contact_e_mail';
   $handler->display->display_options['fields']['field_contact_e_mail']['table'] = 'field_data_field_contact_e_mail';
   $handler->display->display_options['fields']['field_contact_e_mail']['field'] = 'field_contact_e_mail';
+  $handler->display->display_options['fields']['field_contact_e_mail']['label'] = 'E-post';
+  $handler->display->display_options['fields']['field_contact_e_mail']['type'] = 'email_plain';
   $handler->display->display_options['defaults']['sorts'] = FALSE;
   /* Sort criterion: Nodequeue: Position */
   $handler->display->display_options['sorts']['position']['id'] = 'position';

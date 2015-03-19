@@ -7,6 +7,46 @@ function vp_contact_install() {
   drupal_mkdir('public://contacts/files', NULL, TRUE);
 }
 
+
+/**
+ * Implements hook_schema().
+ */
+function vp_contact_schema() {
+
+  $schema = array();  
+
+  $schema['vp_contact_amkood_kuulub'] = array(
+    'description' => 'Helper table to join SAP amkood values with the departments they belong to.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Primary key vp_contact_amkood_kuulub',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'amkood' => array(
+        'description' => 'SAP amkood',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'kuulub' => array(
+        'description' => 'SAP department objekti_id',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('id'),
+    'indexes' => array(
+      'amkood' => array('amkood'),
+      'kuulub' => array('kuulub'),
+    ),
+  );
+
+  return $schema;
+}  
+
 /**
  * Enable nodequeue module and features support for nodequeue.
  * Create nodequeue by reverting feature.
@@ -61,3 +101,45 @@ function vp_contact_update_7101() {
     }
   }
 }
+
+
+/**
+ * Add helper table vp_contact_amkood_kuulub.
+ */
+function vp_contact_update_7102() {
+
+  $schema = array();  
+
+  $schema['vp_contact_amkood_kuulub'] = array(
+    'description' => 'Helper table to join SAP amkood values with the departments they belong to.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Primary key vp_contact_amkood_kuulub',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'amkood' => array(
+        'description' => 'SAP amkood',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'kuulub' => array(
+        'description' => 'SAP department objekti_id',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('id'),
+    'indexes' => array(
+      'amkood' => array('amkood'),
+      'kuulub' => array('kuulub'),
+    ),
+  );
+
+  db_create_table('vp_contact_amkood_kuulub', $schema['vp_contact_amkood_kuulub']);
+
+}
+
