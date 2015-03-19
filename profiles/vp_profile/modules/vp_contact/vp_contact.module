@@ -35,6 +35,7 @@ function vp_contact_views_pre_render(&$view) {
           $dialog = $(this).parent().parent().next().find("div.ui-dialog-content-contact")
           .clone()
           .dialog({
+            position: { my: "left-25%", at: "center", of: e, collision: "fit" },
             close: function(event, ui) {
               $link.focus();
             }
