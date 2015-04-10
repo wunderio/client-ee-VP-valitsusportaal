@@ -1,0 +1,15 @@
+name = BigInt
+description = Defines a numeric field type equivelant to a bigint db field (19) vs (10) of the default int field.
+package = Fields
+version = VERSION
+core = 7.x
+dependencies[] = field
+files[] = bigint.test
+
+
+; Information added by drupal.org packaging script on 2013-09-28
+version = "7.x-1.05"
+core = "7.x"
+project = "bigint"
+datestamp = "1380354970"
+
