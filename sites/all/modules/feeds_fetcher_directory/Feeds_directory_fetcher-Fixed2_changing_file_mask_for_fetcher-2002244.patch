@@ -1,0 +1,15 @@
+diff --git a/feeds_fetcher_directory_fetcher.inc b/feeds_fetcher_directory_fetcher.inc
+index b48c878..0dc2090 100644
+--- a/feeds_fetcher_directory_fetcher.inc
++++ b/feeds_fetcher_directory_fetcher.inc
+@@ -147,4 +147,10 @@ class feeds_fetcher_directory_fetcher extends FeedsFileFetcher {
+     );
+     return $form;
+   }
++
++  /**
++   * Overrides parent::configFormValidate().
++   */
++  public function configFormValidate(&$values) {
++  }
+ }
