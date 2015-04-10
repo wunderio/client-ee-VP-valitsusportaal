@@ -488,6 +488,22 @@ function rk_abi_settings($form, &$form_state) {
     '#description' => t('The ID-Card authentication module allows for automatic user account creation, however, it uses the isikukood as the user name without saving the user\'s actual name anywhere. Checking this setting here allows for hook_user_insert to be applied and to have the user\'s actual name saved into the signature field of the user table.'),
   );
 
+
+  $form['rk_abi_min_specific_fieldset'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Ministry Specific'),
+    '#description' => t('Settings specific to particular ministries. Since the valitsusportaal is shared by so many, there are inevitably places where ministry-specific functionality can be turned on or off.'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+
+  $form['rk_abi_min_specific_fieldset']['rk_abi_vm_country_feed_template'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Välisministeerium-specific RSS feed template'),
+    '#default_value' => variable_get('rk_abi_vm_country_feed_template', 0),
+    '#description' => t('Välisministeerium uses a very specific RSS feed template for taxonomy terms. This is because, their taxonomy term id of 568 (taxonomy/term/568) is a list of countries and for each country, info is added regarding bilateral relations, embassies, travel info etc. Only Välisministeerium should have this box checked.'),
+  );    
+
   return system_settings_form($form);
 }
 
