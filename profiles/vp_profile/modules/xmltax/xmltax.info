@@ -1,0 +1,4 @@
+name = XML output for vocab / taxonomies
+description = Output necessary vocabs and taxonomy terms as XML
+core = 7.x
+package = VM
