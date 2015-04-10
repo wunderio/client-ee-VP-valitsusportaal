@@ -1,0 +1,145 @@
+<?php
+/**
+ * @file
+ * Code for the VM Country and representations feature.
+ */
+
+include_once 'vm_country_and_representations.features.inc';
+
+/**
+ * Implements hook_page_build().
+ */
+function vm_country_and_representations_init(&$page) {
+  global $language;
+  if (arg(0) === 'country-representations' && arg(1) === 'travel-info' && $language->language !== 'et') {
+    drupal_not_found();
+    drupal_exit();
+  }
+
+  $module_path = drupal_get_path('module', 'vm_country_and_representations');
+/*
+  drupal_add_css($module_path . '/css/default.css', array(
+    'group' => 2000,
+    'weight' => 2,
+    'media' => 'screen and (min-device-width: 768px) and (max-device-width: 1023px)',
+    'browsers' => array('IE' => 'gte IE 9', '!IE' => TRUE),
+  ));
+*/
+/*
+  drupal_add_css($module_path . '/css/default.css', array(
+    'group' => 2000,
+    'weight' => 2,
+    'media' => 'screen and (min-device-width: 1024px)',
+    'browsers' => array('IE' => 'gte IE 9', '!IE' => TRUE),
+  ));
+
+  drupal_add_css($module_path . '/css/default-tablet.css', array(
+    'group' => 3000,
+    'weight' => 2,
+    'media' => 'screen and (min-device-width: 768px) and (max-device-width: 1023px)',
+    'browsers' => array('IE' => 'gte IE 9', '!IE' => TRUE),
+  ));
+  *//*
+  drupal_add_css('desktop::' . $module_path . '/css/default-desktop.css', array(
+    'group' => 3000,
+    'weight' => 2,
+    'media' => 'screen and (min-device-width: 1024px)',
+    'browsers' => array('IE' => 'gte IE 9', '!IE' => TRUE),
+  ));
+*/
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function vm_country_and_representations_views_pre_render(&$view) {
+  if ($view->name === 'country_and_representations') {
+    drupal_add_js('(function($){$().ready(function(){
+      country_representations_goto_letter = $("#country_representations_goto_letter");
+      $("div.view-id-country_and_representations h3").each(function(){
+        country_representations_goto_letter.append(\'<a href="#\'+$(this).attr("id")+\'">\'+$(this).text()+"</a>");
+      });
+    });})(jQuery);', 'inline');
+    $content = '<div id="country_representations_goto_letter"></div>';
+    $view->attachment_before = $content;
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function vm_country_and_representations_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id === 'country_and_representations_node_form') {
+    unset($form['field_area'][LANGUAGE_NONE][0]['value']['#maxlength']);
+    $form['field_area'][LANGUAGE_NONE][0]['value']['#element_validate'] = array();
+  }
+}
+
+
+/**
+ * Implements hook_css_alter().
+ * Inject module css into Omega responsive media query tags.
+ */
+function vm_country_and_representations_css_alter(&$css) {
+  global $theme_key;
+  // Get current themes path.
+  $theme_path = drupal_get_path('theme', variable_get('theme_default', NULL));
+  // Get module themes path.
+  $module_path = drupal_get_path('module', 'vm_country_and_representations');
+
+  // Copy the original css arrays.
+  $global = $css[$theme_path . '/css/global.css'];
+  $default_tablet = $css['tablet::' . $theme_path . '/css/vp-theme-vp-theme-default.css'];
+  $default_desktop = $css['desktop::' . $theme_path . '/css/vp-theme-vp-theme-default.css'];
+  $ie_default_desktop = $css['ie::desktop::' . $theme_path . '/css/vp-theme-vp-theme-default.css'];
+  $tablet = $css['tablet::' . $theme_path . '/css/vp-theme-vp-theme-default.css'];
+  $desktop = $css['desktop::' . $theme_path . '/css/vp-theme-vp-theme-default-desktop.css'];
+  $ie_desktop = $css['ie::desktop::' . $theme_path . '/css/vp-theme-vp-theme-default-desktop.css'];
+
+
+  // Add global css.
+
+  $css[$module_path . '/css/global.css'] = $global;
+  $css[$module_path . '/css/global.css']['weight'] += 0.01;
+  $css[$module_path . '/css/global.css']['data'] = $module_path . '/css/global.css';
+  $css[$module_path . '/css/global.css']['basename'] = $module_path . '/css/global.css';
+
+
+  // Add tablet css.
+
+  $css['tablet::' . $module_path . '/css/default.css'] = $default_tablet;
+  $css['tablet::' . $module_path . '/css/default.css']['weight'] += 0.01;
+  $css['tablet::' . $module_path . '/css/default.css']['data'] = '' . $module_path . '/css/default.css';
+  $css['tablet::' . $module_path . '/css/default.css']['basename'] = 'tablet::' . $module_path . '/css/default.css';
+
+  $css['tablet::' . $module_path . '/css/default-tablet.css'] = $tablet;
+  $css['tablet::' . $module_path . '/css/default-tablet.css']['weight'] += 0.01;
+  $css['tablet::' . $module_path . '/css/default-tablet.css']['data'] = $module_path . '/css/default-tablet.css';
+  $css['tablet::' . $module_path . '/css/default-tablet.css']['basename'] = 'tablet::' . $module_path . '/css/default-tablet.css';
+
+
+  // Add desktop css.
+
+  $css['desktop::' . $module_path . '/css/default.css'] = $default_desktop;
+  $css['desktop::' . $module_path . '/css/default.css']['weight'] += 0.01;
+  $css['desktop::' . $module_path . '/css/default.css']['data'] = '' . $module_path . '/css/default.css';
+  $css['desktop::' . $module_path . '/css/default.css']['basename'] = 'desktop::' . $module_path . '/css/default.css';
+
+  $css['desktop::' . $module_path . '/css/default-desktop.css'] = $desktop;
+  $css['desktop::' . $module_path . '/css/default-desktop.css']['weight'] += 0.01;
+  $css['desktop::' . $module_path . '/css/default-desktop.css']['data'] = $module_path . '/css/default-desktop.css';
+  $css['desktop::' . $module_path . '/css/default-desktop.css']['basename'] = 'desktop::' . $module_path . '/css/default-desktop.css';
+
+
+  // Add older ie support.
+
+  $css['ie::desktop::' . $module_path . '/css/default.css'] = $ie_default_desktop;
+  $css['ie::desktop::' . $module_path . '/css/default.css']['weight'] += 0.01;
+  $css['ie::desktop::' . $module_path . '/css/default.css']['data'] = '' . $module_path . '/css/default.css';
+  $css['ie::desktop::' . $module_path . '/css/default.css']['basename'] = 'ie::desktop::' . $module_path . '/css/default.css';
+
+  $css['ie::desktop::' . $module_path . '/css/default-desktop.css'] = $ie_desktop;
+  $css['ie::desktop::' . $module_path . '/css/default-desktop.css']['weight'] += 0.01;
+  $css['ie::desktop::' . $module_path . '/css/default-desktop.css']['data'] = $module_path . '/css/default-desktop.css';
+  $css['ie::desktop::' . $module_path . '/css/default-desktop.css']['basename'] = 'ie::desktop::' . $module_path . '/css/default-desktop.css';
+}

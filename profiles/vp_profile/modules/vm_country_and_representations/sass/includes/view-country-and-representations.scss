@@ -1,0 +1,26 @@
+
+// This file containtas 2 views.
+
+
+@if $layout == global {
+  .view-country-and-representations-eh,
+  .view-country-and-representations-er {
+    .field-name-field-fax,
+    .field-name-field-telephone,
+    .field-name-field-e-mail {
+      padding-left: 16px;
+    }
+
+    .field-name-field-fax {
+      @extend %icon-fax;
+    }
+
+    .field-name-field-telephone {
+      @extend %icon-phone;
+    }
+
+    .field-name-field-e-mail {
+      @extend %icon-email;
+    }
+  }
+}

@@ -1,0 +1,38 @@
+// _mixin.scss
+
+// Chrome, Safari4+ with color fallback.
+@mixin lineartextgradient($color1, $color2, $startPoint:left top, $endPoint:left bottom) {
+  color: $color1;
+  background: -webkit-gradient(linear, $startPoint, $endPoint, color-stop(0%,$color1), color-stop(100%,$color2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+// REM font-size.
+@mixin fontSize($size) {
+  font-size: $size; // Fallback in px.
+  font-size: ($size / 16px) * 1rem;
+}
+
+@mixin list-lines {
+  background-image: url(../img/10-global/static-module-3-1-border.png);
+  bottom: 0;
+  content: "";
+  height: 1px;
+  left: 0;
+  position: absolute;
+  right: 0;
+}
+
+@mixin image-class-reset {
+  background: none;
+  box-shadow: none;
+  display: inline;
+  margin: 0;
+  padding: 0;
+
+  .image-inner {
+    display: inline;
+    padding: 0;
+  }
+}

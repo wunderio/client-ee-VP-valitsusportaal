@@ -1,0 +1,8 @@
+
+
+
+@if $layout == global {
+  .view-consular-news-3-of-latest-news {
+    @extend .view-country-and-representations-latest-updates;
+  }
+}

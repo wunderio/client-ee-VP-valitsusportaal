@@ -1,0 +1,206 @@
+.view-country-and-representations-latest-updates .views-field-changed, .view-consular-news-3-of-latest-news .views-field-changed {
+  color: #686868;
+  font-size: 10px;
+  line-height: 14px;
+  padding-bottom: 6px; }
+  .view-country-and-representations-latest-updates .views-field-changed .spacer, .view-consular-news-3-of-latest-news .views-field-changed .spacer {
+    padding: 0 6px; }
+
+.view-country-and-representations-eh .field-name-field-telephone,
+.view-country-and-representations-er .field-name-field-telephone {
+  background: url(/profiles/vp_profile/modules/vm_country_and_representations/img/icon-phone.png) no-repeat 0 2px; }
+
+.view-country-and-representations-eh .field-name-field-fax,
+.view-country-and-representations-er .field-name-field-fax {
+  background: url(/profiles/vp_profile/modules/vm_country_and_representations/img/icon-fax.png) no-repeat 0 2px; }
+
+.view-country-and-representations-eh .field-name-field-e-mail,
+.view-country-and-representations-er .field-name-field-e-mail {
+  background: url(/profiles/vp_profile/modules/vm_country_and_representations/img/icon-email.png) no-repeat 0 5px; }
+
+.block-info-country-and-representations .hr {
+  margin-bottom: 15px;
+  margin-top: 15px; }
+.block-info-country-and-representations ul {
+  padding: 0; }
+.block-info-country-and-representations li {
+  background: url(/profiles/vp_profile/themes/vp_theme/img/10-global/custom-bullet-romb.png) no-repeat 10px 3px;
+  padding: 0 0 0 30px;
+  margin: 14px 0; }
+
+.view-country-and-representations-latest-updates .views-row, .view-consular-news-3-of-latest-news .views-row {
+  margin-top: 8px; }
+  .view-country-and-representations-latest-updates .views-row:first-child, .view-consular-news-3-of-latest-news .views-row:first-child {
+    margin-top: 0; }
+.view-country-and-representations-latest-updates .views-field-changed, .view-consular-news-3-of-latest-news .views-field-changed {
+  font-size: 11px;
+  padding: 0; }
+
+.view-country-and-representations-eh .field-name-field-fax,
+.view-country-and-representations-eh .field-name-field-telephone,
+.view-country-and-representations-eh .field-name-field-e-mail,
+.view-country-and-representations-er .field-name-field-fax,
+.view-country-and-representations-er .field-name-field-telephone,
+.view-country-and-representations-er .field-name-field-e-mail {
+  padding-left: 16px; }
+
+.node-country-and-representations h2 {
+  font-size: 22px;
+  font-weight: normal; }
+.node-country-and-representations #country-representations-warning {
+  overflow: hidden;
+  margin-bottom: 20px; }
+  .node-country-and-representations #country-representations-warning div {
+    float: left;
+    margin-right: 20px;
+    padding: 5px;
+    width: 160px;
+    text-align: center;
+    background-color: #DBDBDB;
+    font-family: 'Roboto Condensed', sans-serif;
+    margin-top: 20px; }
+  .node-country-and-representations #country-representations-warning div:last-of-type {
+    margin-right: 0px; }
+  .node-country-and-representations #country-representations-warning .active {
+    color: #222; }
+  .node-country-and-representations #country-representations-warning .green.active {
+    background-color: #85C985; }
+  .node-country-and-representations #country-representations-warning .green {
+    padding-top: 14px;
+    padding-bottom: 14px; }
+  .node-country-and-representations #country-representations-warning .yellow.active {
+    background-color: #E9E98E; }
+  .node-country-and-representations #country-representations-warning .orange.active {
+    background-color: #F0B318; }
+  .node-country-and-representations #country-representations-warning .red.active {
+    background-color: #FF4F4F; }
+  .node-country-and-representations #country-representations-warning .black.active {
+    background-color: #000000;
+    color: #FFFFFF; }
+.node-country-and-representations .field-name-field-map {
+  margin-bottom: 30px; }
+.node-country-and-representations ul {
+  padding: 0px; }
+  .node-country-and-representations ul li {
+    background: url(/profiles/vp_profile/themes/vp_theme/img/10-global/custom-bullet-romb.png) no-repeat 10px 3px;
+    padding: 0 0 0 30px;
+    margin: 14px 0; }
+
+.view-country-and-representations {
+  margin-top: 20px; }
+
+.country-list-wrapper {
+  margin-bottom: 20px; }
+  .country-list-wrapper .views-row {
+    margin-top: 10px;
+    margin-bottom: 10px; }
+  .country-list-wrapper .views-field-field-flag,
+  .country-list-wrapper .views-field-title {
+    float: left; }
+  .country-list-wrapper .views-field-title {
+    margin-left: 10px; }
+  .country-list-wrapper h3 {
+    /*width: 200px;*/
+    border-bottom: 1px solid #CCC;
+    font-size: 24px;
+    padding-bottom: 5px; }
+
+#country_representations_goto_letter {
+  margin-left: 0px;
+  margin-bottom: 40px; }
+  #country_representations_goto_letter a {
+    display: inline-block;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    border-right: solid 1px #ccc;
+    padding-right: 10px; }
+  #country_representations_goto_letter a:last-of-type {
+    border-right: 0px;
+    padding-right: 0px;
+    margin-right: 0px; }
+
+.view-country-and-representations-er,
+.view-country-and-representations-eh {
+  font-size: 12px;
+  margin-top: 15px; }
+  .view-country-and-representations-er .views-row,
+  .view-country-and-representations-eh .views-row {
+    margin-bottom: 20px;
+    margin-right: 25px;
+    display: inline-block;
+    width: 220px;
+    vertical-align: top;
+    min-height: 170px;
+    background: #efede3;
+    padding: 20px; }
+  .view-country-and-representations-er .views-row-3,
+  .view-country-and-representations-er .views-row-6,
+  .view-country-and-representations-er .views-row-9,
+  .view-country-and-representations-er .views-row-12,
+  .view-country-and-representations-er .views-row-15,
+  .view-country-and-representations-eh .views-row-3,
+  .view-country-and-representations-eh .views-row-6,
+  .view-country-and-representations-eh .views-row-9,
+  .view-country-and-representations-eh .views-row-12,
+  .view-country-and-representations-eh .views-row-15 {
+    margin-right: 0px; }
+  .view-country-and-representations-er .field-name-field-embassy-name,
+  .view-country-and-representations-er .field-name-field-hon-con-or-ambass-name,
+  .view-country-and-representations-eh .field-name-field-embassy-name,
+  .view-country-and-representations-eh .field-name-field-hon-con-or-ambass-name {
+    font-family: 'Roboto Condensed', sans-serif; }
+  .view-country-and-representations-er .field-name-field-embassy-name,
+  .view-country-and-representations-eh .field-name-field-embassy-name {
+    font-size: 18px; }
+  .view-country-and-representations-er .field-name-field-hon-con-or-ambass-name,
+  .view-country-and-representations-eh .field-name-field-hon-con-or-ambass-name {
+    color: #00698C;
+    margin-bottom: 10px; }
+  .view-country-and-representations-er .field-name-field-agency-type,
+  .view-country-and-representations-eh .field-name-field-agency-type {
+    border-top: dotted 1px #ccc;
+    margin-top: 10px;
+    padding-top: 10px; }
+  .view-country-and-representations-er .field-label,
+  .view-country-and-representations-eh .field-label {
+    font-weight: normal; }
+  .view-country-and-representations-er .field-name-field-description,
+  .view-country-and-representations-eh .field-name-field-description {
+    margin-top: 10px; }
+
+.view-mode-country_representations_fr {
+  font-size: 12px; }
+  .view-mode-country_representations_fr h2 {
+    font-size: 18px;
+    color: #333333;
+    text-shadow: none; }
+  .view-mode-country_representations_fr p strong {
+    display: inline-block;
+    font-weight: normal;
+    color: #00698C;
+    padding-bottom: 10px; }
+  .view-mode-country_representations_fr .field-collections-view {
+    padding: 0px;
+    margin: 0px; }
+  .view-mode-country_representations_fr .field .field-label {
+    font-weight: normal;
+    width: auto; }
+  .view-mode-country_representations_fr .field-name-field-embassy-name,
+  .view-mode-country_representations_fr .field-name-field-hon-con-or-ambass-name {
+    font-family: 'Roboto Condensed', sans-serif; }
+  .view-mode-country_representations_fr .field-name-field-embassy-name {
+    font-size: 18px; }
+  .view-mode-country_representations_fr .field-name-field-hon-con-or-ambass-name {
+    color: #00698C;
+    margin-bottom: 10px; }
+  .view-mode-country_representations_fr .field-name-field-agency-type {
+    border-top: dotted 1px #ccc;
+    margin-top: 10px;
+    padding-top: 10px; }
+  .view-mode-country_representations_fr .field-collection-view {
+    width: 240px;
+    margin: 20px 20px 0px 0px;
+    padding: 20px;
+    border-bottom: none;
+    background: #efede3;
+    line-height: 18px; }

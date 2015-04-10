@@ -1,0 +1,2 @@
+sass -r sass-globbing --watch global.scss:../css/global.css default.scss:../css/default.css default-desktop.scss:../css/default-desktop.css default-tablet.scss:../css/default-tablet.css
+pause

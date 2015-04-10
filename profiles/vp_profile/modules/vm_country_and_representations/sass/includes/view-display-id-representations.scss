@@ -1,0 +1,318 @@
+
+// Single node country warnings
+
+@if $layout == global {
+
+  .node-country-and-representations {
+    h2 {
+      font-size: 22px;
+      font-weight: normal;
+    }
+
+    #country-representations-warning {
+      overflow: hidden;
+      margin-bottom: 20px;
+      div {
+        float: left;
+        margin-right: 20px;
+        padding: 5px;
+        width: 160px;
+        text-align: center;
+        background-color: #DBDBDB;
+        font-family: 'Roboto Condensed', sans-serif;;
+        margin-top: 20px;
+      }
+
+      div:last-of-type {
+        margin-right: 0px;
+      }
+
+      .active {
+        color: #222;
+      }
+      .green.active {
+        background-color: #85C985;
+      }
+      .green {
+        padding-top: 14px;
+        padding-bottom: 14px;
+      }
+      .yellow.active {
+        background-color: #E9E98E;
+      }
+      .orange.active {
+        background-color: #F0B318;
+      }
+      .red.active {
+        background-color: #FF4F4F;
+      }
+      .black.active {
+        background-color: #000000;
+        color: #FFFFFF;
+      }
+
+    }
+
+    .field-name-field-map {
+      margin-bottom: 30px;
+    }
+
+    ul {
+    padding: 0px;
+      li {
+        background: url(/profiles/vp_profile/themes/vp_theme/img/10-global/custom-bullet-romb.png) no-repeat 10px 3px;
+        padding: 0 0 0 30px;
+        margin: 14px 0;
+      }
+    }
+
+  }
+}
+
+@if $layout == default {
+  #country-representations-warning {
+    div {
+      margin-top: 0px;
+    }
+  }
+}
+
+
+// Country list
+
+
+@if $layout == global {
+
+	.view-country-and-representations {
+		margin-top: 20px;
+	}
+
+	.country-list-wrapper {
+		margin-bottom: 20px;
+
+		.views-row {
+			margin-top: 10px;
+			margin-bottom: 10px;
+		}
+
+		.views-field-field-flag,
+		.views-field-title {
+			float: left;
+		}
+		.views-field-title {
+			margin-left: 10px;
+		}
+
+		h3 {
+			/*width: 200px;*/
+			border-bottom: 1px solid #CCC;
+			font-size: 24px;
+			padding-bottom: 5px;
+		}
+	}
+
+}
+
+
+@if $layout == global {
+
+  #country_representations_goto_letter { // Go to letter selection
+    margin-left: 0px;
+    margin-bottom: 40px;
+
+    a {
+      display: inline-block;
+      margin-bottom: 10px;
+      margin-right: 10px;
+      border-right: solid 1px #ccc;
+      padding-right: 10px
+    }
+
+    a:last-of-type {
+      border-right: 0px;
+      padding-right: 0px;
+      margin-right: 0px;
+    }
+  }
+
+}
+
+
+@if $layout == default {
+
+	.view-country-and-representations {
+    .view-content {
+      margin-left: -10px;
+    }
+	}
+
+	.country-list-wrapper {
+		display: inline-block;
+		width: 222px;
+		margin-left: 10px;
+	}
+
+  #country_representations_goto_letter { // Go to letter selection
+  margin-left: 10px;
+    a {
+      display: inline;
+      margin-bottom: 0px;
+    }
+
+  }
+
+}
+
+// Single representation
+
+@if $layout == global {
+
+  .view-country-and-representations-er, // Eesti saatkonnad
+  .view-country-and-representations-eh  { // Eesti aukonsolid
+
+    //width: 240px;
+    font-size: 12px;
+    margin-top: 15px;
+
+    .views-row {
+      margin-bottom: 20px;
+      margin-right: 25px;
+      display: inline-block;
+      width: 220px;
+      vertical-align: top;
+      min-height: 170px;
+      background: #efede3;
+      padding: 20px;
+    }
+
+    .views-row-3,
+    .views-row-6,
+    .views-row-9,
+    .views-row-12,
+    .views-row-15 {
+      margin-right: 0px;
+    }
+
+    .field-name-field-embassy-name,
+    .field-name-field-hon-con-or-ambass-name {
+      font-family: 'Roboto Condensed', sans-serif;;
+    }
+    .field-name-field-embassy-name {
+      font-size: 18px;
+    }
+    .field-name-field-hon-con-or-ambass-name {
+      color: #00698C;
+      margin-bottom: 10px;
+    }
+
+    .field-name-field-agency-type {
+      border-top: dotted 1px #ccc;
+      margin-top: 10px;
+      padding-top: 10px;
+    }
+
+    .field-label {
+      font-weight: normal;
+    }
+
+    .field-name-field-description {
+      margin-top: 10px;
+    }
+
+  }
+
+}
+
+@if $layout == default {
+
+  .view-id-country_and_representations_er {
+    .views-row-1 {
+      margin-right: 20px;
+      margin-bottom: 20px;
+    }
+  }
+
+  .view-country-and-representations-er,
+  .view-country-and-representations-eh {
+    .views-row {
+      width: 250px;
+    }
+  }
+
+}
+
+// Single foreign representations
+
+@if $layout == global {
+
+  .view-mode-country_representations_fr { // V?isriikide saatkonnad Eestis
+    font-size: 12px;
+
+    h2 {
+      font-size: 18px;
+      color: #333333;
+      text-shadow: none;
+    }
+
+    p {
+      strong {
+        display: inline-block;
+        font-weight: normal;
+        color: #00698C;
+        padding-bottom: 10px;
+      }
+    }
+
+    .field-collections-view {
+      padding: 0px;
+      margin: 0px;
+    }
+
+    .field {
+      .field-label {
+        font-weight: normal;
+        width: auto;
+      }
+    }
+
+    .field-name-field-embassy-name,
+    .field-name-field-hon-con-or-ambass-name {
+      font-family: 'Roboto Condensed', sans-serif;;
+    }
+
+    .field-name-field-embassy-name {
+      font-size: 18px;
+    }
+
+    .field-name-field-hon-con-or-ambass-name {
+      color: #00698C;
+      margin-bottom: 10px;
+    }
+
+    .field-name-field-agency-type {
+      border-top: dotted 1px #ccc;
+      margin-top: 10px;
+      padding-top: 10px;
+    }
+
+    .field-collection-view {
+      width: 240px;
+      margin: 20px 20px 0px 0px;
+      padding: 20px;
+      border-bottom: none;
+      background: #efede3;
+      line-height: 18px;
+    }
+
+  }
+
+}
+
+@if $layout == default {
+  .view-mode-country_representations_fr {
+    .field-collection-view {
+      float: left;
+    }
+  }
+
+}

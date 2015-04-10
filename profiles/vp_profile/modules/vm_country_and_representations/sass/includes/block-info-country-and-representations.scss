@@ -1,0 +1,21 @@
+// Infobox on et/riigid/reisiinfo
+
+
+@if $layout == global {
+  .block-info-country-and-representations {
+    .hr {
+      margin-bottom: 15px;
+      margin-top: 15px;
+    }
+
+    ul {
+      padding: 0;
+    }
+
+    li {
+      background: url(/profiles/vp_profile/themes/vp_theme/img/10-global/custom-bullet-romb.png) no-repeat 10px 3px;
+      padding: 0 0 0 30px;
+      margin: 14px 0;
+    }
+  }
+}

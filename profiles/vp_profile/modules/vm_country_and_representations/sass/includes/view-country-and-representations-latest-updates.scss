@@ -1,0 +1,20 @@
+
+
+
+@if $layout == global {
+  .view-country-and-representations-latest-updates {
+    .views-row {
+      margin-top: 8px;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+
+    .views-field-changed {
+      @extend %news-date;
+      font-size: 11px;
+      padding: 0;
+    }
+  }
+}

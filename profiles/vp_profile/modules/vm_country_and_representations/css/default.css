@@ -1,0 +1,27 @@
+#country-representations-warning div {
+  margin-top: 0px; }
+
+.view-country-and-representations .view-content {
+  margin-left: -10px; }
+
+.country-list-wrapper {
+  display: inline-block;
+  width: 222px;
+  margin-left: 10px; }
+
+#country_representations_goto_letter {
+  margin-left: 10px; }
+  #country_representations_goto_letter a {
+    display: inline;
+    margin-bottom: 0px; }
+
+.view-id-country_and_representations_er .views-row-1 {
+  margin-right: 20px;
+  margin-bottom: 20px; }
+
+.view-country-and-representations-er .views-row,
+.view-country-and-representations-eh .views-row {
+  width: 250px; }
+
+.view-mode-country_representations_fr .field-collection-view {
+  float: left; }
