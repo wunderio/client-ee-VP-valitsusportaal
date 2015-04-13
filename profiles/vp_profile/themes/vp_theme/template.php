@@ -440,12 +440,13 @@ function vp_theme_pager($vars) {
   }
 }
 
+
 /**
-* Implements hook_alpha_preprocess_block()
-*
-* There is an issue with using Path Breadcrumb module with Delta blocks.
-* See drupal.org/node/1777644 for description of issue and fix.
-*/
+ * Implements hook_alpha_preprocess_block()
+ *
+ * There is an issue with using Path Breadcrumb module with Delta blocks.
+ * See drupal.org/node/1777644 for description of issue and fix.
+ */
 function vp_theme_alpha_preprocess_block(&$vars) {
   if ($vars['block']->module == 'delta_blocks' && $vars['block']->delta == 'breadcrumb') {
     $data = array(
@@ -460,6 +461,27 @@ function vp_theme_alpha_preprocess_block(&$vars) {
 
     $active_trail = array();
     $obj = menu_get_object('node');
+
+    // This conditional is specific to esto foreign ministry. 10.04.2015.
+    if ($obj && $obj->type === 'country_and_representations') {
+      $displays = array(
+        'travel_info' => 'travel-info',
+        'estonian_representations' => 'estonian-representations',
+        'estonian_honorary_consuls' => 'estonian-honorary-consuls',
+        'foreign_representations' => 'foreign-representations',
+        'relations' => 'relations',
+      );
+      $titles = array(
+        'travel_info' => 'Travel Info',
+        'estonian_representations' => 'Estonian Representations',
+        'estonian_honorary_consuls' => 'Estonian Honorary Consuls',
+        'foreign_representations' => 'Foreign Representations',
+        'relations' => 'Relations between',
+      );
+      $get_display = check_plain($_GET['display']);
+      $data['#breadcrumb'][2] = l(t($titles[$get_display]), 'country-representations/'.$displays[$get_display]);
+    }
+
     if ($obj && $obj->type === 'article') {
       $trail = menu_get_active_trail();
       unset($trail[count($trail) - 1]);
