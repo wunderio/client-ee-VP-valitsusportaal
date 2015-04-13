@@ -9,7 +9,7 @@ include_once 'vm_country_and_representations.features.inc';
 /**
  * Implements hook_page_build().
  */
-function vm_country_and_representations_init(&$page) {
+function vm_country_and_representations_init() {
   global $language;
   if (arg(0) === 'country-representations' && arg(1) === 'travel-info' && $language->language !== 'et') {
     drupal_not_found();
@@ -17,6 +17,10 @@ function vm_country_and_representations_init(&$page) {
   }
 
   $module_path = drupal_get_path('module', 'vm_country_and_representations');
+
+  // Add a file for VM to use as its own css playground.
+  drupal_add_css($module_path . '/css/vm_custom.css');
+
 /*
   drupal_add_css($module_path . '/css/default.css', array(
     'group' => 2000,
@@ -65,6 +69,7 @@ function vm_country_and_representations_views_pre_render(&$view) {
   }
 }
 
+
 /**
  * Implements hook_form_alter().
  */
@@ -77,10 +82,58 @@ function vm_country_and_representations_form_alter(&$form, &$form_state, $form_i
 
 
 /**
+ * Implements hook_block_info().
+ */
+function vm_country_and_representations_block_info() {
+  $blocks = array();
+
+  $blocks['vm_cross_references'] = array(
+    'info' => t('Country and representations - Cross-references'),
+    'cache' => DRUPAL_CACHE_PER_PAGE,
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function vm_country_and_representations_block_view($delta = '') {
+  $block = array();
+
+  switch ($delta) {
+    // Country and representations - Cross-references.
+    case 'vm_cross_references':
+      if ($_GET['display'] !== 'estonian_representations') return;
+      $node = node_load(arg(1));
+      $url = 'node/'.arg(1);
+      $block['subject'] = t('Country and representations - Cross-references');
+      $block['content'] = '<h2>'.$node->title.' lisainfo:</h2>';
+
+      $items = array(
+        l('Eesti aukonsulid selles riigis', $url, array('query' => array('display' => 'estonian_honorary_consuls'))),
+        l('Selle riigi esindamine Eestis', $url, array('query' => array('display' => 'foreign_representations'))),
+        l('Reisiinfo selleks riigiks', $url, array('query' => array('display' => 'travel_info'))),
+        l('Kahepoolsed suhted meie riikide vahel', $url, array('query' => array('display' => 'relations'))),
+      );
+
+      $variables['#theme'] = 'item_list';
+      $variables['#type'] = 'ul';
+      $variables['#items'] = $items;
+      $block['content'] .= render($variables);
+    break;
+  }
+
+  return $block;
+}
+
+
+/**
  * Implements hook_css_alter().
  * Inject module css into Omega responsive media query tags.
  */
 function vm_country_and_representations_css_alter(&$css) {
+
   global $theme_key;
   // Get current themes path.
   $theme_path = drupal_get_path('theme', variable_get('theme_default', NULL));
@@ -101,6 +154,7 @@ function vm_country_and_representations_css_alter(&$css) {
 
   $css[$module_path . '/css/global.css'] = $global;
   $css[$module_path . '/css/global.css']['weight'] += 0.01;
+  $css[$module_path . '/css/global.css']['type'] = 'file';
   $css[$module_path . '/css/global.css']['data'] = $module_path . '/css/global.css';
   $css[$module_path . '/css/global.css']['basename'] = $module_path . '/css/global.css';
 
@@ -109,11 +163,13 @@ function vm_country_and_representations_css_alter(&$css) {
 
   $css['tablet::' . $module_path . '/css/default.css'] = $default_tablet;
   $css['tablet::' . $module_path . '/css/default.css']['weight'] += 0.01;
+  $css['tablet::' . $module_path . '/css/default.css']['type'] = 'file';
   $css['tablet::' . $module_path . '/css/default.css']['data'] = '' . $module_path . '/css/default.css';
   $css['tablet::' . $module_path . '/css/default.css']['basename'] = 'tablet::' . $module_path . '/css/default.css';
 
   $css['tablet::' . $module_path . '/css/default-tablet.css'] = $tablet;
   $css['tablet::' . $module_path . '/css/default-tablet.css']['weight'] += 0.01;
+  $css['tablet::' . $module_path . '/css/default-tablet.css']['type'] = 'file';
   $css['tablet::' . $module_path . '/css/default-tablet.css']['data'] = $module_path . '/css/default-tablet.css';
   $css['tablet::' . $module_path . '/css/default-tablet.css']['basename'] = 'tablet::' . $module_path . '/css/default-tablet.css';
 
@@ -122,11 +178,13 @@ function vm_country_and_representations_css_alter(&$css) {
 
   $css['desktop::' . $module_path . '/css/default.css'] = $default_desktop;
   $css['desktop::' . $module_path . '/css/default.css']['weight'] += 0.01;
+  $css['desktop::' . $module_path . '/css/default.css']['type'] = 'file';
   $css['desktop::' . $module_path . '/css/default.css']['data'] = '' . $module_path . '/css/default.css';
   $css['desktop::' . $module_path . '/css/default.css']['basename'] = 'desktop::' . $module_path . '/css/default.css';
 
   $css['desktop::' . $module_path . '/css/default-desktop.css'] = $desktop;
   $css['desktop::' . $module_path . '/css/default-desktop.css']['weight'] += 0.01;
+  $css['desktop::' . $module_path . '/css/default-desktop.css']['type'] = 'file';
   $css['desktop::' . $module_path . '/css/default-desktop.css']['data'] = $module_path . '/css/default-desktop.css';
   $css['desktop::' . $module_path . '/css/default-desktop.css']['basename'] = 'desktop::' . $module_path . '/css/default-desktop.css';
 
@@ -135,11 +193,14 @@ function vm_country_and_representations_css_alter(&$css) {
 
   $css['ie::desktop::' . $module_path . '/css/default.css'] = $ie_default_desktop;
   $css['ie::desktop::' . $module_path . '/css/default.css']['weight'] += 0.01;
+  $css['ie::desktop::' . $module_path . '/css/default.css']['type'] = 'file';
   $css['ie::desktop::' . $module_path . '/css/default.css']['data'] = '' . $module_path . '/css/default.css';
   $css['ie::desktop::' . $module_path . '/css/default.css']['basename'] = 'ie::desktop::' . $module_path . '/css/default.css';
 
   $css['ie::desktop::' . $module_path . '/css/default-desktop.css'] = $ie_desktop;
   $css['ie::desktop::' . $module_path . '/css/default-desktop.css']['weight'] += 0.01;
+  $css['ie::desktop::' . $module_path . '/css/default-desktop.css']['type'] = 'file';
   $css['ie::desktop::' . $module_path . '/css/default-desktop.css']['data'] = $module_path . '/css/default-desktop.css';
   $css['ie::desktop::' . $module_path . '/css/default-desktop.css']['basename'] = 'ie::desktop::' . $module_path . '/css/default-desktop.css';
+
 }
