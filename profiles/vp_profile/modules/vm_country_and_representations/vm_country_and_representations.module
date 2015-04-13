@@ -18,9 +18,6 @@ function vm_country_and_representations_init() {
 
   $module_path = drupal_get_path('module', 'vm_country_and_representations');
 
-  // Add a file for VM to use as its own css playground.
-  drupal_add_css($module_path . '/css/vm_custom.css');
-
 /*
   drupal_add_css($module_path . '/css/default.css', array(
     'group' => 2000,
