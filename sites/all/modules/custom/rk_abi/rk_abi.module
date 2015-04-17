@@ -489,6 +489,29 @@ function rk_abi_settings($form, &$form_state) {
   );
 
 
+  $form['rk_abi_social_media_fieldset'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Social Media'),
+    '#description' => t('Place to switch on and off certain social media options.'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+
+  $form['rk_abi_social_media_fieldset']['rk_abi_use_twitter_summary_card'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Twitter Summary Card Meta Tag'),
+    '#default_value' => variable_get('rk_abi_use_twitter_summary_card', 0),
+    '#description' => t('Add Twitter summary card meta info to pages.'),
+  );
+
+  $form['rk_abi_social_media_fieldset']['rk_abi_twitter_handle'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Twitter Handle'),
+    '#default_value' => variable_get('rk_abi_twitter_handle', 'StenbockiMaja'),
+    '#description' => t('The Twitter handle used by the site communication team. No need to add @ at the front.'),   
+  );
+
+
   $form['rk_abi_min_specific_fieldset'] = array(
     '#type' => 'fieldset',
     '#title' => t('Ministry Specific'),

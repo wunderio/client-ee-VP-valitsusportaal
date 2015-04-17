@@ -221,12 +221,74 @@ function add_facebook_meta_tags() {
         $description_og_meta['#attributes']['content'] = $teaser;
       }
     }
-  }
+  } 
 
   drupal_add_html_head($image_og_title, 'image_og_title');
   drupal_add_html_head($image_og_meta, 'image_og_meta');
   drupal_add_html_head($description_og_meta, 'description_og_meta');
   drupal_add_html_head($description_og_url, 'description_og_url');
+}
+
+
+/**
+ * Construct Twitter meta tags.
+ * See https://dev.twitter.com/cards/types/summary.
+ */
+function add_twitter_meta_tags() {
+
+  global $base_url;
+  global $base_root;
+
+  $site_name = variable_get('site_name');
+  $link = $base_root . request_uri();  
+  
+  $twitter_card = array(
+    '#tag' => 'meta',
+    '#attributes' => array(
+      'property' => 'twitter:card',
+      'content' => 'summary',
+    ),
+  );
+
+  $user_provided_handle = variable_get('rk_abi_twitter_handle', 'StenbockiMaja');
+  $handle = (substr($user_provided_handle, 0) == '@') ? $user_provided_handle : '@' . $user_provided_handle;
+  $twitter_site = array(
+    '#tag' => 'meta',
+    '#attributes' => array(
+      'property' => 'twitter:site',
+      'content' => $handle,
+    ),
+  );    
+
+  $twitter_title = array(
+    '#tag' => 'meta',
+    '#attributes' => array(
+      'property' => 'twitter:title',
+      'content' => trim(drupal_get_title()),
+    ),
+  );
+
+  $twitter_desc = array(
+    '#tag' => 'meta',
+    '#attributes' => array(
+      'property' => 'twitter:description',
+      'content' => variable_get('site_slogan'),
+    ),
+  );
+
+  $twitter_url = array(
+    '#tag' => 'meta',
+    '#attributes' => array(
+      'property' => 'twitter:url',
+      'content' => $link,
+    ),
+  );
+
+  drupal_add_html_head($twitter_card, 'twitter_card');
+  drupal_add_html_head($twitter_site, 'twitter_site');
+  drupal_add_html_head($twitter_title, 'twitter_title');
+  drupal_add_html_head($twitter_desc, 'twitter_desc');
+  drupal_add_html_head($twitter_url, 'twitter_url');
 }
 
 /**
@@ -258,7 +320,13 @@ function add_facebook_meta_tags() {
     $vars['attributes_array']['class'][] = 'has-sidebar-second';
   }
 
+  // Just mentioning that this line and its assumptive use is part of original VP code. mm.
   add_facebook_meta_tags();
+
+  // Option to add twitter summary card. mm.
+  if (variable_get('rk_abi_use_twitter_summary_card', 0) == 1) {
+    add_twitter_meta_tags();
+  }
 
   // Add IE8 css.
   drupal_add_css(drupal_get_path('theme', 'vp_theme') . '/css/lte-ie8.css', array(
