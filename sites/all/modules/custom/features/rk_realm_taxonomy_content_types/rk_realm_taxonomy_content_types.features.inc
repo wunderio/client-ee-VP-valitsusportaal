@@ -29,14 +29,7 @@ function rk_realm_taxonomy_content_types_node_info() {
       'title_label' => t('Title'),
       'help' => '',
     ),
-    'news' => array(
-      'name' => t('News'),
-      'base' => 'node_content',
-      'description' => t('A single newsitem. Can appear at the frontpage news section, as a related newsitem with another News node or with an Article node, in the general news list at /news, or as an independent node page. Can be used as a newsletter.'),
-      'has_title' => '1',
-      'title_label' => t('Title'),
-      'help' => '',
-    ),
   );
+  drupal_alter('node_info', $items);
   return $items;
 }
