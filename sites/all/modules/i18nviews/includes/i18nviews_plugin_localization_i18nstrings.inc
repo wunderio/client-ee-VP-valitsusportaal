@@ -63,6 +63,15 @@ class i18nviews_plugin_localization_i18nstrings extends views_plugin_localizatio
    *   Array of keys for the string to be translated.
    */
   function stringid($keys) {
+    
+    // Patch from https://www.drupal.org/files/issues/array_to_string_conversion_in_i18nviews_plugin_localization_i13nstrings-2464901-11.patch
+    // I added patch manually. mm 22apr15.
+    foreach ($keys as $key => $value) {
+      if (is_array($value)) {
+        $keys[$key] = implode(':', $value);
+      }
+    }
+
     return 'views:' . implode(':', $keys);
   }
 }
