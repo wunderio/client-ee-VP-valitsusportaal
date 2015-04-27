@@ -305,6 +305,13 @@ function rk_abi_settings($form, &$form_state) {
     '#collapsed' => TRUE,
   );
 
+  $form['rk_abi_contact_options']['rk_abi_contact_email_obfuscate'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Obfuscate Contact Email'),
+    '#default_value' => variable_get('rk_abi_contact_email_obfuscate', 1),
+    '#description' => t('Hide contact page email addresses from bots.'),
+  );  
+
   // Find all newsletters and build logo settings for them.
   $vocab = taxonomy_vocabulary_machine_name_load('department');
   $all_departments = taxonomy_get_tree($vocab->vid);

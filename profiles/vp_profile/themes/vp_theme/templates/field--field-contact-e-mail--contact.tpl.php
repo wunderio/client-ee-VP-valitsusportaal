@@ -7,7 +7,7 @@
       <div class="field-item <?php print $delta % 2 ? 'odd' : 'even'; ?>"<?php print $item_attributes[$delta]; ?>>
 		<?php 
 		  // E-posti php obfuscation.
-		  if (function_exists('_rk_peida_email') && variable_get('rk_abi_contact_email_obfuscate', 0)) {                  
+		  if (function_exists('_rk_peida_email') && variable_get('rk_abi_contact_email_obfuscate', 1)) {                  
 		    print _rk_peida_email(trim($item['#markup']));
 		  }
           else {
