@@ -62,11 +62,11 @@ foreach ($rows as &$row) {
 
                   // EN and RU "teenistuskoht täitmata" equivalents.
                   if ($language->language != 'et' && $field == 'title' && strpos($content, 'teenistus') !== FALSE):
-                    $content = '<strong>' . t('Position Unfilled') . '</strong>';
+                    $content = '<strong>' . t('Position Vacant') . '</strong>';
                   endif;
 
                   // E-posti php obfuscation.
-                  if ($field == 'field_contact_e_mail' && function_exists('_rk_peida_email') && variable_get('rk_abi_contact_email_obfuscate', 0)):
+                  if ($field == 'field_contact_e_mail' && function_exists('_rk_peida_email') && variable_get('rk_abi_contact_email_obfuscate', 1)):
                     $content = _rk_peida_email(trim($content));
                   endif;
 
