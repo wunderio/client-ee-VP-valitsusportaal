@@ -97,6 +97,16 @@ function rk_abi_menu() {
     'weight' => 20,
   );
 
+  $items['admin/config/rkabi/rescue'] = array(
+    'title' => 'Rescue Disabled Content Types',
+    'description' => t('A way to enable content types that were disabled by upgrade to Drupal 7.36. For instance, we lost Eelinfo from the list of content types.'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('rk_abi_rescue_content_types'),
+    'access arguments' => array('admin riigikantselei abimoodul'),
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 30,
+  );  
+
   // Overriding. Original URL in dblog.module.
   $items['admin/reports/event/%'] = array(
     'title' => 'Details',
@@ -950,4 +960,52 @@ function rk_abi_newsletter_list_item($variables) {
  */
 function rk_abi_newsletter_list_wrapper_close($variables) {
   return '</p>';
+}
+
+
+/**
+ * Rescue content types that might disappear with the update to Drupal 7.36.
+ * Drupal 7.36 broke Features content types (eelinfo) for us. Including this
+ * to manually rescue them in case a site has updated and lost a VP content type.
+ */
+function rk_abi_rescue_content_types($form, &$form_state) {
+
+  $form = array();
+
+  $form['rk_abi_rescue_submit'] = array(
+    '#type' => 'submit',
+    '#prefix' => '<p>' . t('Please only click this if you know what you are doing or someone who knows what they are doing told you to click this! This will enable disabled content types that do not belong to the node module. (see node_type table) It has a very narrow use case. If things worked the way they should you would never have to use this.') . '</p>',
+    '#value' => t('Rescue Content Types'),
+    '#description' => t('Drupal 7.36 broke Features content types for us. Including this
+to manually rescue them in case a site has updated and lost a VP content type.'),
+  );  
+
+  return $form;
+
+}
+
+
+function rk_abi_rescue_content_types_submit($form, &$form_state) {
+  // Inspiration from https://www.drupal.org/node/2465159. mm.
+  // Spin through the node_type table.
+  // This is only good where we don't have deleted node type modules or features.
+  $ret = '';
+  $result = db_query("SELECT type, name, module FROM {node_type} WHERE module <> 'node' AND disabled = 1");
+
+  foreach ($result as $row) {
+      $x = db_update('node_type')
+        ->fields(array(
+          'module' => 'node',   // Give it back to the Node module.
+          'custom' => 1,
+          'modified' => 1,
+          'locked' => 0,
+          'disabled' => 0,
+          ))
+        ->condition('type', $row->type)
+        ->execute();
+      $ret .= '<p>' . check_plain("Previously disabled $row->name content type enabled.") . '</p>';
+  }
+
+  watchdog('rk', t('Rescue content types was run.') . $ret);
+  drupal_set_message($ret);
 }
