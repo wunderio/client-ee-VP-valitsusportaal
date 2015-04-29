@@ -32,3 +32,36 @@ function rk_abi_update_7001() {
 
   return $ret;
 }
+
+
+/**
+ * Running the same update logic as in 7001 
+ * in case the Drupal 7.36 disabling of content 
+ * types still existed. In the original update 
+ * the content type disabling may have occurred 
+ * after the 7001 update ran. Therefore, this 
+ * one should get any stragglers.
+ */
+function rk_abi_update_7002() {
+  // Inspiration from https://www.drupal.org/node/2465159. mm.
+  // Spin through the node_type table.
+  // This is only good where we don't have deleted node type modules or features.
+  $ret = '';
+  $result = db_query("SELECT type, name, module FROM {node_type} WHERE module <> 'node' AND disabled = 1");
+
+  foreach ($result as $row) {
+      $x = db_update('node_type')
+        ->fields(array(
+          'module' => 'node',   // Give it back to the Node module.
+          'custom' => 1,
+          'modified' => 1,
+          'locked' => 0,
+          'disabled' => 0,
+          ))
+        ->condition('type', $row->type)
+        ->execute();
+      $ret .= '<p>' . check_plain("Previously disabled $row->name content type enabled.") . '</p>';
+  }
+
+  return $ret;
+}
