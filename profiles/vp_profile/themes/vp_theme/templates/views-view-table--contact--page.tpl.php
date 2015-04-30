@@ -135,6 +135,8 @@ foreach ($rows as &$row) {
           $node_view = render($node_view);
         }
 
+        // Conditional adds option to turn off contact pop-up window.
+        if (!variable_get('rkstatic_kill_contact_popup', 0) == 1) {
           echo '<tr class="modal-tr">'.
             '<td colspan="'.count($row).'">'.
               '<div class="ui-dialog-content-contact">'.
@@ -142,6 +144,8 @@ foreach ($rows as &$row) {
               '</div>'.
             '</td>'.
           '</tr>';
+        }
+
       ?>
     <?php endforeach; ?>
   </tbody>
