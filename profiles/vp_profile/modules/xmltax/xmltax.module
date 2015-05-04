@@ -29,7 +29,7 @@ function xmltax_build() {
 
 	foreach ($vocabularies as $vid => $vocabulary) {
 
-    if ($vocabulary->vid != 7 && $vocabulary->vid != 1 && $vocabulary->vid != 3) {
+    if ($vocabulary->vid != 7 && $vocabulary->vid != 3) {
 		  echo '<vocabulary>'."\n";
 		  echo '  <vid>' . $vid . '</vid>' . "\n";
 		  echo '  <name>' . $vocabulary->name . '</name>' . "\n\n";
@@ -42,7 +42,7 @@ function xmltax_build() {
           $value = i18n_taxonomy_localize_terms(taxonomy_term_load($value->tid));
 				  echo '  <term>' . "\n";
 				  echo '    <name>' . t($value->name) . '</name>' . "\n";
-				  echo '    <link>http://www.vm.ee/?q=' . $value->language . '/taxonomy/term/' . $value->tid . '/feed</link>' . "\n";
+				  echo '    <link>http://www.vm.ee/?q=' . $language->language . '/taxonomy/term/' . $value->tid . '/feed</link>' . "\n";
 				  echo '    <tid>' . $value->tid . '</tid>' . "\n";
 				  echo '    <vid>' . $value->vid . '</vid>' . "\n";
 				  echo '    <language>' . $language->language . '</language>' . "\n";
