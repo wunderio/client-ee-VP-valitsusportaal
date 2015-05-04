@@ -66,30 +66,30 @@
   .view-youtube-videos .views-field-created .spacer, .view-display-id-news-page .views-field-created .spacer, .node-gallery .field-name-field-date-author .spacer, .search-content .gss-info .spacer, #cboxLoadedContent .date .spacer, .block-views-19eef6f0bee85264121542d861111bec .views-field-created .spacer {
     padding: 0 6px; }
 
-.node table, .block-live-press-briefings table, .view-display-id-contact_page table, .view-display-id-weekly_schedule_page .views-table-wrapper table {
+.node table, .block-live-press-briefings table, .view-display-id-contact_page table, .view-display-id-weekly_schedule_page .views-table-wrapper table, .view-newsletters table {
   margin: 0 0 18px;
   width: 100%; }
-  .node table tr, .block-live-press-briefings table tr, .view-display-id-contact_page table tr, .view-display-id-weekly_schedule_page .views-table-wrapper table tr {
+  .node table tr, .block-live-press-briefings table tr, .view-display-id-contact_page table tr, .view-display-id-weekly_schedule_page .views-table-wrapper table tr, .view-newsletters table tr {
     background: transparent;
     padding: 0; }
-  .node table tbody, .block-live-press-briefings table tbody, .view-display-id-contact_page table tbody, .view-display-id-weekly_schedule_page .views-table-wrapper table tbody,
+  .node table tbody, .block-live-press-briefings table tbody, .view-display-id-contact_page table tbody, .view-display-id-weekly_schedule_page .views-table-wrapper table tbody, .view-newsletters table tbody, 
   .node table th,
   .block-live-press-briefings table th,
   .view-display-id-contact_page table th,
-  .view-display-id-weekly_schedule_page .views-table-wrapper table th,
+  .view-display-id-weekly_schedule_page .views-table-wrapper table th, .view-newsletters table th, 
   .node table tr,
   .block-live-press-briefings table tr,
   .view-display-id-contact_page table tr,
-  .view-display-id-weekly_schedule_page .views-table-wrapper table tr {
+  .view-display-id-weekly_schedule_page .views-table-wrapper table tr, .view-newsletters table tr {
     border: 0; }
-  .node table th, .block-live-press-briefings table th, .view-display-id-contact_page table th, .view-display-id-weekly_schedule_page .views-table-wrapper table th,
+  .node table th, .block-live-press-briefings table th, .view-display-id-contact_page table th, .view-display-id-weekly_schedule_page .views-table-wrapper table th, .view-newsletters table th,
   .node table td,
   .block-live-press-briefings table td,
   .view-display-id-contact_page table td,
-  .view-display-id-weekly_schedule_page .views-table-wrapper table td {
+  .view-display-id-weekly_schedule_page .views-table-wrapper table td, .view-newsletters table td {
     padding: 5px 10px;
     vertical-align: top; }
-  .node table a, .block-live-press-briefings table a, .view-display-id-contact_page table a, .view-display-id-weekly_schedule_page .views-table-wrapper table a {
+  .node table a, .block-live-press-briefings table a, .view-display-id-contact_page table a, .view-display-id-weekly_schedule_page .views-table-wrapper table a, .view-newsletters table a {
     text-decoration: underline; }
   .node table img, .block-live-press-briefings table img, .view-display-id-contact_page table img, .view-display-id-weekly_schedule_page .views-table-wrapper table img {
     display: inline-block;
@@ -279,20 +279,23 @@
   margin-bottom: 18px;
   padding: 15px 20px 30px 20px; }
 
-.view-display-id-contact_page table {
+.view-display-id-contact_page table, .view-newsletters table {
   color: #000;
   line-height: 15px; }
-  .view-display-id-contact_page table th {
+  .view-display-id-contact_page table th, .view-newsletters table th {
     font-size: 11px;
     color: #00678C; }
   .view-display-id-contact_page table th,
-  .view-display-id-contact_page table td {
+  .view-display-id-contact_page table td,
+  .view-newsletters table th,
+  .view-newsletters table td {
     border-bottom: 2px solid #BBB;
     border-right: 1px solid #EAEAEA; }
     .view-display-id-contact_page table th.last,
     .view-display-id-contact_page table td.last {
       border-right: 0; }
-  .view-display-id-contact_page table td {
+  .view-display-id-contact_page table td,
+  .view-newsletters table td {
     border-bottom-width: 1px; }
   .view-display-id-contact_page table td {
     font-size: 12px; }
@@ -4625,3 +4628,9 @@ h3.icon-wrap-2 .icon-cv {
           padding-left: 11px; }
         .static-footer ul ul li:first-child a {
           border: 0; }
+
+.view-newsletters table caption {
+  font-weight: bold; }
+
+.view-newsletters table .views-field-created {
+  width: 50px; } 

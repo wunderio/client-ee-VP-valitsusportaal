@@ -204,3 +204,15 @@
     border-bottom: none;
     background: #efede3;
     line-height: 18px; }
+
+
+.node-country-and-representations .image .image-inner {
+    display: inline;
+    padding: 0; }
+  .node-country-and-representations .image {
+  background: none;
+  box-shadow: none;
+  display: inline;
+  margin: 0;
+  padding: 0; }
+  
