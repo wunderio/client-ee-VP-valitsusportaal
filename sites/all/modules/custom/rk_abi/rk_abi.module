@@ -315,6 +315,13 @@ function rk_abi_settings($form, &$form_state) {
     '#collapsed' => TRUE,
   );
 
+  $form['rk_abi_contact_options']['rk_abi_contact_show_silhouette_photo'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show Silhouette Photo if Contact Photo Missing'),
+    '#default_value' => variable_get('rk_abi_contact_show_silhouette_photo', 0),
+    '#description' => t('If contact\'s picture is missing, you can instead use a default silhouette image, instead of leaving the picture area blank.'),
+  );
+
   $form['rk_abi_contact_options']['rk_abi_contact_email_obfuscate'] = array(
     '#type' => 'checkbox',
     '#title' => t('Obfuscate Contact Email'),

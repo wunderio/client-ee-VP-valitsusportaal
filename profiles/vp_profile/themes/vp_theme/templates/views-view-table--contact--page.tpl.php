@@ -110,11 +110,16 @@ foreach ($rows as &$row) {
               $node_view['field_profile_photo']['#items'][0]['is_default'] === TRUE
             )
           ) {
+            
+            // Choice to leave photo space blank or use a default silhouette image.
+            if (variable_get('rk_abi_contact_show_silhouette_photo', 0) == 1) {
+              $node_view['field_profile_photo'] = array('#markup' => '<div class="field field-name-field-profile-photo field-type-image field-label-hidden"><img alt="" src="/profiles/vp_profile/modules/vp_contact/no-profile-image_w104.png" /></div>');
+            }
+            else {              
+              // Ära kasuta no-profile-image. mm 03.06.2014.
+              $node_view['field_profile_photo'] = '';
+            }
 
-            // $node_view['field_profile_photo'] = array('#markup' => '<div class="field field-name-field-profile-photo field-type-image field-label-hidden"><img alt="" src="/profiles/vp_profile/modules/vp_contact/no-profile-image_w104.png" /></div>');
-
-            // Ära kasuta no-profile-image. mm 03.06.2014.
-            $node_view['field_profile_photo'] = '';
           }
 
           // Option to not display department in pop-up. mm 13.11.2014.
