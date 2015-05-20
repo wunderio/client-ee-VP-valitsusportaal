@@ -10,7 +10,7 @@
 </head>
 <body<?php print $attributes;?>>
 <noscript>
-  <h1 class="noscript"><?php print t('Please Enable JavaScript');?></h1><p class="noscript"><?php print t('This site requires JavaScript support to function properly. It appears that your web browser does not support JavaScript,
+  <strong class="noscript"><?php print t('Please Enable JavaScript');?></strong><p class="noscript"><?php print t('This site requires JavaScript support to function properly. It appears that your web browser does not support JavaScript,
       or you have disabled scripting.');?></p>
 </noscript>
   <div id="skip-link">
