@@ -79,14 +79,6 @@ function taxonomy_feeds_processor_targets_alter(&$targets, $entity_type, $bundle
  */
 function taxonomy_feeds_set_target($source, $entity, $target, $terms, $mapping = array()) {
 
-  if (isset($entity->field_field_lock) && !empty($entity->field_field_lock)) {
-    foreach ($entity->field_field_lock[LANGUAGE_NONE] as $lock) {
-      if ($lock['value'] === $target) {
-        return;
-      }
-    }
-  }
-
   // Allow mapping the string '0' to a term name.
   if (empty($terms) && $terms != 0) {
     return;

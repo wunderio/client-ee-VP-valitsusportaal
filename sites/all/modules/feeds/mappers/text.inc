@@ -34,15 +34,6 @@ function text_feeds_processor_targets_alter(&$targets, $entity_type, $bundle_nam
  * Callback for mapping text fields.
  */
 function text_feeds_set_target($source, $entity, $target, $value) {
-
-  if (isset($entity->field_field_lock) && !empty($entity->field_field_lock)) {
-    foreach ($entity->field_field_lock[LANGUAGE_NONE] as $lock) {
-      if ($lock['value'] === $target) {
-        return;
-      }
-    }
-  }
-
   if (empty($value)) {
     return;
   }
