@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Seadusloome karussell feature.
+ */
+
+include_once 'rk_seadusloome_karussell.features.inc';
