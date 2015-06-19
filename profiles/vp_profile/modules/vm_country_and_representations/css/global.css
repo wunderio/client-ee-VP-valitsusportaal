@@ -78,7 +78,8 @@
     background-color: #000000;
     color: #FFFFFF; }
 .node-country-and-representations .field-name-field-map {
-  margin-bottom: 30px; }
+  margin-bottom: 30px;
+  margin-top: 20px; }
 .node-country-and-representations ul {
   padding: 0px; }
   .node-country-and-representations ul li {
@@ -216,3 +217,33 @@
   margin: 0;
   padding: 0; }
   
+.node-country-and-representations .field-name-country-relations-link {
+  display: inline-block;
+  vertical-align: top;
+  background: #efede3;
+  padding: 11px 10px 0px 0px;
+  height: 29px; }
+  .node-country-and-representations .field-name-field-flag {
+  display: inline-block;
+  margin-bottom: 0px;
+  padding: 2px 10px 2px 2px;
+  background: #efede3; }
+
+ /* Visiidi tabelid sisu sees. */
+table.visiidid tr th {width:18%}
+table.visiidid tr td, table.visiidid tr th {border:1px solid #cccccc;}
+
+ /* Välisriikide saatkonnad Eestis ikoonid. */
+.view-mode-country_representations_fr .field-name-field-telephone {
+background: url(../img/icon-phone.png) no-repeat 0 2px; }
+
+.view-mode-country_representations_fr .field-name-field-fax {
+background: url(../img/icon-fax.png) no-repeat 0 2px; }
+
+.view-mode-country_representations_fr .field-name-field-e-mail {
+background: url(../img/icon-email.png) no-repeat 0 5px; }
+
+.view-mode-country_representations_fr .field-name-field-fax,
+.view-mode-country_representations_fr .field-name-field-telephone,
+.view-mode-country_representations_fr .field-name-field-e-mail {
+padding-left: 16px; }  
