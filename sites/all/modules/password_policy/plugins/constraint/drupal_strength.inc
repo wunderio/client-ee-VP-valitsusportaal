@@ -59,16 +59,16 @@ function password_policy_drupal_strength_constraint($password, $account, $constr
   }
   // Count weaknesses.
   if (!$has_lowercase) {
-    $weaknesses++;
+    ++$weaknesses;
   }
   if (!$has_uppercase) {
-    $weaknesses++;
+    ++$weaknesses;
   }
   if (!$has_numbers) {
-    $weaknesses++;
+    ++$weaknesses;
   }
   if (!$has_punctuation) {
-    $weaknesses++;
+    ++$weaknesses;
   }
   // Apply penalty for each weakness (balanced against length penalty).
   switch ($weaknesses) {
@@ -89,9 +89,29 @@ function password_policy_drupal_strength_constraint($password, $account, $constr
       break;
   }
   // Check if password is the same as the username.
-  if ($password !== '' && strtolower($password) === strtolower($account->name)) {
+  $username = _password_policy_drupal_strength_get_username($account);
+  if ($password !== '' && strtolower($password) === strtolower($username)) {
     // Passwords the same as username are always very weak.
     $strength = 5;
   }
   return $strength >= $constraint->config['drupal_strength'];
+}
+
+/**
+ * Gets username against which to check password.
+ */
+function _password_policy_drupal_strength_get_username($account) {
+  if (isset($_POST['name'])) {
+    // The username will not be displayed, so there is no need to filter it
+    // with check_plain() or filter_xss() as suggested by Coder.
+    // @ignore security_17
+    $username = rawurldecode($_POST['name']);
+  }
+  else {
+    // The username input will not be present on the same form as the password
+    // input in some configurations (e.g., sites using Password Tab module). So
+    // fall back to retrieving the username from the user object.
+    $username = $account->name;
+  }
+  return $username;
 }

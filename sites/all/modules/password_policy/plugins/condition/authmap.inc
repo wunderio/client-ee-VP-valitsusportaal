@@ -55,7 +55,8 @@ function password_policy_authmap_condition($account, $condition) {
 
   // Otherwise, test if user authmap intersects with any excluded
   // authentication modules.
-  if ($authmaps = user_get_authmaps($account->name)) {
+  $authmaps = user_get_authmaps($account->name);
+  if ($authmaps) {
     return !count(array_intersect_key($authmaps, $authmodules));
   }
   else {

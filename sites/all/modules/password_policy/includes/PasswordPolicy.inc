@@ -29,13 +29,13 @@ class PasswordPolicy {
     $this->config = isset($policy->config) ? unserialize($policy->config) : array();
 
     // Load all constraint objects.
-    $this->load_plugins();
+    $this->loadPlugins();
   }
 
   /**
    * Creates the administration form for this policy.
    */
-  public function admin_form(&$form, &$form_state) {
+  public function adminForm(&$form, &$form_state) {
     // Condition settings.
     $form['condition_title'] = array(
       '#type' => 'item',
@@ -70,8 +70,8 @@ class PasswordPolicy {
     );
 
     foreach ($this->items as $item) {
-      $parent = $item->is_type('condition') ? 'condition' : ($item->is_type('constraint') ? 'constraint' : 'item');
-      $form[$parent]  = $form[$parent] + $item->admin_form($form, $form_state);
+      $parent = $item->isType('condition') ? 'condition' : ($item->isType('constraint') ? 'constraint' : 'item');
+      $form[$parent]  = $form[$parent] + $item->adminForm($form, $form_state);
     }
 
     return $form;
@@ -83,20 +83,23 @@ class PasswordPolicy {
    * Collects configuration from all plugins into a single configuration
    * variable.
    */
-  public function admin_form_submit($form, &$form_state) {
+  public function adminFormSubmit($form, &$form_state) {
     foreach ($this->items as $item) {
-      $item->admin_form_submit($form, $form_state);
+      $item->adminFormSubmit($form, $form_state);
     }
     $form_state['item']->config = serialize($this->config);
   }
 
   /**
    * Collects messages generated from all plugins.
+   *
+   * @return string[]
+   *   Messages.
    */
-  public function message() {
+  public function messages() {
     $items = array();
-    foreach ($this->active_constraints() as $constraint) {
-      $items = array_merge($items, $constraint->message());
+    foreach ($this->activeConstraints() as $constraint) {
+      $items = array_merge($items, $constraint->messages());
     }
     return $items;
   }
@@ -104,7 +107,7 @@ class PasswordPolicy {
   /**
    * Checks password versus each of the policy's active constraints.
    *
-   * @param string $pass
+   * @param string $password
    *   Password.
    * @param object $account
    *   User account.
@@ -112,11 +115,11 @@ class PasswordPolicy {
    * @return array
    *   Failure messages for failed constraints.
    */
-  public function check($pass, $account) {
+  public function check($password, $account) {
     $errors = array();
-    foreach ($this->active_constraints() as $constraint) {
-      if (!$constraint->check($pass, $account)) {
-        $errors = array_merge($errors, $constraint->fail_message($pass, $account));
+    foreach ($this->activeConstraints() as $constraint) {
+      if (!$constraint->check($password, $account)) {
+        $errors = array_merge($errors, $constraint->failMessages($password, $account));
       }
     }
     return $errors;
@@ -124,10 +127,13 @@ class PasswordPolicy {
 
   /**
    * Returns all constraints that are active.
+   *
+   * @return PasswordPolicyConstraint[]
+   *   Active constraints.
    */
-  public function active_constraints() {
+  public function activeConstraints() {
     $constraints = array();
-    foreach ($this->get_items('constraint') as $constraint) {
+    foreach ($this->getItems('constraint') as $constraint) {
       // Any constraint with non-default configuration is "active"
       if ($constraint->info['config'] != $constraint->config) {
         $constraints[] = $constraint;
@@ -138,24 +144,31 @@ class PasswordPolicy {
 
   /**
    * Returns whether all active conditions match.
+   *
+   * @param object $account
+   *   User object.
+   *
+   * @return bool
+   *   TRUE if all conditions match, FALSE otherwise.
    */
   public function match($account) {
-    $does_match = FALSE;
-    foreach ($this->get_items('condition') as $condition) {
+    foreach ($this->getItems('condition') as $condition) {
       // Any condition with non-default configuration is "active"
       if ($condition->info['config'] != $condition->config) {
-        $does_match = $does_match || $condition->match($account);
+        if (!$condition->match($account)) {
+          return FALSE;
+        }
       }
     }
-    return $does_match;
+    return TRUE;
   }
 
   /**
    * Runs cron for each of the items that is a cron item.
    */
   public function cron() {
-    foreach ($this->get_items('cron') as $item) {
-      if ($item->is_active()) {
+    foreach ($this->getItems('cron') as $item) {
+      if ($item->isActive()) {
         $item->cron();
       }
     }
@@ -163,9 +176,12 @@ class PasswordPolicy {
 
   /**
    * Runs init for each of the items that is a cron item.
+   *
+   * @param object $account
+   *   User object.
    */
   public function init($account) {
-    foreach ($this->get_items('init') as $item) {
+    foreach ($this->getItems('init') as $item) {
       $item->init($account);
     }
   }
@@ -173,16 +189,16 @@ class PasswordPolicy {
   /**
    * Loads all Password Policy plugins.
    */
-  private function load_plugins() {
+  private function loadPlugins() {
     ctools_include('plugins');
     foreach (ctools_get_plugins('password_policy', 'constraint') as $info) {
-      $this->_load_plugin($info);
+      $this->loadPlugin($info);
     }
     foreach (ctools_get_plugins('password_policy', 'condition') as $info) {
-      $this->_load_plugin($info);
+      $this->loadPlugin($info);
     }
     foreach (ctools_get_plugins('password_policy', 'item') as $info) {
-      $this->_load_plugin($info);
+      $this->loadPlugin($info);
     }
   }
 
@@ -192,7 +208,7 @@ class PasswordPolicy {
    * @param object $info
    *   Password Policy plugin information.
    */
-  private function _load_plugin($info) {
+  private function loadPlugin($info) {
     if (!isset($this->config[$info['name']])) {
       $this->config[$info['name']] = array();
     }
@@ -201,12 +217,18 @@ class PasswordPolicy {
 
   /**
    * Gets all items of a particular type.
+   *
+   * @param string $type
+   *   Item type.
+   *
+   * @return PasswordPolicyItem[]
+   *   Items.
    */
-  private function get_items($type) {
+  private function getItems($type) {
     $this->cache[$type] = isset($this->cache[$type]) ? $this->cache[$type] : array();
     if (empty($this->cache[$type])) {
       foreach ($this->items as $item) {
-        if ($item->is_type($type)) {
+        if ($item->isType($type)) {
           $this->cache[$type][] = $item;
         }
       }
@@ -216,6 +238,12 @@ class PasswordPolicy {
 
   /**
    * Retrieves policy by name.
+   *
+   * @param string $name
+   *   Policy name.
+   *
+   * @return PasswordPolicy
+   *   Policy.
    */
   public static function policy($name) {
     ctools_include('export');
@@ -224,11 +252,15 @@ class PasswordPolicy {
       return new PasswordPolicy($info);
     }
   }
-  
+
   /**
    * Retrieves all policies.
+   *
+   * @return array
+   *   Associative array where keys are policy names and values are
+   *   password policies (i.e. PasswordPolicy objects).
    */
-  public static function all_policies() {
+  public static function allPolicies() {
     ctools_include('export');
     $policies = array();
     $infos = ctools_export_crud_load_all('password_policy');
@@ -240,8 +272,11 @@ class PasswordPolicy {
 
   /**
    * Retrieves all enabled policies.
+   *
+   * @return PasswordPolicy[]
+   *   Enabled policies.
    */
-  public static function enabled_policies() {
+  public static function enabledPolicies() {
     ctools_include('export');
     $policies = array();
     $infos = ctools_export_crud_load_all('password_policy');
@@ -255,14 +290,21 @@ class PasswordPolicy {
 
   /**
    * Retrieves all policies that match the current account.
+   *
+   * @param object $account
+   *   User object.
+   *
+   * @return PasswordPolicy[]
+   *   Policies matching account.
    */
-  public static function matched_policies($account) {
+  public static function matchedPolicies($account) {
     $policies = array();
-    foreach (PasswordPolicy::enabled_policies() as $policy) {
+    foreach (PasswordPolicy::enabledPolicies() as $policy) {
       if ($policy->match($account)) {
         $policies[] = $policy;
       }
     }
     return $policies;
   }
+
 }
