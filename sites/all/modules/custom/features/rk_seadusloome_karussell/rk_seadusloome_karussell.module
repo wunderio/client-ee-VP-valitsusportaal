@@ -5,3 +5,34 @@
  */
 
 include_once 'rk_seadusloome_karussell.features.inc';
+
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function rk_seadusloome_karussell_views_pre_render(&$view) {
+  if ($view->name == 'seadusloome_karussellid') {
+    $path_to_module = drupal_get_path('module', 'rk_seadusloome_karussell');
+  	drupal_add_css($path_to_module . '/css/rk_seadusloome_karussell.css');
+    // Allow for modal windows used with term explanations.
+    drupal_add_library('system', 'ui.dialog');
+    drupal_add_js('(function($){$().ready(function() {
+      $("div.field-content a.aken").each(function() {
+        var $link = $(this);
+        $link.click(function(e) {
+          e.preventDefault();
+          $dialog = $link.next("span.ui-dialog-aken-sisu")
+          .css("display", "block")
+          .clone()
+          .dialog({
+            position: { my: "left-25%", at: "center", of: e, collision: "fit" },
+            close: function(event, ui) {
+              $link.next("span.ui-dialog-aken-sisu").css("display", "none");
+              $link.focus();
+            }
+          });
+        });
+      });
+    });})(jQuery);', 'inline');
+  }
+}

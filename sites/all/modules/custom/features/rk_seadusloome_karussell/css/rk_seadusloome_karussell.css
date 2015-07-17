@@ -1,0 +1,16 @@
+.flexslider .slides .views-field-field-strat-thumbnail img {display: none;}
+.flex-direction-nav a {background: url(/profiles/vp_profile/themes/vp_theme/img/10-global/pager-arrows.png) no-repeat 0 0;}
+.flex-direction-nav .flex-next {background-position: -25px -25px;}
+.flex-direction-nav .flex-prev {background-position: 0 0;}
+.flex-direction-nav a {width: 25px;height: 25px;}
+.view-seadusloome-karussellid .flex-control-thumbs li {width: auto;}
+.view-seadusloome-karussellid .flex-control-thumbs img {width: 89px;}
+
+.view-seadusloome-karussellid {font-size: 14px;}
+.view-seadusloome-karussellid p, .view-seadusloome-karussellid div {margin-bottom: 1em;}
+.view-seadusloome-karussellid a.aken {cursor: help;}
+.ui-dialog-aken-sisu {display: none;}
+
+.view-seadusloome-karussellid .flex-control-thumbs li {margin-right: 14px;}
+
+.view-seadusloome-karussellid .caption {color: #00698c;margin-left:3px;margin-top:-7px;font-size: 11px;}
