@@ -332,7 +332,7 @@ function rk_valitsused_ministrid_get($form, &$form_state) {
   $form['grupp']['periood'] = array(
     '#type' => 'checkboxes',
     '#title' => '',
-	  '#options' => _rk_valitsused_periood_linnukesed(),
+    '#options' => _rk_valitsused_periood_linnukesed(),
     '#attributes' => array('class' => array('varasemad')), // 'checked' => TRUE
     '#default_value' => $periood_default,
     '#description' => '',
@@ -346,7 +346,7 @@ function rk_valitsused_ministrid_get($form, &$form_state) {
   $form['grupp']['ametikohad'] = array(
     '#type' => 'select',
     '#title' => '', //t('Minister'),
-	  '#options' => $options, // FAPI does check_plain().
+    '#options' => $options, // FAPI does check_plain().
     '#default_value' => $value, // FAPI does check_plain().
     '#description' => '',
   );
@@ -355,7 +355,7 @@ function rk_valitsused_ministrid_get($form, &$form_state) {
   $form['grupp']['sugu'] = array(
     '#type' => 'select',
     '#title' => '', //t('Gender'),
-	  '#options' => array('all' => t('Both Genders'), 'SEX_TYPE_MALE' => t('Male'), 'SEX_TYPE_FEMALE' => t('Female')), // Kõik ministrid, mees, naine
+    '#options' => array('all' => t('Both Genders'), 'SEX_TYPE_MALE' => t('Male'), 'SEX_TYPE_FEMALE' => t('Female')), // Kõik ministrid, mees, naine
     '#default_value' => $value, // FAPI does check_plain().
     '#description' => '',
   );
@@ -543,7 +543,7 @@ function rk_valitsused_get($form, &$form_state) {
   $form['grupp']['periood'] = array(
     '#type' => 'checkboxes',
     '#title' => '',
-	  '#options' => _rk_valitsused_periood_linnukesed(),
+    '#options' => _rk_valitsused_periood_linnukesed(),
     '#attributes' => array('class' => array('varasemad')), 
     '#default_value' => $periood_default,
     '#description' => '',
@@ -686,7 +686,7 @@ function rk_valitsused_valitsused($form, &$form_state) {
   $form['grupp']['periood'] = array(
     '#type' => 'checkboxes',
     '#title' => '',
-	'#options' => _rk_valitsused_periood_linnukesed(),
+  '#options' => _rk_valitsused_periood_linnukesed(),
     '#attributes' => array('class' => array('varasemad')), // 'checked' => TRUE
     '#description' => '',
   );
@@ -760,7 +760,7 @@ function _rk_valitsused_varasemad_valitsused() {
       $arrResult[$counter]['last_name'] = $row->last_name;
       $arrResult[$counter]['name'] = $row->first_name . ' ' . $row->last_name;
       $arrResult[$counter]['position_type_code'] = $row->position_type_code;
-	  $arrResult[$counter]['ametinimetus'] = _rk_valitsused_gov_num_head_of_gov_title($row->government_number);
+    $arrResult[$counter]['ametinimetus'] = _rk_valitsused_gov_num_head_of_gov_title($row->government_number);
       $counter++;
     }
     
@@ -825,7 +825,7 @@ function rk_valitsused_ministrid($form, &$form_state) {
   $form['grupp']['periood'] = array(
     '#type' => 'checkboxes',
     '#title' => '',
-	'#options' => _rk_valitsused_periood_linnukesed(),
+  '#options' => _rk_valitsused_periood_linnukesed(),
     '#attributes' => array('checked' => TRUE),
     '#description' => '',
   );
@@ -837,7 +837,7 @@ function rk_valitsused_ministrid($form, &$form_state) {
   $form['grupp']['ametikohad'] = array(
     '#type' => 'select',
     '#title' => '', //t('Minister'),
-	  '#options' => $options,
+    '#options' => $options,
     '#default_value' => 'all',
     '#description' => '',
   );
@@ -845,7 +845,7 @@ function rk_valitsused_ministrid($form, &$form_state) {
   $form['grupp']['sugu'] = array(
     '#type' => 'select',
     '#title' => '', //t('Gender'),
-	'#options' => array('all' => t('Both Genders'), 'SEX_TYPE_MALE' => t('Male'), 'SEX_TYPE_FEMALE' => t('Female')), // Kõik ministrid, mees, naine
+  '#options' => array('all' => t('Both Genders'), 'SEX_TYPE_MALE' => t('Male'), 'SEX_TYPE_FEMALE' => t('Female')), // Kõik ministrid, mees, naine
     '#default_value' => 'all',
     '#description' => '',
   );
@@ -891,11 +891,11 @@ function rk_valitsused_statistika($form, &$form_state) {
     '#description' => '',
     '#attributes' => array('class' => array('varasemad-wrapper')),
   );
-	
+  
   $form['kuupaev']['val_min'] = array(
     '#type' => 'radios',
     '#title' => t('On what day has the current'), // Mis kuupäeval on praegune
-	  '#options' => array('valitsus' => t('Government'), 'minister' => t('Minister')),
+    '#options' => array('valitsus' => t('Government'), 'minister' => t('Minister')),
     '#default_value' => 'valitsus',
     '#description' => '',
   );
@@ -908,7 +908,7 @@ function rk_valitsused_statistika($form, &$form_state) {
   $form['kuupaev']['type'] = array(
     '#type' => 'select',
     '#title' => '', // Ametikoht
-	  '#options' => $options,
+    '#options' => $options,
     '#default_value' => 'all',
     '#description' => '',
     '#states' => array(
@@ -919,7 +919,7 @@ function rk_valitsused_statistika($form, &$form_state) {
   /* $form['kuupaev']['type'] = array(
     '#type' => 'select',
     '#title' => t('Mis kuupäeval on praegune'),
-	'#options' => _rk_valitsused_ametikohad(),
+  '#options' => _rk_valitsused_ametikohad(),
     '#default_value' => 'valitsus',
     '#description' => '',
   ); */
@@ -973,7 +973,7 @@ function rk_valitsused_statistika($form, &$form_state) {
   $form['mitupaeva']['mitupaeva_val_min'] = array(
     '#type' => 'radios',
     '#title' => t('How many days has the current'), // Mitu päeva on praegune
-	'#options' => array('valitsus' => t('Government'), 'minister' => t('Minister')),
+  '#options' => array('valitsus' => t('Government'), 'minister' => t('Minister')),
     '#default_value' => 'valitsus',
     '#description' => '',
   );
@@ -986,7 +986,7 @@ function rk_valitsused_statistika($form, &$form_state) {
   $form['mitupaeva']['type_mitupaeva'] = array(
     '#type' => 'select',
     '#title' => '', // Ametikoht
-	'#options' => $options,
+  '#options' => $options,
     '#default_value' => 'all',
     '#description' => '',
     '#states' => array(
@@ -997,7 +997,7 @@ function rk_valitsused_statistika($form, &$form_state) {
   /*$form['mitupaeva']['type_mitupaeva'] = array(
     '#type' => 'select',
     '#title' => t('Mitu päeva on praegune'),
-	'#options' => _rk_valitsused_ametikohad(),
+  '#options' => _rk_valitsused_ametikohad(),
     '#default_value' => 'valitsus',
     '#description' => '',
   );*/
@@ -1052,7 +1052,7 @@ function rk_valitsused_statistika($form, &$form_state) {
   $form['kauem']['type_kauem'] = array(
     '#type' => 'radios',
     '#title' => t('Which is the longest serving'), // Milline on kõige kauem ametis olnud?
-	'#options' => array('valitsus' => t('Government'), 'minister' => t('Minister')),
+  '#options' => array('valitsus' => t('Government'), 'minister' => t('Minister')),
     '#default_value' => 'valitsus',
     '#description' => '',
   );
@@ -1065,7 +1065,7 @@ function rk_valitsused_statistika($form, &$form_state) {
   $form['kauem']['ametikohad_kauem'] = array(
     '#type' => 'select',
     '#title' => '', // t('Minister') Ametikoht
-	  '#options' => $options,
+    '#options' => $options,
     '#default_value' => 'all',
     '#description' => '',
     '#states' => array(
@@ -1076,7 +1076,7 @@ function rk_valitsused_statistika($form, &$form_state) {
   $form['kauem']['sugu_kauem'] = array(
     '#type' => 'select',
     '#title' => '', // t('All, male, female') Kõik, mehed, naised
-	'#options' => array('all' => t('All Ministers'), 'SEX_TYPE_MALE' => t('Male'), 'SEX_TYPE_FEMALE' => t('Female')),
+  '#options' => array('all' => t('All Ministers'), 'SEX_TYPE_MALE' => t('Male'), 'SEX_TYPE_FEMALE' => t('Female')),
     '#default_value' => 'all',
     '#description' => '',
     '#states' => array(
@@ -1087,7 +1087,7 @@ function rk_valitsused_statistika($form, &$form_state) {
   $form['kauem']['periood_kauem'] = array(
     '#type' => 'checkboxes',
     '#title' => '',
-	'#options' => _rk_valitsused_periood_linnukesed(),
+  '#options' => _rk_valitsused_periood_linnukesed(),
     '#attributes' => array('checked' => TRUE),
     '#description' => '',
   );
@@ -1153,7 +1153,7 @@ function rk_valitsused_ministrid_callback($form, &$form_state) {
  */
 function rk_valitsused_statistika_validate($form, &$form_state) {
   if ($form_state['values']['days'] < 0 || $form_state['values']['days'] > 9999):
-	  form_set_error('days', t('Number of days must be between 1 and 9999'));
+    form_set_error('days', t('Number of days must be between 1 and 9999'));
   endif;
 }
 
@@ -1207,7 +1207,7 @@ function rk_valitsused_valitsused_submit($form, &$form_state) {
       $arrResult[$counter]['last_name'] = $row->last_name;
       $arrResult[$counter]['name'] = $row->first_name . ' ' . $row->last_name;
       $arrResult[$counter]['position_type_code'] = $row->position_type_code;
-	  $arrResult[$counter]['ametinimetus'] = _rk_valitsused_gov_num_head_of_gov_title($row->government_number);
+    $arrResult[$counter]['ametinimetus'] = _rk_valitsused_gov_num_head_of_gov_title($row->government_number);
       $counter++;
     }
     
@@ -1443,7 +1443,7 @@ function rk_valitsused_statistika_kauem_submit($form, &$form_state) {
       ->fields('g', array('government_number'))
       ->fields('m', array('first_name', 'last_name', 'person_sex_type_code'))
       //->fields('mg', array('ruled_start_date', 'ruled_end_date', 'position_type_code', 'government_id', 'minister_id'));  
-	  ->fields('mg', array('position_type_code', 'government_id', 'minister_id'));        
+    ->fields('mg', array('position_type_code', 'government_id', 'minister_id'));        
 
       if ($ametikoht !== 'all'):
         $query->condition('mg.position_type_code', _rk_valitsused_amet_options($ametikoht), 'IN');
@@ -1458,11 +1458,11 @@ function rk_valitsused_statistika_kauem_submit($form, &$form_state) {
       $query->condition('g.rule_time_type_code', $millised_valitsused, 'IN');
     endif;
 
-	// Group by minister id.
-	// $query->addExpression('sum(mg.ruled_days)', 'mg_ruled_days');
+  // Group by minister id.
+  // $query->addExpression('sum(mg.ruled_days)', 'mg_ruled_days');
   // @TODO. Fix double-counting for consecutive terms.
-	$query->addExpression('SUM(DATEDIFF(IF(mg.ruled_end_date IS NULL, CURDATE(), mg.ruled_end_date), mg.ruled_start_date) + 1)', 'calculated_days');
-	$query->groupBy('mg.minister_id');
+  $query->addExpression('SUM(DATEDIFF(IF(mg.ruled_end_date IS NULL, CURDATE(), mg.ruled_end_date), mg.ruled_start_date) + 1)', 'calculated_days');
+  $query->groupBy('mg.minister_id');
 
     $result = $query->execute();
 
@@ -2036,6 +2036,7 @@ function theme_table_row_search_minister_object($variables) {
 /*
   $output = '<tr class="' . $variables['even_odd'] . '"><td><a href="' . MINISTER_URL . '/' . $variables['muutujad']->minister_id . '" title="' . $variables['muutujad']->name . '">' . $variables['muutujad']->name . '</a></td><td><a href="' . VALITSUS_URL . '/' . $variables['muutujad']->government_number . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']->government_number . '">' . $variables['muutujad']->government_number . '</a></td><td><span class="ametiaeg">' . _rk_valitsused_eesti_format_date($variables['muutujad']->ruled_start_date) . ' - ' . _rk_valitsused_eesti_format_date($variables['muutujad']->ruled_end_date) . '</span></td><td class="duration">' . $variables['muutujad']->calculated_days . '</td><td>' . _rk_valitsused_translate_amet($variables['muutujad']->position_type_code) . '</td></tr>';
 */
+  $amet = ($variables['muutujad']->display_title != '') ? $variables['muutujad']->display_title : _rk_valitsused_translate_amet($variables['muutujad']->position_type_code);
 
   $output = '<ul class="' . $variables['even_odd'] . ' varasemad">';
   $output .= '<li class="head-title">';
@@ -2048,7 +2049,7 @@ function theme_table_row_search_minister_object($variables) {
   $output .= '  <span class="ametiaeg"><a href="' . VALITSUS_URL . '/' . $variables['muutujad']->government_number . '" title="' . t('Republic of Estonia government number') . ' ' . $variables['muutujad']->government_number . '">' . _rk_valitsused_eesti_format_date($variables['muutujad']->ruled_start_date, FALSE) . ' - ' . _rk_valitsused_eesti_format_date($variables['muutujad']->ruled_end_date) . '</a></span>';
   $output .= '</li>';
   $output .= '<li class="duration">' . $variables['muutujad']->calculated_days . '</li>';
-  $output .= '<li class="gov-head">' . _rk_valitsused_translate_amet($variables['muutujad']->position_type_code) . '</li>';
+  $output .= '<li class="gov-head">' . $amet . '</li>';
   $output .= '</ul>';
 
   return $output;
@@ -2411,28 +2412,28 @@ function rk_valitsused_form_views_exposed_form_alter(&$form, &$form_state, $form
     //dsm($form);  // pretty print array using Krumo to messages
 
     /*$form['rule_time_type_code_all'] = array(
-		'#type' => 'checkboxes',
+    '#type' => 'checkboxes',
         '#title' => t('Which governments'),
         '#options' => array('FIRST_REPUBLIC', 'EXILE_GOVERNMENTS', 'SECOND_REPUBLIC'),
-	);*/
+  );*/
 
     /* $form['rule_time_type_code'] = array(
-		'#type' => 'checkbox',
+    '#type' => 'checkbox',
         '#title' => t('1918-1940/1944'),
         '#default_value' => 'FIRST_REPUBLIC',
-	);
+  );
 
     $form['rule_time_type_code_1'] = array(
-		'#type' => 'checkbox',
+    '#type' => 'checkbox',
         '#title' => t('In Exile'),
         '#default_value' => 'EXILE_GOVERNMENTS',
-	);
+  );
 
     $form['rule_time_type_code_2'] = array(
-		'#type' => 'checkbox',
+    '#type' => 'checkbox',
         '#title' => t('Since 1990'),
         '#default_value' => 'SECOND_REPUBLIC',
-	); */
+  ); */
     
   endif;
 }
@@ -2467,8 +2468,8 @@ endif; */
 
   // Otsi olemasolev valitsus ning arvuta valitsetud aega.
   if ($vars['field']->field_alias == 'rk_government_ruled_days' 
-	    && (int) $vars['field']->original_value == 0 
-	    && (int) $vars['row']->rk_government_ruled_end_date == 0) {
+      && (int) $vars['field']->original_value == 0 
+      && (int) $vars['row']->rk_government_ruled_end_date == 0) {
 
     $start = $vars['row']->rk_government_ruled_start_date;
     //$days = (strtotime(date("Y-m-d")) - strtotime($vars['row']->rk_government_ruled_start_date)) / (60 * 60 * 24);
@@ -2511,7 +2512,7 @@ endif; */
   elseif ($vars['field']->field_alias == 'rk_minister_government_rk_minister_position_type_code') {
     // Ministrite info leht.
     //return _rk_valitsused_translate_amet($vars['row']->rk_minister_government_rk_minister_position_type_code) . ' (' . $vars['row']->rk_minister_government_rk_minister_ruled_start_date . ' ' . t('to') . ' ' . $vars['row']->rk_minister_government_rk_minister_ruled_end_date . ')';
-	return '<span class="ametikoht">' . _rk_valitsused_translate_amet($vars['row']->rk_minister_government_rk_minister_position_type_code) . '</span>';
+  return '<span class="ametikoht">' . _rk_valitsused_translate_amet($vars['row']->rk_minister_government_rk_minister_position_type_code) . '</span>';
   }
   elseif ($vars['field']->field_alias == 'rk_minister_government_rk_minister_ruled_end_date') {
     $min_start = _rk_valitsused_eesti_format_date($vars['row']->rk_minister_government_rk_minister_ruled_start_date, FALSE);
@@ -2649,157 +2650,160 @@ function _rk_valitsused_ametikohad() {
  */
 function _rk_valitsused_translate_amet($amet) {
 
+  // Shortcut to next function.
+  return _rk_valitsused_klassifikaatorid($amet);
+
   $ametid = array(
-	'AJUTISE_VALITSUSE' => t('ajutise valitsuse peaminister, sõjaminister'),
-	'AJUTISE_VALITSUSE_1' => t('ajutise valitsuse peaminister, siseminister'),
-	'AJUTISE_VALITSUSE_10' => t('ajutise valitsuse ja tööstus- ja kaubandusminister'),
-	'AJUTISE_VALITSUSE_11' => t('ajutise valitsuse kaubandus- ja tööstusministri kohusetäitja (köstneri välismaal viibimise ajal)'),
-	'AJUTISE_VALITSUSE_12' => t('ajutise valitsuse kaubandusministri kohusetäitja'),
-	'AJUTISE_VALITSUSE_13' => t('ajutise valitsuse põllutööminister'),
-	'AJUTISE_VALITSUSE_14' => t('ajutise valitsuse põllutöö- ja toitlusminister'),
-	'AJUTISE_VALITSUSE_15' => t('ajutise valitsuse toitlusminister'),
-	'AJUTISE_VALITSUSE_16' => t('ajutise valitsuse rahaminister'),
-	'AJUTISE_VALITSUSE_17' => t('ajutise valitsuse rahaminister, siseministri asetäitja'),
-	'AJUTISE_VALITSUSE_18' => t('ajutise valitsuse raha- ja riigivaranduste minister'),
-	'AJUTISE_VALITSUSE_19' => t('ajutise valitsuse siseminister'),
-	'AJUTISE_VALITSUSE_2' => t('ajutise valitsuse ministrite nõukogu esimees, siseminister, kaubandus- ja tööstusminister (koht ilmselt täitmata)'),
-	'AJUTISE_VALITSUSE_20' => t('ajutise valitsuse töö- ja hoolekandeministri kohusetäitja'),
-	'AJUTISE_VALITSUSE_21' => t('ajutise valitsuse töö- ja hoolekandeminister, peaministri asetäitja'),
-	'AJUTISE_VALITSUSE_22' => t('ajutise valitsuse välisminister'),
-	'AJUTISE_VALITSUSE_23' => t('ajutise valitsuse saksa rahvusminister'),
-	'AJUTISE_VALITSUSE_24' => t('ajutise valitsuse rootsi rahvusminister'),
-	'AJUTISE_VALITSUSE_25' => t('ajutise valitsuse vene rahvusminister'),
-	'AJUTISE_VALITSUSE_26' => t('ajutise valitsuse täievoliline minister välismaal'),
-	'AJUTISE_VALITSUSE_27' => t('ajutise valitsuse teedeminister'),
-	'AJUTISE_VALITSUSE_3' => t('ajutise valitsuse haridusminister'),
-	'AJUTISE_VALITSUSE_4' => t('ajutise valitsuse haridusminister (venemaal vangis olles)'),
-	'AJUTISE_VALITSUSE_5' => t('ajutise valitsuse kohtuminister'),
-	'AJUTISE_VALITSUSE_6' => t('ajutise valitsuse kohtuminister, peaministri asetäitja'),
-	'AJUTISE_VALITSUSE_7' => t('ajutise valitsuse kohtuminister, ministrite nõukogu abiesimees'),
-	'AJUTISE_VALITSUSE_8' => t('ajutise valitsuse sõjaminister'),
-	'AJUTISE_VALITSUSE_9' => t('ajutise valitsuse tööstus- ja kaubandusminister'),
-	'ENERGEETIKAMINISTER' => t('Minister of Energy'),
-	'FINANTSMINISTER_EKSIILIS' => t('Minister of Finance In Exile'),
-	'HARIDUS_JA' => t('Minister of Education'),
-	'HARIDUS_JA_1' => t('haridus- ja teadusminister (haridusminister)'),
-	'HARIDUS_JA_2' => t('Minister of Education'),
-	'HARIDUSMINISTER' => t('Minister of Education'),
-	'HARIDUSMINISTER_' => t('Minister of Education'),
-	'HARIDUSMINISTER_EKSIILIS' => t('Minister of Education In Exile'),
-	'HARIDUSMINISTER_EKSIILIS_1' => t('Minister of Education In Exile'),
-	'JUSTIITSMINISTER' => t('Minister of Justice'),
-	'KAITSEMINISTER' => t('Minister of Defence'),
-	'KAUBANDUS_JA' => t('Minister of Trade'),
-	'KAUBANDUS_JA_1' => t('Minister of Trade'),
-	'KAUBANDUS_TOOSTUS' => t('Minister of Trade and Works'),
-	'KAUBANDUSTOOSTUSMINISTER' => t('Minister of Trade and Works'),
-	'KESKKONNAMINISTER' => t('Minister of the Environment'),
-	'KOHTU_JA' => t('Minister of Justice'),
-	'KOHTU_JA_1' => t('Minister of Justice'),
-	'KOHTUMINISTER' => t('Minister of Justice'),
-	'KOHTUMINISTER_EKSIILIS' => t('Minister of Justice In Exile'),
-	'KULTUURI_JA' => t('kultuuri- ja haridusminister 6.11.1995-1.01.1996, haridusminister 1.01.1996-30.11.1996'),
-	'KULTUURI_JA_1' => t('kultuuri- ja haridusminister'),
-	'KULTUURIMINISTER' => t('Minister of Culture'),
-	'MAJANDUS_JA' => t('Minister of Economic Affairs and Communications'),
-	'MAJANDUS_JA_1' => t('majandus- ja kommunikatsiooniminister (majandusminister ning teede- ja sideminister)'),
-	'MAJANDUSMINISTER' => t('Minister of Economic Affairs'),
-	'MAJANDUSMINISTER_EKSIILIS' => t('Minister of Economic Affairs in Exile'),
-	'MAJANDUSMINISTER_EKSIILIS_1' => t('Minister of Economic Affairs in Exile'),
-	'MAJANDUSMINISTER_EKSIILIS_2' => t('Minister of Economic Affairs in Exile'),
-	'MINISTER' => t('Minister'),
-	'MINISTER_' => t('minister 8.10.1993-27.06.1994, kultuuri- ja haridusminister 27.06.1994-8.11.1994'),
-	'MINISTER__1' => t('minister 1.12.1992-6.10.1993, kaitseminister 23.08.1993-7.01.1994, välisminister 7.01.1994-8.11.1994'),
-	'MINISTER__2' => t('minister 6.11.1995-1.01.1996, kultuuriminister 1.01.1996-17.03.1997'),
-	'MINISTER__3' => t('minister 6.08.1996-1.12.1996, siseminister 1.12.1996-17.03.1997'),
-	'minister eksiilis 3.04.1973-24.08.1977, majandusminister eksiilis 24.08.1977-12.06.1983' => t('Minister In Exile'),
+  'AJUTISE_VALITSUSE' => t('ajutise valitsuse peaminister, sõjaminister'),
+  'AJUTISE_VALITSUSE_1' => t('ajutise valitsuse peaminister, siseminister'),
+  'AJUTISE_VALITSUSE_10' => t('ajutise valitsuse ja tööstus- ja kaubandusminister'),
+  'AJUTISE_VALITSUSE_11' => t('ajutise valitsuse kaubandus- ja tööstusministri kohusetäitja (köstneri välismaal viibimise ajal)'),
+  'AJUTISE_VALITSUSE_12' => t('ajutise valitsuse kaubandusministri kohusetäitja'),
+  'AJUTISE_VALITSUSE_13' => t('ajutise valitsuse põllutööminister'),
+  'AJUTISE_VALITSUSE_14' => t('ajutise valitsuse põllutöö- ja toitlusminister'),
+  'AJUTISE_VALITSUSE_15' => t('ajutise valitsuse toitlusminister'),
+  'AJUTISE_VALITSUSE_16' => t('ajutise valitsuse rahaminister'),
+  'AJUTISE_VALITSUSE_17' => t('ajutise valitsuse rahaminister, siseministri asetäitja'),
+  'AJUTISE_VALITSUSE_18' => t('ajutise valitsuse raha- ja riigivaranduste minister'),
+  'AJUTISE_VALITSUSE_19' => t('ajutise valitsuse siseminister'),
+  'AJUTISE_VALITSUSE_2' => t('ajutise valitsuse ministrite nõukogu esimees, siseminister, kaubandus- ja tööstusminister (koht ilmselt täitmata)'),
+  'AJUTISE_VALITSUSE_20' => t('ajutise valitsuse töö- ja hoolekandeministri kohusetäitja'),
+  'AJUTISE_VALITSUSE_21' => t('ajutise valitsuse töö- ja hoolekandeminister, peaministri asetäitja'),
+  'AJUTISE_VALITSUSE_22' => t('ajutise valitsuse välisminister'),
+  'AJUTISE_VALITSUSE_23' => t('ajutise valitsuse saksa rahvusminister'),
+  'AJUTISE_VALITSUSE_24' => t('ajutise valitsuse rootsi rahvusminister'),
+  'AJUTISE_VALITSUSE_25' => t('ajutise valitsuse vene rahvusminister'),
+  'AJUTISE_VALITSUSE_26' => t('ajutise valitsuse täievoliline minister välismaal'),
+  'AJUTISE_VALITSUSE_27' => t('ajutise valitsuse teedeminister'),
+  'AJUTISE_VALITSUSE_3' => t('ajutise valitsuse haridusminister'),
+  'AJUTISE_VALITSUSE_4' => t('ajutise valitsuse haridusminister (venemaal vangis olles)'),
+  'AJUTISE_VALITSUSE_5' => t('ajutise valitsuse kohtuminister'),
+  'AJUTISE_VALITSUSE_6' => t('ajutise valitsuse kohtuminister, peaministri asetäitja'),
+  'AJUTISE_VALITSUSE_7' => t('ajutise valitsuse kohtuminister, ministrite nõukogu abiesimees'),
+  'AJUTISE_VALITSUSE_8' => t('ajutise valitsuse sõjaminister'),
+  'AJUTISE_VALITSUSE_9' => t('ajutise valitsuse tööstus- ja kaubandusminister'),
+  'ENERGEETIKAMINISTER' => t('Minister of Energy'),
+  'FINANTSMINISTER_EKSIILIS' => t('Minister of Finance In Exile'),
+  'HARIDUS_JA' => t('Minister of Education'),
+  'HARIDUS_JA_1' => t('haridus- ja teadusminister (haridusminister)'),
+  'HARIDUS_JA_2' => t('Minister of Education'),
+  'HARIDUSMINISTER' => t('Minister of Education'),
+  'HARIDUSMINISTER_' => t('Minister of Education'),
+  'HARIDUSMINISTER_EKSIILIS' => t('Minister of Education In Exile'),
+  'HARIDUSMINISTER_EKSIILIS_1' => t('Minister of Education In Exile'),
+  'JUSTIITSMINISTER' => t('Minister of Justice'),
+  'KAITSEMINISTER' => t('Minister of Defence'),
+  'KAUBANDUS_JA' => t('Minister of Trade'),
+  'KAUBANDUS_JA_1' => t('Minister of Trade'),
+  'KAUBANDUS_TOOSTUS' => t('Minister of Trade and Works'),
+  'KAUBANDUSTOOSTUSMINISTER' => t('Minister of Trade and Works'),
+  'KESKKONNAMINISTER' => t('Minister of the Environment'),
+  'KOHTU_JA' => t('Minister of Justice'),
+  'KOHTU_JA_1' => t('Minister of Justice'),
+  'KOHTUMINISTER' => t('Minister of Justice'),
+  'KOHTUMINISTER_EKSIILIS' => t('Minister of Justice In Exile'),
+  'KULTUURI_JA' => t('kultuuri- ja haridusminister 6.11.1995-1.01.1996, haridusminister 1.01.1996-30.11.1996'),
+  'KULTUURI_JA_1' => t('kultuuri- ja haridusminister'),
+  'KULTUURIMINISTER' => t('Minister of Culture'),
+  'MAJANDUS_JA' => t('Minister of Economic Affairs and Communications'),
+  'MAJANDUS_JA_1' => t('majandus- ja kommunikatsiooniminister (majandusminister ning teede- ja sideminister)'),
+  'MAJANDUSMINISTER' => t('Minister of Economic Affairs'),
+  'MAJANDUSMINISTER_EKSIILIS' => t('Minister of Economic Affairs in Exile'),
+  'MAJANDUSMINISTER_EKSIILIS_1' => t('Minister of Economic Affairs in Exile'),
+  'MAJANDUSMINISTER_EKSIILIS_2' => t('Minister of Economic Affairs in Exile'),
+  'MINISTER' => t('Minister'),
+  'MINISTER_' => t('minister 8.10.1993-27.06.1994, kultuuri- ja haridusminister 27.06.1994-8.11.1994'),
+  'MINISTER__1' => t('minister 1.12.1992-6.10.1993, kaitseminister 23.08.1993-7.01.1994, välisminister 7.01.1994-8.11.1994'),
+  'MINISTER__2' => t('minister 6.11.1995-1.01.1996, kultuuriminister 1.01.1996-17.03.1997'),
+  'MINISTER__3' => t('minister 6.08.1996-1.12.1996, siseminister 1.12.1996-17.03.1997'),
+  'minister eksiilis 3.04.1973-24.08.1977, majandusminister eksiilis 24.08.1977-12.06.1983' => t('Minister In Exile'),
   'MINISTER_EKSIILIS' => t('Minister In Exile'),
-	'MINISTER_EKSIILIS_1' => t('Minister In Exile'),
-	'MINISTER_EKSIILIS_2' => t('Minister In Exile'),
-	'MINISTER_EKSIILIS_3' => t('Minister In Exile'),
-	'MINISTER_ILMA' => t('Minister without Portfolio'),
-	'PEAMINISTER' => t('Prime Minister'),
-	'PEAMINISTER_' => t('Prime Minister'),
-	'PEAMINISTER_SOJAMINISTER' => t('Prime and Defence Minister'),
-	'PEAMINISTRI_ASETAITJA' => t('peaministri asetäitja eksiilis'),
-	'PEAMINISTRI_ASETAITJA_1' => t('peaministri asetäitja eksiilis 8.05.1971-1.03.1990, sõjaminister eksiilis 1.03.1990-20.06.1990'),
-	'PEAMINISTRI_ASETAITJA_2' => t('Acting Prime Minister'),
-	'PEAMINISTRI_ASETAITJA_3' => t('Acting Prime Minister'),
-	'PEAMINISTRI_ASETAITJA_4' => t('Acting Prime Minister'),
-	'PEAMINISTRI_KOHUSETAITJA' => t('Acting Prime Minister'),
-	'POLLUMAJANDUSMINISTER' => t('Minister of Agriculture'),
-	'POLLUTOO_JA' => t('Minister of Agriculture'),
-	'POLLUTOOMINISTER' => t('Minister of Agriculture'),
-	'POLLUTOOMINISTER_EKSIILIS' => t('Minister of Agriculture In Exile'),
-	'POLLUTOOMINISTER_EKSIILIS_1' => t('Minister of Agriculture In Exile'),
-	'POLLUTOOMINISTER_EKSIILIS_2' => t('Minister of Agriculture In Exile'),
-	'POLLUTOOMINISTER_TOITLUSMIN' => t('Minister of Agriculture toitlusministri'),
-	'PORTFELLITA_MINISTER' => t('Minister without Portfolio'),
-	'PROPAGANDAMINISTER' => t('Minister of Propaganda'),
-	'RAHA_JA' => t('Minister of Finance'),
-	'RAHAMINISTER' => t('Minister of Finance'),
-	'RAHAMINISTER_KOHTUMINISTRI' => t('Finance Minister in role of Justice Minister'),
-	'RAHAMINISTER_RIIGIVANEMA' => t('Finance Minister in role of Prime Minister'),
-	'RAHANDUSMINISTER' => t('Minister of Finance'),
-	'REFORMIMINISTER' => t('reformiminister'),
-	'REGIONAALMINISTER' => t('Minister of Regional Affairs'),
-	'RIIGIVANEM' => t('Prime Minister'), // riigivanem
-	'RIIGIVANEM_KUNI' => t('Prime Minister'), // riigivanem
-	'SISE_JA' => t('Minister of the Interior'),
-	'SISEMINISTER' => t('Minister of the Interior'),
-	'SISEMINISTER_EKSIILIS' => t('Minister of the Interior in Exile'),
-	'SISEMINISTER_PEAMINISTRI' => t('siseminister peaministri'),
-	'SISEMINISTER_TOO' => t('Minister of the Interior'),
-	'SISEMINISTER_TOO_1' => t('Minister of the Interior'),
-	'SOJAMINISTER' => t('Minister of War'),
-	'SOJAMINISTER_EKSIILIS' => t('Minister of War in Exile'),
-	'SOJAMINISTER_SISEMINISTRI' => t('Defence Minister Actings as Interior Minister'),
-	'SOTSIAALMINISTER' => t('Minister of Social Affairs'),
-	'SOTSIAALMINISTER_EKSIILIS' => t('sotsiaalminister eksiilis, haridusministri kohusetäitja eksiilis 23.02.1992-7.10.1992'),
-	'SOTSIAALMINISTER_EKSIILIS_1' => t('Minister of Social Affairs in Exile'),
-	'TEEDE_JA' => t('teede- ja sideminister'),
-	'TEEDEMINISTER' => t('Minister of Road Infrastructure'),
-	'TEEDEMINISTER_EKSIILIS' => t('Minister of Roads In Exile'), // teedeminister eksiilis
-	'TEEDEMINISTER_EKSIILIS_1' => t('Minister of Roads In Exile'),
-	'TEEDEMINISTER_KAUBANDUS' => t('Road Minister in role of Trade Minister'),
-	'TEEDEMINISTER_RIIGIVANEMA' => t('Road Minister in role of Prime Minister'),
-	'TOITLUSMINISTER' => t('Minister of Food Provisioning'),
-	'TOITLUSTUSMINISTER' => t('Minister of Food Provisioning'),
-	'TOO_JA' => t('Minister of Work'),
-	'TOO_JA_1' => t('Minister of Work'),
-	'TOO_JA_2' => t('töö ja hoolekandmise minister'),
-	'ULEMINEKUVALITSUSE_EHITUSMI' => t('Minister of Reconstruction in Transitional Government'),
-	'ULEMINEKUVALITSUSE_EHITUSMI_1' => t('üleminekuvalitsuse ehitusminister 30.01.1992-15.06.1992, üleminekuvalitsuse majandusminister 15.06.1992-21.10.1992'),
-	'ULEMINEKUVALITSUSE_HARIDUSM' => t('Minister of Education in Transitional Government'),
-	'ULEMINEKUVALITSUSE_JUSTIITS' => t('Minister of Justice in Transitional Government'),
-	'ULEMINEKUVALITSUSE_KAITSEMI' => t('Minister of Defence in Transitional Government'),
-	'ULEMINEKUVALITSUSE_KAUBANDU' => t('Minister of Trade in Transitional Government'),
-	'ULEMINEKUVALITSUSE_KESKKONN' => t('Minister of the Environment in Transitional Government'),
-	'ULEMINEKUVALITSUSE_KULTUURI' => t('Minister of Cultural Affairs in Transitional Government'),
-	'ULEMINEKUVALITSUSE_MAJANDUS' => t('Minister of Economic Affairs in Transitional Government'),
-	'ULEMINEKUVALITSUSE_MATERIAA' => t('üleminekuvalitsuse materiaalsete ressursside minister'),
-	'ULEMINEKUVALITSUSE_MINISTER' => t('Minister in Transitional Government'),
-	'ULEMINEKUVALITSUSE_PEAMINIS' => t('Prime Minister of Transitional Government'),
-	'ULEMINEKUVALITSUSE_POLLUMAJ' => t('Minister of Agriculture in Transitional Government'),
-	'ULEMINEKUVALITSUSE_RAHANDUS' => t('Minister of Finance in Transitional Government'),
-	'ULEMINEKUVALITSUSE_RIIGIMIN' => t('Transitional Government Minister'),
-	'ULEMINEKUVALITSUSE_SIDEMINI' => t('Minister of Communications in Transitional Government'),
-	'ULEMINEKUVALITSUSE_SISEMINI' => t('Minister of Interior Affairs in Transitional Government'),
-	'ULEMINEKUVALITSUSE_SOTSIAAL' => t('Minister of Social Affairs in Transitional Government'),
-	'ULEMINEKUVALITSUSE_SOTSIAAL_1' => t('üleminekuvalitsuse sotsiaalminister (hiljem tööminister)'),
-	'ULEMINEKUVALITSUSE_TERVISHO' => t('Minister of Health in Transitional Government'),
-	'ULEMINEKUVALITSUSE_TOOMINIS' => t('Minister of Employment in Transitional Government'),
-	'ULEMINEKUVALITSUSE_TOOSTUS' => t('üleminekuvalitsuse tööstus- ja energeetikaminister'),
-	'ULEMINEKUVALITSUSE_TRANSPOR' => t('Minister of Transport in Transitional Government'),
-	'ULEMINEKUVALITSUSE_TRANSPOR_1' => t('üleminekuvalitsuse transporidminister (hiljem trandspordi- ja sideminister)'),
-	'ULEMINEKUVALITSUSE_VALISMIN' => t('Minister of Foreign Affairs in Transitional Government'),
-	'VALISMINISTER' => t('Minister of Foreign Affairs'),
-	'VALISMINISTER_EKSIILIS' => t('Minister of Foreign Affairs in Exile'),
-	'VALISMINISTER_EKSIILIS_1' => t('Minister of Foreign Affairs in Exile'),
-	'VALISMINISTER_JUSTIITSMINIS' => t('Minister of Foreign Affairs actings as Justice Minister'),
-	'VALISMINISTER_KUNI' => t('Minister of Foreign Affairs'),
-	'VALISMINISTER_KUNI_1' => t('Minister of Foreign Affairs'),
-	'valitsus' => t('Government'), // lisasin see valik 23.10.2013.
+  'MINISTER_EKSIILIS_1' => t('Minister In Exile'),
+  'MINISTER_EKSIILIS_2' => t('Minister In Exile'),
+  'MINISTER_EKSIILIS_3' => t('Minister In Exile'),
+  'MINISTER_ILMA' => t('Minister without Portfolio'),
+  'PEAMINISTER' => t('Prime Minister'),
+  'PEAMINISTER_' => t('Prime Minister'),
+  'PEAMINISTER_SOJAMINISTER' => t('Prime and Defence Minister'),
+  'PEAMINISTRI_ASETAITJA' => t('peaministri asetäitja eksiilis'),
+  'PEAMINISTRI_ASETAITJA_1' => t('peaministri asetäitja eksiilis 8.05.1971-1.03.1990, sõjaminister eksiilis 1.03.1990-20.06.1990'),
+  'PEAMINISTRI_ASETAITJA_2' => t('Acting Prime Minister'),
+  'PEAMINISTRI_ASETAITJA_3' => t('Acting Prime Minister'),
+  'PEAMINISTRI_ASETAITJA_4' => t('Acting Prime Minister'),
+  'PEAMINISTRI_KOHUSETAITJA' => t('Acting Prime Minister'),
+  'POLLUMAJANDUSMINISTER' => t('Minister of Agriculture'),
+  'POLLUTOO_JA' => t('Minister of Agriculture'),
+  'POLLUTOOMINISTER' => t('Minister of Agriculture'),
+  'POLLUTOOMINISTER_EKSIILIS' => t('Minister of Agriculture In Exile'),
+  'POLLUTOOMINISTER_EKSIILIS_1' => t('Minister of Agriculture In Exile'),
+  'POLLUTOOMINISTER_EKSIILIS_2' => t('Minister of Agriculture In Exile'),
+  'POLLUTOOMINISTER_TOITLUSMIN' => t('Minister of Agriculture toitlusministri'),
+  'PORTFELLITA_MINISTER' => t('Minister without Portfolio'),
+  'PROPAGANDAMINISTER' => t('Minister of Propaganda'),
+  'RAHA_JA' => t('Minister of Finance'),
+  'RAHAMINISTER' => t('Minister of Finance'),
+  'RAHAMINISTER_KOHTUMINISTRI' => t('Finance Minister in role of Justice Minister'),
+  'RAHAMINISTER_RIIGIVANEMA' => t('Finance Minister in role of Prime Minister'),
+  'RAHANDUSMINISTER' => t('Minister of Finance'),
+  'REFORMIMINISTER' => t('reformiminister'),
+  'REGIONAALMINISTER' => t('Minister of Regional Affairs'),
+  'RIIGIVANEM' => t('Prime Minister'), // riigivanem
+  'RIIGIVANEM_KUNI' => t('Prime Minister'), // riigivanem
+  'SISE_JA' => t('Minister of the Interior'),
+  'SISEMINISTER' => t('Minister of the Interior'),
+  'SISEMINISTER_EKSIILIS' => t('Minister of the Interior in Exile'),
+  'SISEMINISTER_PEAMINISTRI' => t('siseminister peaministri'),
+  'SISEMINISTER_TOO' => t('Minister of the Interior'),
+  'SISEMINISTER_TOO_1' => t('Minister of the Interior'),
+  'SOJAMINISTER' => t('Minister of War'),
+  'SOJAMINISTER_EKSIILIS' => t('Minister of War in Exile'),
+  'SOJAMINISTER_SISEMINISTRI' => t('Defence Minister Actings as Interior Minister'),
+  'SOTSIAALMINISTER' => t('Minister of Social Affairs'),
+  'SOTSIAALMINISTER_EKSIILIS' => t('sotsiaalminister eksiilis, haridusministri kohusetäitja eksiilis 23.02.1992-7.10.1992'),
+  'SOTSIAALMINISTER_EKSIILIS_1' => t('Minister of Social Affairs in Exile'),
+  'TEEDE_JA' => t('teede- ja sideminister'),
+  'TEEDEMINISTER' => t('Minister of Road Infrastructure'),
+  'TEEDEMINISTER_EKSIILIS' => t('Minister of Roads In Exile'), // teedeminister eksiilis
+  'TEEDEMINISTER_EKSIILIS_1' => t('Minister of Roads In Exile'),
+  'TEEDEMINISTER_KAUBANDUS' => t('Road Minister in role of Trade Minister'),
+  'TEEDEMINISTER_RIIGIVANEMA' => t('Road Minister in role of Prime Minister'),
+  'TOITLUSMINISTER' => t('Minister of Food Provisioning'),
+  'TOITLUSTUSMINISTER' => t('Minister of Food Provisioning'),
+  'TOO_JA' => t('Minister of Work'),
+  'TOO_JA_1' => t('Minister of Work'),
+  'TOO_JA_2' => t('töö ja hoolekandmise minister'),
+  'ULEMINEKUVALITSUSE_EHITUSMI' => t('Minister of Reconstruction in Transitional Government'),
+  'ULEMINEKUVALITSUSE_EHITUSMI_1' => t('üleminekuvalitsuse ehitusminister 30.01.1992-15.06.1992, üleminekuvalitsuse majandusminister 15.06.1992-21.10.1992'),
+  'ULEMINEKUVALITSUSE_HARIDUSM' => t('Minister of Education in Transitional Government'),
+  'ULEMINEKUVALITSUSE_JUSTIITS' => t('Minister of Justice in Transitional Government'),
+  'ULEMINEKUVALITSUSE_KAITSEMI' => t('Minister of Defence in Transitional Government'),
+  'ULEMINEKUVALITSUSE_KAUBANDU' => t('Minister of Trade in Transitional Government'),
+  'ULEMINEKUVALITSUSE_KESKKONN' => t('Minister of the Environment in Transitional Government'),
+  'ULEMINEKUVALITSUSE_KULTUURI' => t('Minister of Cultural Affairs in Transitional Government'),
+  'ULEMINEKUVALITSUSE_MAJANDUS' => t('Minister of Economic Affairs in Transitional Government'),
+  'ULEMINEKUVALITSUSE_MATERIAA' => t('üleminekuvalitsuse materiaalsete ressursside minister'),
+  'ULEMINEKUVALITSUSE_MINISTER' => t('Minister in Transitional Government'),
+  'ULEMINEKUVALITSUSE_PEAMINIS' => t('Prime Minister of Transitional Government'),
+  'ULEMINEKUVALITSUSE_POLLUMAJ' => t('Minister of Agriculture in Transitional Government'),
+  'ULEMINEKUVALITSUSE_RAHANDUS' => t('Minister of Finance in Transitional Government'),
+  'ULEMINEKUVALITSUSE_RIIGIMIN' => t('Transitional Government Minister'),
+  'ULEMINEKUVALITSUSE_SIDEMINI' => t('Minister of Communications in Transitional Government'),
+  'ULEMINEKUVALITSUSE_SISEMINI' => t('Minister of Interior Affairs in Transitional Government'),
+  'ULEMINEKUVALITSUSE_SOTSIAAL' => t('Minister of Social Affairs in Transitional Government'),
+  'ULEMINEKUVALITSUSE_SOTSIAAL_1' => t('üleminekuvalitsuse sotsiaalminister (hiljem tööminister)'),
+  'ULEMINEKUVALITSUSE_TERVISHO' => t('Minister of Health in Transitional Government'),
+  'ULEMINEKUVALITSUSE_TOOMINIS' => t('Minister of Employment in Transitional Government'),
+  'ULEMINEKUVALITSUSE_TOOSTUS' => t('üleminekuvalitsuse tööstus- ja energeetikaminister'),
+  'ULEMINEKUVALITSUSE_TRANSPOR' => t('Minister of Transport in Transitional Government'),
+  'ULEMINEKUVALITSUSE_TRANSPOR_1' => t('üleminekuvalitsuse transporidminister (hiljem trandspordi- ja sideminister)'),
+  'ULEMINEKUVALITSUSE_VALISMIN' => t('Minister of Foreign Affairs in Transitional Government'),
+  'VALISMINISTER' => t('Minister of Foreign Affairs'),
+  'VALISMINISTER_EKSIILIS' => t('Minister of Foreign Affairs in Exile'),
+  'VALISMINISTER_EKSIILIS_1' => t('Minister of Foreign Affairs in Exile'),
+  'VALISMINISTER_JUSTIITSMINIS' => t('Minister of Foreign Affairs actings as Justice Minister'),
+  'VALISMINISTER_KUNI' => t('Minister of Foreign Affairs'),
+  'VALISMINISTER_KUNI_1' => t('Minister of Foreign Affairs'),
+  'valitsus' => t('Government'), // lisasin see valik 23.10.2013.
   );
 
   return $ametid[$amet];
@@ -2809,7 +2813,7 @@ function _rk_valitsused_translate_amet($amet) {
 /**
  * position_type_code ForteCMS klassifikaatoritest võetud 27.03.2014.
  */
-function _rk_valitsused_klassifikaatorid() {
+function _rk_valitsused_klassifikaatorid($amet) {
   $arrAmetid = array(
     'PEAMINISTER' => 'peaminister',
     'PRIME_MINISTER' => 'peaminister',
@@ -2969,7 +2973,7 @@ function _rk_valitsused_klassifikaatorid() {
     'INTERIOR_REGIONAL' => 'siseminister ja regionaalminister',
   );
 
-  return $arrAmetid;
+  return $arrAmetid[$amet];
 }
 
 
