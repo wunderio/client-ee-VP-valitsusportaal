@@ -142,15 +142,34 @@ function id_card_login() {
   // maybe should check both?
 
   // Implementing original developer's above @todo, checking both formats. mm 15.10.2014.
-  if (@$_SERVER['SSL_CLIENT_VERIFY'] == 'SUCCESS' || @$_SERVER['REDIRECT_SSL_CLIENT_VERIFY'] == 'SUCCESS') {
-    if ($_SERVER['SSL_CLIENT_S_DN_CN'] || $_SERVER['REDIRECT_SSL_CLIENT_S_DN_CN']) {
-      // Extract the ID Code from SSL_CLIENT_S_DN_CN
-      // Added this conditional to check between REDIRECT_* and SSL_CLIENT_S_DN_CN. mm 15.10.2014.
-      $ssl_client_s_dn_cn = (isset($_SERVER['REDIRECT_SSL_CLIENT_S_DN_CN'])) ? $_SERVER['REDIRECT_SSL_CLIENT_S_DN_CN']: $_SERVER['SSL_CLIENT_S_DN_CN'];
-      //list($lastname, $firstname, $id_code) = explode(',', $_SERVER['REDIRECT_SSL_CLIENT_S_DN_CN']);
+  // Looking for 3 possible options. Stingray uses HTTP_SSL_CLIENT_VERIFY. mm.
+  if (@$_SERVER['SSL_CLIENT_VERIFY'] == 'SUCCESS'
+      || @$_SERVER['REDIRECT_SSL_CLIENT_VERIFY'] == 'SUCCESS'
+      || @$_SERVER['HTTP_SSL_CLIENT_VERIFY'] == 'OK') {
+
+    // Above options should have one of these 3 options. mm. 3sep15.
+    if ($_SERVER['SSL_CLIENT_S_DN_CN']
+        || $_SERVER['REDIRECT_SSL_CLIENT_S_DN_CN']
+        || $_SERVER['HTTP_SSL_CLIENT_S_DN_CN']) {
+
+      // Extract the ID Code from whichever header is in use. mm 3sep15.
+      if (isset($_SERVER['REDIRECT_SSL_CLIENT_S_DN_CN'])) {
+        $ssl_client_s_dn_cn = $_SERVER['REDIRECT_SSL_CLIENT_S_DN_CN'];
+      }
+      elseif (isset($_SERVER['SSL_CLIENT_S_DN_CN'])) {
+        $ssl_client_s_dn_cn = $_SERVER['SSL_CLIENT_S_DN_CN'];
+      }
+      elseif (isset($_SERVER['HTTP_SSL_CLIENT_S_DN_CN'])) {
+        $ssl_client_s_dn_cn = $_SERVER['HTTP_SSL_CLIENT_S_DN_CN'];
+      }
+      else {
+        return FALSE;
+      }
+
       list($lastname, $firstname, $id_code) = explode(',', $ssl_client_s_dn_cn);
 
-      if (variable_get('id_card_create_new_user', '1')) {
+      // Meie ei taha luua uusi kasutajaid vale conf'i puhul. mm. 3sep15.
+      if (FALSE && variable_get('id_card_create_new_user', '1')) {
         user_external_login_register($id_code, 'id_card');
         // @TODO: Redirect to front page instead.
         return '<div class="id-card-login-successful">' . t('Logged in with @id_code.', array('@id_code' => $id_code)) . '</div>';
