@@ -296,10 +296,10 @@ function high_contrast_settings_form_submit($form, &$form_state) {
  */
 function high_contrast_toggle_callback() {
   if ($_SESSION['high_contrast_activated'] == 1) {
-    high_contrast_switch(FALSE, $_GET['destination']);
+    high_contrast_switch(FALSE, $_GET['suunata']);
   }
   else {
-    high_contrast_switch(TRUE, $_GET['destination']);
+    high_contrast_switch(TRUE, $_GET['suunata']);
   }
 }
 
@@ -312,7 +312,6 @@ function high_contrast_switch($enable, $destination = '') {
   if (empty($destination)) {
     $destination = _high_contrast_get_current_url();
   }
-
   drupal_goto($destination);
 }
 
@@ -368,7 +367,7 @@ function theme_high_contrast_switcher_links($vars) {
       t(_high_contrast_variable_get('high_contrast_normal_label')),
       'high_contrast_toggle', 
       array(
-        'query' => array('destination' => $current_url),
+        'query' => array('suunata' => $current_url),
         'attributes' => array('rel' => 'nofollow'),
       )
     );
@@ -377,7 +376,7 @@ function theme_high_contrast_switcher_links($vars) {
     $link_high = l(
       t(_high_contrast_variable_get('high_contrast_high_label')),
       'high_contrast_toggle', array(
-        'query' => array('destination' => $current_url),
+        'query' => array('suunata' => $current_url),
         'attributes' => array('rel' => 'nofollow'),
       )
     );
@@ -439,7 +438,7 @@ function _high_contrast_get_current_css_styles() {
  */
 function _high_contrast_get_current_url() {
   $page_url = 'http';
-  if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
+  if (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on') {
     $page_url .= 's';
   }
 
@@ -561,7 +560,7 @@ function _high_contrast_link() {
   return l(
     t('Toggle high contrast'),
     'high_contrast_toggle', array(
-      'query' => array('destination' => _high_contrast_get_current_url()),
+      'query' => array('suunata' => _high_contrast_get_current_url()),
       'attributes' => array(
         'class' => array('element-invisible', 'element-focusable'),
         'rel' => 'nofollow',
