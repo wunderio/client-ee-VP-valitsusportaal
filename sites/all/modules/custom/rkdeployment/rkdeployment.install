@@ -1,0 +1,34 @@
+<?php
+/**
+ * @file
+ * Code to support automated deployment and enabling/disabling of modules.
+ *
+ * All enabling/disabling of core, contrib, custom or feature modules should
+ * take place in this module. When taking action on a new module, add it to both
+ * rkdeployment.info as well as an update hook.
+ *
+ * More info here - http://befused.com/drupal/site-deployment-module
+ */
+
+/**
+ * Implements hook_install().
+ */
+function rkdeployment_install() {
+  // Initial install is at time when also updating youtube_videos view.
+  features_revert(array('vp_video_gallery' => array('image', 'views_view')));
+}
+
+
+/**
+ * Update 7101 enables...
+ */
+function rkdeployment_update_7101() {
+  // module_enable(array('views', 'views_ui'));
+}
+
+/**
+ * Update 7102 will also do something.
+ */
+// function rkdeployment_update_7102() {
+//   module_enable(array('entity'));
+// }
