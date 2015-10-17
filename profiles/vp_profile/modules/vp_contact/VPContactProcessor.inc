@@ -170,7 +170,8 @@ class VPContactProcessor extends FeedsProcessor {
    *
    * @todo: move to processor stage?
    */
-  public function expire($time = NULL) {
+  public function expire(FeedsSource $source, $time = NULL) {
+
     if ($time === NULL) {
       $time = $this->expiryTime();
     }
