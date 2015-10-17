@@ -1,0 +1,13 @@
+diff --git a/config_perms.install b/config_perms.install
+index 385c366..f4c6fea 100644
+--- a/config_perms.install
++++ b/config_perms.install
+@@ -182,7 +182,7 @@ function config_perms_update_7201() {
+  * Add the administer account settings permission.
+  */
+ function config_perms_update_7202() {
+-  if (!array_key_exists('administer account settings', config_perms_perms())) {
++  if (!array_key_exists('administer_account_settings', config_perms_perms())) {
+     config_perms_save(array(
+       'name' => 'administer account settings',
+       'path' => array('admin/config/people/accounts'),
