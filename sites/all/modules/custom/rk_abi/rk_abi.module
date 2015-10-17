@@ -15,6 +15,11 @@ function rk_abi_init() {
   // Load css.
   drupal_add_css(drupal_get_path('module', 'rk_abi') . '/css/rk_abi.css');
 
+  // Option to hide "Köik on front page".
+  if (variable_get('rk_abi_peida_all_link') == 1) {
+    drupal_add_css(drupal_get_path('module', 'rk_abi') . '/css/rk_abi_peida_all.css');
+  }
+
   // Load js.
   drupal_add_js(drupal_get_path('module', 'rk_abi') . '/js/rk_abi.js', array('scope' => 'footer', 'weight' => 10));
  
@@ -168,6 +173,21 @@ function _rk_abi_help_redirect() {
 function rk_abi_settings($form, &$form_state) {
 
   $form = array();
+
+  $form['rk_abi_homepage_fieldset'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Homepage Settings'),
+    '#description' => t('Optional Settings for Homepage.'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+
+  $form['rk_abi_homepage_fieldset']['rk_abi_peida_all_link'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Hide "All" Link on Homepage'),
+    '#default_value' => variable_get('rk_abi_peida_all_link', 0),
+    '#description' => t('Many ministries do not want the Kõik link on their homepages.'),
+  );
 
   $form['rk_abi_newsletters_fieldset'] = array(
     '#type' => 'fieldset',

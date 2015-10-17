@@ -1,0 +1,9 @@
+/* Optional css to hide the cursed All / Köik pager control that no one wants.  */
+
+#region-top .view-top-news-tabs.view-id-top_news_tabs .views-slideshow-controls-bottom .views-slideshow-pager-field-item.flex-active {
+  background: none;
+}
+
+.view-id-top_news_tabs .views-slideshow-controls-bottom .views-slideshow-pager-field-item.flex-active .views-content-name-i18n {
+  visibility: hidden;
+}
