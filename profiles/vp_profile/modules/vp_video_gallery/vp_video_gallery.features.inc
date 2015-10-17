@@ -24,6 +24,31 @@ function vp_video_gallery_views_api($module = NULL, $api = NULL) {
 }
 
 /**
+ * Implements hook_image_default_styles().
+ */
+function vp_video_gallery_image_default_styles() {
+  $styles = array();
+
+  // Exported image style: 120x90.
+  $styles['120x90'] = array(
+    'label' => '120x90',
+    'effects' => array(
+      24 => array(
+        'name' => 'image_scale',
+        'data' => array(
+          'width' => 120,
+          'height' => '',
+          'upscale' => 0,
+        ),
+        'weight' => 1,
+      ),
+    ),
+  );
+
+  return $styles;
+}
+
+/**
  * Implements hook_node_info().
  */
 function vp_video_gallery_node_info() {
@@ -37,5 +62,6 @@ function vp_video_gallery_node_info() {
       'help' => '',
     ),
   );
+  drupal_alter('node_info', $items);
   return $items;
 }

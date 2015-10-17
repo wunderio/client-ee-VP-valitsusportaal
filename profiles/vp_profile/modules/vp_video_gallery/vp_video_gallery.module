@@ -4,6 +4,8 @@
  *
  */
 
+include_once 'vp_video_gallery.features.inc';
+
 /**
  * Implements hook_form_alter().
  */

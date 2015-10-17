@@ -29,10 +29,21 @@ function vp_video_gallery_views_default_views() {
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'better_exposed_filters';
+  $handler->display->display_options['exposed_form']['options']['submit_button'] = 'Rakenda';
+  $handler->display->display_options['exposed_form']['options']['reset_button_label'] = 'Tühista';
+  $handler->display->display_options['exposed_form']['options']['exposed_sorts_label'] = 'Sorteerimise alus';
+  $handler->display->display_options['exposed_form']['options']['sort_asc_label'] = 'Kasvav';
+  $handler->display->display_options['exposed_form']['options']['sort_desc_label'] = 'Kahanev';
   $handler->display->display_options['exposed_form']['options']['bef'] = array(
     'general' => array(
       'allow_secondary' => 0,
       'secondary_label' => 'Advanced options',
+      'collapsible_label' => NULL,
+      'combine_rewrite' => NULL,
+      'reset_label' => NULL,
+      'bef_filter_description' => NULL,
+      'any_label' => NULL,
+      'filter_rewrite_values' => NULL,
     ),
     'title' => array(
       'more_options' => array(
@@ -41,9 +52,36 @@ function vp_video_gallery_views_default_views() {
         'tokens' => array(
           'available' => array(
             0 => 'global_types',
+            'secondary_label' => NULL,
+            'collapsible_label' => NULL,
+            'combine_rewrite' => NULL,
+            'reset_label' => NULL,
+            'bef_filter_description' => NULL,
+            'any_label' => NULL,
+            'filter_rewrite_values' => NULL,
           ),
+          'secondary_label' => NULL,
+          'collapsible_label' => NULL,
+          'combine_rewrite' => NULL,
+          'reset_label' => NULL,
+          'bef_filter_description' => NULL,
+          'any_label' => NULL,
+          'filter_rewrite_values' => NULL,
         ),
+        'secondary_label' => NULL,
+        'collapsible_label' => NULL,
+        'combine_rewrite' => NULL,
+        'reset_label' => NULL,
+        'any_label' => NULL,
+        'filter_rewrite_values' => NULL,
       ),
+      'secondary_label' => NULL,
+      'collapsible_label' => NULL,
+      'combine_rewrite' => NULL,
+      'reset_label' => NULL,
+      'bef_filter_description' => NULL,
+      'any_label' => NULL,
+      'filter_rewrite_values' => NULL,
     ),
     'created_1' => array(
       'bef_format' => 'default',
@@ -53,9 +91,36 @@ function vp_video_gallery_views_default_views() {
         'tokens' => array(
           'available' => array(
             0 => 'global_types',
+            'secondary_label' => NULL,
+            'collapsible_label' => NULL,
+            'combine_rewrite' => NULL,
+            'reset_label' => NULL,
+            'bef_filter_description' => NULL,
+            'any_label' => NULL,
+            'filter_rewrite_values' => NULL,
           ),
+          'secondary_label' => NULL,
+          'collapsible_label' => NULL,
+          'combine_rewrite' => NULL,
+          'reset_label' => NULL,
+          'bef_filter_description' => NULL,
+          'any_label' => NULL,
+          'filter_rewrite_values' => NULL,
         ),
+        'secondary_label' => NULL,
+        'collapsible_label' => NULL,
+        'combine_rewrite' => NULL,
+        'reset_label' => NULL,
+        'any_label' => NULL,
+        'filter_rewrite_values' => NULL,
       ),
+      'secondary_label' => NULL,
+      'collapsible_label' => NULL,
+      'combine_rewrite' => NULL,
+      'reset_label' => NULL,
+      'bef_filter_description' => NULL,
+      'any_label' => NULL,
+      'filter_rewrite_values' => NULL,
     ),
     'created' => array(
       'bef_format' => 'default',
@@ -65,10 +130,44 @@ function vp_video_gallery_views_default_views() {
         'tokens' => array(
           'available' => array(
             0 => 'global_types',
+            'secondary_label' => NULL,
+            'collapsible_label' => NULL,
+            'combine_rewrite' => NULL,
+            'reset_label' => NULL,
+            'bef_filter_description' => NULL,
+            'any_label' => NULL,
+            'filter_rewrite_values' => NULL,
           ),
+          'secondary_label' => NULL,
+          'collapsible_label' => NULL,
+          'combine_rewrite' => NULL,
+          'reset_label' => NULL,
+          'bef_filter_description' => NULL,
+          'any_label' => NULL,
+          'filter_rewrite_values' => NULL,
         ),
+        'secondary_label' => NULL,
+        'collapsible_label' => NULL,
+        'combine_rewrite' => NULL,
+        'reset_label' => NULL,
+        'any_label' => NULL,
+        'filter_rewrite_values' => NULL,
       ),
+      'secondary_label' => NULL,
+      'collapsible_label' => NULL,
+      'combine_rewrite' => NULL,
+      'reset_label' => NULL,
+      'bef_filter_description' => NULL,
+      'any_label' => NULL,
+      'filter_rewrite_values' => NULL,
     ),
+    'secondary_label' => NULL,
+    'collapsible_label' => NULL,
+    'combine_rewrite' => NULL,
+    'reset_label' => NULL,
+    'bef_filter_description' => NULL,
+    'any_label' => NULL,
+    'filter_rewrite_values' => NULL,
   );
   $handler->display->display_options['pager']['type'] = 'full';
   $handler->display->display_options['pager']['options']['items_per_page'] = '10';
@@ -95,7 +194,7 @@ function vp_video_gallery_views_default_views() {
   $handler->display->display_options['fields']['title']['label'] = '';
   $handler->display->display_options['fields']['title']['exclude'] = TRUE;
   $handler->display->display_options['fields']['title']['alter']['make_link'] = TRUE;
-  $handler->display->display_options['fields']['title']['alter']['path'] = 'www.youtube.com/embed/[field_embbed_source]';
+  $handler->display->display_options['fields']['title']['alter']['path'] = 'https://www.youtube.com/embed/[field_embbed_source]';
   $handler->display->display_options['fields']['title']['alter']['external'] = TRUE;
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
@@ -108,12 +207,12 @@ function vp_video_gallery_views_default_views() {
   $handler->display->display_options['fields']['field_thumbnail']['label'] = '';
   $handler->display->display_options['fields']['field_thumbnail']['exclude'] = TRUE;
   $handler->display->display_options['fields']['field_thumbnail']['alter']['make_link'] = TRUE;
-  $handler->display->display_options['fields']['field_thumbnail']['alter']['path'] = 'www.youtube.com/embed/[field_embbed_source]';
+  $handler->display->display_options['fields']['field_thumbnail']['alter']['path'] = 'https://www.youtube.com/embed/[field_embbed_source]';
   $handler->display->display_options['fields']['field_thumbnail']['alter']['external'] = TRUE;
   $handler->display->display_options['fields']['field_thumbnail']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_thumbnail']['click_sort_column'] = 'fid';
   $handler->display->display_options['fields']['field_thumbnail']['settings'] = array(
-    'image_style' => '',
+    'image_style' => '120x90',
     'image_link' => '',
   );
   /* Väli: Sisu: Postituse kuupäev */
@@ -168,7 +267,7 @@ function vp_video_gallery_views_default_views() {
   $handler->display->display_options['filters']['title']['group'] = 1;
   $handler->display->display_options['filters']['title']['exposed'] = TRUE;
   $handler->display->display_options['filters']['title']['expose']['operator_id'] = 'search_op';
-  $handler->display->display_options['filters']['title']['expose']['label'] = 'Search';
+  $handler->display->display_options['filters']['title']['expose']['label'] = 'Otsing';
   $handler->display->display_options['filters']['title']['expose']['use_operator'] = TRUE;
   $handler->display->display_options['filters']['title']['expose']['operator'] = 'title_op';
   $handler->display->display_options['filters']['title']['expose']['identifier'] = 'search';
@@ -201,7 +300,7 @@ function vp_video_gallery_views_default_views() {
     5 => 0,
   );
   $handler->display->display_options['filters']['created_1']['is_grouped'] = TRUE;
-  $handler->display->display_options['filters']['created_1']['group_info']['label'] = 'Date';
+  $handler->display->display_options['filters']['created_1']['group_info']['label'] = 'Kuupäev';
   $handler->display->display_options['filters']['created_1']['group_info']['identifier'] = 'date';
   $handler->display->display_options['filters']['created_1']['group_info']['widget'] = 'radios';
   $handler->display->display_options['filters']['created_1']['group_info']['group_items'] = array(

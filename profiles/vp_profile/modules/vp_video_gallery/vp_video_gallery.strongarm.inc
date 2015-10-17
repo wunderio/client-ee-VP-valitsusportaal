@@ -13,6 +13,13 @@ function vp_video_gallery_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'additional_settings__active_tab_youtube_video';
+  $strongarm->value = 'edit-xmlsitemap';
+  $export['additional_settings__active_tab_youtube_video'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'comment_anonymous_youtube_video';
   $strongarm->value = 0;
   $export['comment_anonymous_youtube_video'] = $strongarm;
@@ -58,6 +65,27 @@ function vp_video_gallery_strongarm() {
   $strongarm->name = 'comment_youtube_video';
   $strongarm->value = '0';
   $export['comment_youtube_video'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_enable_revisions_page_node_youtube_video';
+  $strongarm->value = 1;
+  $export['diff_enable_revisions_page_node_youtube_video'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_show_preview_changes_node_youtube_video';
+  $strongarm->value = 1;
+  $export['diff_show_preview_changes_node_youtube_video'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_view_mode_preview_node_youtube_video';
+  $strongarm->value = 'full';
+  $export['diff_view_mode_preview_node_youtube_video'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -122,23 +150,9 @@ function vp_video_gallery_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'i18n_node_extended_youtube_video';
-  $strongarm->value = 1;
-  $export['i18n_node_extended_youtube_video'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'i18n_node_options_youtube_video';
-  $strongarm->value = array();
-  $export['i18n_node_options_youtube_video'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'i18n_sync_node_type_youtube_video';
-  $strongarm->value = array();
-  $export['i18n_sync_node_type_youtube_video'] = $strongarm;
+  $strongarm->name = 'import_video_stream_youtube_url';
+  $strongarm->value = 'http://www.youtube.com/watch?v=MD9aOna96T4';
+  $export['import_video_stream_youtube_url'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
