@@ -2792,6 +2792,16 @@ td {
       .field-name-field-cover-image img {
         width: 100%; } }
 
+article footer.submitted {
+  color: #ffffff;
+  margin-bottom: 1em; }
+  article footer.submitted span[property="dc:date dc:created"] {
+    color: #000;
+    font-size: 0.9em; }
+
+.submitted .username {
+  display: none; }
+
 .block--exp-contact-search-page .form-item-name {
   margin-bottom: 10px; }
 
