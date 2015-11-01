@@ -1,0 +1,28 @@
+
+
+
+@if $layout == global {
+  article footer.submitted {
+    color: #ffffff;
+    margin-bottom: 1em;
+
+    span[property="dc:date dc:created"] {
+      color: #000;
+      font-size: 0.9em;
+    }
+  }
+  
+  .submitted .username {
+    display: none;
+  }
+}
+
+
+
+@if $layout == default {
+}
+
+
+
+@if $layout == desktop {
+}
