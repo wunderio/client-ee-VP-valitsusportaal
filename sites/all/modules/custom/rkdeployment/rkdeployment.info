@@ -1,5 +1,6 @@
 name = Riigikantselei Deployment
 description = Code to enable and support automatic deployment and enabling/disabling of modules/features.
+package = Riigikantselei
 core = 7.x
 version = "7.x-1.0"
 
