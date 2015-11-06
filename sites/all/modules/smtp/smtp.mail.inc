@@ -381,7 +381,7 @@ class SmtpMailSystem implements MailSystemInterface {
                 // Clean up the text.
                 $body_part2 = trim($this->_remove_headers(trim($body_part2)));
                 // Check whether the encoding is base64, and if so, decode it.
-                if (drupal_strtolower($body_part2_encoding) == 'base64') {
+                if (trim(drupal_strtolower($body_part2_encoding)) == 'base64') {
                   // Include it as part of the mail object.
                   $mailer->Body = base64_decode($body_part2);
                   // Ensure the whole message is recoded in the base64 format.
