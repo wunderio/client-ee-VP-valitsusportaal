@@ -1,5 +1,7 @@
 <?php
 global $language;
+// Ei taha osakonna kirjeldus tabelite <th> ridadesse.
+unset($header['description_i18n']);
 if ($language->language == 'et') {
   unset($header['field_position_in_english']);
   unset($header['field_position_in_russian']);
@@ -29,9 +31,12 @@ foreach ($rows as &$row) {
 ?>
 <?php if (!empty($title) || !empty($caption)) {
   $first = reset($result);
-  $term = taxonomy_get_parents_all($first ->taxonomy_term_data_field_data_field_department_tid);
+  $term = taxonomy_get_parents_all($first->taxonomy_term_data_field_data_field_department_tid);
   $count = count($term) + 1;
-  print '<h'.$count.'>'.$caption . $title.'</h'.$count.'>';
+  print '<h'.$count.' class="kontakt-h' . $count . '">'. $caption . $title .'</h'.$count.'>';
+  if (variable_get('rk_abi_display_department_description', 0) === 1):
+    print '<span class="osakond-subtekst">' . $row['description_i18n'] . '</span>';
+  endif;
 } ?>
 
 <?php 
@@ -55,6 +60,12 @@ foreach ($rows as &$row) {
   <tbody>
     <?php foreach ($rows as $row_count => &$row): ?>
       <tr <?php if ($row_classes[$row_count]) { print 'class="' . implode(' ', $row_classes[$row_count]) .'"';  } ?>>
+        <?php
+          if (isset($row['description_i18n'])):
+            // Selle kasutasime ainult osakonna pealkirja all.
+            unset($row['description_i18n']);
+          endif;
+        ?>
         <?php foreach ($row as $field => $content): ?>
           <?php //end($row); ?>
               <td <?php if ($field_classes[$field][$row_count]) { print 'class="' . $field_classes[$field][$row_count] . ( $field === key($header) ?  ' last' : '' ) . '" '; } ?><?php print drupal_attributes($field_attributes[$field][$row_count]); ?>>                

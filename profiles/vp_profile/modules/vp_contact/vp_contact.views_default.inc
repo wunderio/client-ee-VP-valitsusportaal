@@ -369,6 +369,13 @@ function vp_contact_views_default_views() {
   $handler->display->display_options['fields']['name_i18n_1']['label'] = '';
   $handler->display->display_options['fields']['name_i18n_1']['exclude'] = TRUE;
   $handler->display->display_options['fields']['name_i18n_1']['element_label_colon'] = FALSE;
+  /* Field: Taxonomy term: Term description (translated) */
+  $handler->display->display_options['fields']['description_i18n']['id'] = 'description_i18n';
+  $handler->display->display_options['fields']['description_i18n']['table'] = 'taxonomy_term_data';
+  $handler->display->display_options['fields']['description_i18n']['field'] = 'description_i18n';
+  $handler->display->display_options['fields']['description_i18n']['relationship'] = 'field_department_tid';
+  $handler->display->display_options['fields']['description_i18n']['label'] = '';
+  $handler->display->display_options['fields']['description_i18n']['element_label_colon'] = FALSE;
   /* Field: Content: Nid */
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
   $handler->display->display_options['fields']['nid']['table'] = 'node';

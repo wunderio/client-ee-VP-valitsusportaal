@@ -5,7 +5,10 @@ Drupal.behaviors.geo_filter = Drupal.behaviors.geo_filter || {
     // update a tags containing mailto addresses
     $('a[href]').each(function(i) {
       var href = $(this).attr('href');
-      var address = href.replace(/.*contact\/([a-z0-9._%-]+)\/([a-z0-9._%-]+)\/([a-z.]+)/i,'$1' + '@' + '$2' + '.' + '$3');
+      // Hack alert! I put "esto" into "contact" = conestotact.
+      // Original "contact" in regexp screws with VP /contact view links.
+      // It makes them all into mailto links in Views UI. mm.
+      var address = href.replace(/.*conestotact\/([a-z0-9._%-]+)\/([a-z0-9._%-]+)\/([a-z.]+)/i,'$1' + '@' + '$2' + '.' + '$3');
       if (href != address) {
         $(this).attr('processed', 'processed');
         $(this).attr('href', 'mailto:' + address);

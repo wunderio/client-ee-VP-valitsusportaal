@@ -347,7 +347,14 @@ function rk_abi_settings($form, &$form_state) {
     '#title' => t('Obfuscate Contact Email'),
     '#default_value' => variable_get('rk_abi_contact_email_obfuscate', 1),
     '#description' => t('Hide contact page email addresses from bots.'),
-  );  
+  );
+
+  $form['rk_abi_contact_options']['rk_abi_display_department_description'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Display Department Description'),
+    '#default_value' => variable_get('rk_abi_display_department_description', 0),
+    '#description' => t('Each Department taxonomy term can have a description and we can choose to show or hide it on the contact page, just below each Department heading.'),
+  );
 
   // Find all newsletters and build logo settings for them.
   $vocab = taxonomy_vocabulary_machine_name_load('department');
