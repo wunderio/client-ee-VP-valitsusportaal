@@ -117,6 +117,11 @@ nav.comment-links {
   margin: 0;
 }
 
+/* VM country rep node edit text areas */
+body.page-node-edit.node-type-country-and-representations table.cke_editor tr td.cke_contents {
+  height: 400px !important;
+}
+
 
 /* Media queries */
 @media screen and (min-device-width: 1024px) {
