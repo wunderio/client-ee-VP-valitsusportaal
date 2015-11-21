@@ -66,8 +66,12 @@ function vp_search_block_view($delta = '') {
           // Configured to block flooding of our search. mm. 19feb15.
           if (variable_get('rk_abi_limit_search_flood') === 1) {
 
+            // Default check flag to TRUE.
+            $check_ddos = TRUE;
             if (!isset($_SESSION)) {
               session_start();
+              // We do not have session, do not run check the first time.
+              $check_ddos = FALSE;
             }
             $uri = md5($_SERVER['REQUEST_URI']);
             $exp = variable_get('rk_abi_minimum_seconds_between_searches', 3);
@@ -77,10 +81,10 @@ function vp_search_block_view($delta = '') {
             }
 
             list($_uri, $_exp) = explode('|', $_SESSION['ddos']);
-            if ($_uri == $uri && time() - $_exp < $exp) {              
+            if ($check_ddos && $_uri == $uri && time() - $_exp < $exp) {
                 watchdog('vp_search', t('Suspicious search frequency.<ul><li>$_SERVER[REMOTE_ADDR] => :ip</li><li> $_SERVER[REQUEST_URI] => :uri</li></ul>', array(':ip' => $_SERVER['REMOTE_ADDR'], ':uri' => $_SERVER['REQUEST_URI'])));
                 header('HTTP/1.1 503 Service Unavailable');
-                die('Otsingu sagedus piiratud.');
+                die('<h1>Otsingu sagedus piiratud.</h1><ul><li><a href="javascript:history.back();">Tagasi viimasele lehele</a></li><li><a href="/">Avalehele</a></li></ul>');
             }
 
             // Save last request
