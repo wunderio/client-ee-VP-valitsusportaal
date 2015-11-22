@@ -914,7 +914,7 @@ function vp_theme_preprocess_simplenews_newsletter_body(&$vars) {
   $vars['vp_theme_newsletter_files'] = $files;
 
   // Check body and make relative file links absolute.
-  // This is a fix for conflict with locale module locale_language_url_rewrite_url
+  // Fix for conflict with locale module locale_language_url_rewrite_url.
   // Where the language prefix was incorrectly being put into file paths.
   if (isset($vars['build']['#node']->body['und'][0]['value'])) {
     // Add post_render function to clean paths to files.
@@ -925,7 +925,9 @@ function vp_theme_preprocess_simplenews_newsletter_body(&$vars) {
 
 /**
  * Make sure paths to files are correct.
+ *
  * DOMDocument pinched from linkmeta module.
+ *
  * @param $children
  *   string - $elements['#children'] from drupal_render.
  * @param $elements
@@ -942,12 +944,28 @@ function vp_theme_newsletter_clean_link_path($children, $elements) {
     $dom->loadHTML($children);
     // $dom->encoding = 'UTF-8';
 
+    global $base_url;
     $a_tags = $dom->getElementsByTagName('a');
     foreach ($a_tags as $a) {
       $url = $a->getAttribute('href');
       // Look for different kinds of link extensions.
       $current_url = pathinfo(strtok($url, '?'));
       $extension = '';
+
+      // URL alias.
+      $href = $a->getAttribute('href');
+
+      // Make relative links absolute. Do not break mailto links.
+      if (substr($href, 0, 4) != strtolower('http')
+          && substr($href, 0, 6) != strtolower('mailto')) {
+        // Build absolute url.
+        $href = $base_url . $href;
+      }
+
+      // Make newsletter href absolute.
+      $a->setAttribute('href', $href);
+
+      // Handle links to actual files.
       // @todo. Check that file extension is amongst allowed file extensions?
       if (isset($current_url['extension']) 
           && isset($current_url['dirname']) 
@@ -1007,5 +1025,3 @@ function vp_theme_delta_blocks_logo($variables) {
     return '<div class="logo-img">' . $image . '</div>';
   }
 }
-
-
