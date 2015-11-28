@@ -1,7 +1,9 @@
 <?php
 global $language;
 // Ei taha osakonna kirjeldus tabelite <th> ridadesse.
-unset($header['description_i18n']);
+if (isset($header['description_i18n'])):
+  unset($header['description_i18n']);
+endif;
 if ($language->language == 'et') {
   unset($header['field_position_in_english']);
   unset($header['field_position_in_russian']);
@@ -34,7 +36,7 @@ foreach ($rows as &$row) {
   $term = taxonomy_get_parents_all($first->taxonomy_term_data_field_data_field_department_tid);
   $count = count($term) + 1;
   print '<h'.$count.' class="kontakt-h' . $count . '">'. $caption . $title .'</h'.$count.'>';
-  if (variable_get('rk_abi_display_department_description', 0) === 1):
+  if (variable_get('rk_abi_display_department_description', 0) === 1 && isset($row['description_i18n'])):
     print '<span class="osakond-subtekst">' . $row['description_i18n'] . '</span>';
   endif;
 } ?>
