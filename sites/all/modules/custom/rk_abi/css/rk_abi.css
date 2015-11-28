@@ -123,6 +123,12 @@ body.page-node-edit.node-type-country-and-representations table.cke_editor tr td
   height: 400px !important;
 }
 
+/* Suured ikoonid mobiilvaates kuna teises kohas on max-width: 100% reegel. */
+.node-type-country-and-representations .field-name-field-4r-soovitused img {
+  height: 13px !important;
+  width: 13px !important;
+}
+
 
 /* Media queries */
 @media screen and (min-device-width: 1024px) {
