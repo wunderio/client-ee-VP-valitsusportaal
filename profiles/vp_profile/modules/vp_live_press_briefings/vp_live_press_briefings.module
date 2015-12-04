@@ -135,7 +135,7 @@ function vp_live_press_briefings_block_view($delta = '') {
 
         $block['content'] .= '<div class="import-video-stream-video-wrap livestream clearfix">'.
             '<div id="import-video-stream-live"></div>'.
-            '<div class="aside">' . '<a href="'.variable_get('import_video_stream_stream_url').'" class="import-video-stream-live"><img alt="" src="'.$base_url.'/'.drupal_get_path('module', 'vp_live_press_briefings').'/video.png" /></a></div>' .
+            '<div class="aside">' . '<a href="'.variable_get('import_video_stream_stream_url').'" class="import-video-stream-live"><img alt="' . t('Most recent press conference') . '" src="'.$base_url.'/'.drupal_get_path('module', 'vp_live_press_briefings').'/video.png" /></a></div>' .
             '<div class="text">' . t('LIVE').'!<br />'.t('Watch the press conference as a live stream.') . '</div><div class="mobiillink"><a href="http://meediaveeb.valitsus.ee/show.php">' . t('Watch live press conference') . '</a></div>' .
           '</div>'
         ;
@@ -164,7 +164,7 @@ function vp_live_press_briefings_block_view($delta = '') {
         });})(jQuery);</script>';
         $block['content'] .=
           '<div class="import-video-stream-video-wrap previous clearfix">'.
-            '<div class="aside"><a href="'.variable_get('import_video_stream_youtube_url').'" class="import-video-youtube-live"><img alt="" src="'.$base_url.'/'.drupal_get_path('module', 'vp_live_press_briefings').'/video.png" /></a></div>' .
+            '<div class="aside"><a href="'.variable_get('import_video_stream_youtube_url').'" class="import-video-youtube-live"><img alt="' . t('Watch the recording of the last press conference.') . '" src="'.$base_url.'/'.drupal_get_path('module', 'vp_live_press_briefings').'/video.png" /></a></div>' .
             '<div class="text">'.t('Watch the recording of the last press conference.').'</div>'.
           '</div>'
         ;
