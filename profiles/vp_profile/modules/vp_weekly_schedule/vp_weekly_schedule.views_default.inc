@@ -39,6 +39,12 @@ function vp_weekly_schedule_views_default_views() {
     'general' => array(
       'allow_secondary' => 0,
       'secondary_label' => 'Täpsemad valikud',
+      'collapsible_label' => NULL,
+      'combine_rewrite' => NULL,
+      'reset_label' => NULL,
+      'bef_filter_description' => NULL,
+      'any_label' => NULL,
+      'filter_rewrite_values' => NULL,
     ),
     'tid_i18n' => array(
       'bef_format' => 'bef_links',
@@ -50,10 +56,44 @@ function vp_weekly_schedule_views_default_views() {
         'tokens' => array(
           'available' => array(
             0 => 'global_types',
+            'secondary_label' => NULL,
+            'collapsible_label' => NULL,
+            'combine_rewrite' => NULL,
+            'reset_label' => NULL,
+            'bef_filter_description' => NULL,
+            'any_label' => NULL,
+            'filter_rewrite_values' => NULL,
           ),
+          'secondary_label' => NULL,
+          'collapsible_label' => NULL,
+          'combine_rewrite' => NULL,
+          'reset_label' => NULL,
+          'bef_filter_description' => NULL,
+          'any_label' => NULL,
+          'filter_rewrite_values' => NULL,
         ),
+        'secondary_label' => NULL,
+        'collapsible_label' => NULL,
+        'combine_rewrite' => NULL,
+        'reset_label' => NULL,
+        'any_label' => NULL,
+        'filter_rewrite_values' => NULL,
       ),
+      'secondary_label' => NULL,
+      'collapsible_label' => NULL,
+      'combine_rewrite' => NULL,
+      'reset_label' => NULL,
+      'bef_filter_description' => NULL,
+      'any_label' => NULL,
+      'filter_rewrite_values' => NULL,
     ),
+    'secondary_label' => NULL,
+    'collapsible_label' => NULL,
+    'combine_rewrite' => NULL,
+    'reset_label' => NULL,
+    'bef_filter_description' => NULL,
+    'any_label' => NULL,
+    'filter_rewrite_values' => NULL,
   );
   $handler->display->display_options['pager']['type'] = 'full';
   $handler->display->display_options['pager']['options']['items_per_page'] = '10';
@@ -177,6 +217,7 @@ function vp_weekly_schedule_views_default_views() {
   $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['field'] = 'field_weekly_schedule_date_value';
   $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['default_action'] = 'default';
   $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['exception']['title'] = 'Kõik';
+  $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['default_argument_type'] = 'date';
   $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['default_argument_skip_url'] = TRUE;
   $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['summary']['format'] = 'default_summary';
@@ -302,10 +343,29 @@ function vp_weekly_schedule_views_default_views() {
   $handler->display->display_options['fields']['body']['label'] = '';
   $handler->display->display_options['fields']['body']['element_label_colon'] = FALSE;
   $handler->display->display_options['defaults']['sorts'] = FALSE;
+  /* Sort criterion: Taxonomy term: Weight */
+  $handler->display->display_options['sorts']['weight']['id'] = 'weight';
+  $handler->display->display_options['sorts']['weight']['table'] = 'taxonomy_term_data';
+  $handler->display->display_options['sorts']['weight']['field'] = 'weight';
+  $handler->display->display_options['sorts']['weight']['relationship'] = 'term_node_tid';
   /* Sort criterion: Content: Date (field_weekly_schedule_date) */
   $handler->display->display_options['sorts']['field_weekly_schedule_date_value_1']['id'] = 'field_weekly_schedule_date_value_1';
   $handler->display->display_options['sorts']['field_weekly_schedule_date_value_1']['table'] = 'field_data_field_weekly_schedule_date';
   $handler->display->display_options['sorts']['field_weekly_schedule_date_value_1']['field'] = 'field_weekly_schedule_date_value';
+  $handler->display->display_options['defaults']['arguments'] = FALSE;
+  /* Contextual filter: Content: Date (field_weekly_schedule_date) */
+  $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['id'] = 'field_weekly_schedule_date_value';
+  $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['table'] = 'field_data_field_weekly_schedule_date';
+  $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['field'] = 'field_weekly_schedule_date_value';
+  $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['default_action'] = 'default';
+  $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['exception']['title'] = 'Kõik';
+  $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['default_argument_type'] = 'date';
+  $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['default_argument_skip_url'] = TRUE;
+  $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['year_range'] = '2000:+1';
+  $handler->display->display_options['arguments']['field_weekly_schedule_date_value']['granularity'] = 'week';
   $handler->display->display_options['path'] = 'weekly-schedule';
 
   /* Display: Andmevoog */
@@ -318,7 +378,7 @@ function vp_weekly_schedule_views_default_views() {
   $handler->display->display_options['exposed_form']['options']['sort_asc_label'] = 'Kasvav';
   $handler->display->display_options['exposed_form']['options']['sort_desc_label'] = 'Kahanev';
   $handler->display->display_options['pager']['type'] = 'some';
-  $handler->display->display_options['pager']['options']['items_per_page'] = '0';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '20';
   $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['style_plugin'] = 'rss_fields';
   $handler->display->display_options['style_options']['channel'] = array(
@@ -385,9 +445,9 @@ function vp_weekly_schedule_views_default_views() {
   $handler->display->display_options['arguments']['field_weekly_schedule_source_tid']['table'] = 'field_data_field_weekly_schedule_source';
   $handler->display->display_options['arguments']['field_weekly_schedule_source_tid']['field'] = 'field_weekly_schedule_source_tid';
   $handler->display->display_options['arguments']['field_weekly_schedule_source_tid']['default_action'] = 'default';
+  $handler->display->display_options['arguments']['field_weekly_schedule_source_tid']['exception']['title'] = 'Kõik';
   $handler->display->display_options['arguments']['field_weekly_schedule_source_tid']['default_argument_type'] = 'php';
-  $handler->display->display_options['arguments']['field_weekly_schedule_source_tid']['default_argument_options']['code'] = '$field_info = field_info_instance(\'node\', \'field_weekly_schedule_source\', \'weekly_schedule_day\');
-return $field_info[\'default_value\'][0][\'tid\'];';
+  $handler->display->display_options['arguments']['field_weekly_schedule_source_tid']['default_argument_options']['code'] = '$field_info = field_info_instance(\'node\', \'field_weekly_schedule_source\', \'weekly_schedule_day\');return $field_info[\'default_value\'][0][\'tid\'];';
   $handler->display->display_options['arguments']['field_weekly_schedule_source_tid']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['field_weekly_schedule_source_tid']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['field_weekly_schedule_source_tid']['summary_options']['items_per_page'] = '25';

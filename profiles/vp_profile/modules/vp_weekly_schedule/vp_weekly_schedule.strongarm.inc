@@ -362,5 +362,12 @@ function vp_weekly_schedule_strongarm() {
   );
   $export['xmlsitemap_settings_node_weekly_schedule_day'] = $strongarm;
 
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'date_format_eelinfo';
+  $strongarm->value = 'l, d. F Y';
+  $export['date_format_eelinfo'] = $strongarm;
+
   return $export;
 }
