@@ -23,12 +23,15 @@ function rkdeployment_install() {
  * Update 7101 enables...
  */
 function rkdeployment_update_7101() {
+  // This was added as placeholder before we had an actual update to run.
+  // By now it has likely run on most sites (doing nothing in the process).
+  // So I am leaving it empty and moving onwards and upwards to 7102.
   // module_enable(array('views', 'views_ui'));
 }
 
 /**
- * Update 7102 will also do something.
+ * Update 7102 enables features extra date module to handle date format import.
  */
-// function rkdeployment_update_7102() {
-//   module_enable(array('entity'));
-// }
+function rkdeployment_update_7102() {
+  module_enable(array('fe_date'));
+}
