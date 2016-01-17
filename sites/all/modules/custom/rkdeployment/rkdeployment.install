@@ -35,3 +35,30 @@ function rkdeployment_update_7101() {
 function rkdeployment_update_7102() {
   module_enable(array('fe_date'));
 }
+
+/**
+ * Update 7103 delete and re-add field_sap_ametikood as text field.
+ */
+function rkdeployment_update_7103() {
+  field_cache_clear();
+  field_delete_field('field_sap_ametikood');
+  $field = array(
+    'field_name' => 'field_sap_ametikood',
+    'type' => 'text',
+  );
+  field_create_field($field);
+
+  // Create the instance on the bundle.
+  $instance = array(
+    'field_name' => $field['field_name'],
+    'entity_type' => 'node',
+    'bundle' => 'contact',
+    'label' => 'SAP ametikood',
+    'required' => FALSE,
+    'settings' => array(),
+    'widget' => array(
+      'type' => 'textfield',
+    ),
+  );
+  field_create_instance($instance);
+}
