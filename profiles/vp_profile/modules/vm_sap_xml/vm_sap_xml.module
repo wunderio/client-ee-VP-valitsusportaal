@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the vm sap xml feature.
+ */
+
+include_once 'vm_sap_xml.features.inc';
