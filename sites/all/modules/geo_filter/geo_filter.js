@@ -5,10 +5,14 @@ Drupal.behaviors.geo_filter = Drupal.behaviors.geo_filter || {
     // update a tags containing mailto addresses
     $('a[href]').each(function(i) {
       var href = $(this).attr('href');
-      // Hack alert! I put "esto" into "contact" = conestotact.
-      // Original "contact" in regexp screws with VP /contact view links.
+      var address = href.replace(/.*contact\/([a-z0-9._%-]+)\/([a-z0-9._%-]+)\/([a-z.]+)/i,'$1' + '@' + '$2' + '.' + '$3');
+      // Hack alert! mm.
+      if (Drupal.settings.rk_abi.rk_abi_is_sisselogitud_vaade == 1) {
+      // For logged in users, put "esto" into "contact" = conestotact.
+      // Original "contact" in regexp screws with VP /contact View links.
       // It makes them all into mailto links in Views UI. mm.
-      var address = href.replace(/.*conestotact\/([a-z0-9._%-]+)\/([a-z0-9._%-]+)\/([a-z.]+)/i,'$1' + '@' + '$2' + '.' + '$3');
+        var address = href.replace(/.*conestotact\/([a-z0-9._%-]+)\/([a-z0-9._%-]+)\/([a-z.]+)/i,'$1' + '@' + '$2' + '.' + '$3');
+      }
       if (href != address) {
         $(this).attr('processed', 'processed');
         $(this).attr('href', 'mailto:' + address);
@@ -32,4 +36,3 @@ Drupal.behaviors.geo_filter = Drupal.behaviors.geo_filter || {
 }
 
 })(jQuery);
-

@@ -22,20 +22,18 @@ function rk_abi_init() {
 
   // Load js.
   drupal_add_js(drupal_get_path('module', 'rk_abi') . '/js/rk_abi.js', array('scope' => 'footer', 'weight' => 10));
- 
+
   // Flag if google site search ajax should go over https.
-  if (variable_get('rk_abi_gss_ssl') == 1) {
-    $rk_abi_settings = array(
-      'rk_abi_gss_ssl' => 1,
-    );
-    drupal_add_js(array('rk_abi' => $rk_abi_settings), 'setting');
-  }
-  else {
-    $rk_abi_settings = array(
-      'rk_abi_gss_ssl' => 0,
-    );
-    drupal_add_js(array('rk_abi' => $rk_abi_settings), 'setting'); 
-  }
+  $rk_abi_gss_ssl = (variable_get('rk_abi_gss_ssl') == 1) ? 1 : 0;
+  // Email obfuscator breaks Views admin links in "contact" View.
+  $is_sisselogitud_vaade = (user_is_logged_in() && arg(2) == 'views') ? 1 : 0;
+
+  $rk_abi_settings = array(
+      'rk_abi_gss_ssl' => $rk_abi_gss_ssl,
+      'rk_abi_is_sisselogitud_vaade' => $is_sisselogitud_vaade,
+  );
+
+  drupal_add_js(array('rk_abi' => $rk_abi_settings), 'setting');
 
 }
 
@@ -68,7 +66,7 @@ function rk_abi_menu() {
   // Alternate login path, in case id-kaart and mobiil-id not working.
   $items['rkabi/telliskivi'] = array(
     'title' => 'Riigikantselei Sissepääs',
-    'page callback' => 'rk_abi_alternate_login',    
+    'page callback' => 'rk_abi_alternate_login',
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
