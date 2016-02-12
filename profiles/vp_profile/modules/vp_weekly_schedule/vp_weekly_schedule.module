@@ -88,6 +88,19 @@ function vp_weekly_schedule_form_node_form_alter(&$form, &$form_state) {
   }
 }
 
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function vp_weekly_schedule_views_query_alter(&$view, &$query) {
+  if ($view->name == 'weekly_schedule') {
+    // Views bug? Views query kasutab "< Sunday", ehk Sunday ise ei kuva.
+    // Peaks olema <= lõppajaks.
+    $query->where[0]['conditions'][0]['field'] = "DATE_FORMAT(field_data_field_weekly_schedule_date.field_weekly_schedule_date_value, '%Y-%m-%d %H:%i:%s') >= :field_data_field_weekly_schedule_date_field_weekly_schedule_date_value AND DATE_FORMAT(field_data_field_weekly_schedule_date.field_weekly_schedule_date_value, '%Y-%m-%d %H:%i:%s') <= :field_data_field_weekly_schedule_date_field_weekly_schedule_date_value1";
+  }
+}
+
+
 /**
  * Helper function to get eelinfo grouped into taxonomy groupings.
  */
