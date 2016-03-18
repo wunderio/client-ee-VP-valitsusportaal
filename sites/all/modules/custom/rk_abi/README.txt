@@ -19,6 +19,6 @@ ei sobi uue saidi disainiga kokku.
 
 Security Options
 - väikesed tweak'id, mis aitavad tagada turvalisust
-
+- 
 
 
