@@ -3,7 +3,7 @@
 
 @if $layout == global or
     $layout == editor  {
-  .node .static-textblock-gray-background {
+  .node .static-textblock-gray-background, .node .static-textblock-gray-background-add-row {
     @extend %full-width-global;
     @extend %horizontal-ruler-default;
     background-color: #f7f6f1;
@@ -51,13 +51,89 @@
     .textbox-inner {
       padding: 20px 20px 30px 20px;
     }
+
+    .add-row {
+      float: right;
+      display: none;
+    }
+  }
+}
+
+@if $layout == global or
+    $layout == editor  {
+  .node .static-textblock-gray-background-new-row {
+    @extend %full-width-global;
+    position: relative;
+    z-index: 1;
+
+    &:before {
+      content: "";
+      height: 0;
+      left: 0;
+      margin-left: -35px;
+      margin-right: -35px;
+      position: absolute;
+      right: 0;
+      //top: -9px;
+      z-index: 2;
+    }
+    background-color: #f7f6f1;
+    padding: 30px 40px 15px 40px;
+
+    &:before {
+      //top: -14px;
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    h2 {
+      font-size: 30px;
+      line-height: 40px;
+      margin-bottom: 8px;
+      text-shadow: none;
+    }
+
+    h3 {
+      font-family: $font_museo700;
+      font-size: 16px;
+      text-shadow: none;
+      margin-bottom: 12px;
+    }
+
+    .container-12 {
+      margin-top: 0;
+    }
+
+    .textbox {
+      background: #fff;
+      font-size: 12px;
+      margin-bottom: 20px;
+
+      .responsive-layout-mobile & {
+        margin-left: 0;
+        margin-right: 0;
+      }
+
+      p:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    .textbox-inner {
+      padding: 20px 20px 30px 20px;
+    }
+
+    .add-row {
+      float: right;
+      display: none;
+    }
   }
 }
 
 
 
 @if $layout == editor {
-  .node .static-textblock-gray-background {
+  .node .static-textblock-gray-background, .node .static-textblock-gray-background-add-row, .node .static-textblock-gray-background-new-row {
     .container-12 {
       @extend %clearfix;
       width: 100%;
@@ -124,7 +200,9 @@
         width:98.0%;
       }
     }
-
+    .add-row {
+      display: block;
+    }
   }
 }
 
@@ -135,5 +213,21 @@
   .node .static-textblock-gray-background {
     @extend %full-width-default;
     padding: 43px 55px;
+  }
+}
+
+@if $layout == default or
+    $layout == editor {
+  .node .static-textblock-gray-background-add-row {
+    @extend %full-width-default;
+    padding: 43px 55px 0 55px;
+  }
+}
+
+@if $layout == default or
+    $layout == editor {
+  .node .static-textblock-gray-background-new-row {
+    @extend %full-width-default;
+    padding: 0 55px;
   }
 }

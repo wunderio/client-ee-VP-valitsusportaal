@@ -64,7 +64,7 @@
   margin-left: -35px;
   margin-right: -35px; }
 
-.node .static-module-3-1, .node .static-textblock-gray-background {
+.node .static-module-3-1, .node .static-textblock-gray-background, .node .static-textblock-gray-background-add-row, .node .static-textblock-gray-background-new-row {
   margin-left: -35px;
   margin-right: -35px; }
 
@@ -1535,6 +1535,12 @@ div.item-list ul.pager li.pager-ellipsis, div.item-list ul.pager li.pager-curren
 
 .node .static-textblock-gray-background {
   padding: 43px 55px; }
+
+.node .static-textblock-gray-background-add-row {
+  padding: 43px 55px 0 55px; }
+
+.node .static-textblock-gray-background-new-row {
+  padding: 0 55px; }
 
 .view-history .view-header img {
   float: right;

@@ -430,10 +430,10 @@ td {
   background-image: url(../img/40-desktop/static-module-3-1-shadow-top.png);
   height: 14px; }
 
-.static-module-3-2 {
+.static-module-3-2, .static-module-3-2-add-row, .static-module-3-2-new-row {
   padding-bottom: 60px;
   padding-top: 38px; }
-  .static-module-3-2 .col:before {
+  .static-module-3-2 .col:before, .static-module-3-2-add-row .col:before, .static-module-3-2-new-row .col:before {
     background-color: #f8f8f8;
     border-radius: 3px;
     bottom: 40px;
@@ -442,25 +442,25 @@ td {
     top: 85px;
     width: 297px;
     z-index: -1; }
-  .static-module-3-2 .col-1:before {
+  .static-module-3-2 .col-1:before, .static-module-3-2-add-row .col-1:before, .static-module-3-2-new-row .col-1:before {
     left: 0; }
-  .static-module-3-2 .col-2:before {
+  .static-module-3-2 .col-2:before, .static-module-3-2-add-row .col-2:before, .static-module-3-2-new-row .col-2:before {
     left: 317px;
     width: 296px; }
-  .static-module-3-2 .col-3:before {
+  .static-module-3-2 .col-3:before, .static-module-3-2-add-row .col-3:before, .static-module-3-2-new-row .col-3:before {
     right: 0; }
-  .static-module-3-2 .col {
+  .static-module-3-2 .col, .static-module-3-2-add-row .col, .static-module-3-2-new-row .col {
     background-color: transparent;
     float: left;
     margin-bottom: 0;
     margin-right: 18px;
     padding-top: 50px;
     width: 237px; }
-    .static-module-3-2 .col.col-1 {
+    .static-module-3-2 .col.col-1, .static-module-3-2-add-row .col.col-1, .static-module-3-2-new-row .col.col-1 {
       margin-top: 0; }
-    .static-module-3-2 .col.col-2 {
+    .static-module-3-2 .col.col-2, .static-module-3-2-add-row .col.col-2, .static-module-3-2-new-row .col.col-2 {
       width: 236px; }
-    .static-module-3-2 .col.last {
+    .static-module-3-2 .col.last, .static-module-3-2-add-row .col.last, .static-module-3-2-new-row .col.last {
       margin-right: 0; }
 
 .node .layout-9 .float-left-col-1 {

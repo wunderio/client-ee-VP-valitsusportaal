@@ -41,7 +41,7 @@ input[type="button"] {
   background: linear-gradient(to bottom, #0085b1 0%, #006a8e 100%);
   /* W3C */
   display: inline-block;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0085b1', endColorstr='#006a8e',GradientType=0 );
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0085b1', endColorstr='#006a8e',GradientType=0 );
   /* IE6-9 */
   border: 0;
   box-shadow: inset 0 2px 1px 0 rgba(255, 255, 255, 0.13), inset 0 -2px 1px 0 rgba(0, 0, 0, 0.2);
@@ -74,7 +74,7 @@ input[type="button"]:focus {
   /* Chrome,Safari4+ */
   background: linear-gradient(to bottom, #0085b2 0%, #0085b2 26%, #007ca5 100%);
   /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0085b2', endColorstr='#007ca5',GradientType=0 );
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0085b2', endColorstr='#007ca5',GradientType=0 );
   /* IE6-9 */
   box-shadow: inset 0 2px 1px 0 rgba(255, 255, 255, 0.13), inset 0 -2px 1px 0 rgba(0, 0, 0, 0.2), 0 0 8px rgba(0, 0, 0, 0.22); }
 
@@ -90,7 +90,7 @@ input[type="button"]:active {
   /* Chrome,Safari4+ */
   background: linear-gradient(to bottom, #00698c 0%, #004d67 100%);
   /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00698c', endColorstr='#004d67',GradientType=0 );
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00698c', endColorstr='#004d67',GradientType=0 );
   /* IE6-9 */
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.6); }
 
@@ -155,8 +155,8 @@ select:active,
 textarea:focus,
 textarea:active {
   border-color: #0081AC;
-  -webkit-box-shadow: #0081ac 0 0 7px, inset 0 0 20px 0 rgba(0, 0, 0, 0.15);
-  box-shadow: #0081ac 0 0 7px, inset 0 0 20px 0 rgba(0, 0, 0, 0.15);
+  -webkit-box-shadow: #0081AC 0 0 7px, inset 0 0 20px 0 rgba(0, 0, 0, 0.15);
+  box-shadow: #0081AC 0 0 7px, inset 0 0 20px 0 rgba(0, 0, 0, 0.15);
   z-index: 1; }
   button:focus.error,
   button:active.error,
@@ -266,3 +266,5 @@ optgroup {
   input[type="url"],
   input[type="week"] {
     width: 100%; } }
+
+/*# sourceMappingURL=formalize.css.map */

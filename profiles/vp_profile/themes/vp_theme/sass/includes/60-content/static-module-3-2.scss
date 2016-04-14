@@ -8,7 +8,7 @@ $static_module_3_2_col_padding_right: 30px;
 
 @if $layout == editor or
     $layout == global {
-  .static-module-3-2 {
+  .static-module-3-2, .static-module-3-2-add-row {
     @extend %clearfix;
     @extend %horizontal-ruler-global;
     padding-bottom: 30px;
@@ -41,17 +41,104 @@ $static_module_3_2_col_padding_right: 30px;
     .image {
       @include image-class-reset;
     }
+
+    .add-row {
+      float: right;
+      display: none;
+    }
+  }
+}
+
+// New added row.
+@if $layout == editor or
+    $layout == global {
+  .static-module-3-2-new-row {
+    @extend %clearfix;
+    //@extend %horizontal-ruler-global;
+    position: relative;
+    z-index: 1;
+    // End of customized horizontal-ruler-global.
+    padding-bottom: 30px;
+    padding-top: 0 !important;
+
+    h2 {
+      @include fontSize(20px);
+    }
+
+    h3 {
+      @include fontSize(16px);
+      margin-bottom: 2px;
+    }
+
+    // Real columns
+    .col {
+      background-color: #f8f8f8;
+      border-radius: 3px;
+      margin-bottom: 20px;
+      padding-bottom: 5px;
+      padding-left: $static_module_3_2_col_padding_left;
+      padding-right: $static_module_3_2_col_padding_right;
+      padding-top: 0 !important;
+      margin-top: 20px;
+
+      &.col-1 {
+        margin-top: 20px !important;
+      }
+    }
+
+    .image {
+      @include image-class-reset;
+    }
+
+    .add-row {
+      float: right;
+      display: none;
+    }
+    .col:before {
+      top: 0px !important;
+    }
   }
 }
 
 
 
 @if $layout == editor {
-  .static-module-3-2 {
+  .static-module-3-2, .static-module-3-2-add-row {
     @extend %horizontal-ruler-default;
 
     .editor & {
       width: 930px;
+    }
+
+    .add-row {
+      display: block;
+    }
+  }
+}
+
+@if $layout == editor {
+  .static-module-3-2-new-row {
+    position: relative;
+    z-index: 1;
+
+    &:before {
+      content: "";
+      height: 23px;
+      left: 0;
+      margin-left: -35px;
+      margin-right: -35px;
+      position: absolute;
+      right: 0;
+      top: -9px;
+      z-index: 2;
+    }
+
+    .editor & {
+      width: 930px;
+    }
+
+    .add-row {
+      display: block;
     }
   }
 }
@@ -60,7 +147,7 @@ $static_module_3_2_col_padding_right: 30px;
 
 @if $layout == editor or
     $layout == desktop {
-  .static-module-3-2 {
+  .static-module-3-2, .static-module-3-2-add-row, .static-module-3-2-new-row {
     // BEGIN: Make columns look equal height.
       padding-bottom: 60px;
       padding-top: 38px;

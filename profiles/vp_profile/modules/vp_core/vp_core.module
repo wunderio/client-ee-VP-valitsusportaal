@@ -265,6 +265,13 @@ function vp_core_wysiwyg_plugin($editor, $version) {
           ),
           'load' => TRUE,
         ),
+        'addrowplugin' => array(
+          'path' => drupal_get_path('module', 'vp_core') . '/ckeditor/addrowplugin',
+          'buttons' => array(
+            'addrowplugin_button' => t('Add new div row'),
+          ),
+          'load' => TRUE,
+        ),
       );
       break;
   }
