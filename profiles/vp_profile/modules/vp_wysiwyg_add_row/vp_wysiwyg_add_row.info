@@ -1,0 +1,10 @@
+name = VP wysiwyg add row
+description = New templates to wysiwyg with add row functionality.
+core = 7.x
+package = VP
+version = 7.x-1.0
+dependencies[] = features
+dependencies[] = wysiwyg_template
+features[features_api][] = api:2
+features[wysiwyg_template][] = hall_taust_3_veergu
+features[wysiwyg_template][] = static_module_3_2_add_row
