@@ -57,6 +57,12 @@
       display: none;
     }
   }
+
+  .node .static-textblock-gray-background-add-row {
+    &:before {
+      background-image: none;
+    }
+  }
 }
 
 @if $layout == global or

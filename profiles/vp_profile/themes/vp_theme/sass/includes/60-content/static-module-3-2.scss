@@ -47,6 +47,12 @@ $static_module_3_2_col_padding_right: 30px;
       display: none;
     }
   }
+
+  .static-module-3-2-add-row {
+    &:before {
+      background-image: none;
+    }
+  }
 }
 
 // New added row.

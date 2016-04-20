@@ -1953,6 +1953,9 @@ table[border='0'] td {
     float: right;
     display: none; }
 
+.static-module-3-2-add-row:before {
+  background-image: none; }
+
 .static-module-3-2-new-row {
   position: relative;
   z-index: 1;
@@ -2502,6 +2505,9 @@ h3.icon-wrap-2 .icon-cv {
   .node .static-textblock-gray-background .add-row, .node .static-textblock-gray-background-add-row .add-row {
     float: right;
     display: none; }
+
+.node .static-textblock-gray-background-add-row:before {
+  background-image: none; }
 
 .node .static-textblock-gray-background-new-row {
   position: relative;
