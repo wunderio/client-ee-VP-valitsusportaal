@@ -295,22 +295,22 @@ function high_contrast_settings_form_submit($form, &$form_state) {
  * Menu callback to enable the high contrast styles.
  */
 function high_contrast_toggle_callback() {
-  if ($_SESSION['high_contrast_activated'] == 1) {
-    high_contrast_switch(FALSE, $_GET['suunata']);
+  if (isset($_SESSION['high_contrast_activated']) && $_SESSION['high_contrast_activated'] == 1) {
+    high_contrast_switch(FALSE);
   }
   else {
-    high_contrast_switch(TRUE, $_GET['suunata']);
+    high_contrast_switch(TRUE);
   }
 }
 
 /**
  * Toggle high contrast styles and redirects the user to a destination url.
  */
-function high_contrast_switch($enable, $destination = '') {
-  $_SESSION['high_contrast_activated'] = $enable ? 1 : 0;
-
-  if (empty($destination)) {
-    $destination = _high_contrast_get_current_url();
+function high_contrast_switch($enable = FALSE) {
+  $destination = '';
+  $_SESSION['high_contrast_activated'] = $enable;
+  if (isset($_GET['destination'])) {
+    $destination = $_GET['destination'];
   }
   drupal_goto($destination);
 }
@@ -359,15 +359,15 @@ function theme_high_contrast_switcher($vars) {
 function theme_high_contrast_switcher_links($vars) {
   $label = t(_high_contrast_variable_get('high_contrast_switcher_label'));
 
-  $current_url = _high_contrast_get_current_url();
+  $current_url = drupal_get_destination();
 
-  if ($_SESSION['high_contrast_activated'] == 1) {
+  if (isset($_SESSION['high_contrast_activated']) && $_SESSION['high_contrast_activated'] == 1) {
     $link_high = t(_high_contrast_variable_get('high_contrast_high_label'));
     $link_normal = l(
       t(_high_contrast_variable_get('high_contrast_normal_label')),
-      'high_contrast_toggle', 
+      'high_contrast_toggle',
       array(
-        'query' => array('suunata' => $current_url),
+        'query' => array('destination' => $current_url['destination']),
         'attributes' => array('rel' => 'nofollow'),
       )
     );
@@ -376,7 +376,7 @@ function theme_high_contrast_switcher_links($vars) {
     $link_high = l(
       t(_high_contrast_variable_get('high_contrast_high_label')),
       'high_contrast_toggle', array(
-        'query' => array('suunata' => $current_url),
+        'query' => array('destination' => $current_url['destination']),
         'attributes' => array('rel' => 'nofollow'),
       )
     );
@@ -390,9 +390,9 @@ function theme_high_contrast_switcher_links($vars) {
     <div class="high_contrast_switcher high_contrast_switcher_links">
       <p>
         <span class="high_contrast_switcher_label">' . $label . '</span>' .
-        '<span class="high_contrast_switcher_high' . ($_SESSION['high_contrast_activated'] == 0 ? ' has-switcher-link' : '') . '">' . $link_high . '</span>' .
+        '<span class="high_contrast_switcher_high' . (isset($_SESSION['high_contrast_activated']) && $_SESSION['high_contrast_activated'] == 0 ? ' has-switcher-link' : '') . '">' . $link_high . '</span>' .
         '<span class="high_contrast_switcher_separator">' . $separator . '</span>' .
-        '<span class="high_contrast_switcher_normal' . ($_SESSION['high_contrast_activated'] == 1 ? ' has-switcher-link' : '') . '">' . $link_normal . '</span>' .
+        '<span class="high_contrast_switcher_normal' . (isset($_SESSION['high_contrast_activated']) && $_SESSION['high_contrast_activated'] == 1 ? ' has-switcher-link' : '') . '">' . $link_normal . '</span>' .
       '</p>
     </div>
     ';
@@ -400,6 +400,14 @@ function theme_high_contrast_switcher_links($vars) {
   return $code;
 }
 
+/**
+ * Implements hook_preprocess_html().
+ */
+function high_contrast_preprocess_html(&$vars) {
+  if (isset($_SESSION['high_contrast_activated']) && $_SESSION['high_contrast_activated'] == 1) {
+    $vars['classes_array'][] = 'high-contrast';
+  }
+}
 
 /**
  * HELPER FUNCTIONS.
@@ -437,21 +445,8 @@ function _high_contrast_get_current_css_styles() {
  * Get current url.
  */
 function _high_contrast_get_current_url() {
-  $page_url = 'http';
-  if (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on') {
-    $page_url .= 's';
-  }
-
-  $page_url .= '://';
-
-  if ($_SERVER['SERVER_PORT'] != '80') {
-    $page_url .= $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . $_SERVER['REQUEST_URI'];
-  }
-  else {
-    $page_url .= $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
-  }
-
-  return $page_url;
+  global $base_url;
+  return $base_url . $_SERVER['REQUEST_URI'];
 }
 
 /**
@@ -557,10 +552,11 @@ function _high_contrast_css_exists() {
  * @return string HTML for toggle link.
  */
 function _high_contrast_link() {
+  $destination = drupal_get_destination();
   return l(
     t('Toggle high contrast'),
     'high_contrast_toggle', array(
-      'query' => array('suunata' => _high_contrast_get_current_url()),
+      'query' => array('destination' => $destination['destination']),
       'attributes' => array(
         'class' => array('element-invisible', 'element-focusable'),
         'rel' => 'nofollow',
