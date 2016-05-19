@@ -3,9 +3,9 @@ description = "Allows users to switch to a high contrast version of the active t
 core = 7.x
 configure = admin/config/user-interface/high-contrast
 
-; Information added by Drupal.org packaging script on 2015-05-15
-version = "7.x-1.1"
+; Information added by Drupal.org packaging script on 2015-11-04
+version = "7.x-1.1+10-dev"
 core = "7.x"
 project = "high_contrast"
-datestamp = "1431708642"
+datestamp = "1446672562"
 

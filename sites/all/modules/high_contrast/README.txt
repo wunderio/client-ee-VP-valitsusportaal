@@ -14,3 +14,9 @@ Using the "High contrast" module
 
 Just install the module and press tab on your keyboard. "Toggle high contrast"
 link should appear after first or second key press.
+
+
+Developers
+----------
+
+http://jscompress.com/ was used to create the high_contrast.min.js file.
