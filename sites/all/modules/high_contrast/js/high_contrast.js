@@ -5,9 +5,11 @@
  * http://jscompress.com/ was used to create the high_contrast.min.js file.
  */
 
+var drupalHighContrast = {};
+
 (function() {
   // Create fast 'hook' into DOM where to attach the css.
-  document.write('<script type="text/javascript" id="high-contrast-css-placeholder"></script>');
+  document.write("<script type='text/javascript' id='high-contrast-css-placeholder'>\x3C/script>");
   var placeholder = document.getElementById('high-contrast-css-placeholder');
 
   /*!
@@ -130,6 +132,11 @@
     };
     document.getElementById('skip-link').appendChild(highContrastLink);
   };
+
+  // Create global methods for enabling/disabling high contrast.
+  drupalHighContrast.enableStyles = enableStyles;
+  drupalHighContrast.disableStyles = disableStyles;
+  drupalHighContrast.toggleHighContrast = toggleHighContrast;
 
   // Init on page load.
   if (isHighContrastEnabled()) {

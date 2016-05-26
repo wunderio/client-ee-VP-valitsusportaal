@@ -19,4 +19,9 @@ link should appear after first or second key press.
 Developers
 ----------
 
-http://jscompress.com/ was used to create the high_contrast.min.js file.
+http://jscompress.com/ was used to create the high_contrast.min.js file. One
+change is made manually after the compression:
+</script>
+to
+\x3C/script>
+or otherwise Chrome will crash.
