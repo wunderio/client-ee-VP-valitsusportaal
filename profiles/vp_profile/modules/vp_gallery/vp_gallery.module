@@ -49,8 +49,14 @@ function vp_gallery_node_presave($node) {
     $title = $node->title;
     foreach( $node->field_pictures[LANGUAGE_NONE] as $gallery ) {
       if ($gallery['field_picture'][LANGUAGE_NONE][0]['alt'] == NULL){
-        $gallery['entity']->field_picture[LANGUAGE_NONE][0]['alt'] = $title;
+        if ($gallery['field_title'][LANGUAGE_NONE][0]['value'] != NULL) {
+          $gallery['entity']->field_picture[LANGUAGE_NONE][0]['alt'] = $gallery['field_title'][LANGUAGE_NONE][0]['value'];
+        }
+        else {
+          $gallery['entity']->field_picture[LANGUAGE_NONE][0]['alt'] = $title;
+        }
       }
+      dpm($gallery);
     }
   }
 }
