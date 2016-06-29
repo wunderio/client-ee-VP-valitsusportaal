@@ -56,7 +56,6 @@ function vp_gallery_node_presave($node) {
           $gallery['entity']->field_picture[LANGUAGE_NONE][0]['alt'] = $title;
         }
       }
-      dpm($gallery);
     }
   }
 }
