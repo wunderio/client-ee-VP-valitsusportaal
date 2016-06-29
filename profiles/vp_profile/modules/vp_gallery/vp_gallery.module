@@ -39,3 +39,18 @@ function vp_gallery_node_view($node, $view_mode, $langcode) {
 function vp_gallery_add_retina_js() {
   drupal_add_js(drupal_get_path('module', 'vp_gallery') .'/js/retina.js', array('scope' => 'footer'));
 }
+
+/**
+ * Implements hook_node_presave().
+ * When picture don't have alt text then gallery title added to the picture alt text field.
+ */
+function vp_gallery_node_presave($node) {
+  if ($node->type == "gallery"){
+    $title = $node->title;
+    foreach( $node->field_pictures[LANGUAGE_NONE] as $gallery ) {
+      if ($gallery['field_picture'][LANGUAGE_NONE][0]['alt'] == NULL){
+        $gallery['entity']->field_picture[LANGUAGE_NONE][0]['alt'] = $title;
+      }
+    }
+  }
+}
