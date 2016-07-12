@@ -2512,7 +2512,14 @@ endif; */
   elseif ($vars['field']->field_alias == 'rk_minister_government_rk_minister_position_type_code') {
     // Ministrite info leht.
     //return _rk_valitsused_translate_amet($vars['row']->rk_minister_government_rk_minister_position_type_code) . ' (' . $vars['row']->rk_minister_government_rk_minister_ruled_start_date . ' ' . t('to') . ' ' . $vars['row']->rk_minister_government_rk_minister_ruled_end_date . ')';
-  return '<span class="ametikoht">' . _rk_valitsused_translate_amet($vars['row']->rk_minister_government_rk_minister_position_type_code) . '</span>';
+    //return '<span class="ametikoht">' . _rk_valitsused_translate_amet($vars['row']->rk_minister_government_rk_minister_position_type_code) . '</span>';
+    if(!$vars['row']->rk_minister_government_rk_minister_display_title){
+      $display_name = _rk_valitsused_translate_amet($vars['row']->rk_minister_government_rk_minister_position_type_code);
+    }
+    else {
+      $display_name = $vars['row']->rk_minister_government_rk_minister_display_title;
+    }
+    return '<span class="ametikoht">'.$display_name.'</span>';
   }
   elseif ($vars['field']->field_alias == 'rk_minister_government_rk_minister_ruled_end_date') {
     $min_start = _rk_valitsused_eesti_format_date($vars['row']->rk_minister_government_rk_minister_ruled_start_date, FALSE);
