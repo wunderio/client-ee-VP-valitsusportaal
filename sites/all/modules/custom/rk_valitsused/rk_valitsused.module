@@ -629,7 +629,7 @@ function _rk_valitsused_varasemad_valitsused_get() {
     //$query->orderBy('calculated_days', 'DESC');
   }
   else {
-    $query->orderBy('g.ruled_start_date', 'DESC');
+    $query->orderBy('g.government_number', 'DESC');
   } 
 
   $result = $query->execute();
