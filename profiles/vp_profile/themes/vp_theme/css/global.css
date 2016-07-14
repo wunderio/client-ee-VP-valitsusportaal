@@ -2795,9 +2795,11 @@ td {
 article footer.submitted {
   color: #ffffff;
   margin-bottom: 1em; }
-  article footer.submitted span[property="dc:date dc:created"] {
+  article footer.submitted span[property="dc:date dc:created"], article footer.submitted .changed-date {
     color: #000;
-    font-size: 0.9em; }
+    font-size: 0.9em;
+    position: relative;
+    z-index: 9; }
 
 .submitted .username {
   display: none; }

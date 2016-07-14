@@ -10,8 +10,9 @@
   <?php if ($display_submitted): ?>
   <!--<footer class="submitted"><?php print $date; ?></footer>-->
   <?php endif; ?>
+  <?php if ($content['field_content_type']['#bundle'] != 'article'): ?>
   <footer class="submitted"><?php print $date; ?></footer>
-
+  <?php endif; ?>
   <div<?php print $content_attributes; ?>>
     <?php
       // We hide the comments and links now so that we can render them later.
@@ -20,7 +21,13 @@
       print render($content);
     ?>
   </div>
-
+  <?php if ($content['field_content_type']['#bundle'] == 'article'): ?>
+    <?php if ($language == 'et'){ ?>
+      <footer class="submitted"><div class="changed-date"><?php print t('Last updated').": "; print format_date($changed ,'custom','j. F Y'); ?></div></footer>
+    <?php } else { ?>
+      <footer class="submitted"><div class="changed-date"><?php print t('Last updated').": "; print format_date($changed ,'custom','j F Y'); ?></div></footer>
+    <?php } ?>
+  <?php endif; ?>
   <div class="clearfix">
     <?php if ($links = render($content['links'])): ?>
       <nav class="links node-links clearfix"><?php print $links; ?></nav>

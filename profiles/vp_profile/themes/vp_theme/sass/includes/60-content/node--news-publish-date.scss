@@ -6,9 +6,11 @@
     color: #ffffff;
     margin-bottom: 1em;
 
-    span[property="dc:date dc:created"] {
+    span[property="dc:date dc:created"], .changed-date {
       color: #000;
       font-size: 0.9em;
+      position: relative;
+      z-index: 9;
     }
   }
   
