@@ -17,6 +17,11 @@
   .submitted .username {
     display: none;
   }
+
+  .node-type-article footer.submitted {
+    text-align: right;
+    font-style: italic;
+  }
 }
 
 

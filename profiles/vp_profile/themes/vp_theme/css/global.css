@@ -2804,6 +2804,10 @@ article footer.submitted {
 .submitted .username {
   display: none; }
 
+.node-type-article footer.submitted {
+  text-align: right;
+  font-style: italic; }
+
 .block--exp-contact-search-page .form-item-name {
   margin-bottom: 10px; }
 
