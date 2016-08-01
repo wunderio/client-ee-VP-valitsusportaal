@@ -72,6 +72,31 @@
         width: 200px;
       }
     }
+    @media all and (max-width: $mobile-view-max-width) {
+      thead, .field-type-image, .group_education, .group_the_functions {
+        display: none;
+      }
+      h3, .group_main_custom, .group_contact {
+        margin: 0;
+      }
+      .modal-tr {
+        display: table-row;
+      }
+      .views-field-field-position, .views-field-field-contact-phone-nr, .views-field-field-contact-e-mail, .group-main, .group_other {
+        display: none;
+      }
+      .views-field-title {
+        border: 0;
+        padding-top: 10px;
+        padding-bottom: 0;
+      }
+      .modal-tr .odd, .modal-tr .even{
+        display: block;
+      }
+      table td {
+        border-right: 0;
+      }
+    }
   }
 
 

@@ -246,8 +246,7 @@ sub {
     .node .image {
       float: none !important;
       margin-left: 0 !important;
-      margin-right: 0 !important;
-      width: 100% !important; }
+      margin-right: 0 !important; }
     .node img[style*="float: left"],
     .node .image[style*="float: left"] {
       margin-left: 0; }
