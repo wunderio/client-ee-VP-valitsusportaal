@@ -79,8 +79,8 @@
       h3, .group_main_custom, .group_contact {
         margin: 0;
       }
-      .field-type-email .field-items a {
-        white-space: nowrap;
+      .field-type-email .field-items{
+        clear: both;
       }
       .modal-tr {
         display: table-row;

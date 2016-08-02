@@ -54,6 +54,13 @@
       background: #fff;
       border-radius: 2px;
       padding: 30px;
+      .group_contact {
+        .field-type-email {
+          .field-items {
+            clear: both;
+          }
+        }
+      }
     }
   }
 }
