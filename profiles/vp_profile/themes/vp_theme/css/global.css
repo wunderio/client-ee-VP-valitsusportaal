@@ -337,7 +337,6 @@
   padding-right: 10px;
   width: 70px; }
 .view-contact-search .field-items, .ui-dialog-content-contact .field-items {
-  overflow: hidden;
   padding: 1px 0 1px 2px; }
 .view-contact-search .field-label-hidden .field-items, .ui-dialog-content-contact .field-label-hidden .field-items {
   padding-left: 0; }
@@ -2904,6 +2903,8 @@ article footer.submitted {
     display: none; }
   .view-display-id-contact_page h3, .view-display-id-contact_page .group_main_custom, .view-display-id-contact_page .group_contact {
     margin: 0; }
+  .view-display-id-contact_page .field-type-email .field-items a {
+    white-space: nowrap; }
   .view-display-id-contact_page .modal-tr {
     display: table-row; }
   .view-display-id-contact_page .views-field-field-position, .view-display-id-contact_page .views-field-field-contact-phone-nr, .view-display-id-contact_page .views-field-field-contact-e-mail, .view-display-id-contact_page .group-main, .view-display-id-contact_page .group_other {
