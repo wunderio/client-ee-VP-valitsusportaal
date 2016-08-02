@@ -2907,8 +2907,6 @@ article footer.submitted {
     display: none; }
   .view-display-id-contact_page h3, .view-display-id-contact_page .group_main_custom, .view-display-id-contact_page .group_contact {
     margin: 0; }
-  .view-display-id-contact_page .field-type-email .field-items {
-    clear: both; }
   .view-display-id-contact_page .modal-tr {
     display: table-row; }
   .view-display-id-contact_page .views-field-field-position, .view-display-id-contact_page .views-field-field-contact-phone-nr, .view-display-id-contact_page .views-field-field-contact-e-mail, .view-display-id-contact_page .group-main, .view-display-id-contact_page .group_other {
@@ -2921,6 +2919,9 @@ article footer.submitted {
     display: block; }
   .view-display-id-contact_page table td {
     border-right: 0; } }
+@media all and (max-width: 360px) {
+  .view-display-id-contact_page .field-type-email .field-items {
+    clear: both; } }
 
 .ui-dialog-content-contact .field-name-field-profile-photo {
   margin-bottom: 30px; }

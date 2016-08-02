@@ -80,7 +80,7 @@
         margin: 0;
       }
       .field-type-email .field-items{
-        clear: both;
+        //clear: both;
       }
       .modal-tr {
         display: table-row;
@@ -98,6 +98,11 @@
       }
       table td {
         border-right: 0;
+      }
+    }
+    @media all and (max-width: 360px) {
+      .field-type-email .field-items{
+        clear: both;
       }
     }
   }
