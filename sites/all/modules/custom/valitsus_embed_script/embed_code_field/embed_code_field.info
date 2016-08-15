@@ -1,0 +1,10 @@
+name = Embed code field
+description = Allow to embed scripts to article
+core = 7.x
+package = Features
+version = 7.x-1.0
+dependencies[] = features
+dependencies[] = text
+features[features_api][] = api:2
+features[field_base][] = field_embed_code
+features[field_instance][] = node-article-field_embed_code

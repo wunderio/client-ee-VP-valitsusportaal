@@ -1,0 +1,9 @@
+name = Valitsus embed script
+description = Create script embed fields to article content type.
+package = Riigikantselei
+core = 7.x
+version = "7.x-1.0"
+
+dependencies[] = ctools
+dependencies[] = features
+dependencies[] = embed_code_field

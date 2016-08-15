@@ -1,0 +1,11 @@
+<?php
+/**
+ * @file
+ * Code to support automated deployment and enabling/disabling of modules.
+ *
+ * All enabling/disabling of core, contrib, custom or feature modules should
+ * take place in this module. When taking action on a new module, add it to both
+ * rkdeployment.info as well as an update hook.
+ *
+ * More info here - http://befused.com/drupal/site-deployment-module
+ */

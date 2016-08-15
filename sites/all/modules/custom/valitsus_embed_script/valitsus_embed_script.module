@@ -1,0 +1,63 @@
+<?php
+
+/**
+ * Implements hook_theme().
+ */
+function valitsus_embed_script_theme($existing, $type, $theme, $path) {
+
+  return array(
+    'article_node_form' => array(
+      'render element' => 'form',
+      'template' => 'article-node-form',
+      // this will set to module/theme path by default:
+      'path' => drupal_get_path('module', 'valitsus_embed_script'),
+    ),
+  );
+}
+
+/**
+ * Preprocessor for theme('article_node_form').
+ */
+function template_preprocess_article_node_form(&$variables) {
+
+  drupal_add_js(drupal_get_path('module', 'valitsus_embed_script') .'/js/valitsus_embed_script.js', 'file');
+
+  // nodeformcols is an alternative for this solution.
+  if (!module_exists('nodeformcols')) {
+
+    $variables['sidebar'] = array();   // Put taxonomy fields in sidebar.
+
+    $variables['sidebar'][] = $variables['form']['field_tags'];
+    hide($variables['form']['field_tags']);
+
+    // Extract the form buttons, and put them in independent variable.
+    $variables['buttons'] = $variables['form']['actions'];
+    //hide($variables['form']['actions']);
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function valitsus_embed_script_form_alter(&$form, $form_state, $form_id) {
+  if ($form_id == "article_node_form") {
+    if (user_access('access_valitsus_embed_script')) {
+
+    }
+    else {
+      $form['field_embed_code']['#access'] = 0;
+    }
+  }
+}
+
+/**
+ * Implements hook_permission().
+ */
+function valitsus_embed_script_permission() {
+  return array(
+    'access_valitsus_embed_script' => array(
+      'title' => t('Access valitsus_embed_script'),
+      'description' => t('User who have access to embed scripts.'),
+    )
+  );
+}
