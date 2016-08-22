@@ -524,7 +524,7 @@ function vp_theme_alpha_preprocess_block(&$vars) {
 
     $last = $data['#breadcrumb'][count($data['#breadcrumb'])-1];
     if(!empty($last) && strpos($last, '<a') === FALSE && strlen($last) > 50) {
-      $data['#breadcrumb'][count($data['#breadcrumb'])-1] = substr($data['#breadcrumb'][count($data['#breadcrumb'])-1], 0, 50) . '...';
+      $data['#breadcrumb'][count($data['#breadcrumb'])-1] = mb_substr($data['#breadcrumb'][count($data['#breadcrumb'])-1], 0, 50) . '...';
     }
 
     $active_trail = array();
