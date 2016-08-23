@@ -180,14 +180,14 @@ function vp_video_gallery_views_default_views() {
   $handler->display->display_options['pager']['options']['tags']['last'] = 'viimane »';
   $handler->display->display_options['style_plugin'] = 'default';
   $handler->display->display_options['row_plugin'] = 'fields';
-  /* Väli: Sisu: Embbed Source */
+  /* Field: Content: Embbed Source */
   $handler->display->display_options['fields']['field_embbed_source']['id'] = 'field_embbed_source';
   $handler->display->display_options['fields']['field_embbed_source']['table'] = 'field_data_field_embbed_source';
   $handler->display->display_options['fields']['field_embbed_source']['field'] = 'field_embbed_source';
   $handler->display->display_options['fields']['field_embbed_source']['label'] = '';
   $handler->display->display_options['fields']['field_embbed_source']['exclude'] = TRUE;
   $handler->display->display_options['fields']['field_embbed_source']['element_label_colon'] = FALSE;
-  /* Väli: Sisu: Pealkiri */
+  /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
   $handler->display->display_options['fields']['title']['field'] = 'title';
@@ -200,7 +200,7 @@ function vp_video_gallery_views_default_views() {
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
   $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['title']['link_to_node'] = FALSE;
-  /* Väli: Sisu: Thumbnail */
+  /* Field: Content: Thumbnail */
   $handler->display->display_options['fields']['field_thumbnail']['id'] = 'field_thumbnail';
   $handler->display->display_options['fields']['field_thumbnail']['table'] = 'field_data_field_thumbnail';
   $handler->display->display_options['fields']['field_thumbnail']['field'] = 'field_thumbnail';
@@ -215,7 +215,7 @@ function vp_video_gallery_views_default_views() {
     'image_style' => '120x90',
     'image_link' => '',
   );
-  /* Väli: Sisu: Postituse kuupäev */
+  /* Field: Content: Post date */
   $handler->display->display_options['fields']['created']['id'] = 'created';
   $handler->display->display_options['fields']['created']['table'] = 'node';
   $handler->display->display_options['fields']['created']['field'] = 'created';
@@ -225,14 +225,14 @@ function vp_video_gallery_views_default_views() {
   $handler->display->display_options['fields']['created']['alter']['external'] = TRUE;
   $handler->display->display_options['fields']['created']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['created']['date_format'] = 'date';
-  /* Väli: Sisu: Description */
+  /* Field: Content: Description */
   $handler->display->display_options['fields']['field_description']['id'] = 'field_description';
   $handler->display->display_options['fields']['field_description']['table'] = 'field_data_field_description';
   $handler->display->display_options['fields']['field_description']['field'] = 'field_description';
   $handler->display->display_options['fields']['field_description']['label'] = '';
   $handler->display->display_options['fields']['field_description']['exclude'] = TRUE;
   $handler->display->display_options['fields']['field_description']['element_label_colon'] = FALSE;
-  /* Väli: Rewrite */
+  /* Field: Rewrite */
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
   $handler->display->display_options['fields']['nid']['table'] = 'node';
   $handler->display->display_options['fields']['nid']['field'] = 'nid';
@@ -249,7 +249,7 @@ function vp_video_gallery_views_default_views() {
   $handler->display->display_options['fields']['nid']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['nid']['element_wrapper_type'] = '0';
   $handler->display->display_options['fields']['nid']['element_default_classes'] = FALSE;
-  /* Lühike kriteerium: Sisu: Postituse kuupäev */
+  /* Sort criterion: Content: Post date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'node';
   $handler->display->display_options['sorts']['created']['field'] = 'created';
@@ -259,7 +259,7 @@ function vp_video_gallery_views_default_views() {
     3 => 'AND',
     2 => 'OR',
   );
-  /* Filtri kriteeriumid: Sisu: Pealkiri */
+  /* Filter criterion: Content: Title */
   $handler->display->display_options['filters']['title']['id'] = 'title';
   $handler->display->display_options['filters']['title']['table'] = 'node';
   $handler->display->display_options['filters']['title']['field'] = 'title';
@@ -277,13 +277,13 @@ function vp_video_gallery_views_default_views() {
     3 => 0,
     5 => 0,
   );
-  /* Filtri kriteeriumid: Sisu: Description (field_description) */
+  /* Filter criterion: Content: Description (field_description) */
   $handler->display->display_options['filters']['field_description_value']['id'] = 'field_description_value';
   $handler->display->display_options['filters']['field_description_value']['table'] = 'field_data_field_description';
   $handler->display->display_options['filters']['field_description_value']['field'] = 'field_description_value';
   $handler->display->display_options['filters']['field_description_value']['operator'] = 'contains';
   $handler->display->display_options['filters']['field_description_value']['group'] = 1;
-  /* Filtri kriteeriumid: Sisu: Postituse kuupäev */
+  /* Filter criterion: Content: Post date */
   $handler->display->display_options['filters']['created_1']['id'] = 'created_1';
   $handler->display->display_options['filters']['created_1']['table'] = 'node';
   $handler->display->display_options['filters']['created_1']['field'] = 'created';
@@ -345,7 +345,7 @@ function vp_video_gallery_views_default_views() {
       ),
     ),
   );
-  /* Filtri kriteeriumid: Sisu: Postituse kuupäev */
+  /* Filter criterion: Content: Post date */
   $handler->display->display_options['filters']['created']['id'] = 'created';
   $handler->display->display_options['filters']['created']['table'] = 'node';
   $handler->display->display_options['filters']['created']['field'] = 'created';
@@ -361,7 +361,7 @@ function vp_video_gallery_views_default_views() {
     3 => 0,
     5 => 0,
   );
-  /* Filtri kriteeriumid: Sisu: Liik */
+  /* Filter criterion: Content: Type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'node';
   $handler->display->display_options['filters']['type']['field'] = 'type';
@@ -369,7 +369,7 @@ function vp_video_gallery_views_default_views() {
     'youtube_video' => 'youtube_video',
   );
   $handler->display->display_options['filters']['type']['group'] = 3;
-  /* Filtri kriteeriumid: Sisu: Avaldatud */
+  /* Filter criterion: Content: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';

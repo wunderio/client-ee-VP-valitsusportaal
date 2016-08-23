@@ -151,7 +151,7 @@ function vp_video_gallery_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'import_video_stream_youtube_url';
-  $strongarm->value = 'http://www.youtube.com/watch?v=MD9aOna96T4';
+  $strongarm->value = 'https://www.youtube.com/watch?v=ChQPu9BksHw&feature=youtu.be';
   $export['import_video_stream_youtube_url'] = $strongarm;
 
   $strongarm = new stdClass();
