@@ -96,19 +96,21 @@ function alpha_invoke($type, $hook, &$vars) {
   
   // If one of the themes in the theme trail implements this hook
   // include the corresponding .inc file and call the associated function.
-  foreach (alpha_theme_trail($theme->theme) as $key => $name) {
-    $function = $key . '_alpha_' . $type . '_' . $hook;
-    
-    if (!function_exists($function)) {
-      $file = drupal_get_path('theme', $key) . '/' . $type . '/' . $type . '-' . str_replace('_', '-', $hook) . '.inc';
-      
-      if (is_file($file)) {
-        include $file;
+  if (!empty($theme)) {
+    foreach (alpha_theme_trail($theme->theme) as $key => $name) {
+      $function = $key . '_alpha_' . $type . '_' . $hook;
+
+      if (!function_exists($function)) {
+        $file = drupal_get_path('theme', $key) . '/' . $type . '/' . $type . '-' . str_replace('_', '-', $hook) . '.inc';
+
+        if (is_file($file)) {
+          include $file;
+        }
       }
-    }
-    
-    if (function_exists($function)) {
-      $function($vars);
+
+      if (function_exists($function)) {
+        $function($vars);
+      }
     }
   }
 }
