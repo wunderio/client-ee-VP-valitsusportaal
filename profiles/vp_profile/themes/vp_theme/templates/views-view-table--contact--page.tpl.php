@@ -86,7 +86,7 @@ foreach ($rows as &$row) {
                     if (strpos($content, '+') !== FALSE) {
                       $riigikood = '';
                     }
-                    else{git add
+                    else{
                       $riigikood = '(+372) ';
                     }
                   }
