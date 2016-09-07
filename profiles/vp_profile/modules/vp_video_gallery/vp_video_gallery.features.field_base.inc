@@ -10,7 +10,7 @@
 function vp_video_gallery_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'field_description'
+  // Exported field_base: 'field_description'.
   $field_bases['field_description'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -29,7 +29,7 @@ function vp_video_gallery_field_default_field_bases() {
     'type' => 'text_long',
   );
 
-  // Exported field_base: 'field_embbed_source'
+  // Exported field_base: 'field_embbed_source'.
   $field_bases['field_embbed_source'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -50,7 +50,7 @@ function vp_video_gallery_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_label'
+  // Exported field_base: 'field_label'.
   $field_bases['field_label'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -71,7 +71,7 @@ function vp_video_gallery_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_term'
+  // Exported field_base: 'field_term'.
   $field_bases['field_term'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -92,7 +92,7 @@ function vp_video_gallery_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_thumbnail'
+  // Exported field_base: 'field_thumbnail'.
   $field_bases['field_thumbnail'] = array(
     'active' => 1,
     'cardinality' => 1,

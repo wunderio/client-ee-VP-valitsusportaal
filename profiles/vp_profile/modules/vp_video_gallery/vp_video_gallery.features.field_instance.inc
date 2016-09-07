@@ -10,7 +10,7 @@
 function vp_video_gallery_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'node-youtube_video-field_description'
+  // Exported field_instance: 'node-youtube_video-field_description'.
   $field_instances['node-youtube_video-field_description'] = array(
     'bundle' => 'youtube_video',
     'default_value' => NULL,
@@ -50,7 +50,7 @@ function vp_video_gallery_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-youtube_video-field_embbed_source'
+  // Exported field_instance: 'node-youtube_video-field_embbed_source'.
   $field_instances['node-youtube_video-field_embbed_source'] = array(
     'bundle' => 'youtube_video',
     'default_value' => NULL,
@@ -89,7 +89,7 @@ function vp_video_gallery_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-youtube_video-field_label'
+  // Exported field_instance: 'node-youtube_video-field_label'.
   $field_instances['node-youtube_video-field_label'] = array(
     'bundle' => 'youtube_video',
     'default_value' => NULL,
@@ -129,7 +129,7 @@ function vp_video_gallery_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-youtube_video-field_term'
+  // Exported field_instance: 'node-youtube_video-field_term'.
   $field_instances['node-youtube_video-field_term'] = array(
     'bundle' => 'youtube_video',
     'default_value' => NULL,
@@ -169,7 +169,7 @@ function vp_video_gallery_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-youtube_video-field_thumbnail'
+  // Exported field_instance: 'node-youtube_video-field_thumbnail'.
   $field_instances['node-youtube_video-field_thumbnail'] = array(
     'bundle' => 'youtube_video',
     'deleted' => 0,
