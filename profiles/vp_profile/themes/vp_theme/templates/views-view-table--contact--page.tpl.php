@@ -82,8 +82,18 @@ foreach ($rows as &$row) {
                   if ($field == 'field_contact_e_mail' && function_exists('_rk_peida_email') && variable_get('rk_abi_contact_email_obfuscate', 1)):
                     $content = _rk_peida_email(trim($content));
                   endif;
+                  if ($language->language != 'et' && $field == 'field_contact_phone_nr' && trim($content) != ''){
+                    if (strpos($content, '+') !== FALSE) {
+                      $riigikood = '';
+                    }
+                    else{git add
+                      $riigikood = '(+372) ';
+                    }
+                  }
+                  else {
+                    $riigikood = '';
+                  }
 
-                  $riigikood = ($language->language != 'et' && $field == 'field_contact_phone_nr' && trim($content) != '') ? '(+372) ': '';
 
                   print $riigikood . $content;
                 ?>
