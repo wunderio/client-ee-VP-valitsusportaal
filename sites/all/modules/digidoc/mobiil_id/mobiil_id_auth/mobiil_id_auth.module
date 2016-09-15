@@ -127,6 +127,21 @@ function _mobiil_id_user_login_form_alter(&$form, &$form_state) {
     'id' => array('mobiil-id-link'),
   );
 
+  // Check that is cookie limitation set.
+  $imput_field_type = 'textfield';
+  $mobiil_id_auth_title = t('<h2>Enter Mobile Number</h2><small>Country code [+372] not required.</small>');
+  $mobiil_id_auth_submit_style = '';
+  $cookie_name = 'mob_auth';
+  $cookie_attempts = variable_get('digidoc_mobiil_id_auth_attempts', '3');
+  if(isset($_COOKIE[$cookie_name])) {
+    $attepts = substr($_COOKIE[$cookie_name], -1);
+    if (is_numeric($attepts) && $attepts >= $cookie_attempts) {
+      $imput_field_type = 'hidden';
+      $mobiil_id_auth_title =  t('<h3>Too many login attempts. Try again later...</h3>');
+      $mobiil_id_auth_submit_style = "display: none;";
+    }
+  }
+
   // Create a container with user's mobile number field, submit button
   // and cancel button.
   $wrapper['mobiil_id'] = array(
@@ -144,11 +159,12 @@ function _mobiil_id_user_login_form_alter(&$form, &$form_state) {
     ),
   );
   $wrapper['mobiil_id']['helptext'] = array(
-    '#markup' => t('<h2>Enter Mobile Number</h2><small>Country code [+372] not required.</small>'),
+    '#markup' => $mobiil_id_auth_title,
     '#weight' => -10,
   );
+
   $wrapper['mobiil_id']['mobiil_id_phone_number'] = array(
-    '#type' => 'textfield',
+    '#type' => $imput_field_type,
     '#attributes' => array('type' => 'tel'),
     '#title' => t('Insert your phone number to log in'),
     '#size' => 20,
@@ -168,6 +184,7 @@ function _mobiil_id_user_login_form_alter(&$form, &$form_state) {
       l(t('Sign in'), '', array(
       'attributes' => array(
         'id' => 'edit-mobiil-id-auth',
+        'style' => "$mobiil_id_auth_submit_style",
       ),
     )),
   );
@@ -197,11 +214,44 @@ function _mobiil_id_auth_handle_request($form, &$form_state) {
   $index = array_search('element-hidden', $wrapper['#attributes']['class']);
   unset($wrapper['#attributes']['class'][$index]);
 
+  // Honeypot. Hidden form fields must be empty.
+  if (!empty($values['name'])) {
+    form_error($form['name'], t('Error on login form.'));
+    return $wrapper;
+  }
+  if (!empty($values['pass'])) {
+    form_error($form['pass'], t('Error on login form.'));
+    return $wrapper;
+  }
+
   // Basic validation - cannot be empty.
   if (empty($values['mobiil_id_phone_number'])) {
     form_error($wrapper['mobiil_id_phone_number'], t('Phone number field must be filled.'));
     return $wrapper;
   }
+
+  // Set cookie for counting user attempts.
+  $cookie_name = 'mob_auth';
+  $cookie_timeout = variable_get('digidoc_mobiil_id_auth_timeout', '60');
+  $cookie_attempts = variable_get('digidoc_mobiil_id_auth_attempts', '3');
+  if(!isset($_COOKIE[$cookie_name])) {
+    // If cookie does not exist.
+    $cookie_value = md5($values['mobiil_id_phone_number']) . "1";
+    setcookie($cookie_name, $cookie_value, time() + ($cookie_timeout * 60), '/');
+  } else {
+    // Cookie exist.
+    $attepts = substr($_COOKIE[$cookie_name], -1);
+    // Cookie is with same number as login attempt.
+    if (is_numeric($attepts) && $attepts < $cookie_attempts) {
+      $attepts ++;
+    }
+    else {
+      return $wrapper;
+    }
+    $cookie_value = md5($values['mobiil_id_phone_number']) . $attepts;
+    setcookie($cookie_name, $cookie_value, time() + ($cookie_timeout * 60), '/');
+  }
+  // End of cookies section.
 
   // Start authentication process.
   if ($state == 'initialize') {
@@ -250,7 +300,9 @@ function _mobiil_id_auth_handle_request($form, &$form_state) {
         $function = $module . '_digidoc_mobiil_id_auth_success';
         $function($form_state, $status_result, $commands);
       }
-
+      // After successful login clean up cookies.
+      setcookie("mob_auth", "", 1);
+      unset ($_COOKIE['mob_auth']);
       // After successful login, page would just hang, nothing happens.
       // Using ctools to redirect so user knows they are logged in. mm.
       ctools_include('ajax');

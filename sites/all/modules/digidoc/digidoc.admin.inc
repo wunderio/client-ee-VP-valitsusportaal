@@ -72,6 +72,22 @@ function digidoc_admin_form($form, &$form_state) {
     '#default_value' => variable_get('digidoc_signer_country', 'Eesti'),
   );
 
+  $form['digidoc_mobiil_id_auth_defaults'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Default limitations for mobiil id authentification.'),
+    //'#description' => t('These are just default values, actual values can be set before every signing by implementing _digidoc_signer_alter hook.'),
+  );
+  $mobiil_id_default = &$form['digidoc_mobiil_id_auth_defaults'];
+  $mobiil_id_default['digidoc_mobiil_id_auth_timeout'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Timeout in minutes'),
+    '#default_value' => variable_get('digidoc_mobiil_id_auth_timeout', '60'),
+  );
+  $mobiil_id_default['digidoc_mobiil_id_auth_attempts'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Login attempts'),
+    '#default_value' => variable_get('digidoc_mobiil_id_auth_attempts', '3'),
+  );
   return system_settings_form($form);
 }
 

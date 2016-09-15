@@ -27,6 +27,11 @@
         $('#user-login div.form-item-pass').addClass('element-hidden');
         $('#user-login div.form-actions').addClass('element-hidden');
       });
+      if ($("input[name^='mobiil_id_phone_number']").attr('type') == 'hidden') {
+        $("#edit-mobiil-id-auth").css("display", "none");
+      } else {
+        $("#edit-mobiil-id-auth").css("display", "block");
+      }
 
       // Click event for Mobiil-ID login cancel.
       $('#mobiil-id-cancel', context).unbind('click').bind('click', function(e) {
