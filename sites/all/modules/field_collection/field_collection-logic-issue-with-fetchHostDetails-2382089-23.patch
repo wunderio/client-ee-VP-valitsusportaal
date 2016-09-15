@@ -1,0 +1,58 @@
+From f7b8639f70c99e5f139b0cbdcf974f4f8230681e Mon Sep 17 00:00:00 2001
+From: Mohammad AlQanneh <mqanneh@gmail.com>
+Date: Mon, 29 Feb 2016 23:06:09 +0200
+Subject: [PATCH] Issue #2382089: Logic issue with fetchHostDetails() causes
+ false "the host entity cannot be changed" error in updateHostEntity()
+
+---
+ field_collection.entity.inc | 8 +++++---
+ field_collection.module     | 2 +-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/field_collection.entity.inc b/field_collection.entity.inc
+index 2e8a11b..586f56c 100644
+--- a/field_collection.entity.inc
++++ b/field_collection.entity.inc
+@@ -289,7 +289,7 @@ class FieldCollectionItemEntity extends Entity {
+   }
+ 
+   protected function fetchHostDetails() {
+-    if (!isset($this->hostEntityId)) {
++    if (!isset($this->hostEntityId) || (!$this->hostEntityId && $this->hostEntityRevisionId)) {
+       if ($this->item_id) {
+         // For saved field collections, query the field data to determine the
+         // right host entity.
+@@ -302,13 +302,15 @@ class FieldCollectionItemEntity extends Entity {
+         list($this->hostEntityType, $data) = each($result);
+ 
+         if ($this->isInUse()) {
+-          $this->hostEntityId = $data ? key($data) : FALSE;
++          $data_array_keys = array_keys($data);
++          $this->hostEntityId = $data ? end($data_array_keys) : FALSE;
+           $this->hostEntityRevisionId = FALSE;
+         }
+         // If we are querying for revisions, we get the revision ID.
+         else {
++          $data_array_keys = array_keys($data);
+           $this->hostEntityId = FALSE;
+-          $this->hostEntityRevisionId = $data ? key($data) : FALSE;
++          $this->hostEntityRevisionId = $data ? end($data_array_keys) : FALSE;
+         }
+       }
+       else {
+diff --git a/field_collection.module b/field_collection.module
+index db7b859..9d1a4a6 100644
+--- a/field_collection.module
++++ b/field_collection.module
+@@ -1164,7 +1164,7 @@ function field_collection_remove_submit($form, &$form_state) {
+  *   The entity object or FALSE.
+  */
+ function field_collection_field_get_entity(&$item, $field_name = NULL) {
+-  if (isset($item['entity'])) {
++  if (isset($item['entity']) && ($item['entity']->entityType() == 'field_collection_item')) {
+     return $item['entity'];
+   }
+   elseif (isset($item['value'])) {
+-- 
+1.9.1
+
