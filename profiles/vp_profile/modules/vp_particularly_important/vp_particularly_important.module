@@ -6,6 +6,17 @@
  */
 
 /**
+ * Implements hook_permission().
+ */
+function vp_particularly_important_permission() {
+  return array(
+    'vp particularly important' => array(
+      'title' => t('Administer vp particularly important'),
+    )
+  );
+}
+
+/**
  * Implements hook_block_info().
  */
 function vp_particularly_important_block_info() {
@@ -53,7 +64,7 @@ function vp_particularly_important_menu() {
     'title' => 'Particularly Important',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('vp_particularly_important_page', NULL),
-    'access callback' => TRUE,
+    'access arguments' => array('vp particularly important'),
     'type' => MENU_NORMAL_ITEM,
   );
 
