@@ -301,8 +301,8 @@ function _mobiil_id_auth_handle_request($form, &$form_state) {
         $function($form_state, $status_result, $commands);
       }
       // After successful login clean up cookies.
-      setcookie("mob_auth", "", 1);
-      unset ($_COOKIE['mob_auth']);
+      setcookie("mob_auth", "0", 1, "/");
+      //unset ($_COOKIE['mob_auth']);
       // After successful login, page would just hang, nothing happens.
       // Using ctools to redirect so user knows they are logged in. mm.
       ctools_include('ajax');
