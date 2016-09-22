@@ -128,12 +128,13 @@ function _mobiil_id_user_login_form_alter(&$form, &$form_state) {
   );
 
   // Check that is cookie limitation set.
+  $state = isset($_POST['state']) ? trim($_POST['state']) : 'initialize';
   $imput_field_type = 'textfield';
   $mobiil_id_auth_title = t('<h2>Enter Mobile Number</h2><small>Country code [+372] not required.</small>');
   $mobiil_id_auth_submit_style = '';
   $cookie_name = 'mob_auth';
   $cookie_attempts = variable_get('digidoc_mobiil_id_auth_attempts', '3');
-  if(isset($_COOKIE[$cookie_name])) {
+  if(isset($_COOKIE[$cookie_name]) && ($state != 'finalize')) {
     $attepts = substr($_COOKIE[$cookie_name], -1);
     if (is_numeric($attepts) && $attepts >= $cookie_attempts) {
       $imput_field_type = 'hidden';
@@ -246,7 +247,9 @@ function _mobiil_id_auth_handle_request($form, &$form_state) {
       $attepts ++;
     }
     else {
-      return $wrapper;
+      if ($state != 'finalize') {
+        return $wrapper;
+      }
     }
     $cookie_value = md5($values['mobiil_id_phone_number']) . $attepts;
     setcookie($cookie_name, $cookie_value, time() + ($cookie_timeout * 60), '/');
