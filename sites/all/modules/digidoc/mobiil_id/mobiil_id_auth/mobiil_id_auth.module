@@ -396,19 +396,17 @@ function _mobiil_id_auth_initialize($phone_nr, $personal_code) {
     );
 
     $result = $client->__soapCall("MobileAuthenticate", $param);
+    if ($personal_code != $result['UserIDCode']) {
+      $_SESSION['mobiil_id']['faultstring'] = t('Personal code error.');
+      $_SESSION['mobiil_id']['status'] = FALSE;
+      return FALSE;
+    }
     if ($result['Status'] == 'OK') {
       $_SESSION['mobiil_id'] = array();
 
       // Verify the SPChallenge
       if (substr($result['Challenge'], 0, 20) == $spchallenge) {
-        if ($personal_code == $result['UserIDCode']) {
-          $_SESSION['mobiil_id']['status'] = TRUE;
-        }
-        else {
-          $_SESSION['mobiil_id']['faultstring'] = t('Personal code error.');
-          $_SESSION['mobiil_id']['status'] = FALSE;
-          return FALSE;
-        }
+        $_SESSION['mobiil_id']['status'] = TRUE;
         $_SESSION['mobiil_id']['challengeid'] = $result['ChallengeID'];
         $_SESSION['mobiil_id']['sesscode'] = $result['Sesscode'];
         $_SESSION['mobiil_id']['idcode'] = $result['UserIDCode'];
