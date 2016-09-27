@@ -248,18 +248,18 @@ function _mobiil_id_auth_handle_request($form, &$form_state) {
     setcookie($cookie_name, $cookie_value, time() + ($cookie_timeout * 60), '/');
   } else {
     // Cookie exist.
-    $attepts = substr($_COOKIE[$cookie_name], -1);
-    // Cookie is with same number as login attempt.
-    if (is_numeric($attepts) && $attepts < $cookie_attempts) {
-      $attepts ++;
-    }
-    else {
-      if ($state != 'finalize') {
+    if ($state != 'finalize') {
+      $attepts = substr($_COOKIE[$cookie_name], -1);
+      // Cookie is with same number as login attempt.
+      if (is_numeric($attepts) && $attepts < $cookie_attempts) {
+        $attepts++;
+      }
+      else {
         return $wrapper;
       }
+      $cookie_value = md5($values['mobiil_id_phone_number']) . $attepts;
+      setcookie($cookie_name, $cookie_value, time() + ($cookie_timeout * 60), '/');
     }
-    $cookie_value = md5($values['mobiil_id_phone_number']) . $attepts;
-    setcookie($cookie_name, $cookie_value, time() + ($cookie_timeout * 60), '/');
   }
   // End of cookies section.
 
