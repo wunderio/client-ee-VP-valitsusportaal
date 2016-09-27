@@ -385,7 +385,7 @@ function _mobiil_id_auth_initialize($phone_nr, $personal_code) {
     }
 
     $param = array(
-      'IDCode' => '',
+      'IDCode' => $personal_code,
       'Country' => 'EE',
       'PhoneNo' => $phone_nr,
       'Language' => $mobiil_id_language,
@@ -396,11 +396,6 @@ function _mobiil_id_auth_initialize($phone_nr, $personal_code) {
     );
 
     $result = $client->__soapCall("MobileAuthenticate", $param);
-    if ($personal_code != $result['UserIDCode']) {
-      $_SESSION['mobiil_id']['faultstring'] = t('Personal code error.');
-      $_SESSION['mobiil_id']['status'] = FALSE;
-      return FALSE;
-    }
     if ($result['Status'] == 'OK') {
       $_SESSION['mobiil_id'] = array();
 
