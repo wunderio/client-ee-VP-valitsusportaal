@@ -130,7 +130,7 @@ function _mobiil_id_user_login_form_alter(&$form, &$form_state) {
   // Check that is cookie limitation set.
   $state = isset($_POST['state']) ? trim($_POST['state']) : 'initialize';
   $imput_field_type = 'textfield';
-  $mobiil_id_auth_title = t('<h2>Enter Mobile Number</h2><small>Country code [+372] not required.</small>');
+  $mobiil_id_auth_title = t('<h2></h2><small>Country code [+372] not required.</small>');
   $mobiil_id_auth_submit_style = '';
   $cookie_name = 'mob_auth';
   $cookie_attempts = variable_get('digidoc_mobiil_id_auth_attempts', '3');
