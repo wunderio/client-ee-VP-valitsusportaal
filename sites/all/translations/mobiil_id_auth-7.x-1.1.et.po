@@ -1,0 +1,68 @@
+# Estonian translation of Mobiil-ID Authentication (7.x-1.1)
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mobiil-ID Authentication (7.x-1.1)\n"
+"POT-Creation-Date: 2016-09-28 15:22+0300\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Language-Team: Estonian\n"
+"MIME-Version: 1.1\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+
+#: mobiil_id_auth.module:126
+msgid "Log in using Mobiil-ID"
+msgstr "Logi sisse kasutades Mobiil-ID"
+
+#: mobiil_id_auth.module:133
+msgid "<h2></h2><small>Country code [+372] not required.</small>"
+msgstr "<h2>rokib sajaga</h2><small>Riigikood [+372] ei ole kohustuslik.</small>"
+
+#: mobiil_id_auth.module:141
+msgid "<h3>Too many login attempts. Try again later...</h3>"
+msgstr "<h3>Liiga palju ebaõnnestunud sisselogimise katseid. Palun proovige hiljem uuesti.</h3>"
+
+#: mobiil_id_auth.module:169
+msgid "Personal code"
+msgstr "Isikukood"
+
+#: mobiil_id_auth.module:170
+msgid "Insert your personal code to log in"
+msgstr "Sisenemiseks siseta oma isikukood "
+
+#: mobiil_id_auth.module:178
+msgid "Phone number"
+msgstr "Telefoni number"
+
+#: mobiil_id_auth.module:179
+msgid "Insert your phone number to log in"
+msgstr "Sisenemiseks sisesta oma telefoni number"
+
+#: mobiil_id_auth.module:184
+msgid "What is Mobiil-ID?"
+msgstr "Mis on Mobiil-ID?"
+
+#: mobiil_id_auth.module:194
+msgid "Sign in"
+msgstr "Logi sisse"
+
+#: mobiil_id_auth.module:202
+msgid "Cancel Mobiil-ID login"
+msgstr "Tagasi"
+
+#: mobiil_id_auth.module:229;236
+msgid "Wrong personal code or mobile phone number."
+msgstr "Vale isikukood või mobiiltelefoni number."
+
+#: mobiil_id_auth.module:491
+msgid "Cannot login. User account not active."
+msgstr "Sisse logimine ebaõnnestus. Kasutajakonto ei ole aktiveeritud."
+
+msgid "Authentication cancelled!"
+msgstr "Autentimine peatatud!"
+
+msgid "Follow the instructions on your phone. Before entering your PIN code make sure the verification code given here matches the one on your phone screen. After successful login you will be automatically redirected to the next page."
+msgstr "Sõnum on edastatakse Teie telefonile. Kontrollige, et näete mobiiltelefoni ekraanil täpselt sama kontrollkoodi. Seejärel sisestage Mobiil-ID PIN 1 kood."
+
