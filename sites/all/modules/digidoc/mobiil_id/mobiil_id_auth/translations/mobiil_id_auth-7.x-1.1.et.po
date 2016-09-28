@@ -18,7 +18,7 @@ msgstr "Logi sisse kasutades Mobiil-ID"
 
 #: mobiil_id_auth.module:133
 msgid "<h2></h2><small>Country code [+372] not required.</small>"
-msgstr "<h2>rokib sajaga</h2><small>Riigikood [+372] ei ole kohustuslik.</small>"
+msgstr "<h2></h2><small>Riigikood [+372] ei ole kohustuslik.</small>"
 
 #: mobiil_id_auth.module:141
 msgid "<h3>Too many login attempts. Try again later...</h3>"

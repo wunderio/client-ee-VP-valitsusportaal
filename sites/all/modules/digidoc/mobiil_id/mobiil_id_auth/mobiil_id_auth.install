@@ -1,0 +1,24 @@
+<?php
+/**
+* Import translations file.
+*/
+function mobiil_id_auth_update_7100() {
+  _mobiil_id_auth_import_po('mobiil_id_auth-7.x-1.1.et.po');
+}
+
+function _mobiil_id_auth_import_po($file) {
+  try {
+    // Full filepath of translation.
+    $filepath = DRUPAL_ROOT . '/' . drupal_get_path('module', 'mobiil_id_auth') . '/translations/' . $file;
+    // Copy file to the public folder.
+    // _locale_import_po() can't work with the file directly.
+    $contents = file_get_contents($filepath);
+    $random = md5($filepath) . rand(1000000000, 9999999999);
+    $file = file_save_data($contents, 'public://po-import' . $random . '.po');
+    _locale_import_po($file, 'et', LOCALE_IMPORT_KEEP, 'default');
+    file_delete($file);
+  }
+  catch (Exception $e) {
+    drupal_set_message(t('Oops, could not import the translation @f. Other updates will still take place (@r).', array('@f' => $filename, '@r' => $e->getMessage())));
+  }
+}
