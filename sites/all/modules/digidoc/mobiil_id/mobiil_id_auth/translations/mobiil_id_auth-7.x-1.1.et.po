@@ -95,3 +95,27 @@ msgstr "Teie sertifikaat ei ole kehtiv."
 
 msgid "Mobiil-ID service has not been activate for your phone number. To activate the service visit !link."
 msgstr "Mobiil-ID teenus ei ole teie telefoninumbril aktiveeritud. Aktiveerimiseks külastage aadressi !link."
+
+msgid "Authentication cancelled!"
+msgstr "Autentimine peatatud."
+
+msgid "Signature is not valid!"
+msgstr "Allkiri ei ole kehtiv."
+
+msgid "Authentication has expired!"
+msgstr "Autentimisprotsess on aegunud"
+
+msgid "Mobiil-ID service is unavailable at the moment!"
+msgstr "Mobiil-ID teenus ei ole hetkel saadaval."
+
+msgid "Phone is not reachable!"
+msgstr "Telefon ei ole kättesaadav."
+
+msgid "Could not send the authentication message to the phone!"
+msgstr "Sõnumit ei olnud võimalik mobiiltelefonile edastada."
+
+msgid "SIM card error!"
+msgstr "Viga SIm kaardiga."
+
+msgid "Technical error of Mobiil-ID service!"
+msgstr "Tehniline viga Mobiil-ID teenuses."
