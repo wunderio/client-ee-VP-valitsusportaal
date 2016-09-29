@@ -419,7 +419,7 @@ function _mobiil_id_auth_initialize($phone_nr, $personal_code) {
     $_SESSION['mobiil_id'] = array();
     $_SESSION['mobiil_id']['faultstring'] = $e->getMessage();
     $_SESSION['mobiil_id']['status'] = FALSE;
-    $error_message = _mobiil_id_get_error_message($e->getMessage());
+    $error_message = $e->getMessage() . " - " . _mobiil_id_get_error_message($e->getMessage());
     watchdog('mobiil_id_auth', $error_message, NULL, WATCHDOG_ERROR);
 
     return FALSE;
