@@ -273,7 +273,9 @@ function _mobiil_id_auth_handle_request($form, &$form_state) {
       if (isset($mobiil_id['faultstring'])) {
         $error = $mobiil_id['faultstring'];
         if (is_numeric($error)) {
+          $error_message = $error . " - " . _mobiil_id_get_error_message($error);
           $error = _mobiil_id_get_error_message($error);
+          watchdog('mobiil_id_auth', $error_message, NULL, WATCHDOG_ERROR);
         }
 
         form_error($wrapper['mobiil_id_phone_number'], $error);
@@ -419,8 +421,6 @@ function _mobiil_id_auth_initialize($phone_nr, $personal_code) {
     $_SESSION['mobiil_id'] = array();
     $_SESSION['mobiil_id']['faultstring'] = $e->getMessage();
     $_SESSION['mobiil_id']['status'] = FALSE;
-    $error_message = $e->getMessage() . " - " . _mobiil_id_get_error_message($e->getMessage());
-    watchdog('mobiil_id_auth', $error_message, NULL, WATCHDOG_ERROR);
 
     return FALSE;
   }
