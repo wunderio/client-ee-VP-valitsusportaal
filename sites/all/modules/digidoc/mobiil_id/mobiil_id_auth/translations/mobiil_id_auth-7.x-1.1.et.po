@@ -66,3 +66,32 @@ msgstr "Autentimine peatatud!"
 msgid "Follow the instructions on your phone. Before entering your PIN code make sure the verification code given here matches the one on your phone screen. After successful login you will be automatically redirected to the next page."
 msgstr "Sõnum on edastatakse Teie telefonile. Kontrollige, et näete mobiiltelefoni ekraanil täpselt sama kontrollkoodi. Seejärel sisestage Mobiil-ID PIN 1 kood."
 
+msgid "Error in Mobiil-ID service. Please contact the site administrator for further details."
+msgstr "Viga Mobiil-ID teenuses. Palun võtke ühendust veebilehe halduriga."
+
+msgid "One of the required input parameters is faulty. Please contact the site administrator for further details."
+msgstr "Sisestatud parameetrites on viga. Palun võtke ühendust veebilehe halduriga."
+
+msgid "One of the required input parameters is missing. Please contact the site administrator for further details."
+msgstr "Üks nõutud parameeter on puudu. Palun võtke ühendust veebilehe halduriga."
+
+msgid "This site has no access to Mobiil-ID service. Please contact the site administrator for further details."
+msgstr "Puudub ligipääs Mobiil-ID teenusele. Palun võtke ühendust veebilehe halduriga."
+
+msgid "Error in Mobiil-ID service. Please try again."
+msgstr "Viga Mobiil-ID teenuses. Proovige hiljem uuesti."
+
+msgid "Your certificate was not found."
+msgstr "Teie sertifikaati ei leitud."
+
+msgid "Unable to verify the validity of your certificate."
+msgstr "Ei õnnestunud tuvastada teie sertifikaati."
+
+msgid "Phone related error. Please try again or contact your service provider for further details."
+msgstr "Telefonist tingitud viga. Proovide hiljem uuesti või võtke ühendust veebilehe halduriga."
+
+msgid "Your certificate is not valid."
+msgstr "Teie sertifikaat ei ole kehtiv."
+
+msgid "Mobiil-ID service has not been activate for your phone number. To activate the service visit !link."
+msgstr "Mobiil-ID teenus ei ole teie telefoninumbril aktiveeritud. Aktiveerimiseks külastage aadressi !link."
