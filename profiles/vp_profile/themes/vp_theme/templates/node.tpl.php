@@ -10,7 +10,7 @@
   <?php if ($display_submitted): ?>
   <!--<footer class="submitted"><?php print $date; ?></footer>-->
   <?php endif; ?>
-  <?php if ($content['field_content_type']['#bundle'] != 'article'): ?>
+  <?php if (isset($content['field_content_type']['#bundle']) && $content['field_content_type']['#bundle'] != 'article'): ?>
   <footer class="submitted"><?php print $date; ?></footer>
   <?php endif; ?>
   <div<?php print $content_attributes; ?>>
@@ -21,7 +21,7 @@
       print render($content);
     ?>
   </div>
-  <?php if ($content['field_content_type']['#bundle'] == 'article'): ?>
+  <?php if (isset($content['field_content_type']['#bundle']) && $content['field_content_type']['#bundle'] == 'article'): ?>
     <?php if ($language == 'et'){ ?>
       <footer class="submitted"><div class="changed-date"><?php print t('Last updated').": "; print format_date($changed ,'custom','j. F Y'); ?></div></footer>
     <?php } else { ?>
