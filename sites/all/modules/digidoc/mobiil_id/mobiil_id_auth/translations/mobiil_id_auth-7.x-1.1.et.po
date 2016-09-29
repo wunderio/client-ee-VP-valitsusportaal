@@ -64,7 +64,7 @@ msgid "Authentication cancelled!"
 msgstr "Autentimine peatatud!"
 
 msgid "Follow the instructions on your phone. Before entering your PIN code make sure the verification code given here matches the one on your phone screen. After successful login you will be automatically redirected to the next page."
-msgstr "Sõnum on edastatakse Teie telefonile. Kontrollige, et näete mobiiltelefoni ekraanil täpselt sama kontrollkoodi. Seejärel sisestage Mobiil-ID PIN 1 kood."
+msgstr "Sõnum edastatakse Teie telefonile. Kontrollige, et näete mobiiltelefoni ekraanil täpselt sama kontrollkoodi. Seejärel sisestage Mobiil-ID PIN 1 kood."
 
 msgid "Error in Mobiil-ID service. Please contact the site administrator for further details."
 msgstr "Viga Mobiil-ID teenuses. Palun võtke ühendust veebilehe halduriga."
