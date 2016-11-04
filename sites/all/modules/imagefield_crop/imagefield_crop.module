@@ -416,12 +416,8 @@ function imagefield_crop_widget_value(&$element, &$input, $form_state) {
     // // Save crop data to the database
     // $src->imagefield_crop = array('crop' => $crop);
     // file_save($src);
-    $muutuja1 = drupal_realpath($file_to_crop->uri);
-    $muutuja2 = $crop;
-    $muutuja3 = $scale;
-    $muutuja4 = drupal_realpath($src->uri);
-    $muutuja5 = _imagefield_crop_resize(drupal_realpath($file_to_crop->uri), $crop, $scale, drupal_realpath($src->uri));
-    if (_imagefield_crop_resize(drupal_realpath($file_to_crop->uri), $crop, $scale, drupal_realpath($src->uri)) == TRUE) {
+
+    if (_imagefield_crop_resize(drupal_realpath($file_to_crop->uri), $crop, $scale, drupal_realpath($src->uri))) {
       // insert crop info for this image in imagefield_crop_info variable
       $crop['fid'] = $src->fid;
       unset($crop['changed']);
@@ -536,8 +532,7 @@ function _imagefield_crop_resize($src, $crop = NULL, $scale = NULL, $dst = NULL)
     }
 
     $result = $result && image_save($image, $dst ? $dst : $src);
-    //return $result;
-    return TRUE;
+    return $result;
   }
 
   return FALSE;
