@@ -1,0 +1,11 @@
+name = VP frontpage videos
+description = Showing imported youtube videos on frontpage
+core = 7.x
+package = VP
+version = 7.x-1.0
+dependencies[] = views
+dependencies[] = vp_video_gallery
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = frontpage_videos
+features_exclude[dependencies][ctools] = ctools

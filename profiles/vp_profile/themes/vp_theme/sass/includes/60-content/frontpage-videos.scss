@@ -1,0 +1,49 @@
+// BEGIN: FRONTPAGE VIDEOS
+
+@if $layout == global {
+  .view-frontpage-videos {
+    .views-row {
+      @extend %clearfix;
+      padding: 9px 0 8px 0;
+
+      // Align image and title side by side.
+      .views-field {
+        float: left;
+        width: 50%;
+
+        .field-content {
+          display: block;
+        }
+
+        &.views-field-field-thumbnail img  {
+          max-width: 123px;
+        }
+
+        &.views-field-title a {
+          padding-left: 20px;
+        }
+
+        &.views-field-field-description {
+          display: none;
+        }
+
+        &.views-field-created {
+          display: none;
+        }
+      }
+
+      .views-field-title {
+        a {
+          color: $color-text;
+          display: block;
+          font-size: 12px;
+          line-height: 15px;
+
+          &:hover {
+            color: $color-text-main-blue;
+          }
+        }
+      }
+    }
+  }
+}

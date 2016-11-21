@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the VP frontpage videos feature.
+ */
+
+include_once 'vp_frontpage_videos.features.inc';
