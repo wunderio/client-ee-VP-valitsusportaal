@@ -2,7 +2,7 @@
 .view-content:after,
 .views-row:after,
 .view-footer:after, .zone-portal-navigation-wrapper .language-switcher-locale-url:after,
-.zone-portal-navigation-wrapper .menu:after, .block-delta-blocks-tabs .content ul:after, .all-news:after, .block-live-press-briefings .aside:after, .block-views-2d653631c9a61c122d3bb069094a54c4 .views-row:after, #digidoc-auth-service-wrapper:after, #mobiil-id-auth-wrapper:after, .static-contact-header .location-wrap:after, .static-contact-header .contact:after, .static-module-2 .static-inner:after, .static-module-3-2:after, .static-module-3-2-add-row:after, .static-module-3-2-new-row:after, .static-module-3-3:after, #static-module-5:after, .static-footer:after {
+.zone-portal-navigation-wrapper .menu:after, .block-delta-blocks-tabs .content ul:after, .all-news:after, .block-live-press-briefings .aside:after, .view-frontpage-videos .views-row:after, .block-views-2d653631c9a61c122d3bb069094a54c4 .views-row:after, #digidoc-auth-service-wrapper:after, #mobiil-id-auth-wrapper:after, .static-contact-header .location-wrap:after, .static-contact-header .contact:after, .static-module-2 .static-inner:after, .static-module-3-2:after, .static-module-3-2-add-row:after, .static-module-3-2-new-row:after, .static-module-3-3:after, #static-module-5:after, .static-footer:after {
   content: "";
   display: table;
   clear: both; }
@@ -1842,6 +1842,29 @@ td {
   .block-live-press-briefings .goverment-session-list .view-import-video-stream-from-session .views-field-title {
     padding-left: 40px;
     padding-right: 10px; }
+
+.view-frontpage-videos .views-row {
+  padding: 9px 0 8px 0; }
+  .view-frontpage-videos .views-row .views-field {
+    float: left;
+    width: 50%; }
+    .view-frontpage-videos .views-row .views-field .field-content {
+      display: block; }
+    .view-frontpage-videos .views-row .views-field.views-field-field-thumbnail img {
+      max-width: 123px; }
+    .view-frontpage-videos .views-row .views-field.views-field-title a {
+      padding-left: 20px; }
+    .view-frontpage-videos .views-row .views-field.views-field-field-description {
+      display: none; }
+    .view-frontpage-videos .views-row .views-field.views-field-created {
+      display: none; }
+  .view-frontpage-videos .views-row .views-field-title a {
+    color: #333;
+    display: block;
+    font-size: 12px;
+    line-height: 15px; }
+    .view-frontpage-videos .views-row .views-field-title a:hover {
+      color: #00698C; }
 
 .view-display-id-galleries_page .views-row {
   float: left;
