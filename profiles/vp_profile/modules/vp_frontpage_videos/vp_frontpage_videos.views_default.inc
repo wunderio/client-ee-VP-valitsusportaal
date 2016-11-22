@@ -61,18 +61,18 @@ function vp_frontpage_videos_views_default_views() {
   $handler->display->display_options['footer']['area']['field'] = 'area';
   $handler->display->display_options['footer']['area']['label'] = 'Footer links';
   $handler->display->display_options['footer']['area']['content'] = '<div class="tabs"><ul class="tabs-inner">
-<li><?php echo l(t(\'Photo gallery\'), \'galleries\'); ?></li>
 <?php global $language; if ($language->language == \'et\') : ?><li><?php echo l(t(\'Video gallery\'), \'videos\'); ?></li><?php endif; ?>
+<li><?php echo l(t(\'Photo gallery\'), \'galleries\'); ?></li>
 </ul></div>';
   $handler->display->display_options['footer']['area']['format'] = 'php_code';
-  /* Field: Sisu: Embbed Source */
+  /* Field: Content: Embbed Source */
   $handler->display->display_options['fields']['field_embbed_source']['id'] = 'field_embbed_source';
   $handler->display->display_options['fields']['field_embbed_source']['table'] = 'field_data_field_embbed_source';
   $handler->display->display_options['fields']['field_embbed_source']['field'] = 'field_embbed_source';
   $handler->display->display_options['fields']['field_embbed_source']['label'] = '';
   $handler->display->display_options['fields']['field_embbed_source']['exclude'] = TRUE;
   $handler->display->display_options['fields']['field_embbed_source']['element_label_colon'] = FALSE;
-  /* Field: Sisu: Thumbnail */
+  /* Field: Content: Thumbnail */
   $handler->display->display_options['fields']['field_thumbnail']['id'] = 'field_thumbnail';
   $handler->display->display_options['fields']['field_thumbnail']['table'] = 'field_data_field_thumbnail';
   $handler->display->display_options['fields']['field_thumbnail']['field'] = 'field_thumbnail';
@@ -104,7 +104,7 @@ function vp_frontpage_videos_views_default_views() {
   $handler->display->display_options['fields']['title']['element_type'] = '0';
   $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['title']['link_to_node'] = FALSE;
-  /* Field: Sisu: Description */
+  /* Field: Content: Description */
   $handler->display->display_options['fields']['field_description']['id'] = 'field_description';
   $handler->display->display_options['fields']['field_description']['table'] = 'field_data_field_description';
   $handler->display->display_options['fields']['field_description']['field'] = 'field_description';
