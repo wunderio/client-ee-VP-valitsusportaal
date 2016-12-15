@@ -31,9 +31,29 @@ foreach ($rows as &$row) {
   }
 }
 ?>
+
+
+<?php
+$first = reset($result);
+$term = taxonomy_get_parents_all($first->taxonomy_term_data_field_data_field_department_tid);
+
+// If dpartment filter is used then show only filtered departments.
+if (isset($_GET['tid_with_depth'])) {
+  $departmentFilter = $_GET['tid_with_depth'];
+  $departmentFilterShow = FALSE;
+  if (in_array($term[0]->tid, $departmentFilter)) {
+    $departmentFilterShow = TRUE;
+  }
+}
+else{
+  // If no department filter set then show all.
+  $departmentFilterShow = TRUE;
+}
+
+if ($departmentFilterShow == TRUE) {
+?>
+
 <?php if (!empty($title) || !empty($caption)) {
-  $first = reset($result);
-  $term = taxonomy_get_parents_all($first->taxonomy_term_data_field_data_field_department_tid);
   $count = count($term) + 1;
   print '<h'.$count.' class="kontakt-h' . $count . '">'. $caption . $title .'</h'.$count.'>';
   if (variable_get('rk_abi_display_department_description', 0) === 1 && isset($row['description_i18n'])):
@@ -178,4 +198,6 @@ foreach ($rows as &$row) {
     <?php endforeach; ?>
   </tbody>
 </table>
-
+<?php
+}
+?>
