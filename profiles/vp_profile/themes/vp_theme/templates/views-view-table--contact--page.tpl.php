@@ -32,17 +32,20 @@ foreach ($rows as &$row) {
 }
 ?>
 
-
 <?php
 $first = reset($result);
 $term = taxonomy_get_parents_all($first->taxonomy_term_data_field_data_field_department_tid);
 
-// If dpartment filter is used then show only filtered departments.
+// If department filter is used then show only filtered departments.
 if (isset($_GET['tid_with_depth'])) {
-  $departmentFilter = $_GET['tid_with_depth'];
-  $departmentFilterShow = FALSE;
-  if (in_array($term[0]->tid, $departmentFilter)) {
-    $departmentFilterShow = TRUE;
+  foreach ($term as $termcheck) {
+    $departmentFilter = $_GET['tid_with_depth'];
+    if (in_array($termcheck->tid, $departmentFilter)) {
+      $departmentFilterShow = TRUE;
+    }
+    else {
+      $departmentFilterShow = FALSE;
+    }
   }
 }
 else{
