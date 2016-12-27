@@ -220,6 +220,16 @@ function add_facebook_meta_tags() {
       if (!empty($teaser)) {
         $description_og_meta['#attributes']['content'] = $teaser;
       }
+      elseif (!empty($node->body[LANGUAGE_NONE][0]['value'])) {
+        if($node->type === 'article') {
+          $body_value_summary = preg_replace("|<style\b[^>]*>(.*?)</style>|s", "", $node->body[LANGUAGE_NONE][0]['value']);
+          $body_value_summary = preg_replace("/\[block:.*\]/", "", $body_value_summary);
+          $body_value_summary = substr(strip_tags($body_value_summary), 0, 250);
+          $body_value_summary = substr($body_value_summary, 0, strrpos($body_value_summary, ' '));
+          $body_value_summary = trim($body_value_summary);
+          $description_og_meta['#attributes']['content'] = $body_value_summary . " ...";
+        }
+      }
     }
   } 
 
