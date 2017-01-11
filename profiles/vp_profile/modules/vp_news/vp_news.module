@@ -138,6 +138,10 @@ function vp_news_form_views_exposed_form_alter(&$form, &$form_state, $form_id) {
     global $base_url;
     global $language;
 
+    // Because of this issue 203418400731227 submit button is 'translated' like
+    // this.
+    $form['submit']['#value'] = t($form['submit']['#value']);
+
     $field_source_instance = field_info_instance('node', 'field_source', 'news');
     $form['source']['#default_value'] = $field_source_instance['default_value'][0]['tid'];
     $form['source']['#options'] = array(
