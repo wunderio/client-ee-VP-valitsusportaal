@@ -54,7 +54,7 @@ function vp_news_js_alter(&$js) {
  */
 function vp_news_views_query_alter(&$view, &$query) {
   if ($view->name == 'news_rss_feed' && isset($_GET['body']) && !empty($_GET['body'])) {
-    $query->where[2]['conditions'][1]['value'] = '%'.$_GET['body'].'%';
+    $query->where[2]['conditions'][1]['value'] = '%' . $_GET['body'] . '%';
   }
   if ($view->name == 'news') {
     if (empty($view->exposed_input['date']) || $view->exposed_input['date'] === 'All') {
@@ -73,7 +73,8 @@ function vp_news_views_query_alter(&$view, &$query) {
 
       // Force a start date if date range chosen without start date. mm.
       if ($start === FALSE) {
-        $start = strtotime('1918-02-24'); // Non-arbitrary arbitrary date;)
+        // Non-arbitrary arbitrary date;).
+        $start = strtotime('1918-02-24');
       }
       // Force an end date, if necessary. mm.
       if ($end === FALSE) {
@@ -91,7 +92,8 @@ function vp_news_views_query_alter(&$view, &$query) {
         unset($query->where[4]['conditions'][0]);
         $query->where[4]['conditions'][1]['field'] = 'node.created BETWEEN ' . $start . ' AND ' . $end;
 
-        // Adding these two since the query was not actually working without them. mm 04feb15.
+        // Adding these two since the query was not actually working without
+        // them. mm 04feb15.
         $query->where[4]['conditions'][1]['value'] = array();
         $query->where[4]['conditions'][1]['operator'] = 'formula';
 
@@ -100,10 +102,16 @@ function vp_news_views_query_alter(&$view, &$query) {
     else {
       unset($query->where[4]['conditions'][1]);
 
-      if ($view->exposed_input['date'] == 1) $min_date = '-7 days';
-      if ($view->exposed_input['date'] == 2) $min_date = '-30 days';
-      if ($view->exposed_input['date'] == 3) $min_date = '-12 months';
-      $query->where[4]['conditions'][0]['field'] = 'node.created BETWEEN '.strtotime($min_date).' AND '.REQUEST_TIME;
+      if ($view->exposed_input['date'] == 1) {
+        $min_date = '-7 days';
+      }
+      if ($view->exposed_input['date'] == 2) {
+        $min_date = '-30 days';
+      }
+      if ($view->exposed_input['date'] == 3) {
+        $min_date = '-12 months';
+      }
+      $query->where[4]['conditions'][0]['field'] = 'node.created BETWEEN ' . strtotime($min_date) . ' AND ' . REQUEST_TIME;
     }
   }
 }
@@ -120,12 +128,19 @@ function vp_news_views_pre_build(&$view) {
   }
 }
 
+/**
+ * @param $form
+ * @param $form_state
+ * @param $form_id
+ */
 function vp_news_form_views_exposed_form_alter(&$form, &$form_state, $form_id) {
   if ($form_state['view']->name == 'news') {
     global $base_url;
     global $language;
 
-    //$form['title_op']['#type'] = 'radios';
+    // Because of this issue 203418400731227 submit button is 'translated' like
+    // this.
+    $form['submit']['#value'] = t($form['submit']['#value']);
 
     $field_source_instance = field_info_instance('node', 'field_source', 'news');
     $form['source']['#default_value'] = $field_source_instance['default_value'][0]['tid'];
@@ -133,11 +148,10 @@ function vp_news_form_views_exposed_form_alter(&$form, &$form_state, $form_id) {
       $field_source_instance['default_value'][0]['tid'] => t('Search from !site', array('!site' => parse_url($base_url, PHP_URL_HOST))),
       'All' => t('Search from all Government Portal sites'),
     );
-
-  	$form['body']['#attributes']['class'][] = 'element-hidden';
+    $form['body']['#attributes']['class'][] = 'element-hidden';
     $form['body_value_op']['#attributes']['class'][] = 'element-hidden';
-  	$form['#validate'] = array_merge(array('vp_news_form_views_exposed_body'), $form['#validate']);
-    
+    $form['#validate'] = array_merge(array('vp_news_form_views_exposed_body'), $form['#validate']);
+
     if ($language->language !== 'en') {
       // Adding isset() to avoid php undefined index warnings. mm 22jan15.
       if (isset($form['#info']['filter-tid_i18n']['label'])) {
@@ -145,7 +159,7 @@ function vp_news_form_views_exposed_form_alter(&$form, &$form_state, $form_id) {
       }
       if (isset($form['#info']['filter-field_news_subject_tid_i18n']['label'])) {
         $form['#info']['filter-field_news_subject_tid_i18n']['label'] = t($form['#info']['filter-field_news_subject_tid_i18n']['label']);
-      }      
+      }
       if (isset($form['#info']['filter-date']['label'])) {
         $form['#info']['filter-date']['label'] = t($form['#info']['filter-date']['label']);
       }
@@ -153,7 +167,7 @@ function vp_news_form_views_exposed_form_alter(&$form, &$form_state, $form_id) {
         $form['#info']['filter-title']['label'] = t($form['#info']['filter-title']['label']);
       }
     }
-    
+
     // Hide empty subjects.
     if (isset($form['subject']['#options'])) {
       foreach ($form['subject']['#options'] as $tid => $title) {
@@ -173,6 +187,10 @@ function vp_news_form_views_exposed_form_alter(&$form, &$form_state, $form_id) {
   }
 }
 
+/**
+ * @param $form
+ * @param $form_state
+ */
 function vp_news_form_views_exposed_body($form, &$form_state) {
   if ($form_state['view']->name == 'news') {
     $form_state['values']['body'] = $form_state['values']['title'];
@@ -219,7 +237,7 @@ function vp_news_permission() {
   return array(
     'administer vp news' => array(
       'title' => t('Administer vp news'),
-    )
+    ),
   );
 }
 
