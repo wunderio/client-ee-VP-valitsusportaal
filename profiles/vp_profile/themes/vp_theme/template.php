@@ -207,9 +207,9 @@ function add_facebook_meta_tags() {
     // Check if node object is created. This avoids EntityMalformedException from $teaser_object node_view line.
     if ($node !== FALSE) {    
       $teaser_object = node_view($node, 'view_mode_facebook');
-      $teaser = '';
-      if (isset($teaser_object['body'][0]['#markup'])) {
-        $teaser = str_replace("\n", ' ', strip_tags($teaser_object['body'][0]['#markup']));
+      $teaser = "";
+      if (!empty($node->body[LANGUAGE_NONE][0]['summary'])){
+        $teaser = str_replace("\n", ' ', strip_tags($node->body[LANGUAGE_NONE][0]['summary']));
       }
       if ($node->type === 'news') {
         if (!empty($node->field_cover_image)) {
@@ -221,7 +221,7 @@ function add_facebook_meta_tags() {
         $description_og_meta['#attributes']['content'] = $teaser;
       }
       elseif (!empty($node->body[LANGUAGE_NONE][0]['value'])) {
-        if($node->type === 'article') {
+        if($node->type === 'article' || (empty($teaser) && $node->type === 'news')) {
           $body_value_summary = preg_replace("|<style\b[^>]*>(.*?)</style>|s", "", $node->body[LANGUAGE_NONE][0]['value']);
           $body_value_summary = preg_replace("/\[block:.*\]/", "", $body_value_summary);
           $body_value_summary = substr(strip_tags($body_value_summary), 0, 250);
