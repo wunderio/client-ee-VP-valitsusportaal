@@ -20,7 +20,9 @@
     }
 
     img {
-      width: 100%;
+      /*width: 100%;*/
+      max-height: 145px;
+      margin: 0 auto;
 
       &.normal {
         display: none;
@@ -161,8 +163,9 @@
     }
 
     img {
-      margin: 0 !important;
-      width: 100%;
+      margin: 0 auto !important;
+      /*width: 100%;*/
+      max-height: 145px;
 
       &.normal {
         display: none;
@@ -183,6 +186,7 @@
 
         .field-item {
           margin: 0;
+          height: 200px;
         }
 
         > .field-item  {
@@ -280,6 +284,7 @@
         > .field-item  {
           margin: 1.11111%;
           width: 31.74603%;
+          overflow: hidden;
 
           &.col-tablet-first {
             clear: left; // @todo: if the images allways have the same size, then clear left is overkill.

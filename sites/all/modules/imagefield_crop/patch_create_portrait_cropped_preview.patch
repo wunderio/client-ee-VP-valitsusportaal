@@ -1,0 +1,53 @@
+diff --git a/imagefield_crop/imagefield_crop.module b/imagefield_crop/imagefield_crop.module
+index 45c4a0f..e0f41ff 100644
+--- a/imagefield_crop/imagefield_crop.module
++++ b/imagefield_crop/imagefield_crop.module
+@@ -269,6 +269,17 @@ function imagefield_crop_widget_process($element, &$form_state, $form) {
+     list($res_w, $res_h) = explode('x', $widget_settings['resolution']);
+     list($crop_w, $crop_h) = explode('x', $widget_settings['croparea']);
+ 
++    // If image height is bigger then width then create portrait cropped preview.
++    $image_info = image_get_info(drupal_realpath($file_to_crop->uri));
++    $orig_image_width = $image_info['width'];
++    $orig_image_height = $image_info['height'];
++    if (($orig_image_height > $orig_image_width) && ($res_w > $res_h)) {
++      $ration = $res_w / $res_h;
++      $res_w = $res_h / $ration;
++      $ration = $crop_w / $crop_h;
++      $crop_w = $crop_h / $ration;
++    }
++
+     $element['preview'] = array(
+       '#type' => 'markup',
+       // This is used by the #process function.
+@@ -355,6 +366,15 @@ function imagefield_crop_widget_preview_process($element, &$form_state, $form) {
+     list($width, $height) = explode('x', $instance['widget']['settings']['resolution']);
+   }
+ 
++  // If image height is bigger then width then create portrait cropped preview.
++  $image_info = image_get_info(drupal_realpath($file->uri));
++  $orig_image_width = $image_info['width'];
++  $orig_image_height = $image_info['height'];
++  if (($orig_image_height > $orig_image_width) && ($width > $height)) {
++    $ration = $width / $height;
++    $width = $height / $ration;
++  }
++
+   $image_info = image_get_info(drupal_realpath($file->uri));
+   $settings = array(
+     $parent['#id'] => array(
+@@ -398,6 +418,14 @@ function imagefield_crop_widget_value(&$element, &$input, $form_state) {
+       list($scale['width'], $scale['height']) = explode('x', $instance['widget']['settings']['resolution']);
+     }
+ 
++    // If image height is bigger then width then create portrait cropped preview.
++    $orig_image_width = $input['cropinfo']['width'];
++    $orig_image_height = $input['cropinfo']['height'];
++    if (($orig_image_height > $orig_image_width) && ($scale['width'] > $scale['height'])) {
++      $ration = $scale['width'] / $scale['height'];
++      $scale['width'] = $scale['height'] / $ration;
++    }
++
+     $src = file_load($input['fid']);
+     $file_to_crop = _imagefield_crop_file_to_crop($src->fid);
+     // Copy the original aside, for future cropping.

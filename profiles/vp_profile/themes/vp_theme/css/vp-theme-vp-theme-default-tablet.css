@@ -132,7 +132,8 @@
   margin: 0; }
   .node-gallery .field-name-field-pictures.field-type-field-collection > .field-items > .field-item {
     margin: 1.11111%;
-    width: 31.74603%; }
+    width: 31.74603%;
+    overflow: hidden; }
     .node-gallery .field-name-field-pictures.field-type-field-collection > .field-items > .field-item.col-tablet-first {
       clear: left;
       margin-left: 0; }
