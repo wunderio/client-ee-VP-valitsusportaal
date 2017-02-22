@@ -1261,7 +1261,7 @@ td {
     font-family: "Roboto Condensed", sans-serif;
     text-transform: uppercase; }
     .view-id-top_news_tabs .view-footer h2 a {
-      background-color: #e6f0f4;
+      background-color: #e5f0f3;
       color: #00698C;
       display: block;
       padding: 6px 10px 4px 10px; }
@@ -1471,7 +1471,7 @@ td {
     display: block;
     padding: 10px 10px 7px; }
     .block-delta-blocks-tabs .content a:hover {
-      background: #f7f7f7; }
+      background: #f6f6f6; }
 
 .all-news {
   background-color: #F9F9F9;
@@ -1697,7 +1697,7 @@ td {
   color: #333; }
   .logged-in.page-comment-reply .block-system-main .comment-links a,
   .logged-in .comment-wrapper .comment-links a {
-    background: #e7e7e7;
+    background: #e6e6e6;
     border-radius: 3px;
     color: #00698c;
     display: block;
@@ -1707,7 +1707,7 @@ td {
     .logged-in.page-comment-reply .block-system-main .comment-links a.active, .logged-in.page-comment-reply .block-system-main .comment-links a:hover,
     .logged-in .comment-wrapper .comment-links a.active,
     .logged-in .comment-wrapper .comment-links a:hover {
-      background: #efefef; }
+      background: #eeeeee; }
 
 .logged-in .node > .clearfix > .node-links {
   display: none; }
@@ -2799,7 +2799,7 @@ td {
     background-image: none; }
 
 .field-name-field-cover-image {
-  background-color: whitesmoke;
+  background-color: #f4f4f4;
   display: inline-block;
   float: right;
   margin: 5px 0 30px 30px;
@@ -2929,7 +2929,7 @@ article footer.submitted {
   width: 90px; }
 .view-display-id-contact_page .views-field-field-contact-e-mail {
   width: 200px; }
-@media all and (max-width: 767px) {
+@media screen and (max-width: 767px) {
   .view-display-id-contact_page thead, .view-display-id-contact_page .field-type-image, .view-display-id-contact_page .group_education, .view-display-id-contact_page .group_the_functions {
     display: none; }
   .view-display-id-contact_page h3, .view-display-id-contact_page .group_main_custom, .view-display-id-contact_page .group_contact {
@@ -2946,7 +2946,7 @@ article footer.submitted {
     display: block; }
   .view-display-id-contact_page table td {
     border-right: 0; } }
-@media all and (max-width: 360px) {
+@media screen and (max-width: 360px) {
   .view-display-id-contact_page .field-type-email .field-items {
     clear: both; } }
 

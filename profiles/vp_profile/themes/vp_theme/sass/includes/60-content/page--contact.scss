@@ -72,7 +72,7 @@
         width: 200px;
       }
     }
-    @media all and (max-width: $mobile-view-max-width) {
+    @media screen and (max-width: $mobile-view-max-width) {
       thead, .field-type-image, .group_education, .group_the_functions {
         display: none;
       }
@@ -100,7 +100,7 @@
         border-right: 0;
       }
     }
-    @media all and (max-width: 360px) {
+    @media screen and (max-width: 360px) {
       .field-type-email .field-items{
         clear: both;
       }

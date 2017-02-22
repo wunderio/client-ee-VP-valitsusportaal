@@ -44,25 +44,98 @@
   .view-history .views-row {
     position: static !important; }
 
-.front,
-#admin-menu,
-#zone-portal-navigation-wrapper,
-#block-vp-menu-second-level-menu-content,
-.block-main-menu,
-#zone-top-wrapper,
-#region-sidebar-first,
-#region-sidebar-second,
-#section-footer,
-.menu-l2-popup,
-.block-delta-blocks-breadcrumb,
-.block-addthis-custom,
-.block-delta-blocks-tabs,
-.all-news,
-.static-join-in,
-.field-name-field-gallery,
-.block-views-28b60dac48d416a8e6750a35cdd59247,
-.view-display-id-important_topics_slideshow_block {
+.region-content .field-name-body a:after {
+  content: " (" attr(href) ") ";
+  font-size: 11px;
+  font-weight: normal;
+  color: #555555; }
+
+.page-contact .field-name-body a:after,
+.front .region-content .field-name-body a:after,
+.region-content .field-name-body a[href^="mailto"]:after {
+  display: none;
+  content: ""; }
+
+ul {
+  list-style: bullet outside !important;
+  padding-left: 1em !important; }
+  ul li {
+    list-style: bullet outside !important;
+    padding-left: 0 !important;
+    background: none !important; }
+
+.not-front #admin-menu,
+.not-front #zone-portal-navigation-wrapper,
+.not-front #block-vp-menu-second-level-menu-content,
+.not-front .block-main-menu,
+.not-front #zone-top-wrapper,
+.not-front #region-sidebar-first,
+.not-front #region-sidebar-second,
+.not-front #section-footer,
+.not-front .menu-l2-popup,
+.not-front .block-delta-blocks-breadcrumb,
+.not-front .block-addthis-custom,
+.not-front .block-delta-blocks-tabs,
+.not-front .all-news,
+.not-front .static-join-in,
+.not-front .field-name-field-gallery,
+.not-front .block-views-28b60dac48d416a8e6750a35cdd59247,
+.not-front .view-display-id-important_topics_slideshow_block,
+.not-front .region-page-bottom {
   display: none !important; }
+
+.front #admin-menu,
+.front #zone-portal-navigation-wrapper,
+.front #block-vp-menu-second-level-menu-content,
+.front .block-main-menu,
+.front #section-footer,
+.front .menu-l2-popup,
+.front .block-delta-blocks-breadcrumb,
+.front .region-page-bottom {
+  display: none !important; }
+.front #zone-preface-wrapper,
+.front #zone-preface {
+  display: block !important; }
+.front .zone-content .block {
+  display: block;
+  height: auto !important; }
+.front .block {
+  margin-top: 2em;
+  margin-bottom: 2em; }
+.front .block * {
+  padding: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important; }
+.front .region-page-bottom,
+.front .static-fp-tabs a,
+.front #flexslider-important-topics-slideshow-tablet,
+.front .flex-control-nav,
+.front .flex-control-nav a {
+  display: none !important; }
+.front .flexslider_views_slideshow_top_news_tabs-top_news_tabs_block,
+.front .flexslider-views-slideshow-main-frame,
+.front .view-important-topics-slideshow .slides {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  transform: none !important; }
+.front .flexslider-views-slideshow-main-frame-row,
+.front #flexslider-important-topics-slideshow-desktop .row {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  float: none !important;
+  transform: none !important; }
+.front .view-important-topics-slideshow p br {
+  display: none; }
+.front .flexslider-views-slideshow-main-frame-row.clone,
+.front #flexslider-important-topics-slideshow-desktop .row.clone {
+  display: none !important; }
+.front .tabs ul {
+  display: none; }
+.front h2 {
+  font-size: 16px !important;
+  line-height: 1.2em !important; }
 
 * {
   background: transparent !important;
@@ -76,6 +149,11 @@ body .page .section-content {
 
 body {
   margin: 0 2em 1em 1em; }
+
+.logo-img #logo,
+.block-delta-blocks-logo img {
+  height: 78pt !important;
+  width: auto !important; }
 
 .section-header {
   min-height: 0; }
@@ -94,6 +172,14 @@ body {
 .block-delta-blocks-logo {
   padding-left: 0; }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  page-break-after: avoid; }
+
 .node p a:after {
   content: " (" attr(href) ")";
   font-size: 80%; }
@@ -101,5 +187,18 @@ body {
 img,
 .views-row {
   page-break-inside: avoid; }
+
+/*Contact*/
+.page-contact #zone-top-wrapper {
+  display: block !important; }
+
+.page-contact #zone-top .block.block-breadcrumb {
+  display: none !important; }
+
+.page-contact .location-wrap div {
+  display: none; }
+
+.page-contact .location-wrap div.textbox {
+  display: block; }
 
 /*# sourceMappingURL=print.css.map */
