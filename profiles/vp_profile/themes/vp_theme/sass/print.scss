@@ -10,7 +10,7 @@ $layout: print;
   color: #555555;
 }
 .page-contact .field-name-body a:after,
-.front .region-content .field-name-body a:after,
+//.front .region-content .field-name-body a:after,
 .region-content .field-name-body a[href^="mailto"]:after
 {
   display: none;
@@ -18,13 +18,16 @@ $layout: print;
 }
 
 ul {
-  list-style: bullet outside !important;
-  padding-left: 1em !important;
+  list-style: disc outside !important;
+  padding-left: 1.5em !important;
 
   li {
-    list-style: bullet outside !important;
+    list-style: disc outside !important;
     padding-left: 0 !important;
     background: none !important;
+    line-height: 1.25em !important;
+    padding-top: 0.17em !important;
+    padding-bottom: 0.17em !important;
   }
 }
 
@@ -62,8 +65,16 @@ ul {
   #section-footer,
   .menu-l2-popup,
   .block-delta-blocks-breadcrumb,
-  .region-page-bottom {
+  .region-page-bottom,
+  .static-important-topics-links .hr {
     display: none !important;
+  }
+
+  .block-infosys a[href^="http"]:after {
+    content: " (" attr(href) ") ";
+    font-size: 11px;
+    font-weight: normal;
+    color: #555555;
   }
 
   #zone-preface-wrapper,
@@ -79,25 +90,37 @@ ul {
   .block {
     margin-top: 2em;
     margin-bottom: 2em;
-  }
+    page-break-inside: avoid;
 
-  .block * {
-    padding: 0 !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
+    * {
+      padding: 0 !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+
+    ul {
+      padding-left: 1.5em !important;
+    }
   }
 
   .region-page-bottom,
+  .static-fp-tabs,
   .static-fp-tabs a,
   #flexslider-important-topics-slideshow-tablet,
   .flex-control-nav,
-  .flex-control-nav a {
+  .flex-control-nav a,
+  .view-id-top_news_tabs .view-footer,
+  .spacer {
     display: none !important;
+  }
+
+  .block ul#flexslider_views_slideshow_top_news_tabs-top_news_tabs_block {
+    padding-left: 0 !important;
   }
 
   .flexslider_views_slideshow_top_news_tabs-top_news_tabs_block,
   .flexslider-views-slideshow-main-frame,
-  .view-important-topics-slideshow .slides{
+  .view-important-topics-slideshow .slides {
     width: 100% !important;
     max-width: 100% !important;
     height: auto !important;
@@ -113,13 +136,36 @@ ul {
     transform: none !important;
   }
 
-  .view-important-topics-slideshow p br {
+  .view-important-topics-slideshow p br,
+  #flexslider-important-topics-slideshow-desktop .views-field-body .field-content a {
     display: none;
   }
 
+  #flexslider-important-topics-slideshow-desktop .col {
+    margin: 1.2em 0;
+  }
+
+  .block .flexslider-views-slideshow-main-frame-row .views-row {
+    padding: 0.6em 0 !important;
+  }
+
   .flexslider-views-slideshow-main-frame-row.clone,
-  #flexslider-important-topics-slideshow-desktop .row.clone{
+  #flexslider-important-topics-slideshow-desktop .row.clone {
     display: none !important;
+  }
+
+  .flexslider-views-slideshow-main-frame-row .views-field {
+    height: auto !important;
+  }
+
+  .flexslider-views-slideshow-main-frame-row .views-field-field-cover-image {
+    float: left;
+    width: 33%;
+  }
+
+  .block .flexslider-views-slideshow-main-frame-row .aside {
+    float: left;
+    width: 62%;
   }
 
   .tabs ul {
@@ -130,6 +176,61 @@ ul {
     font-size: 16px !important;
     line-height: 1.2em !important;
   }
+
+  .view-id-vp_galleries .views-field-field-picture .view-content {
+    padding-right: 0.6em !important;
+  }
+
+  .zone-postscript-wrapper {
+    display: block !important;
+  }
+
+  .static-join-in {
+    h2.title1 {
+      font-size: 20px !important;
+
+      br {
+        display: none;
+      }
+    }
+
+    .title2 {
+      margin-bottom: 0.6em;
+    }
+
+    .box {
+      float: left !important;
+      width: 30% !important;
+      padding-right: 3% !important;
+
+      h3 {
+        margin-bottom: 3px !important;
+      }
+
+      .spacer {
+        display: none !important;
+      }
+    }
+  }
+
+  ul.social-links {
+    padding-left: 0 !important;
+    list-style-type: none !important;
+
+    li {
+      list-style-type: none !important;
+      overflow: hidden;
+      clear: both;
+      margin-bottom: 3px !important;
+
+      img {
+        float: left !important;
+        margin-right: 0.5em !important;
+      }
+    }
+  }
+
+
 
 }
 
@@ -154,7 +255,7 @@ body {
 
 .logo-img #logo,
 .block-delta-blocks-logo img {
-  height: 78pt !important;
+  height: 50pt !important;
   width: auto !important;
 }
 
