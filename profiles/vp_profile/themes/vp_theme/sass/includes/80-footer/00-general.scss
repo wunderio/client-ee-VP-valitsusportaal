@@ -2,15 +2,26 @@
 
 
 @if $layout == global {
-  .section-footer {
+
+  #zone-footer-wrapper {
+    background: url(../img/40-desktop/body.png);
+  }
+
+  .block-simple-columns {
     display: none;
   }
+
 }
 
 
 
 @if $layout == default {
-  .section-footer {
+
+  #zone-footer-wrapper {
+    background: none;
+  }
+
+  .block-simple-columns {
     display: block;
   }
 }

@@ -4732,60 +4732,62 @@ h3.icon-wrap-2 .icon-cv {
 .zone-postscript-wrapper {
   display: none; }
 
-.section-footer {
+#zone-footer-wrapper {
+  background: url(../img/40-desktop/body.png); }
+
+.block-simple-columns {
   display: none; }
 
 .static-footer {
-  background: url(../img/10-global/static-footer.png) repeat-x;
   font-size: 11px;
-  margin: 0 -20px;
-  padding: 17px 0 30px 0;
-  text-align: center; }
+  padding: 17px 20px 30px;
+  text-align: left; }
   .editor .static-footer {
     background-image: url(../img/40-desktop/body.png); }
   .static-footer,
   .static-footer a {
     color: #999; }
-  .static-footer ul {
-    direction: inline-block; }
-    .static-footer ul li {
-      display: inline-block;
-      padding-left: 23px; }
-      .static-footer ul li:first-child {
-        padding-left: 0; }
-      .static-footer ul li a {
-        background-position: 0 50%;
-        background-repeat: no-repeat;
-        display: block;
-        padding-left: 24px; }
-        .static-footer ul li a.rss {
-          background-image: url(../img/10-global/static-footer-icon-rss.png); }
-        .static-footer ul li a.twitter {
-          background-image: url(../img/10-global/static-footer-icon-twitter.png); }
-        .static-footer ul li a.fb {
-          background-image: url(../img/10-global/static-footer-icon-fb.png); }
-        .static-footer ul li a.video {
-          background-image: url(../img/10-global/static-footer-icon-video.png); }
-        .static-footer ul li a.newsletter {
-          background-image: url(../img/10-global/static-footer-icon-newsletter.png); }
-        .static-footer ul li a.slideshare {
-          background-image: url(../img/10-global/static-footer-icon-slideshare.png); }
-        .static-footer ul li a.blog {
-          background-image: url(../img/10-global/static-footer-icon-blog.png); }
-        .static-footer ul li a.flickr {
-          background-image: url(../img/10-global/static-footer-icon-flickr.png); }
-        .static-footer ul li a.youtube {
-          background-image: url(../img/10-global/static-footer-icon-youtube.png); }
-    .static-footer ul ul {
-      padding-left: 40px;
-      padding-right: 40px; }
-      .static-footer ul ul li {
-        line-height: 8px;
-        padding-left: 12px; }
-        .static-footer ul ul li a {
-          border-left: 1px solid #fff;
-          padding-left: 11px; }
-        .static-footer ul ul li:first-child a {
-          border: 0; }
+  .static-footer ul li {
+    display: block;
+    padding-left: 0; }
+    .static-footer ul li:first-child {
+      padding-left: 0; }
+    .static-footer ul li a {
+      background-position: 0 50%;
+      background-repeat: no-repeat;
+      display: block;
+      padding-left: 24px; }
+      .static-footer ul li a.rss {
+        background-image: url(../img/10-global/static-footer-icon-rss.png); }
+      .static-footer ul li a.twitter {
+        background-image: url(../img/10-global/static-footer-icon-twitter.png); }
+      .static-footer ul li a.fb {
+        background-image: url(../img/10-global/static-footer-icon-fb.png); }
+      .static-footer ul li a.video {
+        background-image: url(../img/10-global/static-footer-icon-video.png); }
+      .static-footer ul li a.newsletter {
+        background-image: url(../img/10-global/static-footer-icon-newsletter.png); }
+      .static-footer ul li a.slideshare {
+        background-image: url(../img/10-global/static-footer-icon-slideshare.png); }
+      .static-footer ul li a.blog {
+        background-image: url(../img/10-global/static-footer-icon-blog.png); }
+      .static-footer ul li a.flickr {
+        background-image: url(../img/10-global/static-footer-icon-flickr.png); }
+      .static-footer ul li a.youtube {
+        background-image: url(../img/10-global/static-footer-icon-youtube.png); }
+  .static-footer ul ul {
+    display: block;
+    clear: both;
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0; }
+    .static-footer ul ul li {
+      padding-left: 12px;
+      margin-right: 0; }
+      .static-footer ul ul li a {
+        border-left: 1px solid #fff;
+        padding-left: 0px; }
+      .static-footer ul ul li:first-child a {
+        border: 0; }
 
 /*# sourceMappingURL=global.css.map */
