@@ -148,6 +148,12 @@
   sub {
     vertical-align: sub;
   }
+
+  //system.base.css has problematic .clearfix:after {content: "."} in it - it creates unwanted page bottom margin. Override it into more modern version here.
+  .clearfix:after {
+    content: "" !important;
+    display: table;
+  }
 }
 
 

@@ -186,6 +186,10 @@ sup {
 sub {
   vertical-align: sub; }
 
+.clearfix:after {
+  content: "" !important;
+  display: table; }
+
 .node {
   font-size: 14px;
   font-size: 0.875rem;
