@@ -483,6 +483,10 @@ sup {
 sub {
   vertical-align: sub; }
 
+.clearfix:after {
+  content: "" !important;
+  display: table; }
+
 body {
   background-color: #efede3; }
   body.responsive-layout-mobile .page .section-header, body.responsive-layout-mobile .page .section-content {
