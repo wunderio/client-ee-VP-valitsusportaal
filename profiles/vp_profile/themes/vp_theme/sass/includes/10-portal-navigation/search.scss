@@ -2,6 +2,18 @@
 
 
 @if $layout == global {
+  .page-search-site {
+    #page-title {
+      display: none;
+    }
+    .search-form {
+      #edit-basic {
+        label {
+          display: none;
+        }
+      }
+    }
+  }
   .block-search-form {
     margin-right: 22px;
     position: static !important;

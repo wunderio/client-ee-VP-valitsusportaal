@@ -977,6 +977,11 @@ td {
 .portal-navigation-menupopup {
   display: none; }
 
+.page-search-site #page-title {
+  display: none; }
+.page-search-site .search-form #edit-basic label {
+  display: none; }
+
 .block-search-form {
   margin-right: 22px;
   position: static !important; }
@@ -1265,7 +1270,7 @@ td {
     font-family: "Roboto Condensed", sans-serif;
     text-transform: uppercase; }
     .view-id-top_news_tabs .view-footer h2 a {
-      background-color: #e5f0f3;
+      background-color: #e6f0f4;
       color: #00698C;
       display: block;
       padding: 6px 10px 4px 10px; }
@@ -1475,7 +1480,7 @@ td {
     display: block;
     padding: 10px 10px 7px; }
     .block-delta-blocks-tabs .content a:hover {
-      background: #f6f6f6; }
+      background: #f7f7f7; }
 
 .all-news {
   background-color: #F9F9F9;
@@ -1701,7 +1706,7 @@ td {
   color: #333; }
   .logged-in.page-comment-reply .block-system-main .comment-links a,
   .logged-in .comment-wrapper .comment-links a {
-    background: #e6e6e6;
+    background: #e7e7e7;
     border-radius: 3px;
     color: #00698c;
     display: block;
@@ -1711,7 +1716,7 @@ td {
     .logged-in.page-comment-reply .block-system-main .comment-links a.active, .logged-in.page-comment-reply .block-system-main .comment-links a:hover,
     .logged-in .comment-wrapper .comment-links a.active,
     .logged-in .comment-wrapper .comment-links a:hover {
-      background: #eeeeee; }
+      background: #efefef; }
 
 .logged-in .node > .clearfix > .node-links {
   display: none; }
@@ -2803,7 +2808,7 @@ td {
     background-image: none; }
 
 .field-name-field-cover-image {
-  background-color: #f4f4f4;
+  background-color: whitesmoke;
   display: inline-block;
   float: right;
   margin: 5px 0 30px 30px;
