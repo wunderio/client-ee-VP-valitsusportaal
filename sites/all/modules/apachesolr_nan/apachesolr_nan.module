@@ -105,6 +105,10 @@ function apachesolr_nan_process_solr_indexes($path, $title, $description, $fnid)
   $document->label = $title;
   $document->content = apachesolr_clean_text($description . ' ' . $content);
   $document->teaser = truncate_utf8($document->content, 300, TRUE);
+  if (module_exists('domain')) {
+    // Make available for all domains if domain access module exists.
+    $document->access__all = 0;
+  }
   $documents[] = $document;
   apachesolr_index_send_to_solr($env_id, $documents);
   // Restore the user.
