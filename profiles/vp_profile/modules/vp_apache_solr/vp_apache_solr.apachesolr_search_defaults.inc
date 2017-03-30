@@ -21,7 +21,7 @@ function vp_apache_solr_apachesolr_search_default_searchers() {
   $searcher->env_id = 'solr';
   $searcher->settings = array(
     'fq' => array(),
-    'apachesolr_search_custom_enable' => 1,
+    'apachesolr_search_custom_enable' => 0,
     'apachesolr_search_search_type' => 'custom',
     'apachesolr_search_per_page' => 10,
     'apachesolr_search_spellcheck' => 1,

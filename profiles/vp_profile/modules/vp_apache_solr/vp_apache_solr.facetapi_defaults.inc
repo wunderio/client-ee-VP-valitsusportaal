@@ -231,21 +231,34 @@ function vp_apache_solr_facetapi_default_facet_settings() {
     'active_sorts' => array(
       'active' => 'active',
       'indexed' => 'indexed',
+      'natural' => 0,
+      'display' => 0,
+      'count' => 0,
     ),
     'sort_weight' => array(
-      'active' => -50,
-      'indexed' => -49,
+      'active' => '-50',
+      'indexed' => '-49',
+      'natural' => '0',
+      'display' => '0',
+      'count' => '0',
     ),
     'sort_order' => array(
-      'active' => 3,
-      'indexed' => 4,
+      'active' => '3',
+      'indexed' => '3',
+      'natural' => '4',
+      'display' => '4',
+      'count' => '4',
     ),
     'empty_behavior' => 'none',
     'facet_more_text' => 'Show more',
     'facet_fewer_text' => 'Show fewer',
-    'soft_limit' => 20,
+    'soft_limit' => '20',
     'nofollow' => 1,
     'show_expanded' => 0,
+    'empty_text' => array(
+      'value' => '',
+      'format' => 'full_html',
+    ),
   );
   $export['apachesolr@solr:block:created'] = $facet;
 
