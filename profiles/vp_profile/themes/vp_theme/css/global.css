@@ -981,6 +981,8 @@ td {
   display: none; }
 .page-search-site .search-form #edit-basic label {
   display: none; }
+.page-search-site .search-form .spelling-suggestions {
+  display: none; }
 
 .block-search-form {
   margin-right: 22px;
