@@ -75,7 +75,7 @@
       <p class="search-snippet"<?php print $content_attributes; ?>><?php print $snippet; ?></p>
     <?php endif; ?>
     <?php if ($info): ?>
-      <p class="search-info"><?php //print $info; ?></p>
+      <p class="search-info"><?php print print format_date($result['node']->changed,"custom","d.m.Y"); ?></p>
     <?php endif; ?>
   </div>
 </li>
