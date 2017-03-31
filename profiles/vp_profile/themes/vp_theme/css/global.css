@@ -983,6 +983,8 @@ td {
   display: none; }
 .page-search-site .spelling-suggestions {
   display: none; }
+.page-search-site .apachesolr_search-results {
+  margin-top: 10px; }
 
 .block-search-form {
   margin-right: 22px;
