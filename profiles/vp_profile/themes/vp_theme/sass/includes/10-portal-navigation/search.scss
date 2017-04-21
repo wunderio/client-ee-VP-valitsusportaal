@@ -2,6 +2,24 @@
 
 
 @if $layout == global {
+  .page-search-site {
+    #page-title {
+      display: none;
+    }
+    .search-form {
+      #edit-basic {
+        label {
+          display: none;
+        }
+      }
+    }
+    .spelling-suggestions {
+      display: none;
+    }
+    .apachesolr_search-results {
+      margin-top: 10px;
+    }
+  }
   .block-search-form {
     margin-right: 22px;
     position: static !important;
