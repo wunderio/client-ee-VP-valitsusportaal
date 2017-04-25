@@ -448,6 +448,7 @@ function inline_entity_form_field_widget_form(&$form, &$form_state, $field, $ins
     $element['#attached']['js'] = array(
       drupal_get_path('module', 'file') . '/file.js',
       drupal_get_path('module', 'inline_entity_form') . '/inline_entity_form.js',
+      drupal_get_path('module', 'inline_entity_form') . '/inline_entity_form_custom_update.js',
     );
   }
 
