@@ -1,7 +1,7 @@
 
 
 
-@if $layout == default {
+@if $layout == global {
   .view-display-id-important_topics_slideshow_block {
     $column_space: 15px;
 
@@ -85,6 +85,33 @@
       }
     }
   }
+
+
+
+  @media screen and (max-width: $mobile-view-max-width) { //display slider before .responsive-layout-mobile loads, so slider position isn't shift
+    .view-display-id-important_topics_slideshow_block {
+      #flexslider-important-topics-slideshow-mobile {
+        display: block;
+      }
+    }
+  }
+
+  .responsive-layout-mobile {
+
+    .view-display-id-important_topics_slideshow_block {
+      #flexslider-important-topics-slideshow-mobile {
+        .col {
+          padding-bottom: 8px;
+        }
+
+        .col-inner {
+          background-size: 90%;
+          background-position: 100% bottom;
+        }
+      }
+    }
+  }
+
 }
 
 
