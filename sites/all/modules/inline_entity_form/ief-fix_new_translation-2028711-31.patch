@@ -1,0 +1,39 @@
+diff --git a/inline_entity_form.module b/inline_entity_form.module
+index 3cd5d08..3d85c17 100644
+--- a/inline_entity_form.module
++++ b/inline_entity_form.module
+@@ -397,6 +397,7 @@ function inline_entity_form_field_widget_form(&$form, &$form_state, $field, $ins
+   $widget = $instance['widget'];
+   $settings = inline_entity_form_settings($field, $instance);
+   $entity_info = entity_get_info($settings['entity_type']);
++  $parent_entity_info = entity_get_info($element['#entity_type']);
+   $cardinality = $field['cardinality'];
+   $controller = inline_entity_form_get_controller($instance);
+   // The current entity type is not supported, execution can't continue.
+@@ -407,11 +408,23 @@ function inline_entity_form_field_widget_form(&$form, &$form_state, $field, $ins
+   // Get the entity type labels for the UI strings.
+   $labels = $controller->labels();
+ 
++  // Use current form language for translatable field.
++  if (!empty($form_state['entity_translation']['is_translation']) && $langcode != LANGUAGE_NONE) {
++    $langcode = $form_state['entity_translation']['form_langcode'];
++  }
++
+   // Build a parents array for this element's values in the form.
+-  $parents = array_merge($element['#field_parents'], array($element['#field_name'], $element['#language']));
++  $parents = array_merge($element['#field_parents'], array($element['#field_name'], $langcode));
+ 
+-  // Get the langcode of the parent entity.
+-  $parent_langcode = entity_language($element['#entity_type'], $element['#entity']);
++  // If the parent entity is new, the language is not yet set. Use the langcode
++  // from the parent form if existing in this case.
++  if (!isset($element['#entity']->$parent_entity_info['entity keys']['id']) && isset($form_state['complete form']['language'])) {
++    $parent_langcode = isset($form_state['complete form']['language']['#value']) ? $form_state['complete form']['language']['#value'] : $form_state['complete form']['language']['#default_value'];
++  }
++  else {
++    // Get the langcode of the parent entity.
++    $parent_langcode = entity_language($element['#entity_type'], $element['#entity']);
++  }
+ 
+   // Assign a unique identifier to each IEF widget.
+   // Since $parents can get quite long, sha1() ensures that every id has

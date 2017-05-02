@@ -3,7 +3,32 @@
 
 @if $layout == global {
   .zone-preface-wrapper {
-    display: none;
+    display: block;
+
+    .zone-preface {
+
+      .region-preface-first {
+        margin-right: 20px;
+        padding-left: 20px;
+      }
+    }
+  }
+
+  .responsive-layout-mobile {
+    .zone-preface-wrapper {
+      background: url(../img/30-tablet/zone-preface-wrapper.png) 50% 0 repeat-y;
+      margin-top: 0;
+      padding: 36px 0;
+
+      .zone-preface {
+
+        .region-preface-second {
+          margin-top: $line-height-default;
+          padding-left: 20px;
+          padding-right: 20px;
+        }
+      }
+    }
   }
 }
 
