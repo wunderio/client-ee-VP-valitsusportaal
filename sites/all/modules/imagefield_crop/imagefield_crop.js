@@ -78,7 +78,7 @@ Drupal.behaviors.imagefield_crop = {
             parseInt($(widget).children(".edit-image-crop-x").val()),
             parseInt($(widget).children(".edit-image-crop-y").val()),
             settings.imagefield_crop[id].preview.orig_width,
-            settings.imagefield_crop[id].preview.orig_width
+            settings.imagefield_crop[id].preview.orig_height
           ]
         });
       });
