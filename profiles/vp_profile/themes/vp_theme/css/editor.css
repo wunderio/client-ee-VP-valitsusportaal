@@ -377,6 +377,22 @@ table[border='0'] th,
 table[border='0'] td {
   outline: 1px dotted gray; }
 
+table.vp-table {
+  display: block; }
+  table.vp-table thead, table.vp-table tbody {
+    display: block; }
+  table.vp-table thead th {
+    color: #fff; }
+  table.vp-table th, table.vp-table td {
+    min-width: 150px;
+    vertical-align: middle; }
+  table.vp-table tr.slide-row div {
+    display: inline-block; }
+  table.vp-table tbody tr:nth-child(odd) {
+    background-color: #FAFAFA; }
+  table.vp-table td.merged-cell {
+    border-right: solid 1px #d4d4d4 !important; }
+
 .editor .static-important-topics-links {
   background-image: url(../img/40-desktop/zone-preface-wrapper.png);
   padding: 20px;

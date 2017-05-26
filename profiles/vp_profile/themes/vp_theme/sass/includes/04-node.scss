@@ -389,3 +389,96 @@
     }
   }
 }
+
+//=== VP TABLES ===//
+@if $layout == global {
+  table {
+    .toggle-icon {
+      padding-right: 10px;
+    }
+
+    .toggle-icon.hidden {
+        display: none;
+    }
+  }
+
+  table.vp-table {
+    overflow-x: auto;
+    display: block;
+    max-width: 930px;
+    table-layout:fixed;
+
+    tbody {
+        overflow-y: auto;
+        overflow-x: hidden;
+        max-height: 600px;
+        display: block;
+    }
+
+    thead {
+      display: block;
+      th {
+        color: #fff;
+      }
+    }
+
+    th, td {
+      min-width: 150px;
+      width: 100%;
+      background: none;
+      vertical-align: middle;
+    }
+
+    tr.slide-row {
+      div {
+        display: inline-block;
+      }
+    }
+
+    tbody tr:nth-child(odd) {
+       background-color: #FAFAFA;
+    }
+
+    td.merged-cell {
+      border-right: solid 1px #d4d4d4 !important;
+    }
+  }
+}
+
+@if $layout == editor {
+
+  table.vp-table {
+    display: block;
+
+    thead, tbody {
+      display: block;
+    }
+
+    thead {
+      th {
+        color: #fff;
+      }
+    }
+
+    th, td {
+      min-width: 150px;
+      vertical-align: middle;
+    }
+
+    tr.slide-row {
+      div {
+        display: inline-block;
+      }
+    }
+
+    tbody tr:nth-child(odd) {
+       background-color: #FAFAFA;
+    }
+
+    td.merged-cell {
+      border-right: solid 1px #d4d4d4 !important;
+    }
+  }
+}
+
+// END: VP TABLES

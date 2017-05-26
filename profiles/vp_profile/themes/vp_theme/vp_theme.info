@@ -99,6 +99,11 @@ libraries[vp_theme_vp_accordion][js][0][file] = vp_accordion.js
 libraries[vp_theme_vp_accordion][js][0][options][weight] = 25
 libraries[vp_theme_vp_accordion][js][0][options][scope] = footer
 
+libraries[vp_theme_vp_tables][name] = VP Tables
+libraries[vp_theme_vp_tables][js][0][file] = vp_tables.js
+libraries[vp_theme_vp_tables][js][0][options][weight] = 26
+libraries[vp_theme_vp_tables][js][0][options][scope] = footer
+
 ; THEME SETTINGS (DEFAULTS)
 settings[toggle_logo] = '0'
 settings[toggle_name] = '0'
@@ -160,6 +165,7 @@ settings[alpha_libraries][vp_theme_dialog_default_settings] = 'vp_theme_dialog_d
 settings[alpha_libraries][vp_theme_mobile_frontpage_news] = 'vp_theme_mobile_frontpage_news'
 settings[alpha_libraries][vp_theme_embed_iframe_dynamic_size] = 'vp_theme_embed_iframe_dynamic_size'
 settings[alpha_libraries][omega_equalheights] = '0'
+settings[alpha_libraries][vp_theme_vp_tables] = 'vp_theme_vp_tables'
 settings[alpha_css][alpha-reset.css] = 'alpha-reset.css'
 settings[alpha_css][global.css] = 'global.css'
 settings[alpha_css][alpha-mobile.css] = '0'
