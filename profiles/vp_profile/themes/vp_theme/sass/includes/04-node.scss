@@ -392,6 +392,12 @@
 
 //=== VP TABLES ===//
 @if $layout == global {
+  .vp-table-wrapper {
+    width: 930;
+    max-height: 600px;
+    overflow: auto;
+  }
+
   table {
     .toggle-icon {
       padding-right: 10px;
@@ -403,20 +409,11 @@
   }
 
   table.vp-table {
-    overflow-x: auto;
-    display: block;
-    max-width: 930px;
-    table-layout:fixed;
-
-    tbody {
-        overflow-y: auto;
-        overflow-x: hidden;
-        max-height: 600px;
-        display: block;
+    caption {
+     caption-side: bottom;
     }
 
     thead {
-      display: block;
       th {
         color: #fff;
       }
@@ -424,7 +421,6 @@
 
     th, td {
       min-width: 150px;
-      width: 100%;
       background: none;
       vertical-align: middle;
     }
@@ -448,11 +444,6 @@
 @if $layout == editor {
 
   table.vp-table {
-    display: block;
-
-    thead, tbody {
-      display: block;
-    }
 
     thead {
       th {
