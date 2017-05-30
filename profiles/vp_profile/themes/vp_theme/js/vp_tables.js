@@ -19,5 +19,13 @@
         $(this).find('*').width($(this).width() + $(this).scrollLeft());
     });
 
+    $("table.vp-table").wrap('<div class="vp-table-wrapper"></div>');
+
+    $.each(document.getElementsByClassName("vp-table-wrapper"), function() {
+        this.addEventListener("scroll", function() {
+            var translate = "translate(0," + this.scrollTop + "px)";
+            this.querySelector("thead").style.transform = translate;
+        });
+    });
 
 })(jQuery);
